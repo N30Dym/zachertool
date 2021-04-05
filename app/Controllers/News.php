@@ -9,7 +9,6 @@ class News extends Controller
 {
     public function index()
 	{
-		echo "Trolololololo";
 		$model = new NewsModel();
 
 		$data = [

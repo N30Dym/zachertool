@@ -125,3 +125,16 @@ nb-configuration.xml
 /phpunit*.xml
 /.phpunit.*.cache
 
+#-------------------------
+# System Files
+#-------------------------
+
+#No subject to change
+system/*
+
+#-------------------------
+# Database Config File
+#-------------------------
+
+#Database configuration individual for every computer
+app/Config/Database.php

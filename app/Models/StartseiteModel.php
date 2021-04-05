@@ -11,7 +11,7 @@ class StartseiteModel extends Model {
 	{
 		$flugzeugDB = $this->load->database('flugzeugPilotenDB', TRUE);
 		
-		$query = $flugzeugDB->
+		$query = $flugzeugDB-> 
 		return $this->findAll();
 	}
 }

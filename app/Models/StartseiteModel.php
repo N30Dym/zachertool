@@ -7,11 +7,18 @@ use CodeIgniter\Model;
 class StartseiteModel extends Model {
 	
 
-	public function getNews()
+	public function getFlugzeugeDiesesJahr()
 	{
-		$flugzeugDB = $this->load->database('flugzeugPilotenDB', TRUE);
+		$db = \Config\Database::connect('flugzeugDB');
 		
-		$query = $flugzeugDB->
-		return $this->findAll();
+		if ($db->query('SELECT kennung as VARIABLE_NAME, erstelltAm as VARIABLE_VALUE FROM flugzeuge'))
+		{
+			echo "Success!";
+		}
+		else
+		{
+			echo "Query failed!";
+		}
+		return $db->query('SELECT kennung as VARIABLE_NAME, erstelltAm as VARIABLE_VALUE FROM flugzeuge')
 	}
 }

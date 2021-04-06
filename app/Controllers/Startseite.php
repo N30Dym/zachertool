@@ -19,7 +19,7 @@ class Startseite extends Controller
 		
 		
 		$model = new StartseiteModel();
-		$data['test'] = $model->getNews();
+		$data['test'] = $model->getFlugzeugeDiesesJahr();
 		
 		echo view('startseite', $data);
 		echo view('templates/footer');

@@ -6,13 +6,14 @@ use CodeIgniter\Model;
 
 class NewsModel extends Model
 {
-    protected $table = 'news';
+    protected $table = 'protokolle';
 	
 	public function getNews($slug = false)
 	{
 		if ($slug === false)
 		{
 			return $this->findAll();
+			//return var_dump($this);
 		}
 
 		return $this->asArray()

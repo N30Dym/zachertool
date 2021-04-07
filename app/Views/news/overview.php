@@ -4,12 +4,12 @@
 
     <?php foreach ($news as $news_item): ?>
 
-        <h3><?= esc($news_item['title']) ?></h3>
+        <h3><?= esc($news_item['datum']) ?></h3>
 
         <div class="main">
-            <?= esc($news_item['body']) ?>
+            <?= esc($news_item['erstelltAm']) ?>
         </div>
-        <p><a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a></p>
+        <p><a href="/news/<?= esc($news_item['datum'], 'url') ?>">View article</a></p>
 
     <?php endforeach; ?>
 

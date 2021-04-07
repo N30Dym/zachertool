@@ -35,6 +35,7 @@ class News extends Controller
 		$data['title'] = $data['news']['title'];
 
 		echo view('templates/header', $data);
+		echo view('templates/navbar');
 		echo view('news/view', $data);
 		echo view('templates/footer', $data);
 	}

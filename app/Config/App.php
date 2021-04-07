@@ -23,7 +23,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $baseURL = 'http://localhost:80/';
+	public $baseURL = 'http://localhost/';
 
 	/**
 	 * --------------------------------------------------------------------------
@@ -108,7 +108,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $appTimezone = 'Germany/Berlin';
+	public $appTimezone = 'UTC';
 
 	/**
 	 * --------------------------------------------------------------------------

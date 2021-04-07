@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models\flugzeuge;
+
+use CodeIgniter\Model;
+use Config\Autoload;
+
+class FlugzeugeModel extends Model
+{
+	/*public function __construct() {
+		$this->load->database();
+	}*/
+	//$autoload['libraries'] = array('database');
+	//$this->load->database();
+	//protected $db      = \Config\Database::connect('flugzeugeDB');
+	//public $builder = $db->table('flugzeuge');
+	protected $table = 'protokolle';
+	
+	public function getFlugzeuge($anzahl = 0)
+	{
+		if($anzahl == 0)
+		{
+			//$query = $builder->get();
+			return $this->findAll();
+		}
+		
+		$query = $builder->get($anzahl);
+		return $query->getResult();
+	}
+	
+}

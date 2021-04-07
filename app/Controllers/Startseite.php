@@ -4,10 +4,11 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\StartseiteModel;
+use App\Models\flugzeuge\FlugzeugeModel;
 
 class Startseite extends Controller
 {
-
+	
 	public function index()
 	{
 
@@ -17,11 +18,22 @@ class Startseite extends Controller
 			throw new \CodeIgniter\Exceptions\PageNotFoundException('startseite.php');
 		}
 		
+		$flugzeuge = new FlugzeugeModel();
+		$title = "Willkommen beim Zachertool";
+
+		$dataHeader = [
+			"title" => $title,
+			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
+		];
+		$dataContent = [
+			'flugzeuge' => $flugzeuge->getFlugzeuge(),
+			'title' => $title
+		];
+
 		
-		$model = new StartseiteModel();
-		$data['test'] = $model->getFlugzeugeDiesesJahr();
-		
-		echo view('startseite', $data);
+		echo view('templates/header', $dataHeader);
+		echo view('templates/navbar');
+		echo view('startseite', $dataContent);
 		echo view('templates/footer');
 	}
 	

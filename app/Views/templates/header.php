@@ -1,18 +1,23 @@
-<?php helper("istSeiteVerfuegbar");?>
+<?php helper("istSeiteVerfuegbar"); ?>
 
 <!doctype html>
 <html>
 <head>
     <title><?= esc($title) ?></title>
 		<?php if (! istSeiteVerfuegbar("https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css")) : ?>
-			<?= '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">'; ?>
+			<?= '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">' ?>
 		<?php else : ?>
-			<?= '<link href="E:/xampp/htdocs/zachern-dev/public/css/bootstrap.min.css" rel="stylesheet" type="text/css">'; ?>
+			<?php if (! is_file(ROOTPATH .'public\css\bootstrap.min.css')) : ?>
+				<?php throw new \CodeIgniter\Exceptions\CriticalError('bootstrap.min.css'); ?>
+			<?php else : ?>
+				<?= '<link href="public\css\bootstrap.min.css" rel="stylesheet" type="text/css" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">'; ?>
+			<?php endif ?>
 		<?php endif ?>
 	
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="<?= esc($description) ?>">
+	<meta name="description" content="<?= esc($description) ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 <body>
 

@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-
-</head>
-<body>
 <h1><?php echo $title ?></h1>
 
-
-<table>
-	<?php 
-	foreach($flugzeuge as $flugzeug_item)
-		{
-			echo "<tr><td>" . $flugzeug_item["kennung"] . "</td><td>" . $flugzeug_item["erstelltAm"] . "</td></tr>";
-		}
-	?>
-</table>
+<main class="container">
+	<table class="table">
+		
+		<?php foreach($flugzeuge as $flugzeug_item) : ?>
+			
+			<tr>
+				<td><?= esc($flugzeug_item["kennung"]) ?></td>
+				<td> <?= esc($flugzeug_item["erstelltAm"]) ?></td>
+			</tr>
+			
+		<?php endforeach ?>
+		
+	</table>

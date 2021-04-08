@@ -16,7 +16,6 @@ class FlugzeugeModel extends Model
 	{
 		if($anzahl == 0)
 		{
-			//$query = $builder->get();
 			return $this->findAll();
 		}
 		

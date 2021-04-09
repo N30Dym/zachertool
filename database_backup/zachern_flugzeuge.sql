@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 05. Apr 2021 um 17:51
+-- Erstellungszeit: 09. Apr 2021 um 16:34
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -29,10 +29,12 @@ USE `zachern_flugzeuge`;
 -- Tabellenstruktur für Tabelle `flugzeuge`
 --
 
+DROP TABLE IF EXISTS `flugzeuge`;
 CREATE TABLE `flugzeuge` (
   `id` int(11) NOT NULL,
   `kennung` text NOT NULL,
   `musterID` int(11) NOT NULL,
+  `sichtbar` tinyint(1) DEFAULT 1,
   `erstelltAm` datetime NOT NULL,
   `geaendertAm` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -41,33 +43,33 @@ CREATE TABLE `flugzeuge` (
 -- Daten für Tabelle `flugzeuge`
 --
 
-INSERT INTO `flugzeuge` (`id`, `kennung`, `musterID`, `erstelltAm`, `geaendertAm`) VALUES
-(1, 'D-3610', 1, '2019-07-11 14:02:53', '2019-07-11 14:02:53'),
-(5, 'D-9814', 5, '2019-07-15 16:32:44', '2019-08-20 18:13:21'),
-(7, 'D-9929', 6, '2019-07-15 16:54:24', '2019-07-15 16:54:24'),
-(8, 'D-7612', 8, '2019-07-18 16:20:04', '2019-08-20 16:51:53'),
-(9, 'D-9608', 9, '2019-07-30 15:35:56', '2019-07-30 15:35:56'),
-(10, 'D-4298', 10, '2019-07-30 16:01:26', '2019-07-30 16:01:26'),
-(11, 'D-6085', 11, '2019-08-20 18:00:39', '2019-08-20 18:00:39'),
-(12, 'D-4298', 12, '2019-08-20 18:08:27', '2019-08-20 18:08:27'),
-(13, 'D-0542', 13, '2019-08-30 15:26:29', '2019-08-30 15:26:29'),
-(15, 'D-0024', 15, '2019-10-02 12:01:43', '2019-10-02 12:01:43'),
-(17, 'D-1010', 38, '2019-10-02 18:15:02', '2019-10-02 18:15:02'),
-(18, 'D-1128', 57, '2019-10-29 15:15:17', '2019-10-29 15:15:17'),
-(19, 'D-0481', 58, '2019-10-29 15:35:40', '2019-10-29 15:35:40'),
-(20, 'D-9607', 2, '2019-10-29 15:42:41', '2019-10-29 15:42:41'),
-(21, 'D-3940', 60, '2019-10-29 16:08:16', '2019-10-29 16:08:16'),
-(22, 'D-3199', 61, '2019-10-29 16:18:23', '2019-10-29 16:18:23'),
-(23, 'D-9660', 62, '2019-11-05 12:45:27', '2019-11-05 12:45:27'),
-(24, 'D-9733', 63, '2020-05-12 14:13:07', '2020-05-12 14:13:07'),
-(25, 'D-8141', 64, '2020-05-12 14:23:42', '2020-05-12 14:23:42'),
-(26, 'D-0531', 65, '2020-05-18 15:01:52', '2020-05-18 15:01:52'),
-(27, 'D-3467', 66, '2020-08-21 09:50:03', '2020-08-21 09:50:03'),
-(28, 'D-5495', 67, '2020-09-02 21:47:39', '2020-09-02 21:47:39'),
-(29, 'D-1848', 69, '2020-09-03 18:16:18', '2020-09-03 18:16:18'),
-(30, 'D-KARM', 70, '2020-09-03 19:41:27', '2020-09-03 19:41:27'),
-(31, 'D-KWRL', 71, '2020-11-17 12:58:52', '2020-11-17 12:58:52'),
-(32, 'D-7543', 72, '2020-12-01 14:13:25', '2020-12-01 14:13:25');
+INSERT INTO `flugzeuge` (`id`, `kennung`, `musterID`, `sichtbar`, `erstelltAm`, `geaendertAm`) VALUES
+(1, 'D-3610', 1, 1, '2019-07-11 14:02:53', '2019-07-11 14:02:53'),
+(5, 'D-9814', 5, 1, '2019-07-15 16:32:44', '2019-08-20 18:13:21'),
+(7, 'D-9929', 6, 1, '2019-07-15 16:54:24', '2019-07-15 16:54:24'),
+(8, 'D-7612', 8, 1, '2019-07-18 16:20:04', '2019-08-20 16:51:53'),
+(9, 'D-9608', 9, 1, '2019-07-30 15:35:56', '2019-07-30 15:35:56'),
+(10, 'D-4298', 10, 1, '2019-07-30 16:01:26', '2019-07-30 16:01:26'),
+(11, 'D-6085', 11, 1, '2019-08-20 18:00:39', '2019-08-20 18:00:39'),
+(12, 'D-4298', 12, 1, '2019-08-20 18:08:27', '2019-08-20 18:08:27'),
+(13, 'D-0542', 13, 1, '2019-08-30 15:26:29', '2019-08-30 15:26:29'),
+(15, 'D-0024', 15, 1, '2019-10-02 12:01:43', '2019-10-02 12:01:43'),
+(17, 'D-1010', 38, 1, '2019-10-02 18:15:02', '2019-10-02 18:15:02'),
+(18, 'D-1128', 57, 1, '2019-10-29 15:15:17', '2019-10-29 15:15:17'),
+(19, 'D-0481', 58, 1, '2019-10-29 15:35:40', '2019-10-29 15:35:40'),
+(20, 'D-9607', 2, 1, '2019-10-29 15:42:41', '2019-10-29 15:42:41'),
+(21, 'D-3940', 60, 1, '2019-10-29 16:08:16', '2019-10-29 16:08:16'),
+(22, 'D-3199', 61, 1, '2019-10-29 16:18:23', '2019-10-29 16:18:23'),
+(23, 'D-9660', 62, 1, '2019-11-05 12:45:27', '2019-11-05 12:45:27'),
+(24, 'D-9733', 63, 1, '2020-05-12 14:13:07', '2020-05-12 14:13:07'),
+(25, 'D-8141', 64, 1, '2020-05-12 14:23:42', '2020-05-12 14:23:42'),
+(26, 'D-0531', 65, 1, '2020-05-18 15:01:52', '2020-05-18 15:01:52'),
+(27, 'D-3467', 66, 1, '2020-08-21 09:50:03', '2020-08-21 09:50:03'),
+(28, 'D-5495', 67, 1, '2020-09-02 21:47:39', '2020-09-02 21:47:39'),
+(29, 'D-1848', 69, 1, '2020-09-03 18:16:18', '2020-09-03 18:16:18'),
+(30, 'D-KARM', 70, 1, '2020-09-03 19:41:27', '2020-09-03 19:41:27'),
+(31, 'D-KWRL', 71, 1, '2020-11-17 12:58:52', '2020-11-17 12:58:52'),
+(32, 'D-7543', 72, 1, '2020-12-01 14:13:25', '2020-12-01 14:13:25');
 
 -- --------------------------------------------------------
 
@@ -75,6 +77,7 @@ INSERT INTO `flugzeuge` (`id`, `kennung`, `musterID`, `erstelltAm`, `geaendertAm
 -- Tabellenstruktur für Tabelle `flugzeug_details`
 --
 
+DROP TABLE IF EXISTS `flugzeug_details`;
 CREATE TABLE `flugzeug_details` (
   `id` int(11) NOT NULL,
   `flugzeugID` int(11) NOT NULL,
@@ -141,6 +144,7 @@ INSERT INTO `flugzeug_details` (`id`, `flugzeugID`, `baujahr`, `seriennummer`, `
 -- Tabellenstruktur für Tabelle `flugzeug_hebelarme`
 --
 
+DROP TABLE IF EXISTS `flugzeug_hebelarme`;
 CREATE TABLE `flugzeug_hebelarme` (
   `id` int(11) NOT NULL,
   `flugzeugID` int(11) NOT NULL,
@@ -209,6 +213,7 @@ INSERT INTO `flugzeug_hebelarme` (`id`, `flugzeugID`, `beschreibung`, `hebelarm`
 -- Tabellenstruktur für Tabelle `flugzeug_klappen`
 --
 
+DROP TABLE IF EXISTS `flugzeug_klappen`;
 CREATE TABLE `flugzeug_klappen` (
   `id` int(11) NOT NULL,
   `flugzeugID` int(11) NOT NULL,
@@ -270,6 +275,7 @@ INSERT INTO `flugzeug_klappen` (`id`, `flugzeugID`, `stellungName`, `klappenwink
 -- Tabellenstruktur für Tabelle `flugzeug_waegung`
 --
 
+DROP TABLE IF EXISTS `flugzeug_waegung`;
 CREATE TABLE `flugzeug_waegung` (
   `id` int(11) NOT NULL,
   `flugzeugID` int(11) NOT NULL,
@@ -317,6 +323,7 @@ INSERT INTO `flugzeug_waegung` (`id`, `flugzeugID`, `leermasse`, `schwerpunkt`, 
 -- Tabellenstruktur für Tabelle `muster`
 --
 
+DROP TABLE IF EXISTS `muster`;
 CREATE TABLE `muster` (
   `id` int(11) NOT NULL,
   `musterName` text NOT NULL,
@@ -364,6 +371,7 @@ INSERT INTO `muster` (`id`, `musterName`, `doppelsitzer`, `woelbklappen`) VALUES
 -- Tabellenstruktur für Tabelle `muster_details`
 --
 
+DROP TABLE IF EXISTS `muster_details`;
 CREATE TABLE `muster_details` (
   `id` int(11) NOT NULL,
   `musterID` int(11) NOT NULL,
@@ -428,6 +436,7 @@ INSERT INTO `muster_details` (`id`, `musterID`, `kupplung`, `diffQR`, `radgroess
 -- Tabellenstruktur für Tabelle `muster_hebelarme`
 --
 
+DROP TABLE IF EXISTS `muster_hebelarme`;
 CREATE TABLE `muster_hebelarme` (
   `id` int(11) NOT NULL,
   `musterID` int(11) NOT NULL,
@@ -497,6 +506,7 @@ INSERT INTO `muster_hebelarme` (`id`, `musterID`, `beschreibung`, `hebelarm`) VA
 -- Tabellenstruktur für Tabelle `muster_klappen`
 --
 
+DROP TABLE IF EXISTS `muster_klappen`;
 CREATE TABLE `muster_klappen` (
   `id` int(11) NOT NULL,
   `musterID` int(11) NOT NULL,

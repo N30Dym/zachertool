@@ -20,6 +20,7 @@ class ProtokolleModel extends Model
 	/*
 	* Diese Funktion ruft alle Protokolle auf
 	*
+	* @return object
 	*/
 	public function getAlleProtokolle()
 	{			
@@ -29,7 +30,7 @@ class ProtokolleModel extends Model
 	
 	
 	/*
-	* Diese Funktion ruft nur das Protokolle mit
+	* Diese Funktion ruft nur das Protokoll mit
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
@@ -44,10 +45,8 @@ class ProtokolleModel extends Model
 		}
 		else
 		{
-			/*
-				* Fehler beim übergebenen Wert
-				*/
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
 	
@@ -71,10 +70,8 @@ class ProtokolleModel extends Model
 	{			
 		$query = "SELECT * FROM protokolle WHERE bestätigt = 1";
 		
-		/*
-		* Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		*
-		*/
+		
+		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
 		if(!empty($sortiert))
 		{
 			/*
@@ -90,9 +87,8 @@ class ProtokolleModel extends Model
 			}
 			else
 			{
-				/*
-				* Fehler beim übergebenen Wert
-				*/
+				
+				// Fehler beim übergebenen Wert
 				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 			}
 		}
@@ -121,10 +117,7 @@ class ProtokolleModel extends Model
 	{			
 		$query = "SELECT * FROM protokolle WHERE bestätigt IS NULL AND fertig = 1";
 		
-		/*
-		* Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		*
-		*/
+		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
 		if(!empty($sortiert))
 		{
 			/*
@@ -140,9 +133,7 @@ class ProtokolleModel extends Model
 			}
 			else
 			{
-				/*
-				* Fehler beim übergebenen Wert
-				*/
+				// Fehler beim übergebenen Wert
 				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 			}
 		}
@@ -170,10 +161,7 @@ class ProtokolleModel extends Model
 	{			
 		$query = "SELECT * FROM protokolle WHERE bestätigt IS NULL AND fertig IS NULL";
 		
-		/*
-		* Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		*
-		*/
+		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
 		if(!empty($sortiert))
 		{
 			/*
@@ -189,9 +177,7 @@ class ProtokolleModel extends Model
 			}
 			else
 			{
-				/*
-				* Fehler beim übergebenen Wert
-				*/
+				// Fehler beim übergebenen Wert
 				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 			}
 		}
@@ -217,9 +203,7 @@ class ProtokolleModel extends Model
 		}
 		else
 		{
-			/*
-			* Fehler beim übergebenen Wert
-			*/
+			// Fehler beim übergebenen Wert
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
@@ -254,19 +238,14 @@ class ProtokolleModel extends Model
 	{	
 
 		$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-		if(!pruefeString($whereWert, $erlaubteEingaben))
+		if( ! pruefeString($whereWert, $erlaubteEingaben))
 		{
-			/*
-			* Fehler beim übergebenen Wert
-			*/
+			// Fehler beim übergebenen Wert
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 		$query = "SELECT * FROM protokolle WHERE " . $whereWert . " = ". $suchWert;
 		
-		/*
-		* Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		*
-		*/
+		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
 		if(!empty($sortiert))
 		{
 			/*
@@ -282,9 +261,7 @@ class ProtokolleModel extends Model
 			}
 			else
 			{
-				/*
-				* Fehler beim übergebenen Wert
-				*/
+				// Fehler beim übergebenen Wert
 				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 			}
 		}

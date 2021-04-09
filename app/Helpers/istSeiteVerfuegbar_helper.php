@@ -7,7 +7,6 @@ if (! function_exists('istSeiteVerfuegbar'))
 	 * Gibt an, ob die Seite verfügbar ist
 	 *
 	 * @param string $url 
-	 *
 	 * @return boolean
 	 */
 	function istSeiteVerfuegbar(string $url){

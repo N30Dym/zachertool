@@ -12,6 +12,8 @@ class Startseite extends Controller
 	
 	public function index()
 	{
+		session_start();
+		$_SESSION["admin"] = TRUE;
 		if ( ! is_file(APPPATH.'/Views/startseite.php'))
 		{
 			// Whoops, we don't have a page for that!
@@ -25,10 +27,9 @@ class Startseite extends Controller
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
 		$dataContent = [
-			'flugzeuge' => $flugzeuge->getFlugzeuge(),
+			'flugzeuge' => $flugzeuge->getFlugzeugeDiesesJahr(),
 			'title' => $title
 		];
-
 		
 		echo view('templates/header', $dataHeader);
 		echo view('templates/navbar');
@@ -36,15 +37,4 @@ class Startseite extends Controller
 		echo view('templates/footer');
 	}
 	
-	public function checkout($title = "Hallo")
-	{
-		
-		$dataHeader = [
-			"title" => $title,
-			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
-		];
-		echo view('templates/navbar');
-		echo view('checkout');
-		echo view('templates/footer');
-	}
 }

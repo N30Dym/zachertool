@@ -16,18 +16,19 @@ class FlugzeugeModel extends Model
 
 	
 	
-	public function getFlugzeugeDiesesJahr()
+	public function getProtokolleDiesesJahr()
 	{
 		
 	##############################################################################
 	### Query zum Anzeigen der Kennzeichen die im letzten Jahr geflogen wurden ###
 	##############################################################################
 
-		$query = "SELECT DISTINCT zachern_flugzeuge.flugzeuge.kennung FROM zachern_protokolle.protokolle LEFT JOIN zachern_flugzeuge.flugzeuge ON zachern_protokolle.protokolle.flugzeugID = zachern_flugzeuge.flugzeuge.id WHERE YEAR(zachern_protokolle.protokolle.datum) = YEAR(CURDATE())-1";
-		return $this->query($query)->getResult();
-
-
-		
-
+		$query = "SELECT DISTINCT zachern_flugzeuge.flugzeuge.kennung, zachern_flugzeuge.muster.musterName FROM zachern_flugzeuge.flugzeuge JOIN zachern_protokolle.protokolle ON zachern_protokolle.protokolle.flugzeugID = zachern_flugzeuge.flugzeuge.id JOIN zachern_flugzeuge.muster ON zachern_flugzeuge.flugzeuge.musterID = zachern_flugzeuge.muster.id WHERE YEAR(zachern_protokolle.protokolle.datum) = YEAR(CURDATE())-1;";
+		return $this->query($query)->getResult();	
+	}
+	
+	public function getAnzahlProtokolleProFlugzeug($flugzeugID)
+	{
+		return $flugzeugID;
 	}
 }

@@ -16,9 +16,10 @@
 		<?php foreach($flugzeuge as $flugzeug_item) : ?>
 			
 			<tr class="text-center">
-				<td><?= esc($flugzeug_item->flugzeugID) ?></td>
-				<td><?= esc($flugzeug_item->pilotID) ?></td>
-				<td><?php // esc($flugzeug_item->musterName) ?></td>
+				<td><?= esc($flugzeug_item["protokollSpeicherID"]) ?></td>
+				<td><?= esc($flugzeug_item["gedrücktHSt"]) ?></td>
+				<td><?= esc($flugzeug_item["neutralHSt"]) ?></td>
+				<td><?= esc($flugzeug_item["gezogenHSt"]) ?></td>
 			</tr>
 			
 		<?php endforeach ?>

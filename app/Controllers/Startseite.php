@@ -6,7 +6,9 @@ use CodeIgniter\Controller;
 use App\Models\StartseiteModel;
 use App\Models\flugzeuge\FlugzeugeModel;
 use App\Models\protokolle\ProtokolleModel;
-
+use App\Models\protokolle\HStWegeModel;
+helper("array");
+helper("konvertiereHStWegeInProzent");
 
 class Startseite extends Controller
 {
@@ -33,13 +35,18 @@ class Startseite extends Controller
 			//echo $anzahl;
 		}*/
 		
+		//array_sort_by_multiple_keys!!!
+		
+		$testModel = new HStWegeModel();
+		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
+		
 		$dataHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
 		$dataContent = [
-			'flugzeuge' => $getProtokolle,
-			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung",
+			'flugzeuge' => $test,
+			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
 			'title' => $title
 		];
 		

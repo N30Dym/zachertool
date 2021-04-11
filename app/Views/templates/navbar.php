@@ -3,7 +3,7 @@
 <header>
 	<nav class="navbar navbar-expand bg-secondary bg-gradient ">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="">
+			<a class="navbar-brand" href="<?= base_url() ?>/">
 				<img class="rounded-1" src="<?= base_url() ?>/public/bilder/Idaflieg_Logo_ohne_Text.jpg" alt="" height="35">
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
 						</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="#">Flugzeugliste</a>
-							<a class="dropdown-item" href="#">Flugzeug hinzufügen</a>
+							<a class="dropdown-item" href="<?= base_url() ?>/flugzeuge/flugzeugNeu">Flugzeug hinzufügen</a>
 							
 							<?php if (isset($_SESSION["admin"]) && $SESSION["admin"] = TRUE) :?>
 								<a class="dropdown-item" href="#">Flugzeug bearbeiten</a>

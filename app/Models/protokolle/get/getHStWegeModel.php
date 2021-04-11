@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\protokolle;
+namespace App\Models\protokolle\get;
 
 use CodeIgniter\Model;
 helper("pruefeString");
 
-class HStWegeModel extends Model
+class getHStWegeModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur

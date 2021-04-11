@@ -4,9 +4,9 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\StartseiteModel;
-use App\Models\flugzeuge\FlugzeugeModel;
-use App\Models\protokolle\ProtokolleModel;
-use App\Models\protokolle\HStWegeModel;
+use App\Models\flugzeuge\get\getFlugzeugeModel;
+use App\Models\protokolle\get\getProtokolleModel;
+use App\Models\protokolle\get\getHStWegeModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
@@ -23,7 +23,7 @@ class Startseite extends Controller
 		
 		$title = "Willkommen beim Zachertool";
 		
-		$protokolleNachJahr = new ProtokolleModel();
+		$protokolleNachJahr = new getProtokolleModel();
 		$getProtokolle = $protokolleNachJahr->getProtokolleNachBeliebig("flugzeugID", 23, "datum");
 		
 		//var_dump($getProtokolle);
@@ -37,7 +37,7 @@ class Startseite extends Controller
 		
 		//array_sort_by_multiple_keys!!!
 		
-		$testModel = new HStWegeModel();
+		$testModel = new getHStWegeModel();
 		$test = konvertiereHStWegeInProzent($testModel->getHStWegeNachID(78));
 		
 		$dataHeader = [

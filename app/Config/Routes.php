@@ -34,6 +34,10 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Startseite::index');
 $routes->get('startseite', 'Startseite::index');
+$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeu::index');
+$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeu::flugzeugAnlegen/$1');
+
+
 //$routes->get('(:any)', 'Pages::view/$1');
 //$routes->get('news/(:segment)', 'News::view/$1');
 //$routes->get('news', 'News::index');

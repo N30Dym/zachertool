@@ -38,9 +38,9 @@ class getMusterModel extends Model
 		}
 	}
 	
-	public function getAlleAktivenMuster()
+	public function getAlleMuster()
 	{
-		$query = "SELECT * FROM muster WHERE aktiv = 1";
+		$query = "SELECT * FROM muster";
 		return $this->query($query)->getResult();
 	}
 }

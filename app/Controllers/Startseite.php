@@ -38,7 +38,7 @@ class Startseite extends Controller
 		//array_sort_by_multiple_keys!!!
 		
 		$testModel = new HStWegeModel();
-		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
+		$test = konvertiereHStWegeInProzent($testModel->getHStWegeNachID(78));
 		
 		$dataHeader = [
 			"title" => $title,

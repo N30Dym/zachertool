@@ -32,11 +32,11 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'startseite::index');
-$routes->get('startseite', 'startseite::index');
-$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeu::index');
-$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeu::flugzeugAnlegen/$1');
-$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeu::flugzeugAnlegen/');
+$routes->get('/', 'startseiteController::index');
+$routes->get('startseite', 'startseiteController::index');
+$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeuController::index');
+$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/$1');
+$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/');
 
 
 //$routes->get('(:any)', 'Pages::view/$1');

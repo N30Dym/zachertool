@@ -3,22 +3,22 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\StartseiteModel;
+use App\Models\startseiteModel;
 use App\Models\flugzeuge\get\getFlugzeugeModel;
 use App\Models\protokolle\get\getProtokolleModel;
 use App\Models\protokolle\get\getHStWegeModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
-class startseite extends Controller
+class startseiteController extends Controller
 {
 	
 	public function index()
 	{
-		if ( ! is_file(APPPATH.'/Views/startseite.php'))
+		if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
 		{
 			// Whoops, we don't have a page for that!
-			throw new \CodeIgniter\Exceptions\PageNotFoundException('startseite.php');
+			throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
 		}
 		
 		$title = "Willkommen beim Zachertool";
@@ -50,10 +50,10 @@ class startseite extends Controller
 			'title' => $title
 		];
 		
-		echo view('templates/header', $dataHeader);
-		echo view('templates/navbar');
-		echo view('startseite', $dataContent);
-		echo view('templates/footer');
+		echo view('templates/headerView', $dataHeader);
+		echo view('templates/navbarView');
+		echo view('startseiteView', $dataContent);
+		echo view('templates/footerView');
 	}
 	
 }

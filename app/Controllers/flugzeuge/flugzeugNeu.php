@@ -4,6 +4,7 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 use App\Models\muster\get\getMusterModel;
+use App\Models\muster\get\getMusterDetailsModel;
 helper("array");
 
 class flugzeugNeu extends Controller
@@ -47,6 +48,15 @@ class flugzeugNeu extends Controller
 	
 	public function flugzeugAnlegen($musterID)
 	{
-		echo $musterID;
+		if($musterID)
+		{
+			$getMusterDetailsModel = new getMusterDetailsModel();
+			$musterDetails = $getMusterDetailsModel->getMusterDetailsNachMusterID($musterID);
+			var_dump($musterDetails);
+		}
+		else
+		{
+			echo "Neu";
+		}
 	}
 }

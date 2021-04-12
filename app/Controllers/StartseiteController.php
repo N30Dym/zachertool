@@ -10,7 +10,7 @@ use App\Models\protokolle\get\getHStWegeModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
-class Startseite extends Controller
+class startseite extends Controller
 {
 	
 	public function index()

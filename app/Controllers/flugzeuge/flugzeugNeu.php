@@ -4,6 +4,7 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 use App\Models\muster\get\getMusterModel;
+helper("array");
 
 class flugzeugNeu extends Controller
 {
@@ -19,7 +20,13 @@ class flugzeugNeu extends Controller
 		}
 		
 		$getMusterModel = new getMusterModel();
+		// Alle Flugzeugmuster laden
 		$alleMuster = $getMusterModel->getAlleMuster();
+		if(array_sort_by_multiple_keys($alleMuster, ["musterKlarname" => SORT_ASC])){}
+		else{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
 		
 		$title = "Musterauswahl";		
 		$description = "Wähle das Muster des Flugzeuges aus, dass du hinzufügen möchtest";
@@ -29,9 +36,8 @@ class flugzeugNeu extends Controller
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
 		$dataContent = [
-			'flugzeuge' => $alleMuster,
+			'muster' => $alleMuster
 		];
-		//var_dump($alleMuster);
 		
 		echo view('templates/header',  $dataHeader);
 		echo view('templates/navbar');

@@ -4,7 +4,7 @@ namespace App\Models\muster\get;
 
 use CodeIgniter\Model;
 
-class getMusterModel extends Model
+class getMusterDetailsModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur

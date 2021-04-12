@@ -1,9 +1,12 @@
 <h2 class="text-center"><?= esc($title) ?></h2>	
 <div class="row">
 	<div class="col-3">
-		<span class="pt-5 sticky-top">
-			Wenn es das Muster noch nicht gibt kannst du <a href="<?= base_url() ?>/flugzeuge/flugzeugNeu/neu">hier</a> das Flugzeug mit Muster anlegen.
-		</span>
+		<div class="sticky-top row">
+			<span class="col-3" style="height: 3rem !important"></span>
+			<span class=" ">
+				Wenn es das Muster noch nicht gibt kannst du <a href="<?= base_url() ?>/flugzeuge/flugzeugNeu/neu">hier</a> das Flugzeug mit Muster anlegen.
+			</span>
+		</div>
 	</div>
 	<div class="col-6 d-flex justify-content-center">	
 	<?php if(count($muster) == 0): ?>

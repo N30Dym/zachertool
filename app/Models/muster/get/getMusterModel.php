@@ -29,7 +29,7 @@ class getMusterModel extends Model
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
 			$query = "SELECT * FROM muster WHERE id = ". trim($id);
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{
@@ -40,7 +40,8 @@ class getMusterModel extends Model
 	
 	public function getAlleMuster()
 	{
-		$query = "SELECT * FROM muster";
-		return $this->query($query)->getResult();
+
+		return($this->findAll());
+
 	}
 }

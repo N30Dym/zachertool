@@ -25,7 +25,7 @@ class getProtokolleModel extends Model
 	public function getAlleProtokolle()
 	{			
 		$query = "SELECT * FROM protokolle;";
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}
 	
 	
@@ -41,7 +41,7 @@ class getProtokolleModel extends Model
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
 			$query = "SELECT * FROM protokolle WHERE id = ". trim($id);
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{
@@ -93,7 +93,7 @@ class getProtokolleModel extends Model
 			}
 		}
 		
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}
 	
 	
@@ -138,7 +138,7 @@ class getProtokolleModel extends Model
 			}
 		}
 		
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}
 	
 	
@@ -182,7 +182,7 @@ class getProtokolleModel extends Model
 			}
 		}
 		
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}
 	
 	
@@ -199,7 +199,7 @@ class getProtokolleModel extends Model
 		if(is_int(trim($jahr)) OR is_numeric(trim($jahr)))
 		{
 			$query = "SELECT * FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{
@@ -266,6 +266,6 @@ class getProtokolleModel extends Model
 			}
 		}
 		
-		return $this->query($query)->getResult();
+		return $this->query($query)->getResultArray();
 	}	
 }	

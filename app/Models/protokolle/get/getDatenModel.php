@@ -30,7 +30,7 @@ class getDatenModel extends Model
 	if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
 			$query = "SELECT * FROM daten WHERE id = ". trim($id);
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{

@@ -8,7 +8,7 @@
 		<?php foreach($flugzeuge as $flugzeug_item) : ?>
 			
 			<tr class="text-center">
-				<td><?= esc($flugzeug_item->musterName) ?></td>
+				<td><?= esc($flugzeug_item["musterName"]) ?></td>
 			</tr>
 			
 		<?php endforeach ?>

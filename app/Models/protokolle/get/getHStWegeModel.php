@@ -25,7 +25,7 @@ class getHStWegeModel extends Model
 	public function getAlleHStWege()
 	{			
 		$query = "SELECT * FROM `hst-wege`";
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}
 	
 	/*
@@ -40,7 +40,7 @@ class getHStWegeModel extends Model
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{		
 			$query = "SELECT * FROM `hst-wege` WHERE id = ". $id;
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{
@@ -61,7 +61,7 @@ class getHStWegeModel extends Model
 		if(is_int(trim($protokollSpeicherID)) OR is_numeric(trim($protokollSpeicherID)))
 		{		
 			$query = "SELECT * FROM `hst-wege` WHERE protokollSpeicherID = ". $protokollSpeicherID;
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{

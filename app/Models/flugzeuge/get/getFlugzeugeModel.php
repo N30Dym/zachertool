@@ -26,7 +26,7 @@ class getFlugzeugeModel extends Model
 	##############################################################################
 
 		$query = "SELECT DISTINCT zachern_flugzeuge.flugzeuge.kennung, zachern_flugzeuge.muster.musterName FROM zachern_flugzeuge.flugzeuge JOIN zachern_protokolle.protokolle ON zachern_protokolle.protokolle.flugzeugID = zachern_flugzeuge.flugzeuge.id JOIN zachern_flugzeuge.muster ON zachern_flugzeuge.flugzeuge.musterID = zachern_flugzeuge.muster.id WHERE YEAR(zachern_protokolle.protokolle.datum) = YEAR(CURDATE())-1;";
-		return $this->query($query)->getResult();	
+		return $this->query($query)->getResultArray();	
 	}*/
 	
 	/*public function getAnzahlProtokolleProFlugzeug($flugzeugID)
@@ -46,7 +46,7 @@ class getFlugzeugeModel extends Model
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
 			$query = "SELECT * FROM flugzeuge WHERE id = ". trim($id);
-			return $this->query($query)->getResult();	
+			return $this->query($query)->getResultArray();	
 		}
 		else
 		{

@@ -21,7 +21,7 @@ if (! function_exists('konvertiereHStWegeInProzent'))
 				{
 					$neutralHSt = round(100 * ((double)$hStWeg->neutralHSt - (double) $hStWeg->gedrücktHSt) / ((double) $hStWeg->gezogenHSt - (double) $hStWeg->gedrücktHSt), 2);
 					$temporaeresArray = ["protokollSpeicherID" => $hStWeg->protokollSpeicherID, "protokollSektionID" => $hStWeg->protokollSektionID, "gedrücktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
-					array_push($hStWegeInProzent, (object) $temporaeresArray);
+					array_push($hStWegeInProzent, $temporaeresArray);
 				}
 				
 			}
@@ -30,8 +30,8 @@ if (! function_exists('konvertiereHStWegeInProzent'))
 				if((double) $hStWeg["gedrücktHSt"] <= (double) $hStWeg["neutralHSt"] && (double) $hStWeg["neutralHSt"] <= (double) $hStWeg["gezogenHSt"])
 				{
 					$neutralHSt = round(100 * ((double)$hStWeg["neutralHSt"] - (double) $hStWeg["gedrücktHSt"]) / ((double) $hStWeg["gezogenHSt"] - (double) $hStWeg["gedrücktHSt"]), 2);
-					$temporaeresArray = ["protokollSpeicherID" => $hStWeg->protokollSpeicherID, "protokollSektionID" => $hStWeg->protokollSektionID, "gedrücktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
-					array_push($hStWegeInProzent, (object) $temporaeresArray);
+					$temporaeresArray = ["protokollSpeicherID" => $hStWeg["protokollSpeicherID"], "protokollSektionID" => $hStWeg["protokollSektionID"], "gedrücktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
+					array_push($hStWegeInProzent, $temporaeresArray);
 				}
 			}
 		}

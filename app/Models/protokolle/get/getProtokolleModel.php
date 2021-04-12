@@ -20,7 +20,7 @@ class getProtokolleModel extends Model
 	/*
 	* Diese Funktion ruft alle Protokolle auf
 	*
-	* @return object
+	* @return array
 	*/
 	public function getAlleProtokolle()
 	{			
@@ -34,7 +34,7 @@ class getProtokolleModel extends Model
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
-	* @return object
+	* @return array
 	*/
 	public function getProtokolleNachID($id)
 	{			
@@ -64,7 +64,7 @@ class getProtokolleModel extends Model
 	*		flugzeit
 	*		datum
 	*		erstelltAm
-	* @return object
+	* @return array
 	*/
 	public function getBestaetigteProtokolle($sortiert = '')
 	{			
@@ -111,7 +111,7 @@ class getProtokolleModel extends Model
 	*		flugzeit
 	*		datum
 	*		erstelltAm
-	* @return object
+	* @return array
 	*/
 	public function getFertigeProtokolle($sortiert = '')
 	{			
@@ -155,7 +155,7 @@ class getProtokolleModel extends Model
 	*		flugzeit
 	*		datum
 	*		erstelltAm
-	* @return object
+	* @return array
 	*/
 	public function getUnfertigeProtokolle($sortiert = '')
 	{			
@@ -192,7 +192,7 @@ class getProtokolleModel extends Model
 	* Erstelldatum wird NICHT berücksichtigt
 	*
 	* @param  int $jahr
-	* @return object
+	* @return array
 	*/
 	public function getProtokolleNachJahr($jahr)
 	{		
@@ -232,7 +232,7 @@ class getProtokolleModel extends Model
 	*		flugzeit
 	*		datum
 	*		erstelltAm
-	* @return object
+	* @return array
 	*/
 	public function getProtokolleNachBeliebig($whereWert, $suchWert, $sortiert = "")
 	{	

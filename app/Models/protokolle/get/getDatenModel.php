@@ -22,7 +22,7 @@ class getDatenModel extends Model
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
-	* @return object
+	* @return array
 	*/
 	public function getDatenNachID($id)
 	{
@@ -58,7 +58,7 @@ class getDatenModel extends Model
 	*		Links
 	*		Rechts
 	* @param mix $multipelNr standard = "0"
-	* @return object
+	* @return array
 	*/
 	public function getDatenSpezifisch($protokollSpeicherID, $protokollInputID, $woelbklappenstellung = "0", $linksUndRechts = "0", $multipelNr = "0")
 	{

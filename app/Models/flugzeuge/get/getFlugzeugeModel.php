@@ -39,7 +39,7 @@ class getFlugzeugeModel extends Model
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
-	* @return object
+	* @return array
 	*/
 	public function getFlugzeugeNachID($id)
 	{			

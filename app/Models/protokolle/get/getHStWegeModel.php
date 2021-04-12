@@ -20,7 +20,7 @@ class getHStWegeModel extends Model
 	/*
 	* Diese Funktion ruft alle HSt-Wege auf
 	*
-	* @return object
+	* @return array
 	*/
 	public function getAlleHStWege()
 	{			
@@ -33,7 +33,7 @@ class getHStWegeModel extends Model
 	* der jeweiligen ID auf
 	*
 	* @params mix $id
-	* @return object
+	* @return array
 	*/
 	public function getHStWegeNachID($id)
 	{	
@@ -54,7 +54,7 @@ class getHStWegeModel extends Model
 	* jeweiligen $protokollSpeicherID auf
 	*
 	* @params mix $protokollSpeicherID
-	* @return object
+	* @return array
 	*/
 	public function getHStWegeNachProtokollSpeicherID($protokollSpeicherID)
 	{	

@@ -8,28 +8,25 @@ class getMusterModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_protokolle auf die 
-	 * Tabelle protokolle
+	 * Datenbank zachern_flugzeuge auf die 
+	 * Tabelle muster
 	 */
     protected $DBGroup = 'flugzeugeDB';
 	protected $table      = 'muster';
     protected $primaryKey = 'id';
-	protected $createdField  = 'erstelltAm';
-
 	
 	/*
 	* Diese Funktion ruft nur das Protokoll mit
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
-	* @return object
+	* @return array
 	*/
 	public function getMusterNachID($id)
 	{			
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
-		{
-			$query = "SELECT * FROM muster WHERE id = ". trim($id);
-			return $this->query($query)->getResultArray();	
+		{	
+			return($this->where("id", $id)->findAll());
 		}
 		else
 		{

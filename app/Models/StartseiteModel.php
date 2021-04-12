@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class StartseiteModel extends Model {
+class startseiteModel extends Model {
 	
 
 	public function getFlugzeugeDiesesJahr()

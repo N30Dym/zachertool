@@ -36,6 +36,7 @@ $routes->get('/', 'Startseite::index');
 $routes->get('startseite', 'Startseite::index');
 $routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeu::index');
 $routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeu::flugzeugAnlegen/$1');
+$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeu::flugzeugAnlegen/');
 
 
 //$routes->get('(:any)', 'Pages::view/$1');

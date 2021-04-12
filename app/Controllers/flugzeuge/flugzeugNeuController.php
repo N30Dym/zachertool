@@ -7,24 +7,31 @@ use App\Models\muster\get\getMusterModel;
 use App\Models\muster\get\getMusterDetailsModel;
 helper("array");
 
-class flugzeugNeu extends Controller
+class flugzeugNeuController extends Controller
 {
 	
 	public function index()
 	{
 		//Auswahl eines Muster, Link um neues Muster zu erstellen
 		
-		if ( ! is_file(APPPATH.'/Views/startseite.php'))
+		if ( ! is_file(APPPATH.'/Views/flugzeuge/flugzeugAngabenView.php'))
 		{
 			// Whoops, we don't have a page for that!
-			throw new \CodeIgniter\Exceptions\PageNotFoundException('startseite.php');
+			throw new \CodeIgniter\Exceptions\PageNotFoundException('flugzeugAngabenView.php');
+		}
+		if ( ! is_file(APPPATH.'/Views/flugzeuge/musterauswahlView.php'))
+		{
+			// Whoops, we don't have a page for that!
+			throw new \CodeIgniter\Exceptions\PageNotFoundException('musterauswahlView.php');
 		}
 		
 		$getMusterModel = new getMusterModel();
 		// Alle Flugzeugmuster laden
 		$alleMuster = $getMusterModel->getAlleMuster();
-		if(array_sort_by_multiple_keys($alleMuster, ["musterKlarname" => SORT_ASC])){}
-		else{
+		
+		// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
+		if(!array_sort_by_multiple_keys($alleMuster, ["musterKlarname" => SORT_ASC]))
+		{
 			// Fehler beim übergebenen Wert
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
@@ -40,10 +47,10 @@ class flugzeugNeu extends Controller
 			'muster' => $alleMuster
 		];
 		
-		echo view('templates/header',  $dataHeader);
-		echo view('templates/navbar');
-		echo view('flugzeuge/musterauswahl', $dataContent);
-		echo view('templates/footer');
+		echo view('templates/headerView',  $dataHeader);
+		echo view('templates/navbarView');
+		echo view('flugzeuge/musterauswahlView', $dataContent);
+		echo view('templates/footerView');
 	}
 	
 	public function flugzeugAnlegen($musterID)

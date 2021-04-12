@@ -2,7 +2,7 @@
 <div class="row">
 	<div class="col-3">
 		<span class="pt-5 sticky-top">
-			Wenn es das Muster noch nicht gibt kannst du <a href="">hier</a> ein neues anlegen.
+			Wenn es das Muster noch nicht gibt kannst du <a href="<?= base_url() ?>/flugzeuge/flugzeugNeu/neu">hier</a> das Flugzeug mit Muster anlegen.
 		</span>
 	</div>
 	<div class="col-6 d-flex justify-content-center">	

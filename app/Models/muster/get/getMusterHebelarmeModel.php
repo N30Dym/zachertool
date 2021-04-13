@@ -15,7 +15,7 @@ class getMusterHebelarmeModel extends Model
 	protected $table      = 'muster_hebelarme';
     protected $primaryKey = 'id';
 
-	public function getMusterHebelarmeNachID($musterID)
+	public function getMusterHebelarmeNachMusterID($musterID)
 	{
 		if(is_int(trim($musterID)) OR is_numeric(trim($musterID)))
 		{	
@@ -39,15 +39,14 @@ class getMusterHebelarmeModel extends Model
 	public function getMusterHebelarmeLeer()
 	{
 		$dbName = $this->db->database;
-		$dbTabellenName = $this->db->table;
+		$dbTabellenName = $this->table;
 		$query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='". $dbName ."' AND `TABLE_NAME`='". $dbTabellenName ."' ";
 		$columnNames = $this->query($query)->getResultArray();
 
 		$returnArray = [];
 		foreach($columnNames as $columnName)
 		{
-			$tempArray = [$columnName["COLUMN_NAME"] => ""];
-			array_push($returnArray, $tempArray);
+			$returnArray[$columnName["COLUMN_NAME"]] = "";
 		}
 		return $returnArray;
 	}

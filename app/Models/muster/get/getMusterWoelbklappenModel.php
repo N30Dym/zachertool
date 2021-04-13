@@ -39,15 +39,14 @@ class getMusterWoelbklappenModel extends Model
 	public function getMusterWoelbklappenLeer()
 	{
 		$dbName = $this->db->database;
-		$dbTabellenName = $this->db->table;
+		$dbTabellenName = $this->table;
 		$query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='". $dbName ."' AND `TABLE_NAME`='". $dbTabellenName ."' ";
 		$columnNames = $this->query($query)->getResultArray();
 
 		$returnArray = [];
 		foreach($columnNames as $columnName)
 		{
-			$tempArray = [$columnName["COLUMN_NAME"] => ""];
-			array_push($returnArray, $tempArray);
+			$returnArray[$columnName["COLUMN_NAME"]] = "";
 		}
 		return $returnArray;
 	}

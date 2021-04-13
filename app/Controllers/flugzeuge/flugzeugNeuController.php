@@ -19,9 +19,8 @@ class flugzeugNeuController extends Controller
 	* stellt diese zur Auswahl zur Verfügung.
 	*/
 	public function index()
-	{
-		//Auswahl eines Muster, Link um neues Muster zu erstellen
-		
+	{	
+		// Überprüfen, ob die beiden Views verfügbar sind
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/flugzeugAngabenView.php'))
 		{
 			// Whoops, we don't have a page for that!
@@ -33,7 +32,9 @@ class flugzeugNeuController extends Controller
 			throw new \CodeIgniter\Exceptions\PageNotFoundException('musterauswahlView.php');
 		}
 		
+		// getMusterModell initiieren
 		$getMusterModel = new getMusterModel();
+		
 		// Alle Flugzeugmuster laden
 		$alleMuster = $getMusterModel->getAlleMuster();
 		
@@ -47,14 +48,18 @@ class flugzeugNeuController extends Controller
 		$title = "Musterauswahl";		
 		$description = "Wähle das Muster des Flugzeuges aus, dass du hinzufügen möchtest";
 		
+		// Daten für den Header aufbereiten
 		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
+		
+		// Daten für den Inhalt aufbereiten
 		$datenInhalt = [
 			'muster' => $alleMuster
 		];
 		
+		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
 		echo view('templates/navbarView');
 		echo view('flugzeuge/musterauswahlView', $datenInhalt);
@@ -88,6 +93,11 @@ class flugzeugNeuController extends Controller
 			$getMusterModel = new getMusterModel();
 			$muster = $getMusterModel->getMusterNachID($musterID);
 			
+			if(!$muster)
+			{
+				throw new \CodeIgniter\Database\Exceptions\DatabaseException("Kein Muster mit dieser ID verfügbar");
+			}
+			
 			// Alles aus Tabelle zachern_flugzeuge.muster_details als Array laden, wo die musterID = $musterID
 			$getMusterDetailsModel = new getMusterDetailsModel();
 			$musterDetails = $getMusterDetailsModel->getMusterDetailsNachMusterID($musterID);
@@ -95,7 +105,7 @@ class flugzeugNeuController extends Controller
 			
 			// Alles aus Tabelle zachern_flugzeuge.muster_hebelarme als Array laden, wo die musterID = $musterID
 			$getMusterHebelarmeModel = new getMusterHebelarmeModel();
-			$musterHebelarme = $getMusterHebelarmeModel->getMusterHebelarmeNachID($musterID);
+			$musterHebelarme = $getMusterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
 			
 			// $musterWoelbklappen initialisieren und leer setzten, falls kein WK-Flugzeug, bleibt die Variable leer
 			$musterWoelbklappen = null;
@@ -105,7 +115,7 @@ class flugzeugNeuController extends Controller
 			{
 				// Wenn ja, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
 				$getMusterWoelbklappenModel = new getMusterWoelbklappenModel();
-				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachID($musterID);
+				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachMusterID($musterID);
 			}
 			
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
@@ -117,6 +127,7 @@ class flugzeugNeuController extends Controller
 			'musterHebelarme' => $musterHebelarme,
 			'musterWoelbklappen' => $musterWoelbklappen
 			];
+			var_dump($muster);
 		}
 		
 		/*
@@ -129,9 +140,7 @@ class flugzeugNeuController extends Controller
 		else
 		{
 			$title = "Neues Flugzeug und Flugzeugmuster erstellen";
-			
-			// Alle Felder der Arrays leer setzen, um nicht im View überprüfen zu müssen ob die Variable gesetzt ist oder nicht
-			
+						
 			// Aus Tabelle zachern_flugzeuge.muster leere Einträge als Array laden
 			$getMusterModel = new getMusterModel();
 			$musterLeer = $getMusterModel->getMusterLeer();
@@ -154,17 +163,18 @@ class flugzeugNeuController extends Controller
 			'musterHebelarme' => $musterHebelarmeLeer,
 			'musterWoelbklappen' => $musterWoelbklappenLeer
 			];
+			var_dump($musterLeer);
 		}
 		
 		
-		// Daten für den HeaderView initialisieren
+		// Daten für den HeaderView aufbereiten
 		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];	
 		
 		
-		// Views aufrufen, Seite laden und Daten übertragen
+		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
 		echo view('templates/navbarView');
 		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);

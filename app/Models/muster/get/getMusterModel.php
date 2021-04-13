@@ -37,8 +37,21 @@ class getMusterModel extends Model
 	
 	public function getAlleMuster()
 	{
-
 		return($this->findAll());
+	}
+	
+	public function getMusterLeer()
+	{
+		$dbName = $this->db->database;
+		$dbTabellenName = $this->table;
+		$query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='". $dbName ."' AND `TABLE_NAME`='". $dbTabellenName ."' ";
+		$columnNames = $this->query($query)->getResultArray();
 
+		$returnArray = [];
+		foreach($columnNames as $columnName)
+		{			
+			$returnArray[$columnName["COLUMN_NAME"]] = "";
+		}
+		return $returnArray;
 	}
 }

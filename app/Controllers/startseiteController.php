@@ -40,19 +40,19 @@ class startseiteController extends Controller
 		$testModel = new getHStWegeModel();
 		$test = konvertiereHStWegeInProzent($testModel->getHStWegeNachID(78));
 		
-		$dataHeader = [
+		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
-		$dataContent = [
+		$datenInhalt = [
 			'flugzeuge' => $test,
 			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
 			'title' => $title
 		];
 		
-		echo view('templates/headerView', $dataHeader);
+		echo view('templates/headerView', $datenHeader);
 		echo view('templates/navbarView');
-		echo view('startseiteView', $dataContent);
+		echo view('startseiteView', $datenInhalt);
 		echo view('templates/footerView');
 	}
 	

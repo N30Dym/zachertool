@@ -40,8 +40,7 @@ class getProtokolleModel extends Model
 	{			
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
-			$query = "SELECT * FROM protokolle WHERE id = ". trim($id);
-			return $this->query($query)->getResultArray();	
+			return($this->where("id", $id)->first());	
 		}
 		else
 		{
@@ -55,45 +54,11 @@ class getProtokolleModel extends Model
 	* Diese Funktion ruft nur Protokolle auf die
 	* bestätigt wurden (Nach Abgabegespräch)
 	*
-	* @param str $sortiert standard: ''
-	*	erlaubte Parameter sind:
-	*		id
-	*		flugzeugID
-	*		pilotID
-	*		copilotID
-	*		flugzeit
-	*		datum
-	*		erstelltAm
 	* @return array
 	*/
-	public function getBestaetigteProtokolle($sortiert = '')
+	public function getBestaetigteProtokolle()
 	{			
-		$query = "SELECT * FROM protokolle WHERE bestätigt = 1";
-		
-		
-		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		if(!empty($sortiert))
-		{
-			/*
-			* Erzeugt ein array $erlaubteEingaben in dem alle erlaubten
-			* Eingaben für das Sortieren stehen und prüft mit der Helper-
-			* Funktion pruefeString(), dass die Eingabe korrekt ist
-			*
-			*/
-			$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-			if(pruefeString($sortiert, $erlaubteEingaben))
-			{
-				$query = $query . " ORDER BY ". trim($sortiert);
-			}
-			else
-			{
-				
-				// Fehler beim übergebenen Wert
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-			}
-		}
-		
-		return $this->query($query)->getResultArray();	
+		return($this->where("bestaetigt", 1)->findAll());				
 	}
 	
 	
@@ -102,43 +67,11 @@ class getProtokolleModel extends Model
 	* fertig sind, aber noch nicht abgegeben wurden 
 	* (vor Abgabegespräch, aber abgesendet)
 	*
-	* @param str $sortiert standard: ''
-	*	erlaubte Parameter sind:
-	*		id
-	*		flugzeugID
-	*		pilotID
-	*		copilotID
-	*		flugzeit
-	*		datum
-	*		erstelltAm
 	* @return array
 	*/
-	public function getFertigeProtokolle($sortiert = '')
+	public function getFertigeProtokolle()
 	{			
-		$query = "SELECT * FROM protokolle WHERE bestätigt IS NULL AND fertig = 1";
-		
-		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		if(!empty($sortiert))
-		{
-			/*
-			* Erzeugt ein array $erlaubteEingaben in dem alle erlaubten
-			* Eingaben für das Sortieren stehen und prüft mit der Helper-
-			* Funktion pruefeString(), dass die Eingabe korrekt ist
-			*
-			*/
-			$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-			if(pruefeString($sortiert, $erlaubteEingaben))
-			{
-				$query = $query . " ORDER BY ". trim($sortiert);
-			}
-			else
-			{
-				// Fehler beim übergebenen Wert
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-			}
-		}
-		
-		return $this->query($query)->getResultArray();	
+		return($this->where("bestaetigt", 1)->where("fertig", null)->findAll());
 	}
 	
 	
@@ -146,43 +79,11 @@ class getProtokolleModel extends Model
 	* Diese Funktion ruft nur Protokolle auf die
 	* NICHT fertig sind (Zwischenspeicher ggf. abgebrochen)
 	*
-	* @param str $sortiert standard: ''
-	*	erlaubte Parameter sind:
-	*		id
-	*		flugzeugID
-	*		pilotID
-	*		copilotID
-	*		flugzeit
-	*		datum
-	*		erstelltAm
 	* @return array
 	*/
-	public function getUnfertigeProtokolle($sortiert = '')
+	public function getUnfertigeProtokolle()
 	{			
-		$query = "SELECT * FROM protokolle WHERE bestätigt IS NULL AND fertig IS NULL";
-		
-		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		if(!empty($sortiert))
-		{
-			/*
-			* Erzeugt ein array $erlaubteEingaben in dem alle erlaubten
-			* Eingaben für das Sortieren stehen und prüft mit der Helper-
-			* Funktion pruefeString(), dass die Eingabe korrekt ist
-			*
-			*/
-			$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-			if(pruefeString($sortiert, $erlaubteEingaben))
-			{
-				$query = $query . " ORDER BY ". trim($sortiert);
-			}
-			else
-			{
-				// Fehler beim übergebenen Wert
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-			}
-		}
-		
-		return $this->query($query)->getResultArray();	
+		return($this->where("bestaetigt", null)->where("fertig", null)->findAll());
 	}
 	
 	
@@ -207,65 +108,5 @@ class getProtokolleModel extends Model
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
-	
-	
-	/*
-	* Diese Funktion ruft kann nach bestimmten Attributen
-	* in der Tabelle protokolle suchen
-	*
-	* @param str $whereWert
-	* 	erlaubte Parameter sind:
-	*		id
-	*		flugzeugID
-	*		pilotID
-	*		copilotID
-	*		flugzeit
-	*		datum
-	*		erstelltAm
-	* @param mix $suchWert
-	* @param str $sortiert standard: ''
-	*	erlaubte Parameter sind:
-	*		id
-	*		flugzeugID
-	*		pilotID
-	*		copilotID
-	*		flugzeit
-	*		datum
-	*		erstelltAm
-	* @return array
-	*/
-	public function getProtokolleNachBeliebig($whereWert, $suchWert, $sortiert = "")
-	{	
-
-		$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-		if( ! pruefeString($whereWert, $erlaubteEingaben))
-		{
-			// Fehler beim übergebenen Wert
-			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-		}
-		$query = "SELECT * FROM protokolle WHERE " . $whereWert . " = ". $suchWert;
 		
-		// Hier wird überprüft, dass der übergebene Wert nicht leer ist.
-		if(!empty($sortiert))
-		{
-			/*
-			* Erzeugt ein array $erlaubteEingaben in dem alle erlaubten
-			* Eingaben für das Sortieren stehen und prüft mit der Helper-
-			* Funktion pruefeString(), dass die Eingabe korrekt ist
-			*
-			*/
-			$erlaubteEingaben = (array) ["id", "flugzeugID", "pilotID", "copilotID", "flugzeit", "datum", "erstelltAm"];
-			if(pruefeString($sortiert, $erlaubteEingaben))
-			{
-				$query = $query . " ORDER BY ". trim($sortiert);
-			}
-			else
-			{
-				// Fehler beim übergebenen Wert
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-			}
-		}
-		
-		return $this->query($query)->getResultArray();
-	}	
 }	

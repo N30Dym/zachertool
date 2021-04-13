@@ -61,6 +61,7 @@ class flugzeugNeuController extends Controller
 		
 		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
+		echo view('flugzeuge/scripts/musterSucheScript');
 		echo view('templates/navbarView');
 		echo view('flugzeuge/musterauswahlView', $datenInhalt);
 		echo view('templates/footerView');

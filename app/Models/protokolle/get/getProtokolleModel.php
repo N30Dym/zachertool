@@ -3,7 +3,7 @@
 namespace App\Models\protokolle\get;
 
 use CodeIgniter\Model;
-helper("pruefeString");
+//helper("pruefeString");
 
 class getProtokolleModel extends Model
 {

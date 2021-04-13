@@ -3,7 +3,7 @@
 namespace App\Models\protokolle\get;
 
 use CodeIgniter\Model;
-helper("pruefeString");
+//helper("pruefeString");
 
 class getHStWegeModel extends Model
 {
@@ -24,8 +24,7 @@ class getHStWegeModel extends Model
 	*/
 	public function getAlleHStWege()
 	{			
-		$query = "SELECT * FROM `hst-wege`";
-		return $this->query($query)->getResultArray();	
+		return $this->findAll();	
 	}
 	
 	/*
@@ -39,8 +38,7 @@ class getHStWegeModel extends Model
 	{	
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{		
-			$query = "SELECT * FROM `hst-wege` WHERE id = ". $id;
-			return $this->query($query)->getResultArray();	
+			return($this->where("id", $id)->first());
 		}
 		else
 		{
@@ -60,8 +58,7 @@ class getHStWegeModel extends Model
 	{	
 		if(is_int(trim($protokollSpeicherID)) OR is_numeric(trim($protokollSpeicherID)))
 		{		
-			$query = "SELECT * FROM `hst-wege` WHERE protokollSpeicherID = ". $protokollSpeicherID;
-			return $this->query($query)->getResultArray();	
+			return($this->where("protokollSpeicherID", $protokollSpeicherID)->findAll());
 		}
 		else
 		{

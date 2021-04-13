@@ -25,19 +25,15 @@ class getDatenModel extends Model
 	* @return array
 	*/
 	public function getDatenNachID($id)
-	{
-		
+	{		
 	if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
-			$query = "SELECT * FROM daten WHERE id = ". trim($id);
-			return $this->query($query)->getResultArray();	
+			return($this->where("id", $id)->first());
 		}
 		else
 		{
-			/*
-				* Fehler beim übergebenen Wert
-				*/
-				throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+			//Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}	
 	}
 	
@@ -68,6 +64,7 @@ class getDatenModel extends Model
 		{			
 			$query = "SELECT wert FROM daten WHERE protokollSpeicherID = " . $protokollSpeicherID . " AND protokollInputID = " . $protokollInputID . " AND wölbklappenstellung = " . $woelbklappenstellung . " AND linksUndRechts = " . $linksUndRechts . " AND multipelNr = " . $multipelNr;
 		}
+		return $this->query($query)->getResultArray();
 	}
 	
 }

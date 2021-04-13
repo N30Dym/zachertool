@@ -16,7 +16,7 @@ class getMusterModel extends Model
     protected $primaryKey = 'id';
 	
 	/*
-	* Diese Funktion ruft nur das Protokoll mit
+	* Diese Funktion ruft nur das Muster mit
 	* der jeweiligen ID auf
 	*
 	* @param  mix $id int oder string
@@ -26,7 +26,7 @@ class getMusterModel extends Model
 	{			
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{	
-			return($this->where("id", $id)->findAll());
+			return($this->where("id", $id)->first());
 		}
 		else
 		{

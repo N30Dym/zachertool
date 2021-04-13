@@ -12,7 +12,15 @@ helper("konvertiereHStWegeInProzent");
 
 class startseiteController extends Controller
 {
-	
+	/*
+	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):
+	* -> /
+	*
+	* Sie lädt das View: startseiteView.php. Was genau hier angezeigt werden wird ist noch nicht ganz klar.
+	* Es könnten die jährlich aktuellen gezacherten Flugzeuge angezeigt werden und der "Zacherkönig" der vergangenen
+	* Jahre.
+	* Derzeit wird die Startseite hauptsächlich zu Testzwecken verwendet.
+	*/
 	public function index()
 	{
 		if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
@@ -25,17 +33,6 @@ class startseiteController extends Controller
 		
 		$protokolleNachJahr = new getProtokolleModel();
 		$getProtokolle = $protokolleNachJahr->getProtokolleNachBeliebig("flugzeugID", 23, "datum");
-		
-		//var_dump($getProtokolle);
-		
-		/*foreach($getFlugzeuge as $flugzeugDaten)
-		{
-			//var_dump($flugzeugDaten);
-			//$anzahl = $flugzeuge->getAnzahlProtokolleProFlugzeug($flugzeug->id);
-			//echo $anzahl;
-		}*/
-		
-		//array_sort_by_multiple_keys!!!
 		
 		$testModel = new getHStWegeModel();
 		$test = konvertiereHStWegeInProzent($testModel->getHStWegeNachID(78));

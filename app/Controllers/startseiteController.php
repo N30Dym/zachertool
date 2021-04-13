@@ -4,8 +4,6 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\startseiteModel;
-use App\Models\flugzeuge\get\getFlugzeugeModel;
-use App\Models\protokolle\get\getProtokolleModel;
 use App\Models\protokolle\get\getHStWegeModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
@@ -30,12 +28,9 @@ class startseiteController extends Controller
 		}
 		
 		$title = "Willkommen beim Zachertool";
-		
-		$protokolleNachJahr = new getProtokolleModel();
-		$getProtokolle = $protokolleNachJahr->getProtokolleNachBeliebig("flugzeugID", 23, "datum");
-		
+			
 		$testModel = new getHStWegeModel();
-		$test = konvertiereHStWegeInProzent($testModel->getHStWegeNachID(78));
+		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
 		
 		$datenHeader = [
 			"title" => $title,

@@ -9,7 +9,7 @@
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php if(esc($muster["musterSchreibweise"]) == ""){echo "required";} else {echo "disabled";} ?>>
+				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ? "required" : "disabled" ?>>
 					<!--<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", <br />Zusatzbezeichnung = " CS" <span class="text-danger">Leerzeichen beachten!</span></small>-->
 				</div>
 				
@@ -30,12 +30,12 @@
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-4 form-check">
-					<input type="checkbox" class="form-check-input" id="doppelsitzer" <?php if(esc($muster["doppelsitzer"])){echo "checked";}?>>
+					<input type="checkbox" class="form-check-input" id="doppelsitzer" <?php echo esc($muster["doppelsitzer"]) == "0" ?: "checked" ?>>
 					<label class="form-check-label" for="doppelsitzer">Doppelsitzer</label>
 				</div>
 
 				<div class="col-sm-5 form-check">
-					<input type="checkbox" class="form-check-input" id="woelbklappen" <?php if(esc($muster["woelbklappen"])){echo "checked";}?>>
+					<input type="checkbox" class="form-check-input" id="woelbklappen" <?php echo esc($muster["woelbklappen"]) == "0" ?: "checked" ?>>
 					<label class="form-check-label" for="woelbklappen">Wölbklappenflugzeug</label>
 				</div>
 				
@@ -64,28 +64,33 @@
 				<div class="col-12">
 					<label for="kupplung" class="form-label">Ort der F-Schleppkupplung</label>
 					<select class="form-select" id="kupplung">
-						<option value="Bug" <?php if(esc($musterDetails["kupplung"]) == "Bug"){echo "selected";}?>>Bug</option>
-						<option value="Schwerpunkt" <?php if(esc($musterDetails["kupplung"]) == "Schwerpunkt"){echo "selected";}?>>Schwerpunkt</option>
+						<option value="Bug" <?php echo esc($musterDetails["kupplung"]) == "Bug" ? "selected" : "" ?>>Bug</option>
+						<option value="Schwerpunkt" <?php echo esc($musterDetails["kupplung"]) == "Schwerpunkt" ? "selected" : "" ?>>Schwerpunkt</option>
 					</select>
 				</div>
 				
 				<div class="col-12">
 					<label for="diffQR" class="form-label">Querruder differenziert?</label>
 					<select class="form-select" id="diffQR">
-						<option value="Ja" <?php if(esc($musterDetails["diffQR"]) == "Ja"){echo "selected";}?>>Ja</option>
-						<option value="Nein" <?php if(esc($musterDetails["diffQR"]) == "Nein"){echo "selected";}?>>Nein</option>
+						<option value="Ja" <?php echo esc($musterDetails["diffQR"]) == "Ja" ? "selected" : "" ?>>Ja</option>
+						<option value="Nein" <?php echo esc($musterDetails["diffQR"]) == "Nein" ? "selected" : "" ?>>Nein</option>
 					</select>
 				</div>
 				
 				<div class="col-12">
 					<label for="radgroesse" class="form-label">Hauptradgröße</label>
-					<input type="text" class="form-control" id="radgroesse" placeholder="you@example.com">
+					<input type="text" class="form-control" id="radgroesse" value="<?= esc($musterDetails["radgroesse"]) ?>">
 				</div>
 				
 				<div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
+					<label for="radbremse" class="form-label">Art der Hauptradbremse</label>
+					<select class="form-control" id="radbremse">
+						<option value="Ja" <?php echo esc($musterDetails["radbremse"]) == "Trommel" ? "selected" : "" ?>>Trommel</option>
+						<option value="Nein" <?php echo esc($musterDetails["radbremse"]) == "Scheibe" ? "selected" : "" ?>>Scheibe</option>
+					</select>
+				</div>
+				
+				<div class="col-12">
 				  <label for="email" class="form-label">Email</label>
 				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
 				</div><div class="col-12">

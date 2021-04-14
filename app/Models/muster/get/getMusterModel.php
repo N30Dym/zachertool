@@ -35,7 +35,7 @@ class getMusterModel extends Model
 		}
 	}
 	
-	public function getAlleMuster()
+	public function getMusterAlle()
 	{
 		return($this->findAll());
 	}

@@ -4,18 +4,27 @@
 	</div>
 	<div class="col-8">
 		
+			<!-- Könnte noch nützlich sein
+			<div class="input-group has-validation">
+				<span class="input-group-text">@</span>
+			</div>
+			
+			<div class="invalid-feedback">
+				Please enter a valid email address for shipping updates.
+			</div>
+			-->
+		
 		<form class="needs-validation" novalidate="">
 			<h4 class="mb-3 mt-3">Basisinformationen</h4>
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ? "required" : "disabled" ?>>
-					<!--<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", <br />Zusatzbezeichnung = " CS" <span class="text-danger">Leerzeichen beachten!</span></small>-->
+				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ? "required" : "" ?><?php echo isset($flugzeugDetails) ? "" : "disabled" ?>>
 				</div>
 				
 				<div class="col-sm-3">
 					<label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
-					<input type="text" class="form-control" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($muster["musterZusatz"]) ?>" required> 
+					<input type="text" class="form-control" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($muster["musterZusatz"]) ?>"> 
 				  
 				</div>
 				<div class="col-12 pt-n5">
@@ -24,7 +33,7 @@
 				</div>
 				<div class="col-12">
 					<label for="kennzeichen" class="form-label">Kennzeichen</label>
-					<input type="text" class="form-control" id="kennzeichen" placeholder="D-9325" required>
+					<input type="text" class="form-control" id="kennzeichen" placeholder="D-9325" value="<?php echo isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
 				</div>
 				
 				<div class="col-sm-1">
@@ -41,29 +50,22 @@
 				
 				<div class="col-12">
 				</div>
-			<!--
-			<div class="input-group has-validation">
-				<span class="input-group-text">@</span>
-			</div>
-			
-			<div class="invalid-feedback">
-				Please enter a valid email address for shipping updates.
-			</div>
-			-->
+
 				<h4>Angaben zum Flugzeug</h4>
 				<div class="col-12">
 					<label for="baujahr" class="form-label">Baujahr</label>
-					<input type="number" class="form-control" id="baujahr"  min="1900" max="<?= date("Y") ?>" required>
+					<input type="number" class="form-control" id="baujahr"  min="1900" max="<?= date("Y") ?>" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["baujahr"] : "" ?>" required>
 				</div>
 				
 				<div class="col-12">
-					<label for="werknummer" class="form-label">Werknummer</label>
-					<input type="text" class="form-control" id="werknummer" placeholder="">
+					<label for="seriennummer" class="form-label">Seriennummer</label>
+					<input type="text" class="form-control" id="seriennummer" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["seriennummer"] : "" ?>">
 				</div>
 				
 				<div class="col-12">
 					<label for="kupplung" class="form-label">Ort der F-Schleppkupplung</label>
-					<select class="form-select" id="kupplung">
+					<select class="form-select" id="kupplung" placeholder="">
+						<option value="" disabled <?php echo esc($muster["id"]) == "" ? "selected" : "" ?>></option>
 						<option value="Bug" <?php echo esc($musterDetails["kupplung"]) == "Bug" ? "selected" : "" ?>>Bug</option>
 						<option value="Schwerpunkt" <?php echo esc($musterDetails["kupplung"]) == "Schwerpunkt" ? "selected" : "" ?>>Schwerpunkt</option>
 					</select>
@@ -72,6 +74,7 @@
 				<div class="col-12">
 					<label for="diffQR" class="form-label">Querruder differenziert?</label>
 					<select class="form-select" id="diffQR">
+						<option value="" disabled <?php echo esc($muster["id"]) == "" ? "selected" : "" ?>></option>
 						<option value="Ja" <?php echo esc($musterDetails["diffQR"]) == "Ja" ? "selected" : "" ?>>Ja</option>
 						<option value="Nein" <?php echo esc($musterDetails["diffQR"]) == "Nein" ? "selected" : "" ?>>Nein</option>
 					</select>
@@ -84,120 +87,80 @@
 				
 				<div class="col-12">
 					<label for="radbremse" class="form-label">Art der Hauptradbremse</label>
-					<select class="form-control" id="radbremse">
+					<select class="form-select" id="radbremse">
+						<option value="" disabled <?php echo esc($muster["id"]) == "" ? "selected" : "" ?>></option>
 						<option value="Ja" <?php echo esc($musterDetails["radbremse"]) == "Trommel" ? "selected" : "" ?>>Trommel</option>
 						<option value="Nein" <?php echo esc($musterDetails["radbremse"]) == "Scheibe" ? "selected" : "" ?>>Scheibe</option>
 					</select>
 				</div>
 				
 				<div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
-				</div><div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
+					<label for="radfederung" class="form-label">Hauptrad gefedert?</label>
+					<select class="form-select" id="radfederung" >
+						<option value="" disabled <?php echo esc($muster["id"]) == "" ? "selected" : "" ?>></option>
+						<option value="Ja" <?php echo esc($musterDetails["radfederung"]) == "Ja" ? "selected" : "" ?>>Ja</option>
+						<option value="Nein" <?php echo esc($musterDetails["radfederung"]) == "Nein" ? "selected" : "" ?>>Nein</option>
+					</select>
 				</div>
+				
+				<div class="col-12">					
+					<label for="fluegelflaeche" class="form-label">Flügelfläche</label>
+					<div class="input-group has-validation">
+						<input type="number" class="form-control" min="0" step="0.01" id="fluegelflaeche" value="<?= esc($musterDetails["fluegelflaeche"]) ?>">
+						<span class="input-group-text">m<sup>2</sup></span>
+					</div>
+				</div>
+				
+				<div class="col-12">					
+					<label for="spannweite" class="form-label">Spannweite</label>
+					<div class="input-group has-validation">
+						<input type="number" class="form-control" min="0" step="0.1" id="spannweite" value="<?php echo esc($muster["id"]) == "" ? "" : round(esc((int) $musterDetails["spannweite"]),0) ?>">
+						<span class="input-group-text">m</span>
+					</div>
+				</div>
+				
 				<div class="col-12">
-				  <label for="email" class="form-label">Email</label>
-				  <input type="email" class="form-control" id="email" placeholder="you@example.com">
+					<label for="variometer" class="form-label">Art des Variometers</label>
+					<input type="text" class="form-control" list="varioListe" id="variometer" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["variometer"] : "" ?>">
+					<datalist id="varioListe">
+						<?php foreach ($variometerEingaben as $eingabe) : ?>
+							<option value="<?= esc($eingabe) ?>">
+						<?php endforeach ?>
+					</datalist>
+				</div>
+				
+				<div class="col-12">
+					<label for="tek" class="form-label">Art und Ort der TEK-Düse</label>
+					<input type="text" class="form-control" list="tekListe" id="tek" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["tek"] : "" ?>">
+					<datalist id="tekListe">
+						<?php foreach ($tekEingaben as $eingabe) : ?>
+							<option value="<?= esc($eingabe) ?>">
+						<?php endforeach ?>
+					</datalist>
+				</div>
+				
+				<div class="col-12">
+					<label for="pitotPosition" class="form-label">Lage der Gesamtdrucksonde</label>
+					<input type="text" class="form-control" list="pitotPositionListe" id="pitotPosition" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["pitotPosition"] : "" ?>">
+					<datalist id="pitotPositionListe">
+						<?php foreach ($pitotPositionEingaben as $eingabe) : ?>
+							<option value="<?= esc($eingabe) ?>">
+						<?php endforeach ?>
+					</datalist>
+				</div>
+				
+				<div class="col-12">
+					<label for="bremsklappen" class="form-label">Bremsklappen</label>
+					<input type="text" class="form-control" list="bremsklappenListe" id="bremsklappen" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["bremsklappen"] : "" ?>">
+					<datalist id="bremsklappenListe">
+						<?php foreach ($bremsklappenEingaben as $eingabe) : ?>
+							<option value="<?= esc($eingabe) ?>">
+						<?php endforeach ?>
+					</datalist>
 				</div>
 
 
-			<p>
-			<table>
-				<tr>
-					<td>
-						Baujahr:
-					</td>
-					<td>
-						<input type="number" step="1" min="1900" id="year_of_construction" name="year_of_construction" required>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Werknummer:
-					</td>
-					<td>
-						<input type="text" id="serial_number" name="serial_number" required>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="FschleppKupplung">
-							Kupplung für F-Schlepp
-						</label>
-					</td>
-					<td>
-						<select name="FschleppKupplung" id="FschleppKupplung" required>
-							<option value="Bug" <?php if (esc($musterDetails["kupplung"]) == 'Bug') : echo('selected') ?>>
-								Bug
-							</option>
-							<option value="Schwerpunkt" <?php elseif (esc($musterDetails["kupplung"]) == 'Schwerpunkt') : echo('selected') ?>>
-								Schwerpunkt
-							</option>
-							<?php endif ?>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="QRdif">
-							Differenzierung der Querruder
-						</label>
-					</td>
-					<td>
-						<select id="QRdif" name="QRdif" required>
-							<option value="Ja" <?php if(esc($musterDetails["diffQR"]) == "Ja") : echo('selected') ?>>
-								Ja
-							</option>
-							<option value="Nein" <?php elseif(esc($musterDetails["diffQR"]) == "Nein") : echo('selected') ?>>
-								Nein
-							</option>
-							<?php endif ?>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="Hauptradgroesse">
-							Hauptradgröße
-						</label>
-					</td>
-					<td>
-						<input type="text" id="Hauptradgroesse" name="Hauptradgroesse" value='<?= esc($musterDetails["radgroesse"]) ?>'>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="Hauptradbremse">
-							Art der Hauptradbremse
-						</label>
-					</td>
-					<td>
-						<select id="Hauptradbremse" name="Hauptradbremse" required>
-							<option value="Scheibe" <?php if(esc($musterDetails["radbremse"]) == "Scheibe") : echo('selected') ?>>
-								Scheibe
-							</option>
-							<option value="Trommel" <?php elseif(esc($musterDetails["radbremse"]) == 'Trommel') : echo('selected') ?>>
-								Trommel
-							</option>
-							<?php endif ?>
-						</select>
-					</td>
-				</tr>
-			</table>
+			
 		</form>	
 	</div>
 </div>

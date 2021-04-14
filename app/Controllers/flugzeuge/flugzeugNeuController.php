@@ -7,6 +7,7 @@ use App\Models\muster\get\getMusterModel;
 use App\Models\muster\get\getMusterDetailsModel;
 use App\Models\muster\get\getMusterHebelarmeModel;
 use App\Models\muster\get\getMusterWoelbklappenModel;
+use App\Models\flugzeuge\get\getFlugzeugDetailsModel;
 helper("array");
 
 class flugzeugNeuController extends Controller
@@ -36,7 +37,7 @@ class flugzeugNeuController extends Controller
 		$getMusterModel = new getMusterModel();
 		
 		// Alle Flugzeugmuster laden
-		$alleMuster = $getMusterModel->getAlleMuster();
+		$alleMuster = $getMusterModel->getMusterAlle();
 		
 		// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
 		if(!array_sort_by_multiple_keys($alleMuster, ["musterKlarname" => SORT_ASC]))
@@ -102,7 +103,7 @@ class flugzeugNeuController extends Controller
 			// Alles aus Tabelle zachern_flugzeuge.muster_details als Array laden, wo die musterID = $musterID
 			$getMusterDetailsModel = new getMusterDetailsModel();
 			$musterDetails = $getMusterDetailsModel->getMusterDetailsNachMusterID($musterID);
-			var_dump($musterDetails);
+			//var_dump($musterDetails);
 			
 			// Alles aus Tabelle zachern_flugzeuge.muster_hebelarme als Array laden, wo die musterID = $musterID
 			$getMusterHebelarmeModel = new getMusterHebelarmeModel();
@@ -119,16 +120,20 @@ class flugzeugNeuController extends Controller
 				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachMusterID($musterID);
 			}
 			
+			$testModel = new getFlugzeugDetailsModel();
+			$testFunktion = $testModel->getFlugzeugDetailsNachID($musterID);
+			var_dump($testFunktion);
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
 			
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
 			'muster' => $muster,
-			'musterDetails' => $musterDetails,
+			'musterDetails' => $testFunktion,
 			'musterHebelarme' => $musterHebelarme,
-			'musterWoelbklappen' => $musterWoelbklappen
+			'musterWoelbklappen' => $musterWoelbklappen,
+			'flugzeugDetails' => $testFunktion
 			];
-			var_dump($muster);
+			//var_dump($muster);
 		}
 		
 		/*
@@ -174,6 +179,22 @@ class flugzeugNeuController extends Controller
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];	
 		
+		// Alle bisherigen Eingaben in zachern_flugzeuge.flugzeug_details der Spalten "variometer", "tek", "pitotPosition", 
+		// "bremsklappen" und "bezugspunkt" jeweils ohne Dopplungen
+		$getFlugzeugDetailsModel = new getFlugzeugDetailsModel();
+		
+		$variometerEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben();
+		$tekEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben();
+		$pitotPositionEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctpitotPositionEingaben();
+		$bremsklappenEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
+		$bezugspunktEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
+		
+		// Dies ist notwendig bei vorhanden und neuen Mustern, deswegen werden diese Werte jetzt $datenInhalt hinzugefügt
+		$datenInhalt["variometerEingaben"] = $variometerEingaben;
+		$datenInhalt["tekEingaben"] = $tekEingaben;
+		$datenInhalt["pitotPositionEingaben"] = $pitotPositionEingaben;
+		$datenInhalt["bremsklappenEingaben"] = $bremsklappenEingaben;
+		$datenInhalt["bezugspunktEingaben"] = $bezugspunktEingaben;
 		
 		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);

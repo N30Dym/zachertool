@@ -19,7 +19,7 @@ class getMusterWoelbklappenModel extends Model
 	{
 		if(is_int(trim($musterID)) OR is_numeric(trim($musterID)))
 		{	
-			return($this->where("musterID", $musterID)->first());
+			return($this->where("musterID", $musterID)->findAll());
 		}
 		else
 		{

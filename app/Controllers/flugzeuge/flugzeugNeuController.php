@@ -13,7 +13,7 @@ helper("array");
 class flugzeugNeuController extends Controller
 {
 	/*
-	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):
+	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
 	* -> /flugzeuge/flugzeugNeu
 	*
 	* Sie lädt das View: flugzeuge/musterAuswahl.php, lädt alle verfügbaren Muster und
@@ -69,7 +69,7 @@ class flugzeugNeuController extends Controller
 	}
 	
 	/*
-	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):
+	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
 	* -> /flugzeuge/flugzeugNeu/(:num) bzw. -> /flugzeuge/flugzeugNeu/neu
 	*
 	* Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
@@ -125,11 +125,11 @@ class flugzeugNeuController extends Controller
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
 				'muster' => $muster,
-				'musterDetails' => $testFunktion,
+				'musterDetails' => $musterDetails,
 				'musterHebelarme' => $musterHebelarme,
 				'musterWoelbklappen' => $musterWoelbklappen
 			];
-			//var_dump($muster);
+			var_dump($muster);
 		}
 		
 		/*
@@ -165,7 +165,7 @@ class flugzeugNeuController extends Controller
 				'musterHebelarme' => $musterHebelarmeLeer,
 				'musterWoelbklappen' => $musterWoelbklappenLeer
 			];
-			var_dump($musterLeer);
+			//var_dump($musterLeer);
 		}
 		
 		
@@ -194,6 +194,7 @@ class flugzeugNeuController extends Controller
 		
 		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
+		echo view('flugzeuge/scripts/flugzeugAngabenScript');
 		echo view('templates/navbarView');
 		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
 		echo view('templates/footerView');		

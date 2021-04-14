@@ -27,25 +27,25 @@
 					<input type="text" class="form-control" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($muster["musterZusatz"]) ?>"> 
 				  
 				</div>
-				<div class="col-12 pt-n5">
+				<div class="col-12 pt-n5 <?php echo $muster["musterSchreibweise"] == "" ? "" : "d-none" ?>">
 					<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
 					<br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
 				</div>
 				<div class="col-12">
 					<label for="kennzeichen" class="form-label">Kennzeichen</label>
-					<input type="text" class="form-control" id="kennzeichen" placeholder="D-9325" value="<?php echo isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
+					<input type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?php echo isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
 				</div>
 				
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-4 form-check">
-					<input type="checkbox" class="form-check-input" id="doppelsitzer" <?php echo esc($muster["doppelsitzer"]) == "0" ?: "checked" ?>>
-					<label class="form-check-label" for="doppelsitzer">Doppelsitzer</label>
+					<input type="checkbox" class="form-check-input" id="istDoppelsitzer" <?php echo esc($muster["doppelsitzer"]) == "0" ?: "checked" ?> <?php echo isset($flugzeugDetails) ? "" : "disabled" ?>>
+					<label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
 				</div>
 
 				<div class="col-sm-5 form-check">
-					<input type="checkbox" class="form-check-input" id="woelbklappen" <?php echo esc($muster["woelbklappen"]) == "0" ?: "checked" ?>>
-					<label class="form-check-label" for="woelbklappen">Wölbklappenflugzeug</label>
+					<input type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?php echo esc($muster["woelbklappen"]) == "0" ?: "checked" ?> <?php //echo isset($flugzeugDetails) ? "" : "disabled" ?>>
+					<label class="form-check-label" for="istWoelbklappenFlugzeug">Wölbklappenflugzeug</label>
 				</div>
 				
 				<div class="col-12">
@@ -159,8 +159,81 @@
 					</datalist>
 				</div>
 
+				<div class="pt-3 col-12" id="woelbklappen">
+				<h4>Wölbklappen</h4>
 
-			
+					<?php if($musterWoelbklappen != "") : ?>
+						<div class="row col-12" id="woelbklappenListe">
+							<div class="row col-12">
+								<div class="col-1 text-center">
+									<small>Löschen</small>
+								</div>
+								<div class="col-3 text-center">
+									<small>Bezeichnung</small>
+								</div>
+								<div class="col-3 text-center">
+									<small>Ausschlag</small>
+								</div>
+								<div class="col-1 text-center">
+									<small>Neutral</small>
+								</div>
+								<div class="col-1 text-center">
+									<small>Kreisflug</small>
+								</div>
+								<div class="col-2 text-center">
+									<small>IAS<sub>VG</sub></small>
+								</div>
+								<div class="col-1 text-center">
+								</div>
+							</div>
+							<?php foreach ($musterWoelbklappen as $key => $woelbklappe) :?>
+								
+								<div class="row col-12" id="woelbklappe<?= $key ?>">
+									<div class="col-1 text-center align-middle">
+										<button type="button" id="loesche<?= $key ?>" class="btn-danger btn-close loeschen" aria-label="Close"></button>
+									</div>
+									<div class="col-3">
+										<input type="text" class="form-control" id="stellungBezeichnung<?= $key ?>" value="<?= $woelbklappe["stellungBezeichnung"] ?>">
+									</div>
+									<div class="col-3">
+										<div class="input-group has-validation">
+											<input type="text" class="form-control" id="stellungWinkel<?= $key ?>" value="<?= $woelbklappe["stellungWinkel"] ?>">
+											<span class="input-group-text">°</span>
+										</div>	
+									</div>
+									<div class="col-1 text-center align-middle">
+										<input class="form-check-input" type="radio" name="neutral" id="neutral" value="<?= $key ?>" required <?php echo $woelbklappe["neutral"] ? "checked" : "" ?>>
+									</div>
+									<div class="col-1 text-center align-middle">
+										<input class="form-check-input" type="radio" name="kreisflug" id="kreisflug" value="<?= $key ?>" required <?php echo $woelbklappe["kreisflug"] ? "checked" : "" ?>>
+									</div>
+									<div class="col-2 iasVG">
+										<?php if($woelbklappe["kreisflug"])  : ?>
+											<input type="number" class="form-control" id="iasVGKreisflug" value="<?= $woelbklappe["iasVG"] ?>">
+										<?php elseif($woelbklappe["neutral"]): ?>
+											<input type="number" class="form-control" id="iasVGNeutral" value="<?= $woelbklappe["iasVG"] ?>">
+										<?php endif ?>
+									</div>
+									<div class="col-1">
+									</div>
+								</div>
+								
+							<?php endforeach ?>
+								</div>
+								<div class="row col-12 pt-3">
+									<button id="neueZeile" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
+								</div>
+						<?php else : ?>
+						
+						<?php endif ?>
+					
+					
+					
+				</div>
+				
+				
+				
+			</div>			
 		</form>	
 	</div>
 </div>

@@ -37,10 +37,10 @@ class flugzeugNeuController extends Controller
 		$getMusterModel = new getMusterModel();
 		
 		// Alle Flugzeugmuster laden
-		$alleMuster = $getMusterModel->getMusterAlle();
+		$getMusterAlle = $getMusterModel->getMusterAlle();
 		
 		// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
-		if(!array_sort_by_multiple_keys($alleMuster, ["musterKlarname" => SORT_ASC]))
+		if(!array_sort_by_multiple_keys($getMusterAlle, ["musterKlarname" => SORT_ASC]))
 		{
 			// Fehler beim übergebenen Wert
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
@@ -57,12 +57,12 @@ class flugzeugNeuController extends Controller
 		
 		// Daten für den Inhalt aufbereiten
 		$datenInhalt = [
-			'muster' => $alleMuster
+			'muster' => $getMusterAlle
 		];
 		
 		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
-		echo view('flugzeuge/scripts/musterSucheScript');
+		echo view('flugzeuge/scripts/musterauswahlScript');
 		echo view('templates/navbarView');
 		echo view('flugzeuge/musterauswahlView', $datenInhalt);
 		echo view('templates/footerView');
@@ -120,18 +120,14 @@ class flugzeugNeuController extends Controller
 				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachMusterID($musterID);
 			}
 			
-			$testModel = new getFlugzeugDetailsModel();
-			$testFunktion = $testModel->getFlugzeugDetailsNachID($musterID);
-			var_dump($testFunktion);
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
 			
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
-			'muster' => $muster,
-			'musterDetails' => $testFunktion,
-			'musterHebelarme' => $musterHebelarme,
-			'musterWoelbklappen' => $musterWoelbklappen,
-			'flugzeugDetails' => $testFunktion
+				'muster' => $muster,
+				'musterDetails' => $testFunktion,
+				'musterHebelarme' => $musterHebelarme,
+				'musterWoelbklappen' => $musterWoelbklappen
 			];
 			//var_dump($muster);
 		}
@@ -164,10 +160,10 @@ class flugzeugNeuController extends Controller
 			
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
-			'muster' => $musterLeer,
-			'musterDetails' => $musterDetailsLeer,
-			'musterHebelarme' => $musterHebelarmeLeer,
-			'musterWoelbklappen' => $musterWoelbklappenLeer
+				'muster' => $musterLeer,
+				'musterDetails' => $musterDetailsLeer,
+				'musterHebelarme' => $musterHebelarmeLeer,
+				'musterWoelbklappen' => $musterWoelbklappenLeer
 			];
 			var_dump($musterLeer);
 		}
@@ -185,7 +181,7 @@ class flugzeugNeuController extends Controller
 		
 		$variometerEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben();
 		$tekEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben();
-		$pitotPositionEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctpitotPositionEingaben();
+		$pitotPositionEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
 		$bremsklappenEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$bezugspunktEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
 		

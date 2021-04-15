@@ -13,6 +13,7 @@ $(document).ready(function() {
 	if(!$('#istWoelbklappenFlugzeug').is(':checked'))
 	{
 		$('#woelbklappen').addClass('d-none');
+		$('#iasVGDiv').removeClass('d-none');
 	}
 	
 	// Beim Laden wird der benachbarte Button links, bzw. rechts disabled
@@ -30,7 +31,16 @@ $(document).ready(function() {
 		}
 	});
 	
-	
+	// Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
+	$( document ).on('click', '#neueZeileHebelarme', function()
+	{
+		var zaehler = $( "#hebelarmListe" ).children('div:last').attr('id').slice(8);
+		zaehler++;
+		if ( zaehler < 10 )
+		{
+			$( "#hebelarmListe" ).append('<div class="row g-2 col-12" id="hebelarm' + zaehler + '"><div class="col-1 text-center"><button type="button" id="loescheHebelarme' + zaehler + '" class="btn-danger btn-close loescheHebelarm" aria-label="Close"></button></div><div class="col-5"><input type="text" class="form-control" id="hebelarmBeschreibung' + zaehler + '" value=""></div><div class="col-6"><div class="input-group"><input type="text" class="form-control" id="hebelarmLänge' + zaehler + '" value=""><select class="form-select input-group-text text-start" id="auswahlVorOderHinter' + zaehler + '"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 
+		}
+	});	
 	
 	// Wenn man einen anderen Radiobutton bei "Neutral" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Kreisflug-Radiobuttons,
 	// löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
@@ -79,18 +89,30 @@ $(document).ready(function() {
 		if ($('#istWoelbklappenFlugzeug').is(':checked'))
 		{
 			$('#woelbklappen').removeClass('d-none');
+			$('#iasVGDiv').addClass('d-none');
 		}
 		else 
 		{
 			$('#woelbklappen').addClass('d-none');
+			$('#iasVGDiv').removeClass('d-none');
 		}
 	});
 	
-	// Diese Funktion sorgt dafür, dass die "Löschen"-Buttons funktionieren
+	// Diese Funktion sorgt dafür, dass die "Löschen"-Buttons bei den Wölbklappen funktionieren
 	$(document).on('click', '.loeschen', function()
 	{
-		var loeschenID = $('.loeschen').attr('id').slice(7)
+		var loeschenID = $(this).attr('id').slice(7)
 		$( "#woelbklappenListe" ).children('#woelbklappe'+ loeschenID).remove();
 	});
+	
+	// Diese Funktion sorgt dafür, dass die "Löschen"-Buttons bei den Hebelarmen funktionieren
+	$(document).on('click', '.loescheHebelarm', function()
+	{
+		var loeschenID = $(this).attr('id').slice(16)
+		$( "#hebelarmListe" ).children('#hebelarm'+ loeschenID).remove();
+	});
 });
+</script>
+<script type="text/css">
+
 </script>

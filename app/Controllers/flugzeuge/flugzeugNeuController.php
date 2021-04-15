@@ -172,7 +172,7 @@ class flugzeugNeuController extends Controller
 				'musterWoelbklappen' => $musterWoelbklappen
 				//'flugzeugDetails' => $getTest
 			];
-			var_dump($muster);
+			var_dump($musterHebelarme);
 		}
 		
 		/*

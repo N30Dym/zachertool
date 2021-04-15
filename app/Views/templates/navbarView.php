@@ -75,4 +75,4 @@
 		</div>
 	</nav>
 </header>
-<main class="container bg-light shadow p-3 mb-5 rounded">
+<main class="container bg-light shadow pb-5">

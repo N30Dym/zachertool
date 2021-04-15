@@ -13,13 +13,13 @@
 				Please enter a valid email address for shipping updates.
 			</div>
 			-->
-		
 		<form class="needs-validation" novalidate="">
 			<h4 class="mb-3 mt-3">Basisinformationen</h4>
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ? "required" : "" ?><?php echo isset($flugzeugDetails) ? "" : "disabled" ?>>
+					<?php echo isset($flugzeugDetails) ?>
+				    <input type="text" class="form-control" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ? "required" : "" ?> <?php echo isset($flugzeugDetails) ? "" : "disabled" ?>>
 				</div>
 				
 				<div class="col-sm-3">
@@ -39,12 +39,12 @@
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-4 form-check">
-					<input type="checkbox" class="form-check-input" id="istDoppelsitzer" <?php echo esc($muster["doppelsitzer"]) == "0" ?: "checked" ?> <?php echo isset($flugzeugDetails) ? "" : "disabled" ?>>
+					<input type="checkbox" class="form-check-input" id="istDoppelsitzer" <?php echo esc($muster["doppelsitzer"]) == "1" ? "checked": "" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] == "") ? "" : "disabled" ?>>
 					<label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
 				</div>
 
 				<div class="col-sm-5 form-check">
-					<input type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?php echo esc($muster["woelbklappen"]) == "0" ?: "checked" ?> <?php //echo isset($flugzeugDetails) ? "" : "disabled" ?>>
+					<input type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?php echo esc($muster["woelbklappen"]) == "1" ? "checked": "" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] == "") ? "" : "disabled" ?>>
 					<label class="form-check-label" for="istWoelbklappenFlugzeug">Wölbklappenflugzeug</label>
 				</div>
 				
@@ -161,8 +161,10 @@
 
 				<div class="pt-3 col-12" id="woelbklappen">
 				<h4>Wölbklappen</h4>
-
-					<?php if($musterWoelbklappen != "") : ?>
+					<div class="col-12">
+						<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
+					</div>
+					<?php if($musterWoelbklappen != null) : ?> 
 						<div class="row col-12" id="woelbklappenListe">
 							<div class="row col-12">
 								<div class="col-1 text-center">
@@ -219,15 +221,11 @@
 								</div>
 								
 							<?php endforeach ?>
-								</div>
-								<div class="row col-12 pt-3">
-									<button id="neueZeile" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
-								</div>
-						<?php else : ?>
-						
-						<?php endif ?>
-					
-					
+						</div>
+					<?php endif ?>
+					<div class="row col-12 pt-3">
+						<button id="neueZeile" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
+					</div>
 					
 				</div>
 				

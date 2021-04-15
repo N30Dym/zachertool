@@ -118,9 +118,51 @@ class flugzeugNeuController extends Controller
 				// Wenn ja, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
 				$getMusterWoelbklappenModel = new getMusterWoelbklappenModel();
 				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachMusterID($musterID);
+				
+				/*
+				* Die Wölbklappenstellungen sollen nach Möglichkeit aufsteigend von negativ zu positiv ausgegeben werden.
+				* Nicht bei jedem Flugzeug wurden Winkel angegeben und die Wölbklappenbezeichnungen sind nicht immer Aussagekräftig
+				* Deshalb wird hier überprüft, ob ALLE Wölbklappenbezeichnungen numerisch sind und ob ALLE Wölbklappenwinkel gesetzt sind.
+				* Wenn alle Wölbklappenbezeichnungen numerisch sind, dann wird danach in aufsteigender Reihenfolge sortiert.
+				* Sonst, wenn alle Wölbklappenwinkel vorhanden sind, wird danach in aufsteigender Reihenfolge sortiert.
+				* Wenn nicht bleibt die Reihenfolge, wie sie beim Eingeben und Speichern vorgegeben wurde.
+				*
+				*/
+				$pruefeObAlleStellungBezeichnungNumerisch = true;
+				$pruefeObAlleStellungWinkelVorhanden = true;
+				foreach($musterWoelbklappen as $musterWoelbklappe) 			
+				{
+					if(is_numeric($musterWoelbklappe["stellungBezeichnung"]))
+					{
+						$pruefeObAlleStellungBezeichnungNumerisch = false;
+					}
+					if($musterWoelbklappe["stellungWinkel"] == "")
+					{
+						$pruefeObAlleStellungWinkelVorhanden = false;
+					}
+				}
+				if($pruefeObAlleStellungBezeichnungNumerisch)
+				{
+					if(!array_sort_by_multiple_keys($musterWoelbklappen, ["stellungBezeichnung" => SORT_ASC]))
+					{
+						// Fehler beim übergebenen Wert
+						throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+					}
+				}
+				else if($pruefeObAlleStellungWinkelVorhanden)
+				{
+					if(!array_sort_by_multiple_keys($musterWoelbklappen, ["stellungWinkel" => SORT_ASC]))
+					{
+						// Fehler beim übergebenen Wert
+						throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+					}
+				}
 			}
 			
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
+			
+			//$testModel = new getFlugzeugDetailsModel();
+			//$getTest = $testModel->getFlugzeugDetailsNachFlugzeugID($musterID);
 			
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
@@ -128,6 +170,7 @@ class flugzeugNeuController extends Controller
 				'musterDetails' => $musterDetails,
 				'musterHebelarme' => $musterHebelarme,
 				'musterWoelbklappen' => $musterWoelbklappen
+				//'flugzeugDetails' => $getTest
 			];
 			var_dump($muster);
 		}
@@ -142,6 +185,7 @@ class flugzeugNeuController extends Controller
 		else
 		{
 			$title = "Neues Flugzeug und Flugzeugmuster erstellen";
+			$anzahlLeereWoelbklappenZeilen = 6;
 						
 			// Aus Tabelle zachern_flugzeuge.muster leere Einträge als Array laden
 			$getMusterModel = new getMusterModel();
@@ -155,17 +199,23 @@ class flugzeugNeuController extends Controller
 			$getMusterHebelarmeModel = new getMusterHebelarmeModel();
 			$musterHebelarmeLeer = $getMusterHebelarmeModel->getMusterHebelarmeLeer();
 			
-			// Null, da beim neuen Muster noch nicht bekannt, ob WK oder nicht
-			$musterWoelbklappenLeer = null;
+			// Leeres Wölbklappen-Array für neue Muster
+			$getMusterWoelbklappenModel = new getMusterWoelbklappenModel();
+			$musterWoelbklappenLeer = $getMusterWoelbklappenModel->getMusterWoelbklappenLeer();
+			$musterWoelbklappenLeerArray = [];
+			for($i=0; $i < $anzahlLeereWoelbklappenZeilen; $i++)
+			{
+				array_push($musterWoelbklappenLeerArray, $musterWoelbklappenLeer);
+			}
 			
 			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
 			$datenInhalt = [
 				'muster' => $musterLeer,
 				'musterDetails' => $musterDetailsLeer,
 				'musterHebelarme' => $musterHebelarmeLeer,
-				'musterWoelbklappen' => $musterWoelbklappenLeer
+				'musterWoelbklappen' => $musterWoelbklappenLeerArray
 			];
-			//var_dump($musterLeer);
+			//var_dump($musterWoelbklappenLeer);
 		}
 		
 		

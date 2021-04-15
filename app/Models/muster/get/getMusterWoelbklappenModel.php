@@ -48,6 +48,7 @@ class getMusterWoelbklappenModel extends Model
 		{
 			$returnArray[$columnName["COLUMN_NAME"]] = "";
 		}
+		//var_dump($returnArray);
 		return $returnArray;
 	}
 }

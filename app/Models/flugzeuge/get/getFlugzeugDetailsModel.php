@@ -23,7 +23,7 @@ class getFlugzeugDetailsModel extends Model
 	* @param  mix $id int oder string
 	* @return array
 	*/
-	public function getFlugzeugDetailsNachID($flugzeugID)
+	public function getFlugzeugDetailsNachFlugzeugID($flugzeugID)
 	{			
 		if(is_int(trim($flugzeugID)) OR is_numeric(trim($flugzeugID)))
 		{	

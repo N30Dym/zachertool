@@ -1,19 +1,27 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	// Verhindert, dass beim drücken der Eingabetaste die Daten abgeschickt werden, obwohl noch nicht alles eingeben ist
 	$(document).keypress(function (event) {
 		if (event.keyCode === 10 || event.keyCode === 13) {
 			event.preventDefault();
 		}
 	});
+	//alert("Hallo");
 	
+	// Beim Laden der Seite überprüfen, ob "woelbklappen" gesetzt ist und wenn nicht, dann das Wölbklappen Kapitel unsichtbar machen
+	if(!$('#istWoelbklappenFlugzeug').is(':checked'))
+	{
+		$('#woelbklappen').addClass('d-none');
+	}
 	
+	// Beim Laden wird der benachbarte Button links, bzw. rechts disabled
 	$( 'input[type=radio][id=neutral][value=' + $( '#kreisflug:checked' ).val() + ']' ).attr('disabled', true);
 	$( 'input[type=radio][id=kreisflug][value=' + $( '#neutral:checked' ).val() + ']' ).attr('disabled',true);
 	
-	$( "#neueZeile" ).on('click', function(e)
+	// Funktion um neue Zeilen beim Wölbklappenmenü hinzuzufügen
+	$( document ).on('click', '#neueZeile', function()
 	{
-        //e.preventDefault();
 		var zaehler = $( "#woelbklappenListe" ).children('div:last').attr('id').slice(11);
 		zaehler++;
 		if ( zaehler < 20 )
@@ -22,29 +30,53 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	
+	// Wenn man einen anderen Radiobutton bei "Neutral" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Kreisflug-Radiobuttons,
+	// löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
 	$(document).on('click', '#neutral', function()
 	{
-		var aktuellerIasVGNeutralWert = $( '#iasVGNeutral' ).attr( 'value' );
-		$( 'input[type=radio][id=kreisflug]' ).removeAttr('disabled');
+		if($( '#iasVGNeutral' )[0]){
+			var aktuellerIasVGNeutralWert = $( '#iasVGNeutral' ).val();
+		}
+		else
+		{
+			var aktuellerIasVGNeutralWert = "";
+		}
 		$( '#iasVGNeutral').remove();
+		
 		var neueNeutralWoelbklappe = $( '#neutral:checked' ).val();
 		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueNeutralWoelbklappe ).children( '.iasVG' ).append('<input type="number" class="form-control" id="iasVGNeutral" value="'+ aktuellerIasVGNeutralWert +'">');
+		
+		$( 'input[type=radio][id=kreisflug]' ).removeAttr('disabled');
 		$( 'input[type=radio][id=kreisflug][value=' + neueNeutralWoelbklappe + ']' ).attr('disabled',true);
 	});
 	
+	// Wenn man einen anderen Radiobutton bei "Kreisflug" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Neutral-Radiobuttons,
+	// löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
 	$(document).on('click', '#kreisflug', function()
 	{
-		var aktuellerIasVGKreisflugWert = $( '#iasVGKreisflug' ).attr( 'value' );
-		$( 'input[type=radio][id=neutral]' ).removeAttr('disabled');
+		if($( '#iasVGKreisflug' )[0]){
+			var aktuellerIasVGKreisflugWert = $( '#iasVGKreisflug' ).val();
+		}
+		else
+		{
+			var aktuellerIasVGKreisflugWert = "";
+		}		
 		$( '#iasVGKreisflug').remove();
+		
 		var neueKreisflugWoelbklappe = $( '#kreisflug:checked' ).val();
 		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueKreisflugWoelbklappe ).children( '.iasVG' ).append('<input type="number" class="form-control" id="iasVGKreisflug" value="'+ aktuellerIasVGKreisflugWert +'">');
+		
+		$( 'input[type=radio][id=neutral]' ).removeAttr('disabled');
 		$( 'input[type=radio][id=neutral][value=' + neueKreisflugWoelbklappe + ']' ).attr('disabled', true);
 	});
 	
-	$('#istWoelbklappenFlugzeug').on('click', function()
+	// Diese Funktion ändert die Sichtbarkeit des divs "woelklappen", je nachdem ob die "istWoelklappe"-Checkbox aktiv ist oder nicht.
+	// Sie entfernt die Klasse "d-none" oder fügt sie hinzu
+	$( document ).on('click', '#istWoelbklappenFlugzeug', function()
 	{
-		if ($(this).is(':checked'))
+		if ($('#istWoelbklappenFlugzeug').is(':checked'))
 		{
 			$('#woelbklappen').removeClass('d-none');
 		}
@@ -54,10 +86,11 @@ $(document).ready(function() {
 		}
 	});
 	
+	// Diese Funktion sorgt dafür, dass die "Löschen"-Buttons funktionieren
 	$(document).on('click', '.loeschen', function()
 	{
-		var flugzeugListenID = $(this).attr('id').slice(7);
-		$( "#woelbklappenListe" ).children('#woelbklappe'+ flugzeugListenID).remove();
+		var loeschenID = $('.loeschen').attr('id').slice(7)
+		$( "#woelbklappenListe" ).children('#woelbklappe'+ loeschenID).remove();
 	});
 });
 </script>

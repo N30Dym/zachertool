@@ -4,7 +4,7 @@
 		<div class="sticky-top row">
 			<span class="col-3" style="height: 3rem !important"></span>
 			<span class=" ">
-				Wenn es das Muster noch nicht gibt kannst du <a href="<?= base_url() ?>/flugzeuge/flugzeugNeu/neu">hier</a> das Flugzeug mit Muster anlegen.
+				Wenn es das Muster noch nicht gibt, kannst du <a href="/zachern-dev/flugzeuge/flugzeugNeu/neu">hier</a> das Flugzeug mit Muster anlegen.
 			</span>
 		</div>
 	</div>
@@ -25,13 +25,13 @@
 				<?php foreach($muster as $muster_item) : ?>
 					<tr class="text-center">
 						<td>
-							<a href="<?= base_url() ?>/flugzeuge/flugzeugNeu/<?= esc($muster_item["id"]) ?>">
+							<a href="/zachern-dev/flugzeuge/flugzeugNeu/<?= esc($muster_item["id"]) ?>">
 								<?= esc($muster_item["musterSchreibweise"]) ?><?= esc($muster_item["musterZusatz"]) ?>
 							</a>
 						</td>
 					</tr>
 				<?php endforeach ?>
 			<?php endif ?>
-		</div>
+		</table>
 	</div>
 </div>

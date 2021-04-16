@@ -3,8 +3,8 @@
 <header>
 	<nav class="navbar navbar-expand bg-secondary bg-gradient ">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="<?= base_url() ?>/">
-				<img class="rounded-1" src="<?= base_url() ?>/public/bilder/Idaflieg_Logo_ohne_Text.jpg" alt="" height="35">
+			<a class="navbar-brand" href="/zachern-dev">
+				<img class="rounded-1" src="/zachern-dev/public/bilder/Idaflieg_Logo_ohne_Text.jpg" alt="" height="35">
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -26,13 +26,13 @@
 						</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="#">Flugzeugliste</a>
-							<a class="dropdown-item" href="<?= base_url() ?>/flugzeuge/flugzeugNeu">Flugzeug hinzufügen</a>
+							<a class="dropdown-item" href="/zachern-dev/flugzeuge/flugzeugNeu">Flugzeug hinzufügen</a>
 							
 							<?php if (isset($_SESSION["admin"]) && $SESSION["admin"] = TRUE) :?>
 								<a class="dropdown-item" href="#">Flugzeug bearbeiten</a>
 							<?php endif ?>
 							
-							<a class="dropdown-item" href="#">Muster hinzufügen</a>
+							<a class="dropdown-item" href="#">Waegebericht aktualisieren</a>
 							
 							<?php if (isset($_SESSION["admin"]) && $SESSION["admin"] = TRUE) :?>
 								<a class="dropdown-item" href="#">Muster bearbeiten</a>
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 			<a class="navbar-brand" href="">
-				<img class="rounded-1" src="<?= base_url() ?>/public/bilder/DLR-Signet_grau.jpg" alt="" height="35">
+				<img class="rounded-1" src="/zachern-dev/public/bilder/DLR-Signet_grau.jpg" alt="" height="35">
 			</a>
 				
 		</div>

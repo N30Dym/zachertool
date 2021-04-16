@@ -6,22 +6,24 @@ use CodeIgniter\Controller;
 use App\Models\muster\get\getMusterModel;
 use App\Models\muster\get\getMusterDetailsModel;
 use App\Models\muster\get\getMusterHebelarmeModel;
-use App\Models\muster\get\getMusterWoelbklappenModel;
+use App\Models\muster\get\getMusterKlappenModel;
 use App\Models\flugzeuge\get\getFlugzeugDetailsModel;
+use App\Models\flugzeuge\get\getFlugzeugWaegungModel;
+use App\Models\muster\set\setMusterModel;
 helper("array");
 
 class flugzeugNeuController extends Controller
 {
-	/*
-	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-	* -> /flugzeuge/flugzeugNeu
-	*
-	* Sie lädt das View: flugzeuge/musterAuswahl.php, lädt alle verfügbaren Muster und
-	* stellt diese zur Auswahl zur Verfügung.
-	*/
+		/*
+		* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
+		* -> /flugzeuge/flugzeugNeu
+		*
+		* Sie lädt das View: flugzeuge/musterAuswahl.php, lädt alle verfügbaren Muster und
+		* stellt diese zur Auswahl zur Verfügung.
+		*/
 	public function index()
 	{	
-		// Überprüfen, ob die beiden Views verfügbar sind
+			// Überprüfen, ob die beiden Views verfügbar sind
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/flugzeugAngabenView.php'))
 		{
 			// Whoops, we don't have a page for that!
@@ -33,13 +35,13 @@ class flugzeugNeuController extends Controller
 			throw new \CodeIgniter\Exceptions\PageNotFoundException('musterauswahlView.php');
 		}
 		
-		// getMusterModell initiieren
+			// getMusterModell initiieren
 		$getMusterModel = new getMusterModel();
 		
-		// Alle Flugzeugmuster laden
+			// Alle Flugzeugmuster laden
 		$getMusterAlle = $getMusterModel->getMusterAlle();
 		
-		// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
+			// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
 		if(!array_sort_by_multiple_keys($getMusterAlle, ["musterKlarname" => SORT_ASC]))
 		{
 			// Fehler beim übergebenen Wert
@@ -49,18 +51,18 @@ class flugzeugNeuController extends Controller
 		$title = "Musterauswahl";		
 		$description = "Wähle das Muster des Flugzeuges aus, dass du hinzufügen möchtest";
 		
-		// Daten für den Header aufbereiten
+			// Daten für den Header aufbereiten
 		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
 		
-		// Daten für den Inhalt aufbereiten
+			// Daten für den Inhalt aufbereiten
 		$datenInhalt = [
 			'muster' => $getMusterAlle
 		];
 		
-		// Front-end laden und Daten übertragen
+			// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
 		echo view('flugzeuge/scripts/musterauswahlScript');
 		echo view('templates/navbarView');
@@ -68,30 +70,36 @@ class flugzeugNeuController extends Controller
 		echo view('templates/footerView');
 	}
 	
-	/*
-	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-	* -> /flugzeuge/flugzeugNeu/(:num) bzw. -> /flugzeuge/flugzeugNeu/neu
-	*
-	* Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
-	* bzw. ein neues Flugzeug sammt neuem Muster zu erstellen.
-	* 
-	* @param $musterID wird automatisch aus der URL entnommen
-	*/
 	
+		/*
+		* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
+		* -> /flugzeuge/flugzeugNeu/(:num) bzw. -> /flugzeuge/flugzeugNeu/neu
+		*
+		* Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
+		* bzw. ein neues Flugzeug sammt neuem Muster zu erstellen.
+		* 
+		* @param $musterID wird automatisch aus der URL entnommen
+		*/	
 	public function flugzeugAnlegen($musterID)
 	{
+			// Überprüfen, ob der View vorhanden ist
+		if ( ! is_file(APPPATH.'/Views/flugzeuge/musterauswahlView.php'))
+		{
+			// Whoops, we don't have a page for that!
+			throw new \CodeIgniter\Exceptions\PageNotFoundException('musterauswahlView.php');
+		}
 		
-		/*
-		* -> /flugzeuge/flugzeugNeu/$musterID
-		* Wenn in der URL eine musterID übergeben wurde, wird diese Bedingung ausgeführt.
-		* Es werden alle Tabelleneinträge der Tabellen muster, muster_details, muster_hebelarme 
-		* und muster_klappen geladen, die mit der musterID Korrellieren. Die Arrays werden, dann 
-		* in das Array $datenInhalt geladen um es anschließend dem flugzeugAngabenView zu übergeben.
-		*
-		*/
+			/*
+			* -> /flugzeuge/flugzeugNeu/$musterID
+			* Wenn in der URL eine musterID übergeben wurde, wird diese Bedingung ausgeführt.
+			* Es werden alle Tabelleneinträge der Tabellen muster, muster_details, muster_hebelarme 
+			* und muster_klappen geladen, die mit der musterID Korrellieren. Die Arrays werden, dann 
+			* in das Array $datenInhalt geladen um es anschließend dem flugzeugAngabenView zu übergeben.
+			*
+			*/
 		if($musterID)
 		{
-			// Alles aus Tabelle zachern_flugzeuge.muster als Array laden, wo die id = $musterID
+				// Alles aus Tabelle zachern_flugzeuge.muster als Array laden, wo die id = $musterID
 			$getMusterModel = new getMusterModel();
 			$muster = $getMusterModel->getMusterNachID($musterID);
 			
@@ -100,50 +108,76 @@ class flugzeugNeuController extends Controller
 				throw new \CodeIgniter\Database\Exceptions\DatabaseException("Kein Muster mit dieser ID verfügbar");
 			}
 			
-			// Alles aus Tabelle zachern_flugzeuge.muster_details als Array laden, wo die musterID = $musterID
+				// Alles aus Tabelle zachern_flugzeuge.muster_details als Array laden, wo die musterID = $musterID
 			$getMusterDetailsModel = new getMusterDetailsModel();
 			$musterDetails = $getMusterDetailsModel->getMusterDetailsNachMusterID($musterID);
 			//var_dump($musterDetails);
 			
-			// Alles aus Tabelle zachern_flugzeuge.muster_hebelarme als Array laden, wo die musterID = $musterID
+				// Alles aus Tabelle zachern_flugzeuge.muster_hebelarme als Array laden, wo die musterID = $musterID
 			$getMusterHebelarmeModel = new getMusterHebelarmeModel();
 			$musterHebelarme = $getMusterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
 			
-			// $musterWoelbklappen initialisieren und leer setzten, falls kein WK-Flugzeug, bleibt die Variable leer
-			$musterWoelbklappen = null;
+				// Hebelarme so sortieren, dass immer Pilot und ggf. Copilot zuerst erscheinen			
+			$indexPilot = $indexCopilot = false;
 			
-			// Prüfen, ob das Muster ein WK-Flugzeug ist
+				// Durch alle Hebelarme gehen und $indexPilot bzw. $indexCopilot mit dem Index belegen, wo der jeweilige Wert gespeichert ist
+			foreach($musterHebelarme as $key => $musterhebelarm)			
+			{
+				array_search("Pilot", $musterHebelarme[$key]) ?  $indexPilot = $key : "";
+				array_search("Copilot", $musterHebelarme[$key]) ?  $indexCopilot = $key : "";
+			}
+			
+				// Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+			$musterHebelarmeSortiert[0] = $musterHebelarme[$indexPilot];
+			if($indexCopilot)
+			{
+				$musterHebelarmeSortiert[1] = $musterHebelarme[$indexCopilot];
+			}
+			
+				// Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+			foreach($musterHebelarme as $key => $musterHebelarm)
+			{
+				if($key != $indexPilot AND $key != $indexCopilot)
+				{
+					array_push($musterHebelarmeSortiert,$musterHebelarm);
+				}
+			}
+			
+				// $musterKlappen initialisieren und leer setzten, falls kein WK-Flugzeug, bleibt die Variable leer
+			$musterKlappen = null;
+			
+				// Prüfen, ob das Muster ein WK-Flugzeug ist
 			if($muster["woelbklappen"])
 			{
-				// Wenn ja, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
-				$getMusterWoelbklappenModel = new getMusterWoelbklappenModel();
-				$musterWoelbklappen = $getMusterWoelbklappenModel->getMusterWoelbklappenNachMusterID($musterID);
+					// Wenn ja, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
+				$getMusterKlappenModel = new getMusterKlappenModel();
+				$musterKlappen = $getMusterKlappenModel->getMusterKlappenNachMusterID($musterID);
 				
-				/*
-				* Die Wölbklappenstellungen sollen nach Möglichkeit aufsteigend von negativ zu positiv ausgegeben werden.
-				* Nicht bei jedem Flugzeug wurden Winkel angegeben und die Wölbklappenbezeichnungen sind nicht immer Aussagekräftig
-				* Deshalb wird hier überprüft, ob ALLE Wölbklappenbezeichnungen numerisch sind und ob ALLE Wölbklappenwinkel gesetzt sind.
-				* Wenn alle Wölbklappenbezeichnungen numerisch sind, dann wird danach in aufsteigender Reihenfolge sortiert.
-				* Sonst, wenn alle Wölbklappenwinkel vorhanden sind, wird danach in aufsteigender Reihenfolge sortiert.
-				* Wenn nicht bleibt die Reihenfolge, wie sie beim Eingeben und Speichern vorgegeben wurde.
-				*
-				*/
+					/*
+					* Die Wölbklappenstellungen sollen nach Möglichkeit aufsteigend von negativ zu positiv ausgegeben werden.
+					* Nicht bei jedem Flugzeug wurden Winkel angegeben und die Wölbklappenbezeichnungen sind nicht immer Aussagekräftig
+					* Deshalb wird hier überprüft, ob ALLE Wölbklappenbezeichnungen numerisch sind und ob ALLE Wölbklappenwinkel gesetzt sind.
+					* Wenn alle Wölbklappenbezeichnungen numerisch sind, dann wird danach in aufsteigender Reihenfolge sortiert.
+					* Sonst, wenn alle Wölbklappenwinkel vorhanden sind, wird danach in aufsteigender Reihenfolge sortiert.
+					* Wenn nicht bleibt die Reihenfolge, wie sie beim Eingeben und Speichern vorgegeben wurde.
+					*
+					*/
 				$pruefeObAlleStellungBezeichnungNumerisch = true;
 				$pruefeObAlleStellungWinkelVorhanden = true;
-				foreach($musterWoelbklappen as $musterWoelbklappe) 			
+				foreach($musterKlappen as $musterKlappe) 			
 				{
-					if(is_numeric($musterWoelbklappe["stellungBezeichnung"]))
+					if(is_numeric($musterKlappe["stellungBezeichnung"]))
 					{
 						$pruefeObAlleStellungBezeichnungNumerisch = false;
 					}
-					if($musterWoelbklappe["stellungWinkel"] == "")
+					if($musterKlappe["stellungWinkel"] == "")
 					{
 						$pruefeObAlleStellungWinkelVorhanden = false;
 					}
 				}
 				if($pruefeObAlleStellungBezeichnungNumerisch)
 				{
-					if(!array_sort_by_multiple_keys($musterWoelbklappen, ["stellungBezeichnung" => SORT_ASC]))
+					if(!array_sort_by_multiple_keys($musterKlappen, ["stellungBezeichnung" => SORT_ASC]))
 					{
 						// Fehler beim übergebenen Wert
 						throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
@@ -151,7 +185,7 @@ class flugzeugNeuController extends Controller
 				}
 				else if($pruefeObAlleStellungWinkelVorhanden)
 				{
-					if(!array_sort_by_multiple_keys($musterWoelbklappen, ["stellungWinkel" => SORT_ASC]))
+					if(!array_sort_by_multiple_keys($musterKlappen, ["stellungWinkel" => SORT_ASC]))
 					{
 						// Fehler beim übergebenen Wert
 						throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
@@ -161,18 +195,22 @@ class flugzeugNeuController extends Controller
 			
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
 			
-			//$testModel = new getFlugzeugDetailsModel();
-			//$getTest = $testModel->getFlugzeugDetailsNachFlugzeugID($musterID);
+			/*$testModel = new getFlugzeugDetailsModel();
+			$getTest = $testModel->getFlugzeugDetailsNachFlugzeugID($musterID);
 			
-			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
+			$testWaegungsModel = new getFlugzeugWaegungModel();
+			$getTestWaegung = $testWaegungsModel->getFlugzeugWaegungNachFlugzeugID($musterID);*/
+			
+				// Die Variable $datenInhalt mit den geladenen und vorbereiteten Arrays bestücken
 			$datenInhalt = [
 				'muster' => $muster,
 				'musterDetails' => $musterDetails,
-				'musterHebelarme' => $musterHebelarme,
-				'musterWoelbklappen' => $musterWoelbklappen
-				//'flugzeugDetails' => $getTest
+				'musterHebelarme' => $musterHebelarmeSortiert,
+				'musterKlappen' => $musterKlappen
+				/*'flugzeugDetails' => $getTest,
+				'flugzeugWaegung' => $getTestWaegung*/
 			];
-			var_dump($musterHebelarme);
+			//var_dump($musterHebelarme);
 		}
 		
 		/*
@@ -184,69 +222,92 @@ class flugzeugNeuController extends Controller
 		*/
 		else
 		{
+			
+			$musterHebelarmeLeerArray = [];
+			$musterKlappenLeerArray = [];
+			$anzahlLeereKlappenZeilen = 6;
+			
 			$title = "Neues Flugzeug und Flugzeugmuster erstellen";
-			$anzahlLeereWoelbklappenZeilen = 6;
 						
-			// Aus Tabelle zachern_flugzeuge.muster leere Einträge als Array laden
+				// Aus Tabelle zachern_flugzeuge.muster leere Einträge als Array laden
 			$getMusterModel = new getMusterModel();
 			$musterLeer = $getMusterModel->getMusterLeer();
 			
-			// Aus Tabelle zachern_flugzeuge.muster_details leere Einträge als Array laden
+				// Aus Tabelle zachern_flugzeuge.muster_details leere Einträge als Array laden
 			$getMusterDetailsModel = new getMusterDetailsModel();
 			$musterDetailsLeer = $getMusterDetailsModel->getMusterDetailsLeer();
 			
-			// Aus Tabelle zachern_flugzeuge.muster_hebelarme leere Einträge als Array laden
+				// Aus Tabelle zachern_flugzeuge.muster_hebelarme leere Einträge als Array laden
 			$getMusterHebelarmeModel = new getMusterHebelarmeModel();
 			$musterHebelarmeLeer = $getMusterHebelarmeModel->getMusterHebelarmeLeer();
 			
-			// Leeres Wölbklappen-Array für neue Muster
-			$getMusterWoelbklappenModel = new getMusterWoelbklappenModel();
-			$musterWoelbklappenLeer = $getMusterWoelbklappenModel->getMusterWoelbklappenLeer();
-			$musterWoelbklappenLeerArray = [];
-			for($i=0; $i < $anzahlLeereWoelbklappenZeilen; $i++)
+				// $musterHebelarmeLeerArray dreimal mit dem leeren Array bestücken
+			for($i=0;$i<3;$i++)
 			{
-				array_push($musterWoelbklappenLeerArray, $musterWoelbklappenLeer);
+				array_push($musterHebelarmeLeerArray, $musterHebelarmeLeer);
+			}	
+			
+				// Für jedes Array im Array die Beschreibung in der richtigen Reihenfolge setze
+			$musterHebelarmeLeerArray[0]["beschreibung"] = "Pilot";
+			$musterHebelarmeLeerArray[1]["beschreibung"] = "Copilot";
+			$musterHebelarmeLeerArray[2]["beschreibung"] = "Trimmballast";				
+			
+				// Leeres Wölbklappen-Array für neue Muster
+			$getMusterKlappenModel = new getMusterKlappenModel();
+			$musterKlappenLeer = $getMusterKlappenModel->getMusterKlappenLeer();
+
+			for($i=0; $i < $anzahlLeereKlappenZeilen; $i++)
+			{
+				array_push($musterKlappenLeerArray, $musterKlappenLeer);
 			}
 			
-			// Die Variable $datenInhalt mit den geladenen Arrays bestücken
+				// Die Variable $datenInhalt mit den geladenen und vorbereiteten Arrays bestücken
 			$datenInhalt = [
 				'muster' => $musterLeer,
 				'musterDetails' => $musterDetailsLeer,
-				'musterHebelarme' => $musterHebelarmeLeer,
-				'musterWoelbklappen' => $musterWoelbklappenLeerArray
+				'musterHebelarme' => $musterHebelarmeLeerArray,
+				'musterKlappen' => $musterKlappenLeerArray
 			];
-			//var_dump($musterWoelbklappenLeer);
+			//var_dump($musterKlappenLeer);
 		}
 		
 		
-		// Daten für den HeaderView aufbereiten
+			// Daten für den HeaderView aufbereiten
 		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];	
 		
-		// Alle bisherigen Eingaben in zachern_flugzeuge.flugzeug_details der Spalten "variometer", "tek", "pitotPosition", 
-		// "bremsklappen" und "bezugspunkt" jeweils ohne Dopplungen
+			// Alle bisherigen Eingaben in zachern_flugzeuge.flugzeug_details der Spalten "variometer", "tek", "pitotPosition", 
+			// "bremsklappen" und "bezugspunkt" jeweils ohne Dopplungen
 		$getFlugzeugDetailsModel = new getFlugzeugDetailsModel();
 		
+			// Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
+			// als Vorschlagliste im View geladen
 		$variometerEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben();
 		$tekEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben();
 		$pitotPositionEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
 		$bremsklappenEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$bezugspunktEingaben = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
 		
-		// Dies ist notwendig bei vorhanden und neuen Mustern, deswegen werden diese Werte jetzt $datenInhalt hinzugefügt
+			// Dies ist notwendig bei vorhanden und neuen Mustern, deswegen werden diese Werte jetzt $datenInhalt hinzugefügt
 		$datenInhalt["variometerEingaben"] = $variometerEingaben;
 		$datenInhalt["tekEingaben"] = $tekEingaben;
 		$datenInhalt["pitotPositionEingaben"] = $pitotPositionEingaben;
 		$datenInhalt["bremsklappenEingaben"] = $bremsklappenEingaben;
 		$datenInhalt["bezugspunktEingaben"] = $bezugspunktEingaben;
 		
-		// Front-end laden und Daten übertragen
+			// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
 		echo view('flugzeuge/scripts/flugzeugAngabenScript');
 		echo view('templates/navbarView');
 		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
+		echo view('flugzeuge/flugzeugSpeichernView');
 		echo view('templates/footerView');		
+	}
+	
+	public function flugzeugSpeichern()
+	{
+		
 	}
 }

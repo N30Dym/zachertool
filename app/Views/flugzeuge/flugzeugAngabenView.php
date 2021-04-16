@@ -1,4 +1,7 @@
 <h2 class="text-center m-4"><?= esc($title) ?></h2>	
+
+<?= \Config\Services::validation()->listErrors() ?>
+
 <div class="row">
 	<div class="col-2">
 	</div>
@@ -14,6 +17,9 @@
 			</div>
 			-->
 		<form class="needs-validation" novalidate="">
+		
+			<?= csrf_field() ?>
+			
 			<h3 class="m-4">Basisinformationen</h3>
 			<div class="row g-3">
 				<div class="col-sm-7">
@@ -169,7 +175,7 @@
 					<div class="col-12">
 						<small class="text-muted">Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
 					</div>
-					<?php if($musterWoelbklappen != null) : ?> 
+					<?php if($musterKlappen != null) : ?> 
 						<div class="row col-12" id="woelbklappenListe">
 							<div class="row m-3 col-12">
 								<div class="col-1 text-center">
@@ -193,7 +199,7 @@
 								<div class="col-1 text-center">
 								</div>
 							</div>
-							<?php foreach ($musterWoelbklappen as $key => $woelbklappe) :?>
+							<?php foreach ($musterKlappen as $key => $woelbklappe) :?>
 								
 								<div class="row col-12 g-1" id="woelbklappe<?= $key ?>">
 									<div class="col-1 text-center align-middle">
@@ -289,41 +295,87 @@
 					</datalist>
 				</div>	
 			</div>	
-			
-			
-			
+					
 			<h3 class="m-4">Hebelarme</h3>
 			<div class="row col-12 g-3" id="hebelarmListe">
-				<div class="col-6 text-center">
+			
+				<div class="col-1 text-center">
+				</div>
+			
+				<div class="col-5 text-center">
 					Beschreibung
 				</div>
-				<div class="col-6 text-center">
+				
+				<div class="col-3 text-center">
 					Hebelarmlänge
 				</div>
+				
+				<div class="col-3 text-center">
+				</div>
+
 				<?php foreach($musterHebelarme as $key => $musterHebelarm): ?>
-					<div class="row g-2 col-12" id="hebelarm<?= $key ?>">
+					<div class="row g-1 col-12" id="hebelarm<?= $key ?>">
+					
 						<div class="col-1 text-center">
 							<button type="button" id="loescheHebelarme<?= $key ?>" class="btn-danger btn-close loescheHebelarm" aria-label="Close"></button>
 						</div>
+						
 						<div class="col-5">
 							<input type="text" class="form-control" id="hebelarmBeschreibung<?= $key ?>" value="<?= $musterHebelarm["beschreibung"] ?>">
 						</div>
+						
 						<div class="col-6">
 							<div class="input-group">
 								<input type="text" class="form-control" id="hebelarmLänge<?= $key ?>" value="<?= $musterHebelarm["hebelarm"] ?>">						
 								<select class="form-select input-group-text text-start" id="auswahlVorOderHinter<?= $key ?>">
-									<option value="hinterBP" <?php echo ((double)$musterHebelarm["hebelarm"] <= 0) ? "selected" : "" ?>>mm h. BP</option>
-									<option value="vorBP" <?php echo ((double)$musterHebelarm["hebelarm"] > 0) ? "selected" : "" ?>>mm v. BP</option>
+									<option value="hinterBP" selected>mm h. BP</option>
+									<option value="vorBP">mm v. BP</option>
 								</select>
 							</div>
 						</div>
+						
 					</div>
 				<?php endforeach ?>
 
 			</div>
 			<div class="row col-12 pt-3">
 				<button id="neueZeileHebelarme" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
-			</div>			
-		</form>	
-	</div>
-</div>
+			</div>	
+			
+			<h3 class="m-4">Letzte Wägung</h3>
+			<div class="row col-12 g-3">
+			
+				<div class="col-12">
+					<label for="datumWaegung" class="form-label">Datum der letzten Wägung</label>
+					<input type="date" class="form-control" id="datumWaegung" placeholder="TT.MM.JJJJ" value="<?php echo isset($flugzeugWaegung) ? $flugzeugWaegung["datum"] : "" ?>">
+				</div>
+
+				<div class="col-12">					
+					<label  class="form-label">Zulässige Zuladung</label>
+					<div class="input-group">
+						<span class="input-group-text">min</span>
+						<input type="text" class="form-control" id="zuladungMin" value="<?php echo isset($flugzeugWaegung) ? $flugzeugWaegung["zuladungMin"] : "" ?>">
+						<span class="input-group-text">kg</span>
+						<span class="input-group-text">max</span>
+						<input type="text" class="form-control" id="zuladungMax" value="<?php echo isset($flugzeugWaegung) ? $flugzeugWaegung["zuladungMax"] : "" ?>">
+						<span class="input-group-text">kg</span>
+					</div>
+				</div>
+				
+				<div class="col-12">
+					<label for="leermasse" class="form-label">Leermasse</label>
+					<div class="input-group">
+						<input type="number" class="form-control" id="leermasse"  value="<?php echo isset($flugzeugWaegung) ? $flugzeugWaegung["leermasse"] : "" ?>">
+						<span class="input-group-text">kg</span>
+					</div>
+				</div>
+				
+				<div class="col-12">
+					<label for="schwerpunkt" class="form-label">Leermassenschwerpunkt</label>
+					<div class="input-group">
+						<input type="number" class="form-control" id="schwerpunkt"  value="<?php echo isset($flugzeugWaegung) ? $flugzeugWaegung["schwerpunkt"] : "" ?>">
+						<span class="input-group-text">mm h. BP</span>
+					</div>
+				</div>
+			
+

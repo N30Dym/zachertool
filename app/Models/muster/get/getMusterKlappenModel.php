@@ -4,7 +4,7 @@ namespace App\Models\muster\get;
 
 use CodeIgniter\Model;
 
-class getMusterWoelbklappenModel extends Model
+class getMusterKlappenModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
@@ -15,7 +15,7 @@ class getMusterWoelbklappenModel extends Model
 	protected $table      = 'muster_klappen';
     protected $primaryKey = 'id';
 
-	public function getMusterWoelbklappenNachMusterID($musterID)
+	public function getMusterKlappenNachMusterID($musterID)
 	{
 		if(is_int(trim($musterID)) OR is_numeric(trim($musterID)))
 		{	
@@ -36,7 +36,7 @@ class getMusterWoelbklappenModel extends Model
 	*
 	* @return array
 	*/
-	public function getMusterWoelbklappenLeer()
+	public function getMusterKlappenLeer()
 	{
 		$dbName = $this->db->database;
 		$dbTabellenName = $this->table;

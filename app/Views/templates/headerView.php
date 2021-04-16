@@ -4,8 +4,9 @@
 <!doctype html>
 <html>
 <head>
+<?php if (isset($title)) : ?>
     <title><?= esc($title) ?></title>
-	
+<?php endif ?>
 <!----------------------------------------------------------------->	
 <!-- Lade bootstrap.min.css entweder aus dem Internet oder lokal -->
 <!----------------------------------------------------------------->
@@ -71,7 +72,9 @@
 
  
  	<meta charset="UTF-8">
-	<meta name="description" content="<?= esc($description) ?>">
+	<?php if (isset($description)) : ?>
+		<meta name="description" content="<?= esc($description) ?>">
+	<?php endif ?>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 

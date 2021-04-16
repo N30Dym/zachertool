@@ -5,7 +5,7 @@ namespace App\Models\protokolle;
 use CodeIgniter\Model;
 helper("pruefeString");
 
-class DatenModel extends Model
+class datenModel extends Model
 {
 		/*
 		 * Verbindungsvariablen für den Zugriff zur

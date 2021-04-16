@@ -4,7 +4,7 @@ namespace App\Models\muster;
 
 use CodeIgniter\Model;
 
-class MusterModel extends Model
+class musterModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur

@@ -5,7 +5,7 @@ namespace App\Models\protokolle;
 use CodeIgniter\Model;
 
 
-class ProtokolleModel extends Model
+class protokolleModel extends Model
 {
 		/*
 		 * Verbindungsvariablen für den Zugriff zur

@@ -4,7 +4,7 @@ namespace App\Models\flugzeuge;
 
 use CodeIgniter\Model;
 
-class FlugzeugDetailsModel extends Model
+class flugzeugDetailsModel extends Model
 {
 
 		/*

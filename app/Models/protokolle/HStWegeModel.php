@@ -5,7 +5,7 @@ namespace App\Models\protokolle;
 use CodeIgniter\Model;
 //helper("pruefeString");
 
-class HStWegeModel extends Model
+class hStWegeModel extends Model
 {
 		/*
 		 * Verbindungsvariablen für den Zugriff zur

@@ -4,7 +4,7 @@ namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
 
-class KommentareModel extends Model
+class kommentareModel extends Model
 {
 	
 }

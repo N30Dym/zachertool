@@ -4,7 +4,7 @@ namespace App\Models\flugzeuge;
 
 use CodeIgniter\Model;
 
-class FlugzeugeModel extends Model
+class flugzeugeModel extends Model
 {
 		/*
 		 * Verbindungsvariablen für den Zugriff zur

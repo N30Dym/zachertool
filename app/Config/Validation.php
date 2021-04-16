@@ -40,4 +40,28 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+	
+	public $muster = [
+		'musterSchreibweise' => [
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'Du musst das Muster angeben.'
+            ]
+		], 
+		/*'musterKlarname' => [
+            'rules'  => 'required|',
+            'errors' => [
+                'required' => 'Etwas ist beim Konvertieren des Klarnames falschgelaufen.'
+            ]
+		],*/
+		'musterZusatz' => 'permit_empty', 
+		'doppelsitzer' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Wert für Doppelsitzer ist kein boolean.'
+		], 
+		'woelbklappen' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Wert für Wölbklappe ist kein boolean.'
+		]
+	];
 }

@@ -48,12 +48,13 @@ class Validation
                 'required' => 'Du musst das Muster angeben.'
             ]
 		], 
-		/*'musterKlarname' => [
-            'rules'  => 'required|',
+		'musterKlarname' => [
+            'rules'  => 'required|alpha_numeric',
             'errors' => [
-                'required' => 'Etwas ist beim Konvertieren des Klarnames falschgelaufen.'
+                'required' => 'Der Klarname fehlt.',
+				'alpha_numeric' => 'Etwas ist beim Konvertieren des Klarnames falschgelaufen.'
             ]
-		],*/
+		],
 		'musterZusatz' => 'permit_empty', 
 		'doppelsitzer' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',

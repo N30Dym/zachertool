@@ -299,48 +299,91 @@ class flugzeugNeuController extends Controller
 	
 	public function flugzeugSpeichern()
 	{
-		$validation =  \Config\Services::validation();
-		//var_dump($validation->getRuleGroup("muster"));
-		
-		$testArray = [
-			'musterSchreibweise' => 'ASK13',
-			'musterZusatz' => ' b',
-			'doppelsitzer' => '',
-			'woelbklappen' => 1
-		];
-		
-		$musterModel = new musterModel();
-		
-		var_dump($this->request->getPost());
-		echo $this->validate($musterModel->validationRules);
-		
-		//echo $saveMusterModel->validate();
-		//echo $validation->listErrors();
-		
-		
-		
-		if ($this->request->getMethod() === 'post' && $this->validate($musterModel->validationRules))
+		if ($this->request->getMethod() === 'post' && $this->request->getPost())
 		{
-			/*if($saveMusterModel->save([
-				'musterSchreibweise' => $this->request->getPost('musterSchreibweise'), 
-				'musterKlarname' => $this->request->getPost('musterKlarname'), 
-				'musterZusatz' => $this->request->getPost('musterZusatz'), 
-				'doppelsitzer' => $this->request->getPost('istDoppelsitzer'), 
-				'woelbklappen' => $this->request->getPost('istWoelbklappenFlugzeug')
-			]))		
+			helper("text");
+			$postArray = $this->request->getPost();
+			$validation =  \Config\Services::validation();
+			
+			$musterModel = new musterModel();
+			
+			$postArray['musterKlarname'] = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($postArray['musterSchreibweise'])));
+			$postArray['musterKlarname'] = str_replace("ä", "ae", $postArray['musterKlarname']);
+			$postArray['musterKlarname'] = str_replace("ö", "oe", $postArray['musterKlarname']);
+			$postArray['musterKlarname'] = str_replace("ü", "ue", $postArray['musterKlarname']);
+
+			//var_dump($postArray);
+			
+			$hebelarmArray = [];
+			$indexPilot;
+			
+			
+				// Wenn keine MusterID übermittelt wurde, existiert das Muster noch nicht und muss zunächst angelegt werden
+			if( ! isset($musterID))
 			{
-				echo "Hat geklappt";
+				if($validation->run($postArray, $musterModel->validationRules))
+				{
+					/*if($saveMusterModel->save([
+						'musterSchreibweise' => $this->request->getPost('musterSchreibweise'), 
+						'musterKlarname' => $this->request->getPost('musterKlarname'), 
+						'musterZusatz' => $this->request->getPost('musterZusatz'), 
+						'doppelsitzer' => $this->request->getPost('istDoppelsitzer'), 
+						'woelbklappen' => $this->request->getPost('istWoelbklappenFlugzeug')
+					]))		
+					{
+						echo "Hat geklappt";
+					}
+					else
+					{
+						echo $validation->listErrors();
+					}*/
+					echo "<br>Erfolg";
+				}
+				else 
+				{
+					echo "Da lief was schief";
+				}
+				
 			}
-			else
+			
+			for ($i = 0; $i < 20; $i++)
+			{					
+				if(isset($postArray['hebelarmLänge'.$i]))
+				{
+					$temporaeresArray['beschreibung'] = $postArray['hebelarmBeschreibung'.$i];
+					$temporaeresArray['hebelarm'] = $postArray['hebelarmLänge'.$i];
+					array_push($hebelarmArray, $temporaeresArray);
+				}
+			}
+				
+			foreach($hebelarmArray as $key => $hebelarm)			
 			{
-				echo $validation->listErrors();
-			}*/
-			echo "Erfolg";
-		}
-		else 
-		{
-			echo "Da lief was schief";
-			//gettype($saveMusterModel->errors());
+				array_search("Pilot", $hebelarmArray[$key]) ?  $indexPilot = $key : "";
+			}
+			
+				// Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+			$hebelarmArraySortiert[0] = $hebelarmArray[$indexPilot];
+			if(isset($postArray['hebelarmLängeCopilot']))
+			{
+				$temporaeresArray['beschreibung'] = $postArray['hebelarmBeschreibungCopilot'];
+				$temporaeresArray['hebelarm'] = $postArray['hebelarmLängeCopilot'];
+				array_push($hebelarmArraySortiert, $temporaeresArray);
+			}
+			
+				// Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+			foreach($hebelarmArray as $key => $hebelarm)
+			{
+				if($key != $indexPilot)
+				{
+					array_push($hebelarmArraySortiert,$hebelarm);
+				}
+			}	
+			
+			
+			var_dump($hebelarmArray);
+			
+			
+			
 		}
 
 	}

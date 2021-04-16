@@ -16,7 +16,7 @@
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ?"required" :"" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] =="") ?"" :"disabled" ?> required>
+				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ?"required" :"" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] =="") ?"" :"readonly" ?> required>
 				</div>
 				
 				

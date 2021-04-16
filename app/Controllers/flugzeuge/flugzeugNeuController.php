@@ -3,13 +3,12 @@
 namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
-use App\Models\muster\get\getMusterModel;
-use App\Models\muster\get\getMusterDetailsModel;
-use App\Models\muster\get\getMusterHebelarmeModel;
-use App\Models\muster\get\getMusterKlappenModel;
-use App\Models\flugzeuge\get\getFlugzeugDetailsModel;
-use App\Models\flugzeuge\get\getFlugzeugWaegungModel;
-use App\Models\muster\save\saveMusterModel;
+use App\Models\muster\MusterModel;
+use App\Models\muster\MusterDetailsModel;
+use App\Models\muster\MusterHebelarmeModel;
+use App\Models\muster\MusterKlappenModel;
+use App\Models\flugzeuge\FlugzeugDetailsModel;
+use App\Models\flugzeuge\FlugzeugWaegungModel;
 
 
 class flugzeugNeuController extends Controller
@@ -37,10 +36,10 @@ class flugzeugNeuController extends Controller
 		}
 		
 			// getMusterModell initiieren
-		$getMusterModel = new getMusterModel();
+		$MusterModel = new MusterModel();
 		
 			// Alle Flugzeugmuster laden
-		$getMusterAlle = $getMusterModel->getMusterAlle();
+		$getMusterAlle = $MusterModel->getMusterAlle();
 		
 			// Flugzeugmuster sortieren nach Klarnamen (siehe Doku) oder Fehlermeldung
 		if(!array_sort_by_multiple_keys($getMusterAlle, ["musterKlarname" => SORT_ASC]))
@@ -93,10 +92,10 @@ class flugzeugNeuController extends Controller
 		}
 		
 			// Klassen initiieren, die später benötigt werden, um deren Funktionen zu benutzen		
-		$getMusterModel = new getMusterModel();
-		$getMusterDetailsModel = new getMusterDetailsModel();
-		$getMusterHebelarmeModel = new getMusterHebelarmeModel();
-		$getFlugzeugDetailsModel = new getFlugzeugDetailsModel();
+		$MusterModel = new MusterModel();
+		$MusterDetailsModel = new MusterDetailsModel();
+		$MusterHebelarmeModel = new MusterHebelarmeModel();
+		$FlugzeugDetailsModel = new FlugzeugDetailsModel();
 
 		$description = "Das webbasierte Tool zur Zacherdatenverarbeitung";
 		
@@ -115,9 +114,9 @@ class flugzeugNeuController extends Controller
 			$musterKlappen = null;
 			
 				// Daten aus der jeweiligen Datenbank in ein Array laden, bei denen die einzelnen Werte 
-			$muster = $getMusterModel->getMusterNachID($musterID);
-			$musterDetails = $getMusterDetailsModel->getMusterDetailsNachMusterID($musterID);
-			$musterHebelarme = $getMusterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
+			$muster = $MusterModel->getMusterNachID($musterID);
+			$musterDetails = $MusterDetailsModel->getMusterDetailsNachMusterID($musterID);
+			$musterHebelarme = $MusterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
 			
 				// Titel für diese Seite. Wird im Browser angezeigt und steht als Überschrift ganz oben
 			$title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
@@ -155,8 +154,8 @@ class flugzeugNeuController extends Controller
 			if($muster["woelbklappen"])
 			{
 					// Wenn doch, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
-				$getMusterKlappenModel = new getMusterKlappenModel();
-				$musterKlappen = $getMusterKlappenModel->getMusterKlappenNachMusterID($musterID);
+				$MusterKlappenModel = new MusterKlappenModel();
+				$musterKlappen = $MusterKlappenModel->getMusterKlappenNachMusterID($musterID);
 				
 					/*
 					* Die Wölbklappenstellungen sollen nach Möglichkeit aufsteigend von negativ zu positiv ausgegeben werden.
@@ -343,5 +342,12 @@ class flugzeugNeuController extends Controller
 			//gettype($saveMusterModel->errors());
 		}*/
 
+	}
+	
+	public function test()
+	{
+		echo view('templates/headerView');
+		echo view('templates/ladenView');	
+		echo view('templates/footerView');			
 	}
 }

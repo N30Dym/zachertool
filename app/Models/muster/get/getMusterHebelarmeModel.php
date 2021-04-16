@@ -38,15 +38,12 @@ class getMusterHebelarmeModel extends Model
 	*/
 	public function getMusterHebelarmeLeer()
 	{
-		$dbName = $this->db->database;
-		$dbTabellenName = $this->table;
-		$query = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='". $dbName ."' AND `TABLE_NAME`='". $dbTabellenName ."' ";
-		$columnNames = $this->query($query)->getResultArray();
+		$spaltenNamen = $this->getFieldNames( $this->table );
 
 		$returnArray = [];
-		foreach($columnNames as $columnName)
+		foreach($spaltenNamen as $spaltenName)
 		{
-			$returnArray[$columnName["COLUMN_NAME"]] = "";
+			$returnArray[$spaltenName] = "";
 		}
 		return $returnArray;
 	}

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\startseiteModel;
-use App\Models\protokolle\get\getHStWegeModel;
+use App\Models\protokolle\hStWegeModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
@@ -29,7 +29,7 @@ class startseiteController extends Controller
 		
 		$title = "Willkommen beim Zachertool";
 			
-		$testModel = new getHStWegeModel();
+		$testModel = new hHStWegeModel();
 		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
 		
 		$datenHeader = [

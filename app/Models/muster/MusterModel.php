@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Models\muster\get;
+namespace App\Models\muster;
 
 use CodeIgniter\Model;
 
-class getMusterModel extends Model
+class MusterModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
 	 * Datenbank zachern_flugzeuge auf die 
 	 * Tabelle muster
 	 */
-    protected $DBGroup = 'flugzeugeDB';
-	protected $table      = 'muster';
-    protected $primaryKey = 'id';
+    protected $DBGroup 			= 'flugzeugeDB';
+	protected $table      		= 'muster';
+    protected $primaryKey 		= 'id';
+	protected $validationRules 	= 'muster';
+	
+	protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'doppelsitzer', 'woelbklappen'];
 	
 	/*
 	* Diese Funktion ruft nur das Muster mit

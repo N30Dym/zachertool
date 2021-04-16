@@ -1,20 +1,22 @@
 <?php 
 
-namespace App\Models\muster\get;
+namespace App\Models\muster;
 
 use CodeIgniter\Model;
 
-class getMusterDetailsModel extends Model
+class MusterDetailsModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
 	 * Datenbank zachern_flugzeuge auf die 
 	 * Tabelle muster_details
 	 */
-    protected $DBGroup = 'flugzeugeDB';
-	protected $table      = 'muster_details';
-    protected $primaryKey = 'id';
-	protected $createdField  = 'erstelltAm';
+    protected $DBGroup 			= 'flugzeugeDB';
+	protected $table     		= 'muster_details';
+    protected $primaryKey 		= 'id';
+	protected $createdField  	= 'erstelltAm';
+	
+	protected $allowedFields 	= ['musterID', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'zuladungMin', 'zuladungMax', 'bezugspunkt', 'anstellwinkel', 'erstelltAm'];
 
 	/*
 	* Diese Funktion ruft nur die Musterdetails mit

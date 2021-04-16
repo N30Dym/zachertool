@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Models\protokolle\get;
+namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
 helper("pruefeString");
 
-class getDatenModel extends Model
+class DatenModel extends Model
 {
-	/*
-	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_protokolle auf die 
-	 * Tabelle daten
-	 */
-    protected $DBGroup = 'protokolleDB';
-	protected $table      = 'daten';
-    protected $primaryKey = 'id';
+		/*
+		 * Verbindungsvariablen für den Zugriff zur
+		 * Datenbank zachern_protokolle auf die 
+		 * Tabelle daten
+		 */
+    protected $DBGroup 				= 'protokolleDB';
+	protected $table      			= 'daten';
+    protected $primaryKey 			= 'id';
 
 
-	/*
-	* Diese Funktion ruft nur den Datensatz mit
-	* der jeweiligen ID auf
-	*
-	* @param  mix $id int oder string
-	* @return array
-	*/
+		/*
+		* Diese Funktion ruft nur den Datensatz mit
+		* der jeweiligen ID auf
+		*
+		* @param  mix $id int oder string
+		* @return array
+		*/
 	public function getDatenNachID($id)
 	{		
 	if(is_int(trim($id)) OR is_numeric(trim($id)))
@@ -37,25 +37,25 @@ class getDatenModel extends Model
 		}	
 	}
 	
-	/*
-	* Diese Funktion ruft nur Datensätze auf die
-	* die folgendenen Angaben Zutreffen
-	*
-	* @param mix $protokollSpeicherID
-	* @param mix $protokollInputID
-	* @param string $woelbklappenstellung standard = "0"
-	*	erlaubte Eingaben sind:
-	*		0
-	*		Neutral
-	*		Kreisflug
-	* @param string $linksUndRechts standard = "0"
-	*	erlaubte Eingaben sind:
-	*		0
-	*		Links
-	*		Rechts
-	* @param mix $multipelNr standard = "0"
-	* @return array
-	*/
+		/*
+		* Diese Funktion ruft nur Datensätze auf die
+		* die folgendenen Angaben Zutreffen
+		*
+		* @param mix $protokollSpeicherID
+		* @param mix $protokollInputID
+		* @param string $woelbklappenstellung standard = "0"
+		*	erlaubte Eingaben sind:
+		*		0
+		*		Neutral
+		*		Kreisflug
+		* @param string $linksUndRechts standard = "0"
+		*	erlaubte Eingaben sind:
+		*		0
+		*		Links
+		*		Rechts
+		* @param mix $multipelNr standard = "0"
+		* @return array
+		*/
 	public function getDatenSpezifisch($protokollSpeicherID, $protokollInputID, $woelbklappenstellung = "0", $linksUndRechts = "0", $multipelNr = "0")
 	{
 		$erlaubteEingabenWoelbklappe = [0, "0", "Neutral", "Kreisflug"];

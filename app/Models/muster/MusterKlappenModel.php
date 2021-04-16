@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Models\muster\get;
+namespace App\Models\muster;
 
 use CodeIgniter\Model;
 
-class getMusterKlappenModel extends Model
+class MusterKlappenModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
 	 * Datenbank zachern_flugzeuge auf die 
 	 * Tabelle muster_klappen
 	 */
-    protected $DBGroup = 'flugzeugeDB';
-	protected $table      = 'muster_klappen';
-    protected $primaryKey = 'id';
+    protected $DBGroup 			= 'flugzeugeDB';
+	protected $table      		= 'muster_klappen';
+    protected $primaryKey 		= 'id';
+	
+	protected $allowedFields 	= ['musterID', 'stellungBezeichnung', 'stellungWinkel', 'neutral', 'kreisflug', 'iasVG'];
 
 	public function getMusterKlappenNachMusterID($musterID)
 	{

@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Models\muster\get;
+namespace App\Models\muster;
 
 use CodeIgniter\Model;
 
-class getMusterHebelarmeModel extends Model
+class MusterHebelarmeModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
 	 * Datenbank zachern_flugzeuge auf die 
 	 * Tabelle muster_hebelarme
 	 */
-    protected $DBGroup = 'flugzeugeDB';
-	protected $table      = 'muster_hebelarme';
-    protected $primaryKey = 'id';
+    protected $DBGroup			= 'flugzeugeDB';
+	protected $table      		= 'muster_hebelarme';
+    protected $primaryKey 		= 'id';
+	
+	protected $allowedFields 	= ['musterID', 'beschreibung', 'hebelarm'];
 
 	public function getMusterHebelarmeNachMusterID($musterID)
 	{

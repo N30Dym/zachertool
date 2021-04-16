@@ -1,39 +1,39 @@
 <?php
 
-namespace App\Models\protokolle\get;
+namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
 //helper("pruefeString");
 
-class getHStWegeModel extends Model
+class HStWegeModel extends Model
 {
-	/*
-	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_protokolle auf die 
-	 * Tabelle hst-wege
-	 */
-    protected $DBGroup = 'protokolleDB';
-	protected $table      = 'hst-wege';
-    protected $primaryKey = 'id';
-	protected $createdField  = 'erstelltAm';
+		/*
+		 * Verbindungsvariablen für den Zugriff zur
+		 * Datenbank zachern_protokolle auf die 
+		 * Tabelle hst-wege
+		 */
+    protected $DBGroup 				= 'protokolleDB';
+	protected $table      			= 'hst-wege';
+    protected $primaryKey 			= 'id';
+	protected $createdField  		= 'erstelltAm';
 	
-	/*
-	* Diese Funktion ruft alle HSt-Wege auf
-	*
-	* @return array
-	*/
+		/*
+		* Diese Funktion ruft alle HSt-Wege auf
+		*
+		* @return array
+		*/
 	public function getAlleHStWege()
 	{			
 		return $this->findAll();	
 	}
 	
-	/*
-	* Diese Funktion ruft nur den HSt-Weg mit
-	* der jeweiligen ID auf
-	*
-	* @params mix $id
-	* @return array
-	*/
+		/*
+		* Diese Funktion ruft nur den HSt-Weg mit
+		* der jeweiligen ID auf
+		*
+		* @params mix $id
+		* @return array
+		*/
 	public function getHStWegeNachID($id)
 	{	
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
@@ -47,13 +47,13 @@ class getHStWegeModel extends Model
 		}
 	}
 	
-	/*
-	* Diese Funktion ruft alle HSt-Wege ders
-	* jeweiligen $protokollSpeicherID auf
-	*
-	* @params mix $protokollSpeicherID
-	* @return array
-	*/
+		/*
+		* Diese Funktion ruft alle HSt-Wege ders
+		* jeweiligen $protokollSpeicherID auf
+		*
+		* @params mix $protokollSpeicherID
+		* @return array
+		*/
 	public function getHStWegeNachProtokollSpeicherID($protokollSpeicherID)
 	{	
 		if(is_int(trim($protokollSpeicherID)) OR is_numeric(trim($protokollSpeicherID)))

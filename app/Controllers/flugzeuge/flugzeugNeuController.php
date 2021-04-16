@@ -9,8 +9,8 @@ use App\Models\muster\get\getMusterHebelarmeModel;
 use App\Models\muster\get\getMusterKlappenModel;
 use App\Models\flugzeuge\get\getFlugzeugDetailsModel;
 use App\Models\flugzeuge\get\getFlugzeugWaegungModel;
-use App\Models\muster\set\setMusterModel;
-helper("array");
+use App\Models\muster\save\saveMusterModel;
+
 
 class flugzeugNeuController extends Controller
 {
@@ -23,6 +23,7 @@ class flugzeugNeuController extends Controller
 		*/
 	public function index()
 	{	
+		helper("array");
 			// Überprüfen, ob die beiden Views verfügbar sind
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/flugzeugAngabenView.php'))
 		{
@@ -82,6 +83,8 @@ class flugzeugNeuController extends Controller
 		*/	
 	public function flugzeugAnlegen($musterID)
 	{
+
+		helper("form");
 			// Überprüfen, ob der View vorhanden ist
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/musterauswahlView.php'))
 		{
@@ -258,7 +261,7 @@ class flugzeugNeuController extends Controller
 			{
 				array_push($musterKlappenLeerArray, $musterKlappenLeer);
 			}
-			
+			//var_dump($musterDetailsLeer);
 				// Die Variable $datenInhalt mit den geladenen und vorbereiteten Arrays bestücken
 			$datenInhalt = [
 				'muster' => $musterLeer,
@@ -275,10 +278,11 @@ class flugzeugNeuController extends Controller
 			"description" => $description
 		];	
 		
-
-			// Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
-			// als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
-			// Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
+			/*
+			* Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
+			* als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
+			* Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
+			*/
 		$datenInhalt["variometerEingaben"] = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben();
 		$datenInhalt["tekEingaben"] = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben();
 		$datenInhalt["pitotPositionEingaben"] = $getFlugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
@@ -289,13 +293,55 @@ class flugzeugNeuController extends Controller
 		echo view('templates/headerView',  $datenHeader);
 		echo view('flugzeuge/scripts/flugzeugAngabenScript');
 		echo view('templates/navbarView');
-		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
 		echo view('flugzeuge/flugzeugSpeichernView');
+		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
 		echo view('templates/footerView');		
 	}
 	
 	public function flugzeugSpeichern()
 	{
-		$setMusterModel;
+		$validation =  \Config\Services::validation();
+		//var_dump($validation->getRuleGroup("muster"));
+		
+		$testArray = [
+			'musterSchreibweise' => 'ASK13',
+			'musterZusatz' => ' b',
+			'doppelsitzer' => '',
+			'woelbklappen' => 1
+		];
+		
+		$saveMusterModel = new saveMusterModel();
+		
+		var_dump($this->request->getPost());
+		//echo $this->validate($saveMusterModel->validationRules);
+		
+		//echo $saveMusterModel->validate();
+		//echo $validation->listErrors();
+		/*
+		
+		
+		if ($this->request->getMethod() === 'post' && $this->validate($validation->getRuleGroup("muster"))
+		{
+			if($saveMusterModel->save([
+				'musterSchreibweise' => $this->request->getPost('musterSchreibweise'), 
+				'musterKlarname' => $this->request->getPost('musterKlarname'), 
+				'musterZusatz' => $this->request->getPost('musterZusatz'), 
+				'doppelsitzer' => $this->request->getPost('istDoppelsitzer'), 
+				'woelbklappen' => $this->request->getPost('istWoelbklappenFlugzeug')
+			]))		
+			{
+				echo "Hat geklappt";
+			}
+			else
+			{
+				echo $validation->listErrors();
+			}
+		}
+		else 
+		{
+			echo "Da lief was schief";
+			//gettype($saveMusterModel->errors());
+		}*/
+
 	}
 }

@@ -269,7 +269,7 @@ class flugzeugNeuController extends Controller
 				'musterKlappen' => $musterKlappenLeerArray
 			];
 		}
-		
+		var_dump($this->request->getGet());
 		
 			// Daten für den HeaderView aufbereiten
 		$datenHeader = [
@@ -288,18 +288,135 @@ class flugzeugNeuController extends Controller
 		$datenInhalt["bremsklappenEingaben"] = $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$datenInhalt["bezugspunktEingaben"] = $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
 		
+				echo "Ich bin ich";
+				if(isset($old))
+				{
+					echo "Good";
+				}
+				else
+				{
+					echo "Bad";
+				}
+				
+						$validation =  \Config\Services::validation();
+		$musterModel = new musterModel();
+		
+
+		$uebertrageneDaten = $this->request->getPost();
+		
+
+		
+		if ($this->request->getMethod() === 'post' && $this->request->getPost())
+		{
+			if($validation->run($this->request->getPost(), $musterModel->validationRules))
+			{
+				echo "Das hat geklappt";
+				//$this->load->view("flugzeuge/erfolg");
+			}
+			else
+			{
+					// Front-end laden und Daten übertragen
+				/*echo view('templates/headerView');
+				echo view('flugzeuge/scripts/flugzeugAngabenScript');
+				echo view('templates/navbarView');
+				echo view('flugzeuge/flugzeugSpeichernView', ["title" => "bla"]);
+				echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
+				echo view('templates/footerView');*/
+				gettype(redirect()->to('/flugzeuge/flugzeugNeu/neu')->withInput());
+				
+			}
+		}
+		else
+		{
 			// Front-end laden und Daten übertragen
-		echo view('templates/headerView',  $datenHeader);
-		echo view('flugzeuge/scripts/flugzeugAngabenScript');
-		echo view('templates/navbarView');
-		echo view('flugzeuge/flugzeugSpeichernView');
-		echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
-		echo view('templates/footerView');		
+				echo view('templates/headerView',  $datenHeader);
+				echo view('flugzeuge/scripts/flugzeugAngabenScript');
+				echo view('templates/navbarView');
+				echo view('flugzeuge/flugzeugSpeichernView');
+				echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
+				echo view('templates/footerView');
+		}
+	
+				/*	// Front-end laden und Daten übertragen
+				echo view('templates/headerView',  $datenHeader);
+				echo view('flugzeuge/scripts/flugzeugAngabenScript');
+				echo view('templates/navbarView');
+				echo view('flugzeuge/flugzeugSpeichernView');
+				echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
+				echo view('templates/footerView');*/
+	
 	}
 	
 	public function flugzeugSpeichern()
 	{
+		$validation =  \Config\Services::validation();
+		$musterModel = new musterModel();
+		
+		$title = "Flugzeug des Musters anlegen";
+		$uebertrageneDaten = $this->request->getPost();
+		
+		$datenInhalt = [
+			"title" => "bla",
+			"uebertrageneDaten" => $uebertrageneDaten
+		];
+		
 		if ($this->request->getMethod() === 'post' && $this->request->getPost())
+		{
+			if($validation->run($this->request->getPost(), $musterModel->validationRules))
+			{
+				echo "Das hat geklappt";
+				//$this->load->view("flugzeuge/erfolg");
+			}
+			else
+			{
+					// Front-end laden und Daten übertragen
+				/*echo view('templates/headerView');
+				echo view('flugzeuge/scripts/flugzeugAngabenScript');
+				echo view('templates/navbarView');
+				echo view('flugzeuge/flugzeugSpeichernView', ["title" => "bla"]);
+				echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
+				echo view('templates/footerView');*/
+				gettype(redirect()->to('/flugzeuge/flugzeugNeu/neu')->withInput());
+				
+			}
+		}
+		else
+		{
+			echo "Hello<br>";
+			echo "Post:". $this->request->getMethod() === 'post'."<br>";
+			var_dump($this->request->getPost());
+			//return redirect()->to('neu');
+		}
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*if ($this->request->getMethod() === 'post' && $this->request->getPost())
 		{
 			helper("text");
 			$postArray = $this->request->getPost();
@@ -314,8 +431,13 @@ class flugzeugNeuController extends Controller
 
 			//var_dump($postArray);
 			
+			$musterArray = [];
 			$hebelarmArray = [];
 			$indexPilot;
+			
+			
+			$validationRegeln = $musterModel->validationRules;
+			var_dump($validationRegeln);
 			
 			
 				// Wenn keine MusterID übermittelt wurde, existiert das Muster noch nicht und muss zunächst angelegt werden
@@ -337,7 +459,7 @@ class flugzeugNeuController extends Controller
 					{
 						echo $validation->listErrors();
 					}*/
-					echo "<br>Erfolg";
+					/*echo "<br>Erfolg";
 				}
 				else 
 				{
@@ -380,11 +502,11 @@ class flugzeugNeuController extends Controller
 			}	
 			
 			
-			var_dump($hebelarmArray);
+			//var_dump($hebelarmArray);
 			
 			
 			
-		}
+		}*/
 
 	}
 	

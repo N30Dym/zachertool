@@ -10,37 +10,38 @@
 			-->
 		
 			<?= csrf_field() ?>
-			<?= form_hidden('musterID', $muster["id"]) ?>
+			<?= isset($muster["id"]) ? form_hidden('musterID', $muster["id"]) : "" ?>
+
 			
 			<h3 class="m-4">Basisinformationen</h3>
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster["musterSchreibweise"]) ?>" <?php echo esc($muster["musterSchreibweise"]) == "" ?"required" :"" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] =="") ?"" :"readonly" ?> required>
+				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= isset($old) ? $old["musterSchreibweise"] : "" ?><?= isset($muster) ? esc($muster["musterSchreibweise"]) : "" ?>" <?= (isset($muster) && esc($muster["musterSchreibweise"]) == "") ?"required" :"" ?> <?= (isset($flugzeugDetails) OR (isset($muster) AND $muster["musterSchreibweise"] == "") OR (isset($uebertrageneDaten) AND $uebertrageneDaten['musterID'] == "")) ? "" : "readonly" ?> required>
 				</div>
 				
 				
 				<div class="col-sm-3">
 					<label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
-					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($muster["musterZusatz"]) ?>"> 
+					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= isset($uebertrageneDaten) ? $uebertrageneDaten["musterZusatz"] : "" ?><?= isset($muster["musterZusatz"]) ? esc($muster["musterZusatz"]) : "" ?>"> 
 				  
 				</div>
 				<div class="col-2">
 				</div>
-				<div class="col-12 ms-3 <?php echo $muster["musterSchreibweise"] =="" ?"" :"d-none" ?>">
-					<small class="text-muted">Beispiel"Discus CS": Muster ="Discus", Zusatzbezeichnung ="<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
-					<br \><small class="text-muted">Beispiel"AK-8b": Muster ="AK-8", Zusatzbezeichnung ="b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
+				<div class="col-12 ms-3 <?= (isset($muster) AND $muster["musterSchreibweise"] == "") OR (isset($uebertrageneDaten) AND $uebertrageneDaten["musterSchreibweise"] == "") ? "" : "d-none" ?>">
+					<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
+					<br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
 				</div>
 	
 				<div class="col-12">
 					<label for="kennzeichen" class="form-label">Kennzeichen</label>
-					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?php echo isset($flugzeug) ? $flugzeug["kennzeichen"] :"" ?>" required>
+					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?= isset($uebertrageneDaten) ? $uebertrageneDaten["kennzeichen"] : "" ?><?= isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
 				</div>
 				
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-4 form-check">
-					<input name="istDoppelsitzer" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?php echo esc($muster["doppelsitzer"]) =="1" ?"checked":"" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] =="") ?"" :"disabled" ?>>
+					<input name="istDoppelsitzer" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= isset($uebertrageneDaten["istDoppelsitzer"]) ? "checked" : "" ?><?= (isset($muster["doppelsitzer"]) == "1") ? "checked" : "" ?> <?= (isset($flugzeugDetails) OR $muster["musterSchreibweise"] == "") ? "" : "disabled" ?>>
 					<label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
 				</div>
 
@@ -378,7 +379,7 @@
 					</a>
 				</div>
 				<div class="col-6">
-					<button type="submit" class="btn btn-secondary col-12">Speichern</button>
+					<button type="submit" class="btn btn-success col-12">Speichern</button>
 				</div>
 			</div>
 

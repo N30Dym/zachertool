@@ -99,14 +99,9 @@ class flugzeugNeuController extends Controller
 		$flugzeugDetailsModel = new flugzeugDetailsModel();
 
 		$description = "Das webbasierte Tool zur Zacherdatenverarbeitung";
-		$titel = "";
 		
 		if(null === old("kennzeichen"))
 		{
-			echo "Bad";
-		
-		
-		
 				/*
 				* -> /flugzeuge/flugzeugNeu/$musterID
 				* Wenn in der URL eine musterID übergeben wurde, wird diese Bedingung ausgeführt.
@@ -213,8 +208,8 @@ class flugzeugNeuController extends Controller
 				{
 					if(isset($musterKlappen[$i]))
 					{
-						$datenInhalt["stellungBezeichnung".$i] 	= $musterKlappen[$i]["stellungBezeichnung"];
-						$datenInhalt["stellungWinkel".$i] 		= $musterKlappen[$i]["stellungWinkel"];
+						$datenInhalt["stellungBezeichnung"][$i] 	= $musterKlappen[$i]["stellungBezeichnung"];
+						$datenInhalt["stellungWinkel"][$i] 			= $musterKlappen[$i]["stellungWinkel"];
 					
 						if($musterKlappen[$i]["neutral"])
 						{
@@ -229,15 +224,13 @@ class flugzeugNeuController extends Controller
 					}
 					if(isset($musterHebelarme[$i]))
 					{
-						$datenInhalt["hebelarmBeschreibung".$i] = $musterHebelarme[$i]["beschreibung"];
-						$datenInhalt["hebelarmLänge".$i]		= $musterHebelarme[$i]["hebelarm"];
+						$datenInhalt["hebelarmBeschreibung"][$i]= $musterHebelarme[$i]["beschreibung"];
+						$datenInhalt["hebelarmLänge"][$i]		= $musterHebelarme[$i]["hebelarm"];
 					}
 				}
-				var_dump($datenInhalt);
-					
-				
+				$datenInhalt["title"] = $title;
 
-				
+						
 			}
 			
 			/*
@@ -250,9 +243,9 @@ class flugzeugNeuController extends Controller
 			else
 			{
 					// Variablen initiieren, die später benötigt werden
-				$musterHebelarmeLeerArray = [];
-				$musterKlappenLeerArray = [];
-				$anzahlLeereKlappenZeilen = 6;
+				$musterHebelarmeLeerArray 	= [];
+				$musterKlappenLeerArray 	= [];
+				$anzahlLeereKlappenZeilen 	= 6;
 				
 					// Klasse initiieren, die später benötigt werden, um deren Funktionen zu benutzen
 				$musterKlappenModel = new musterKlappenModel();
@@ -267,7 +260,6 @@ class flugzeugNeuController extends Controller
 				$title = "Neues Flugzeug und Flugzeugmuster erstellen";
 				
 				
-				
 				$datenInhalt = $musterLeer;
 				$datenInhalt += $musterDetailsLeer;
 					
@@ -275,33 +267,34 @@ class flugzeugNeuController extends Controller
 					// $musterHebelarmeLeerArray dreimal mit dem leeren Array bestücken
 				for($i=0;$i<3;$i++)
 				{
-					$datenInhalt["hebelarmLänge".$i]		= "";
+					$datenInhalt["hebelarmLänge"][$i] = "";
 				}	
 				
 					// Für jedes Array im Array die Beschreibung in der richtigen Reihenfolge setze
-				$datenInhalt["stellungBezeichnung0"] = "Pilot";
-				$datenInhalt["stellungBezeichnung1"] = "Copilot";
-				$datenInhalt["stellungBezeichnung2"] = "Trimmballast";				
+				$datenInhalt["hebelarmBeschreibung"][0] = "Pilot";
+				$datenInhalt["hebelarmBeschreibung"][1] = "Copilot";
+				$datenInhalt["hebelarmBeschreibung"][2] = "Trimmballast";				
 				
 					// Da $musterKlappenLeer nur ein Array enthält muss die Form angepasst werden an Arrays in Array:
 					// $musterKlappenLeer wird dafür $anzahlLeereKlappenZeilen mal in das Array $musterKlappenLeerArray geladen
 				for($i=0; $i < $anzahlLeereKlappenZeilen; $i++)
 				{
-					$datenInhalt["stellungBezeichnung".$i] 	= "";
-					$datenInhalt["stellungWinkel".$i] 		= "";
+					$datenInhalt["stellungBezeichnung"][$i] 	= "";
+					$datenInhalt["stellungWinkel"][$i]	 		= "";
 				}
+				$datenInhalt["title"] = $title;
 				unset($datenInhalt["musterID"]);
-				var_dump($datenInhalt);
+
 				
 			}
 			
 		}
 		else
 		{
-			$title = "Hallo";
-			echo "Good".old("kennzeichen");
-			
+			//var_dump(old("hebelarmBeschreibung"));
+			//echo old("hebelarmBeschreibung")[0];
 			$datenInhalt = [
+				"title"						=> old("title"),
 				"musterSchreibweise" 		=> old("musterSchreibweise"),
 				"musterKlarname" 			=> old("musterKlarname"),
 				"musterZusatz" 				=> old("musterZusatz"),
@@ -342,22 +335,18 @@ class flugzeugNeuController extends Controller
 			{
 				$datenInhalt["musterID"] = old("musterID");
 			}
-			for($i=0;$i<20;$i++)
+			foreach(old("hebelarmBeschreibung") as $i => $beschreibung)
 			{
-				if(null !== old("hebelarmLänge".$i) /*AND old("hebelarmLänge".$i != ""*/)
-				{
-					$datenInhalt["hebelarmBeschreibung".$i] = old("hebelarmBeschreibung".$i);
-					$datenInhalt["hebelarmLänge".$i] 		= old("hebelarmLänge".$i);
-				}
-				if(null !== old("hebelarmLänge".$i) /*AND old("hebelarmLänge".$i != ""*/)
-				{
-					$datenInhalt["stellungBezeichnung".$i] 	= old("stellungBezeichnung".$i);
-					$datenInhalt["stellungWinkel".$i] 		= old("stellungWinkel".$i);
-				}
+				$datenInhalt["hebelarmBeschreibung"][$i]= old("hebelarmBeschreibung")[$i];
+				$datenInhalt["hebelarmLänge"][$i] 		= old("hebelarmLänge")[$i];
 			}
-			var_dump($datenInhalt);		
-				
-		//"hebelarmLänge0"=>  "" "hebelarmLänge1"=>  "" "hebelarmLänge2"=>  "" "stellungBezeichnung0"=>  "" "stellungBezeichnung1"=>  "" "stellungBezeichnung2"=>  "" "stellungWinkel0"=>  "" "stellungWinkel1"=>  "" "stellungWinkel2"=>  "" "stellungBezeichnung3"=>  "" "stellungWinkel3"=>  "" "stellungBezeichnung4"=>  "" "stellungWinkel4"=>  "" "stellungBezeichnung5"=>  "" "stellungWinkel5"=>  ""
+			foreach(old("stellungBezeichnung")as $i => $bezeichnung) 
+			{
+				$datenInhalt["stellungBezeichnung"][$i] 	= old("stellungBezeichnung")[$i];
+				$datenInhalt["stellungWinkel"][$i] 			= old("stellungWinkel")[$i];
+			}
+			$title = old("title");
+	
 		}
 			// Daten für den HeaderView aufbereiten
 		$datenHeader = [
@@ -375,7 +364,7 @@ class flugzeugNeuController extends Controller
 		$datenInhalt["pitotPositionEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
 		$datenInhalt["bremsklappenEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$datenInhalt["bezugspunktEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
-		
+		//var_dump($datenInhalt);	
 			
 						
 		// Front-end laden und Daten übertragen

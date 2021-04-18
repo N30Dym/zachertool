@@ -17,22 +17,22 @@
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($musterSchreibweise) ?>" required>
+				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= isset($old) ? $old["musterSchreibweise"] : "" ?><?= isset($muster) ? esc($muster["musterSchreibweise"]) : "" ?>" <?= (isset($muster) && esc($muster["musterSchreibweise"]) == "") ?"required" :"" ?> <?= (isset($flugzeugDetails) OR (isset($muster) AND $muster["musterSchreibweise"] == "") OR (isset($uebertrageneDaten) AND $uebertrageneDaten['musterID'] == "")) ? "" : "readonly" ?> required>
 				</div>
 				
 				
 				<div class="col-sm-3">
 					<label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
-					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($musterZusatz) ?>"> 
+					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= isset($uebertrageneDaten) ? $uebertrageneDaten["musterZusatz"] : "" ?><?= isset($muster["musterZusatz"]) ? esc($muster["musterZusatz"]) : "" ?>"> 
 				  
 				</div>
 				<div class="col-2">
 				</div>
-				<div class="col-12 ms-3 <?= $musterSchreibweise ? "d-none" : "" ?>">
+				<div class="col-12 ms-3 <?= (isset($muster) AND $muster["musterSchreibweise"] == "") OR (isset($uebertrageneDaten) AND $uebertrageneDaten["musterSchreibweise"] == "") ? "" : "d-none" ?>">
 					<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
 					<br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
 				</div>
-	<?php /*
+	
 				<div class="col-12">
 					<label for="kennzeichen" class="form-label">Kennzeichen</label>
 					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?= isset($uebertrageneDaten) ? $uebertrageneDaten["kennzeichen"] : "" ?><?= isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
@@ -382,7 +382,7 @@
 					<button type="submit" class="btn btn-success col-12">Speichern</button>
 				</div>
 			</div>
- */ ?>
+
 		</form>	
 	</div>
 </div>			

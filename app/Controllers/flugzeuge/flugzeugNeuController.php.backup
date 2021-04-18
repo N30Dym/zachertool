@@ -1,4 +1,11 @@
 <?php
+/*
+* Backup, falls ich das neue vorgehen vollkommen verkacke
+*
+*
+*
+*/
+
 
 namespace App\Controllers\flugzeuge;
 
@@ -84,7 +91,7 @@ class flugzeugNeuController extends Controller
 	public function flugzeugAnlegen($musterID)
 	{
 
-		helper(["array","form"]);
+		helper("form");
 			// Überprüfen, ob der View vorhanden ist
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/musterauswahlView.php'))
 		{
@@ -198,38 +205,17 @@ class flugzeugNeuController extends Controller
 				}
 			}
 			
-				// $datenInhalt setzen
-			$datenInhalt = $muster;
-			$datenInhalt += $musterDetails;
-			for($i=0; $i<20; $i++)
-			{
-				if(isset($musterKlappen[$i]))
-				{
-					$datenInhalt["stellungBezeichnung".$i] 	= $musterKlappen[$i]["stellungBezeichnung"];
-					$datenInhalt["stellungWinkel".$i] 		= $musterKlappen[$i]["stellungWinkel"];
-				
-					if($musterKlappen[$i]["neutral"])
-					{
-						$datenInhalt["neutral"] 		= $i;
-						$datenInhalt["iasVGNeutral"] 	= $musterKlappen[$i]["iasVG"];
-					}
-					if($musterKlappen[$i]["kreisflug"])
-					{
-						$datenInhalt["kreisflug"] 		= $i;
-						$datenInhalt["iasVGKreisflug"] 	= $musterKlappen[$i]["iasVG"];
-					}
-				}
-				if(isset($musterHebelarme[$i]))
-				{
-					$datenInhalt["hebelarmBeschreibung".$i] = $musterHebelarme[$i]["beschreibung"];
-					$datenInhalt["hebelarmLänge".$i]		= $musterHebelarme[$i]["hebelarm"];
-				}
-			}
-			var_dump($datenInhalt);
-				
+			
 			
 
 			
+				// Die Variable $datenInhalt mit den geladenen und vorbereiteten Arrays bestücken
+			$datenInhalt = [
+				'muster' => $muster,
+				'musterDetails' => $musterDetails,
+				'musterHebelarme' => $musterHebelarmeSortiert,
+				'musterKlappen' => $musterKlappen
+			];
 		}
 		
 		/*
@@ -250,40 +236,42 @@ class flugzeugNeuController extends Controller
 			$musterKlappenModel = new musterKlappenModel();
 			
 				// Daten aus der jeweiligen Datenbank in ein Array laden, bei denen die einzelnen Werte jeweils leer sind
-			$musterLeer 			= $musterModel->getMusterLeer();
-			$musterDetailsLeer 		= $musterDetailsModel->getMusterDetailsLeer();
-			$musterHebelarmeLeer 	= $musterHebelarmeModel->getMusterHebelarmeLeer();
-			$musterKlappenLeer 		= $musterKlappenModel->getMusterKlappenLeer();
+			$musterLeer = $musterModel->getMusterLeer();
+			$musterDetailsLeer = $musterDetailsModel->getMusterDetailsLeer();
+			$musterHebelarmeLeer = $musterHebelarmeModel->getMusterHebelarmeLeer();
+			$musterKlappenLeer = $musterKlappenModel->getMusterKlappenLeer();
 			
 				// Titel für diese Seite. Wird im Browser angezeigt und steht als Überschrift ganz oben
 			$title = "Neues Flugzeug und Flugzeugmuster erstellen";
-			
-			$datenInhalt = $musterLeer;
-			$datenInhalt += $musterDetailsLeer;
 				
 				// Da $musterHebelarmeLeer nur ein Array enthält muss die Form angepasst werden an Arrays in Array:
 				// $musterHebelarmeLeerArray dreimal mit dem leeren Array bestücken
 			for($i=0;$i<3;$i++)
 			{
-				$datenInhalt["hebelarmLänge".$i]		= "";
+				array_push($musterHebelarmeLeerArray, $musterHebelarmeLeer);
 			}	
 			
 				// Für jedes Array im Array die Beschreibung in der richtigen Reihenfolge setze
-			$datenInhalt["stellungBezeichnung0"] = "Pilot";
-			$datenInhalt["stellungBezeichnung1"] = "Copilot";
-			$datenInhalt["stellungBezeichnung2"] = "Trimmballast";				
+			$musterHebelarmeLeerArray[0]["beschreibung"] = "Pilot";
+			$musterHebelarmeLeerArray[1]["beschreibung"] = "Copilot";
+			$musterHebelarmeLeerArray[2]["beschreibung"] = "Trimmballast";				
 			
 				// Da $musterKlappenLeer nur ein Array enthält muss die Form angepasst werden an Arrays in Array:
 				// $musterKlappenLeer wird dafür $anzahlLeereKlappenZeilen mal in das Array $musterKlappenLeerArray geladen
 			for($i=0; $i < $anzahlLeereKlappenZeilen; $i++)
 			{
-				$datenInhalt["stellungBezeichnung".$i] 	= "";
-				$datenInhalt["stellungWinkel".$i] 		= "";
+				array_push($musterKlappenLeerArray, $musterKlappenLeer);
 			}
-			var_dump($datenInhalt);
-			
+			//var_dump($musterDetailsLeer);
+				// Die Variable $datenInhalt mit den geladenen und vorbereiteten Arrays bestücken
+			$datenInhalt = [
+				'muster' => $musterLeer,
+				'musterDetails' => $musterDetailsLeer,
+				'musterHebelarme' => $musterHebelarmeLeerArray,
+				'musterKlappen' => $musterKlappenLeerArray
+			];
 		}
-		//var_dump($this->request->getGet());
+		var_dump($this->request->getGet());
 		
 			// Daten für den HeaderView aufbereiten
 		$datenHeader = [
@@ -390,15 +378,14 @@ class flugzeugNeuController extends Controller
 				echo view('flugzeuge/flugzeugSpeichernView', ["title" => "bla"]);
 				echo view('flugzeuge/flugzeugAngabenView', $datenInhalt);
 				echo view('templates/footerView');*/
-				/*if($this->request->getPost("musterID") != "")
+				if($this->request->getPost("musterID") != "")
 				{
 					return redirect()->to('/flugzeuge/flugzeugNeu/'. $this->request->getPost("musterID"))->withInput();
 				}
 				else
 				{
 					return redirect()->to('/flugzeuge/flugzeugNeu/neu')->withInput();
-				}*/
-				var_dump($this->request->getPost());
+				}
 
 				
 			}
@@ -412,6 +399,124 @@ class flugzeugNeuController extends Controller
 		}
 			
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*if ($this->request->getMethod() === 'post' && $this->request->getPost())
+		{
+			helper("text");
+			$postArray = $this->request->getPost();
+			$validation =  \Config\Services::validation();
+			
+			$musterModel = new musterModel();
+			
+			$postArray['musterKlarname'] = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($postArray['musterSchreibweise'])));
+			$postArray['musterKlarname'] = str_replace("ä", "ae", $postArray['musterKlarname']);
+			$postArray['musterKlarname'] = str_replace("ö", "oe", $postArray['musterKlarname']);
+			$postArray['musterKlarname'] = str_replace("ü", "ue", $postArray['musterKlarname']);
+
+			//var_dump($postArray);
+			
+			$musterArray = [];
+			$hebelarmArray = [];
+			$indexPilot;
+			
+			
+			$validationRegeln = $musterModel->validationRules;
+			var_dump($validationRegeln);
+			
+			
+				// Wenn keine MusterID übermittelt wurde, existiert das Muster noch nicht und muss zunächst angelegt werden
+			if( ! isset($musterID))
+			{
+				if($validation->run($postArray, $musterModel->validationRules))
+				{
+					/*if($saveMusterModel->save([
+						'musterSchreibweise' => $this->request->getPost('musterSchreibweise'), 
+						'musterKlarname' => $this->request->getPost('musterKlarname'), 
+						'musterZusatz' => $this->request->getPost('musterZusatz'), 
+						'doppelsitzer' => $this->request->getPost('istDoppelsitzer'), 
+						'woelbklappen' => $this->request->getPost('istWoelbklappenFlugzeug')
+					]))		
+					{
+						echo "Hat geklappt";
+					}
+					else
+					{
+						echo $validation->listErrors();
+					}*/
+					/*echo "<br>Erfolg";
+				}
+				else 
+				{
+					echo "Da lief was schief";
+				}
+				
+			}
+			
+			for ($i = 0; $i < 20; $i++)
+			{					
+				if(isset($postArray['hebelarmLänge'.$i]))
+				{
+					$temporaeresArray['beschreibung'] = $postArray['hebelarmBeschreibung'.$i];
+					$temporaeresArray['hebelarm'] = $postArray['hebelarmLänge'.$i];
+					array_push($hebelarmArray, $temporaeresArray);
+				}
+			}
+				
+			foreach($hebelarmArray as $key => $hebelarm)			
+			{
+				array_search("Pilot", $hebelarmArray[$key]) ?  $indexPilot = $key : "";
+			}
+			
+				// Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+			$hebelarmArraySortiert[0] = $hebelarmArray[$indexPilot];
+			if(isset($postArray['hebelarmLängeCopilot']))
+			{
+				$temporaeresArray['beschreibung'] = $postArray['hebelarmBeschreibungCopilot'];
+				$temporaeresArray['hebelarm'] = $postArray['hebelarmLängeCopilot'];
+				array_push($hebelarmArraySortiert, $temporaeresArray);
+			}
+			
+				// Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+			foreach($hebelarmArray as $key => $hebelarm)
+			{
+				if($key != $indexPilot)
+				{
+					array_push($hebelarmArraySortiert,$hebelarm);
+				}
+			}	
+			
+			
+			//var_dump($hebelarmArray);
+			
+			
+			
+		}*/
 
 	}
 	

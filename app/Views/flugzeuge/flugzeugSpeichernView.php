@@ -7,7 +7,7 @@
 	</div>
 	<div class="col-8">
 	
-		<form class="needs-validation" method="post" action="/flugzeuge/flugzeugNeu/15" novalidate=""><!--  novalidate="" nur zum testen!! -->
-		<!--<?php  //form_open('/flugzeuge/flugzeugNeu/flugzeugSpeichern', ["class" => "needs-validation"]) ?>-->
+		<!--<form class="needs-validation" method="post" action="/flugzeuge/flugzeugNeu/15" novalidate=""><!--  novalidate="" nur zum testen!! -->
+		<?=  form_open(site_url('flugzeuge/flugzeugNeu/flugzeugSpeichern'), ["class" => "needs-validation", "novalidate" => "novalidate"]) ?>
 
 		

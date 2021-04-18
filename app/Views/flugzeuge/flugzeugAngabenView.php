@@ -10,20 +10,20 @@
 			-->
 		
 			<?= csrf_field() ?>
-			<?= isset($muster["id"]) ? form_hidden('musterID', $muster["id"]) : "" ?>
+			<?= isset($musterID) ? form_hidden('musterID', $musterID) : "" ?>
 
 			
 			<h3 class="m-4">Basisinformationen</h3>
 			<div class="row g-3">
 				<div class="col-sm-7">
 				    <label for="musterSchreibweise" class="form-label">Muster</label>
-				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($musterSchreibweise) ?>" required>
+				    <input type="text" class="form-control" name="musterSchreibweise" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= isset($musterSchreibweise) ? esc($musterSchreibweise) : "" ?>" required <?= isset($musterID) ? "readonly" : "" ?>>
 				</div>
 				
 				
 				<div class="col-sm-3">
 					<label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
-					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= esc($musterZusatz) ?>"> 
+					<input type="text" class="form-control" name="musterZusatz" id="musterZusatz" placeholder="b, XL, FES" value="<?= isset($musterZusatz) ? esc($musterZusatz) : "" ?>"> 
 				  
 				</div>
 				<div class="col-2">
@@ -32,21 +32,21 @@
 					<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
 					<br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
 				</div>
-	<?php /*
+
 				<div class="col-12">
 					<label for="kennzeichen" class="form-label">Kennzeichen</label>
-					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?= isset($uebertrageneDaten) ? $uebertrageneDaten["kennzeichen"] : "" ?><?= isset($flugzeug) ? $flugzeug["kennzeichen"] : "" ?>" required>
+					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?= isset($kennzeichen) ? esc($kennzeichen) : "" ?>" required >
 				</div>
-				
+					
 				<div class="col-sm-1">
 				</div>
 				<div class="col-sm-4 form-check">
-					<input name="istDoppelsitzer" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= isset($uebertrageneDaten["istDoppelsitzer"]) ? "checked" : "" ?><?= (isset($muster["doppelsitzer"]) == "1") ? "checked" : "" ?> <?= (isset($flugzeugDetails) OR $muster["musterSchreibweise"] == "") ? "" : "disabled" ?>>
+					<input name="istDoppelsitzer" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($istDoppelsitzer) AND $istDoppelsitzer != "" AND $istDoppelsitzer != "0") ? "checked" : "" ?> <?= isset($musterID) ? "disabled" : "" ?>>
 					<label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
 				</div>
 
 				<div class="col-sm-5 form-check">
-					<input name="istWoelbklappenFlugzeug" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?php echo esc($muster["woelbklappen"]) =="1" ?"checked":"" ?> <?php echo (isset($flugzeugDetails) OR $muster["musterSchreibweise"] =="") ?"" :"disabled" ?>>
+					<input name="istWoelbklappenFlugzeug" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($istWoelbklappenFlugzeug) AND $istWoelbklappenFlugzeug != "" AND $istWoelbklappenFlugzeug != "0") ? "checked" : "" ?> <?= isset($musterID) ? "disabled" : "" ?>>
 					<label class="form-check-label" for="istWoelbklappenFlugzeug">Wölbklappenflugzeug</label>
 				</div>
 				
@@ -56,9 +56,9 @@
 				
 				<div class="col-12">
 					<label for="baujahr" class="form-label">Baujahr</label>
-					<input name="baujahr" type="number" class="form-control" id="baujahr"  min="1900" max="<?= date("Y") ?>" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["baujahr"] : "" ?>" required>
+					<input name="baujahr" type="number" class="form-control" id="baujahr"  min="1900" max="<?= date("Y") ?>" value="<?= isset($baujahr) ? esc($baujahr) : "" ?>" required>
 				</div>
-				
+<?php /*				
 				<div class="col-12">
 					<label for="seriennummer" class="form-label">Seriennummer</label>
 					<input name="seriennummer" type="text" class="form-control" id="seriennummer" value="<?php echo isset($flugzeugDetails) ? $flugzeugDetails["seriennummer"] : "" ?>" required>
@@ -370,7 +370,7 @@
 						<span class="input-group-text">mm h. BP</span>
 					</div>
 				</div>
-				
+ */ ?>				
 			</div>
 			<div class="row gx-3 col-12 mt-4">
 				<div class="col-6">
@@ -382,7 +382,7 @@
 					<button type="submit" class="btn btn-success col-12">Speichern</button>
 				</div>
 			</div>
- */ ?>
+
 		</form>	
 	</div>
 </div>			

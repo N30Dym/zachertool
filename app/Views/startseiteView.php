@@ -4,9 +4,9 @@
 </div>
 
 <div class="col-6 ">
-	<h4 class="text-center mt-2"><?= date('Y') ?> gezacherte Flugzeuge</h4>
+	<h4 class="text-center mt-2"><?= date('Y')-1 ?> gezacherte Flugzeuge</h4>
 	
-	<?php if(count($flugzeuge) == 0): ?>
+	<?php if($flugzeuge[0] == ""): ?>
 		<div class="text-center">
 			Dieses Jahr sind noch keine Flugzeuge gezachert worden
 		</div>
@@ -16,10 +16,8 @@
 		<?php foreach($flugzeuge as $flugzeug_item) : ?>
 			
 			<tr class="text-center">
-				<td><?= esc($flugzeug_item["protokollSpeicherID"]) ?></td>
-				<td><?= esc($flugzeug_item["gedrücktHSt"]) ?></td>
-				<td><?= esc($flugzeug_item["neutralHSt"]) ?></td>
-				<td><?= esc($flugzeug_item["gezogenHSt"]) ?></td>
+				<td><?= esc($flugzeug_item["musterSchreibweise"]) ?><?= esc($flugzeug_item["musterZusatz"]) ?></td>
+				<td><?= esc($flugzeug_item["kennung"]) ?></td>
 			</tr>
 			
 		<?php endforeach ?>

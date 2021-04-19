@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use App\Models\startseiteModel;
-use App\Models\protokolle\hStWegeModel;
+use App\Models\protokolle\protokolleModel;
+use App\Models\flugzeuge\flugzeugeModel;
+use App\Models\muster\musterModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
@@ -29,18 +31,36 @@ class startseiteController extends Controller
 		
 		$title = "Willkommen beim Zachertool";
 			
-		$testModel = new hStWegeModel();
-		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
+		$protokolleModel = new protokolleModel();
+		$flugzeugeModel = new flugzeugeModel();
+		$musterModel = new musterModel();
+		
+		$protokolleLetztesJahr = $protokolleModel->getProtokolleNachJahr(date("Y")-1);
+		
+		$datenInhalt = [
+			'flugzeuge' => [],
+			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
+			'title' => $title
+		];
+		foreach($protokolleLetztesJahr as $protokolle)
+		{
+			
+			$protokollFlugzeug = $flugzeugeModel->getFlugzeugeNachID($protokolle["flugzeugID"]);
+			$datenArray["kennung"] = $protokollFlugzeug["kennung"];
+			$protokollMuster = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
+			$datenArray["musterSchreibweise"] = $protokollMuster["musterSchreibweise"];
+			$datenArray["musterZusatz"] = $protokollMuster["musterZusatz"];
+			array_push($datenInhalt["flugzeuge"], $datenArray);
+		}
 		
 		$datenHeader = [
 			"title" => $title,
 			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
-		$datenInhalt = [
-			'flugzeuge' => $test,
+		/*$datenInhalt = [
 			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
 			'title' => $title
-		];
+		];*/
 		
 		echo view('templates/headerView', $datenHeader);
 		echo view('templates/navbarView');

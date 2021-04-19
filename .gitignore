@@ -132,9 +132,3 @@ nb-configuration.xml
 #No subject to change
 system/*
 
-#-------------------------
-# Database Config File
-#-------------------------
-
-#Database configuration individual for every computer
-app/Config/Database.php

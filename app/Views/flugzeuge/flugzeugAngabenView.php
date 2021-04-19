@@ -1,19 +1,8 @@
-		
-			<!-- Könnte noch nützlich sein
-			<div class="input-group">
-				<span class="input-group-text">@</span>
-			</div>
-			
-			<div class="invalid-feedback">
-				Please enter a valid email address for shipping updates.
-			</div>
-			-->
-		
+
 			<?= csrf_field() ?>
 			<?= form_hidden('title', $title) ?>
 			<?= isset($musterID) ? form_hidden('musterID', $musterID) : "" ?>
 
-			
 			<h3 class="m-4">Basisinformationen</h3>
 			<div class="row g-3">
 				<div class="col-sm-7">
@@ -35,8 +24,8 @@
 				</div>
 
 				<div class="col-12">
-					<label for="kennzeichen" class="form-label">Kennzeichen</label>
-					<input name="kennzeichen" type="text" class="form-control" id="kennzeichen" placeholder="D-XXXX" value="<?= isset($kennzeichen) ? esc($kennzeichen) : "" ?>" required >
+					<label for="kennung" class="form-label">kennung</label>
+					<input name="kennung" type="text" class="form-control" id="kennung" placeholder="D-XXXX" value="<?= isset($kennung) ? esc($kennung) : "" ?>" required >
 				</div>
 					
 				<div class="col-sm-1">
@@ -85,7 +74,7 @@
 			
 				<div class="col-12">
 					<label for="radgroesse" class="form-label">Hauptradgröße</label>
-					<input type="text" class="form-control" name="radgroesse" id="radgroesse" value="<?= isset($radgroesse) ? esc($radgroesse) : "" ?>" required>
+					<input type="text" class="form-control" name="radgroesse" id="radgroesse" value='<?= isset($radgroesse) ? $radgroesse : '' ?>' required>
 				</div>
 							
 				<div class="col-12">
@@ -233,7 +222,7 @@
 					
 				</div>
 					
-				<div class="col-12" id="iasVGDiv">
+				<div class="col-12 <?= ($istWoelbklappenFlugzeug == "1" OR $istWoelbklappenFlugzeug == "on") ? "d-none" : "" ?>" id="iasVGDiv">
 					<h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
 					<div class="col-12">
 					<label for="iasVG" class="form-label">IAS<sub>VG</sub></label>
@@ -287,6 +276,12 @@
 						<?php endforeach ?>
 					</datalist>
 				</div>	
+				
+				<div class="col-12">
+					<label for="anstellwinkel" class="form-label">Längsneigung in Wägelage</label>
+					<input type="text" name="anstellwinkel" class="form-control"  id="anstellwinkel" value="<?= isset($anstellwinkel) ? esc($anstellwinkel) : "" ?>" required>
+				</div>
+				
 			</div>	
 			
 			<h3 class="m-4">Hebelarme</h3>
@@ -326,7 +321,7 @@
 							
 							<div class="col-6">
 								<div class="input-group">
-									<input type="text" name="hebelarmLänge[<?= $key ?>]" class="form-control" id="hebelarmLänge<?= $key ?>" value="<?= esc($hebelarmLänge[$key]) ?>" <?= ($beschreibung == "Pilot" OR ($istDoppelsitzer == "1" AND $beschreibung == "Copilot")) ? "required" : "" ?>>						
+									<input type="text" name="hebelarmLänge[<?= $key ?>]" class="form-control" id="hebelarmLänge<?= $key ?>" value="<?= esc($hebelarmLänge[$key]) ?>" <?= ($beschreibung == "Pilot" OR (($istDoppelsitzer == "1" OR $istDoppelsitzer == "on") AND $beschreibung == "Copilot")) ? "required" : "" ?>>						
 									<select class="form-select input-group-text text-start" name="auswahlVorOderHinter[<?= $key ?>]" id="auswahlVorOderHinter<?= $key ?>">
 										<option value="hinterBP" <?= (isset($auswahlVorOderHinter[$key]) AND ($auswahlVorOderHinter[$key] == "hinterBP" OR $auswahlVorOderHinter[$key] == "")) ? "selected" : ""?>>mm h. BP</option>
 										<option value="vorBP" <?= (isset($auswahlVorOderHinter[$key]) AND $auswahlVorOderHinter[$key] == "vorBP") ? "selected" : ""?>>mm v. BP</option>
@@ -348,7 +343,7 @@
 			
 				<div class="col-12">
 					<label for="datumWaegung" name="datumWaegung" class="form-label">Datum der letzten Wägung</label>
-					<input type="date" class="form-control" id="datumWaegung" placeholder="TT.MM.JJJJ" value="<?= isset($datumWaegung) ? esc($datumWaegung) : "" ?>" required>
+					<input type="date" class="form-control" name="datumWaegung" id="datumWaegung" value="<?= isset($datumWaegung) ? esc($datumWaegung) : "" ?>" required>
 				</div>
 
 				<div class="col-12">					

@@ -7,7 +7,10 @@ use App\Models\muster\musterModel;
 use App\Models\muster\musterDetailsModel;
 use App\Models\muster\musterHebelarmeModel;
 use App\Models\muster\musterKlappenModel;
+use App\Models\flugzeuge\flugzeugeModel;
 use App\Models\flugzeuge\flugzeugDetailsModel;
+use App\Models\flugzeuge\flugzeugHebelarmeModel;
+use App\Models\flugzeuge\flugzeugKlappenModel;
 use App\Models\flugzeuge\flugzeugWaegungModel;
 
 
@@ -84,7 +87,7 @@ class flugzeugNeuController extends Controller
 	public function flugzeugAnlegen($musterID)
 	{
 
-		helper(["array","form"]);
+		helper(["array","form","text"]);
 			// Überprüfen, ob der View vorhanden ist
 		if ( ! is_file(APPPATH.'/Views/flugzeuge/musterauswahlView.php'))
 		{
@@ -100,7 +103,7 @@ class flugzeugNeuController extends Controller
 
 		$description = "Das webbasierte Tool zur Zacherdatenverarbeitung";
 		
-		if(null === old("kennzeichen"))
+		if(null === old("kennung"))
 		{
 				/*
 				* -> /flugzeuge/flugzeugNeu/$musterID
@@ -298,7 +301,7 @@ class flugzeugNeuController extends Controller
 				"musterSchreibweise" 		=> old("musterSchreibweise"),
 				"musterKlarname" 			=> old("musterKlarname"),
 				"musterZusatz" 				=> old("musterZusatz"),
-				"kennzeichen" 				=> old("kennzeichen"),
+				"kennung" 				=> old("kennung"),
 				"istDoppelsitzer" 			=> old("istDoppelsitzer"),
 				"istWoelbklappenFlugzeug" 	=> old("istWoelbklappenFlugzeug"),
 				"baujahr" 					=> old("baujahr"),
@@ -328,6 +331,7 @@ class flugzeugNeuController extends Controller
 				"kreisflug" 				=> old("kreisflug"),
 				"iasVGNeutral" 				=> old("iasVGNeutral"),
 				"iasVGKreisflug" 			=> old("iasVGKreisflug"),
+				"datumWaegung"				=> old("datumWaegung"),
 				"leermasse" 				=> old("leermasse"),
 				"schwerpunkt" 				=> old("schwerpunkt")				
 			];
@@ -368,8 +372,7 @@ class flugzeugNeuController extends Controller
 		$datenInhalt["pitotPositionEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
 		$datenInhalt["bremsklappenEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$datenInhalt["bezugspunktEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
-		var_dump($datenInhalt);	
-			
+		//var_dump($datenInhalt);	
 						
 		// Front-end laden und Daten übertragen
 		echo view('templates/headerView',  $datenHeader);
@@ -383,31 +386,51 @@ class flugzeugNeuController extends Controller
 	
 	public function flugzeugSpeichern()
 	{
-		$validation =  \Config\Services::validation();
-		$musterModel = new musterModel();
-		
-		
 		if ($this->request->getMethod() === 'post' && $this->request->getPost())
-		{
-			if($validation->run($this->request->getPost(), $musterModel->validationRules))
+		{	
+			
+			helper("text");
+			
+			$validation 		= \Config\Services::validation();
+			$musterModel 		= new musterModel();
+			$musterDetailsModel	= new musterDetailsModel();
+			$flugzeugeModel 	= new flugzeugeModel();
+			
+				/*
+				* Die Daten müssen noch aufbereitet werden, bevor sie in die entsprechenden DB-Tabellen eingetragen werden. Dies folgt ganz speziellen Regeln
+				*
+				*/
+			
+			$dataArray = $this->request->getPost();
+			
+				// Der Klarname ist zum Vergleichen der Muster notwendig, da die Schreibweisen variieren. Es werden alle Sonderzeichen entfernt/geändert und alle Groß- zu Kleinbuchstaben 
+			$dataArray['musterKlarname'] = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($dataArray['musterSchreibweise'])));
+			$dataArray['musterKlarname'] = str_replace("ä", "ae", $dataArray['musterKlarname']);
+			$dataArray['musterKlarname'] = str_replace("ö", "oe", $dataArray['musterKlarname']);
+			$dataArray['musterKlarname'] = str_replace("ü", "ue", $dataArray['musterKlarname']);
+
+			(isset($dataArray['istDoppelsitzer']) AND $dataArray['istDoppelsitzer'] == "on") ? $dataArray['istDoppelsitzer'] = 1 : null;
+			(isset($dataArray['istWoelbklappenFlugzeug']) AND $dataArray['istWoelbklappenFlugzeug'] == "on") ? $dataArray['istWoelbklappenFlugzeug'] = 1 : null;
+			
+			var_dump($dataArray);
+			
+		
+			$validationErfolgreich = true;
+			$validationErfolgreich = $validation->run($dataArray, $musterModel->validationRules) ?  : false; 
+			$validationErfolgreich = $validation->run($dataArray, $flugzeugeModel->validationRules) ? : false; 
+			$validationErfolgreich = $validation->run($dataArray, $musterDetailsModel->validationRules) ? : false;
+			
+			if($validationErfolgreich == TRUE)
 			{
 				echo "Das hat geklappt";
-				//$this->load->view("flugzeuge/erfolg");
+				//echo view("flugzeuge/erfolg");
 			}
 			else
 			{
-
-				if($this->request->getPost("musterID") != "")
-				{
-					return redirect()->to('/flugzeuge/flugzeugNeu/'. $this->request->getPost("musterID"))->withInput();
-				}
-				else
-				{
-					return redirect()->to('/flugzeuge/flugzeugNeu/neu')->withInput();
-				}
-				var_dump($this->request->getPost());
-
-				
+				//return redirect()->back()->withInput();
+				//var_dump($this->request->getPost());
+				echo "Das hättest du wohl gerne, aber:";
+				echo $validation->listErrors();				
 			}
 		}
 		else

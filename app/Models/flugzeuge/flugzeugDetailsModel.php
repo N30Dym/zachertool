@@ -15,6 +15,8 @@ class flugzeugDetailsModel extends Model
     protected $DBGroup = 'flugzeugeDB';
 	protected $table      = 'flugzeug_details';
     protected $primaryKey = 'id';
+	
+	protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tek', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel'];
 
 		/*
 		* Diese Funktion ruft nur die Flugzeugdetails mit

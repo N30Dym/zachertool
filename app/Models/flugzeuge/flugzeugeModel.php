@@ -11,11 +11,14 @@ class flugzeugeModel extends Model
 		 * Datenbank zachern_protokolle auf die 
 		 * Tabelle protokolle
 		 */
-    protected $DBGroup = 'flugzeugeDB';
-	protected $table      = 'flugzeuge';
-    protected $primaryKey = 'id';
-	protected $createdField  = 'erstelltAm';
+    protected $DBGroup 			= 'flugzeugeDB';
+	protected $table      		= 'flugzeuge';
+    protected $primaryKey 		= 'id';
+	protected $createdField  	= 'erstelltAm';
+	protected $updatedField   	= 'geandertAm';
+	protected $validationRules 	= 'flugzeuge';
 
+	protected $allowedFields	= ['kennung', 'musterID', 'sichtbar'];
 	
 		/*
 		* Diese Funktion ruft nur das Protokoll mit
@@ -28,12 +31,11 @@ class flugzeugeModel extends Model
 	{			
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
-			$query = "SELECT * FROM flugzeuge WHERE id = ". trim($id);
-			return $this->query($query)->getResultArray();	
+			return($this->where("id", $id)->first());	
 		}
 		else
 		{
-			// Fehler beim übergebenen Wert
+				// Fehler beim übergebenen Wert
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}

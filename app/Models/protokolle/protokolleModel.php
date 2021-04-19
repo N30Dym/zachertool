@@ -99,7 +99,7 @@ class protokolleModel extends Model
 	{		
 		if(is_int(trim($jahr)) OR is_numeric(trim($jahr)))
 		{
-			$query = "SELECT * FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
+			$query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
 			return $this->query($query)->getResultArray();	
 		}
 		else

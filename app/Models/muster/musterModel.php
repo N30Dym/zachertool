@@ -16,7 +16,7 @@ class musterModel extends Model
     protected $primaryKey 		= 'id';
 	protected $validationRules 	= 'muster';
 	
-	protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'doppelsitzer', 'woelbklappen'];
+	protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'istDoppelsitzer', 'istWoelbklappenFlugzeug'];
 	
 	/*
 	* Diese Funktion ruft nur das Muster mit

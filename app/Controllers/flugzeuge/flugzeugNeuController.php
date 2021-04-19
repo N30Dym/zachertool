@@ -337,8 +337,12 @@ class flugzeugNeuController extends Controller
 			}
 			foreach(old("hebelarmBeschreibung") as $i => $beschreibung)
 			{
-				$datenInhalt["hebelarmBeschreibung"][$i]= old("hebelarmBeschreibung")[$i];
-				$datenInhalt["hebelarmLänge"][$i] 		= old("hebelarmLänge")[$i];
+				if(old("hebelarmBeschreibung")[$i] != "" OR old("hebelarmLänge")[$i] != "")
+				{
+					$datenInhalt["hebelarmBeschreibung"][$i]= old("hebelarmBeschreibung")[$i];
+					$datenInhalt["hebelarmLänge"][$i] 		= old("hebelarmLänge")[$i];
+					$datenInhalt["auswahlVorOderHinter"][$i]= old("auswahlVorOderHinter")[$i];
+				}
 			}
 			foreach(old("stellungBezeichnung")as $i => $bezeichnung) 
 			{
@@ -364,7 +368,7 @@ class flugzeugNeuController extends Controller
 		$datenInhalt["pitotPositionEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
 		$datenInhalt["bremsklappenEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
 		$datenInhalt["bezugspunktEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
-		//var_dump($datenInhalt);	
+		var_dump($datenInhalt);	
 			
 						
 		// Front-end laden und Daten übertragen
@@ -393,7 +397,7 @@ class flugzeugNeuController extends Controller
 			else
 			{
 
-				if($this->request->getPost("istMusterVorhanden") != "")
+				if($this->request->getPost("musterID") != "")
 				{
 					return redirect()->to('/flugzeuge/flugzeugNeu/'. $this->request->getPost("musterID"))->withInput();
 				}

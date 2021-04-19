@@ -30,7 +30,14 @@ $(document).ready(function() {
 		// Funktion um neue Zeilen beim Wölbklappenmenü hinzuzufügen
 	$( document ).on( 'click', '#neueZeile', function()
 	{
-		var zaehler = $( '#woelbklappenListe' ).children( 'div:last' ).attr( 'id' ).slice( 11 );
+		if(typeof($( '#woelbklappenListe' ).children( 'div:last' ).attr( 'id' )) === 'undefined')
+		{
+			var zaehler = 0;
+		}
+		else
+		{
+			var zaehler = $( '#woelbklappenListe' ).children( 'div:last' ).attr( 'id' ).slice( 11 );
+		}
 		zaehler++;
 		if ( zaehler < 20 )
 		{
@@ -41,7 +48,15 @@ $(document).ready(function() {
 		// Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
 	$( document ).on( 'click', '#neueZeileHebelarme', function()
 	{
-		var zaehler = $( '#hebelarmListe' ).children( 'div:last' ).attr( 'id' ).slice( 8 );
+		
+		if(typeof($( '#hebelarmListe' ).children( 'div:last' ).attr( 'id' )) === 'undefined')
+		{
+			var zaehler = 0;
+		}
+		else
+		{
+			var zaehler = $( '#hebelarmListe' ).children( 'div:last' ).attr( 'id' ).slice( 8 );
+		}
 		zaehler++;
 		if ( zaehler < 10 )
 		{
@@ -115,7 +130,7 @@ $(document).ready(function() {
 	{
 		if ($( this ).is( ':checked' ))
 		{
-			$( '#hebelarm0' ).after( '<div class="row g-1 col-12" id="hebelarmCopilot"><div class="col-1 text-center"><button type="button" id="loescheHebelarmeCopilot" class="btn-danger btn-close loescheHebelarm" aria-label="Close"></button></div><div class="col-5"><input type="text" class="form-control" id="hebelarmBeschreibungCopilot" value="Copilot"></div><div class="col-6"><div class="input-group"><input type="text" class="form-control" id="hebelarmLängeCopilot" value=""><select class="form-select input-group-text text-start" id="auswahlVorOderHinterCopilot"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 		
+			$( '#hebelarm0' ).after( '<div class="row g-1 col-12" id="hebelarm1"><div class="col-1 text-center"></div><div class="col-5"><input type="text" class="form-control" name="hebelarmBeschreibung[1]" id="hebelarmBeschreibung1" value="Copilot"></div><div class="col-6"><div class="input-group"><input type="text" class="form-control" name="hebelarmLänge[1]" id="hebelarmLänge1" value="" required><select class="form-select input-group-text text-start" name="auswahlVorOderHinter[1]" id="auswahlVorOderHinter1"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 		
 		}
 		else 
 		{

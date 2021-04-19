@@ -29,7 +29,7 @@ class startseiteController extends Controller
 		
 		$title = "Willkommen beim Zachertool";
 			
-		$testModel = new hHStWegeModel();
+		$testModel = new hStWegeModel();
 		$test = konvertiereHStWegeInProzent($testModel->getAlleHStWege());
 		
 		$datenHeader = [

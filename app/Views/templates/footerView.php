@@ -1,3 +1,5 @@
+<!-- Hier endet die <main>, die in navbarView.php gestartet wird und den Seiteninhalt umschließt -->
+
 </main>
 <div style="height:5rem !important"></div>
 <footer class="footer fixed-bottom mt-auto py-3 bg-light">

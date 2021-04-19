@@ -1,3 +1,5 @@
+<!-- Hier wird der <head> beendet, der in headerView.php gestartet wird -->
+
 </head>
 <body class="white">
 <header>
@@ -76,3 +78,5 @@
 	</nav>
 </header>
 <main class="container bg-light shadow pb-5 pt-3">
+
+<!-- Hier beginnt <main>. </main> ist in footerView.php zu finden. Der gesamte Inhalt wird dazwischen geladen -->

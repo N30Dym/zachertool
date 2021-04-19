@@ -79,3 +79,4 @@
 
 
 
+<!-- </head> befindet sich in navbarView.php um die Möglichkeit zu lassen mit einem weiteren View noch <script>-Code einzufügen -->

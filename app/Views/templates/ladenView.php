@@ -1,3 +1,4 @@
+<?= view('templates/headerView') ?>
 </head>
 <body class="bg-light">
 <main>
@@ -7,3 +8,5 @@
 			<span class="visually-hidden">Loading...</span>
 		</div>
 	</div>
+	
+<?= view('templates/footerView') ?>	

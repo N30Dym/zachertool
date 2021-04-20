@@ -14,6 +14,7 @@ class musterKlappenModel extends Model
     protected $DBGroup 			= 'flugzeugeDB';
 	protected $table      		= 'muster_klappen';
     protected $primaryKey 		= 'id';
+	protected $validationRules 	= 'musterKlappe';
 	
 	protected $allowedFields 	= ['musterID', 'stellungBezeichnung', 'stellungWinkel', 'neutral', 'kreisflug', 'iasVG'];
 

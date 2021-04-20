@@ -14,6 +14,7 @@ class musterHebelarmeModel extends Model
     protected $DBGroup			= 'flugzeugeDB';
 	protected $table      		= 'muster_hebelarme';
     protected $primaryKey 		= 'id';
+	protected $validationRules 	= 'musterHebelarm';
 	
 	protected $allowedFields 	= ['musterID', 'beschreibung', 'hebelarm'];
 

@@ -2,6 +2,7 @@
 			<?= csrf_field() ?>
 			<?= form_hidden('title', $title) ?>
 			<?= isset($musterID) ? form_hidden('musterID', $musterID) : "" ?>
+			<?php (isset($zuladungMax) && is_numeric($zuladungMax)) ? (string)$zuladungMax = str_replace(",", ".", $zuladungMax) : ""?>
 
 			<h3 class="m-4">Basisinformationen</h3>
 			<div class="row g-3">
@@ -18,13 +19,13 @@
 				</div>
 				<div class="col-2">
 				</div>
-				<div class="col-12 ms-3 <?= $musterSchreibweise ? "d-none" : "" ?>">
+				<div class="col-12 ms-3 <?= (isset($musterSchreibweise) AND $musterSchreibweise != "") ? "d-none" : "" ?>">
 					<small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
 					<br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
 				</div>
 
 				<div class="col-12">
-					<label for="kennung" class="form-label">kennung</label>
+					<label for="kennung" class="form-label">Kennzeichen</label>
 					<input name="kennung" type="text" class="form-control" id="kennung" placeholder="D-XXXX" value="<?= isset($kennung) ? esc($kennung) : "" ?>" required >
 				</div>
 					
@@ -46,7 +47,7 @@
 				
 				<div class="col-12">
 					<label for="baujahr" class="form-label">Baujahr</label>
-					<input name="baujahr" type="number" class="form-control" id="baujahr"  min="1900" max="<?= date("Y") ?>" value="<?= isset($baujahr) ? esc($baujahr) : "" ?>" required>
+					<input name="baujahr" type="number" class="form-control" id="baujahr" step="1"  min="1900" max="<?= date("Y") ?>" value="<?= isset($baujahr) ? esc($baujahr) : "" ?>" required>
 				</div>
 				
 				<div class="col-12">
@@ -161,22 +162,22 @@
 					<div class="row" id="woelbklappenListe">
 						<div class="row g-1 mb-2 ">
 							<div class="col-1 text-center">
-								<small>Löschen</small>
+								<small><br>Löschen</small>
 							</div>
 							<div class="col-3 text-center">
-								<small>Bezeichnung</small>
+								<small><br>Bezeichnung</small>
 							</div>
 							<div class="col-3 text-center">
-								<small>Ausschlag</small>
+								<small><br>Ausschlag</small>
 							</div>
 							<div class="col-1 text-center">
-								<small>Neutral</small>
+								<small>Neutral- stellung</small>
 							</div>
 							<div class="col-1 text-center">
-								<small>Kreisflug</small>
+								<small>Kreisflug- stellung</small>
 							</div>
 							<div class="col-2 text-center">
-								<small>IAS<sub>VG</sub></small>
+								<small><br>IAS<sub>VG</sub></small>
 							</div>
 							<div class="col-1 text-center">
 							</div>
@@ -192,7 +193,7 @@
 									</div>
 									<div class="col-3">
 										<div class="input-group">
-											<input type="text" name="stellungWinkel[<?= $key ?>]" class="form-control" id="stellungWinkel<?= $key ?>" value="<?= esc($stellungWinkel[$key]) ?>">
+											<input type="number" name="stellungWinkel[<?= $key ?>]" step="0.1" class="form-control" id="stellungWinkel<?= $key ?>" value="<?= esc($stellungWinkel[$key]) ?>">
 											<span class="input-group-text">°</span>
 										</div>	
 									</div>
@@ -204,9 +205,9 @@
 									</div>
 									<div class="col-2 iasVG">
 										<?php if(isset($kreisflug) AND $kreisflug == $key)  : ?>
-											<input type="number" name="iasVGKreisflug" class="form-control" id="iasVGKreisflug" value="<?= esc($iasVGKreisflug) ?>">
+											<input type="number" name="iasVGKreisflug" step="1" class="form-control" id="iasVGKreisflug" value="<?= esc($iasVGKreisflug) ?>">
 										<?php elseif(isset($neutral) AND $neutral == $key): ?>
-											<input type="number" name="iasVGNeutral" class="form-control" id="iasVGNeutral" value="<?= esc($iasVGNeutral) ?>">
+											<input type="number" name="iasVGNeutral" step="1" class="form-control" id="iasVGNeutral" value="<?= esc($iasVGNeutral) ?>">
 										<?php endif ?>
 									</div>
 									<div class="col-1">
@@ -222,12 +223,12 @@
 					
 				</div>
 					
-				<div class="col-12 <?= ($istWoelbklappenFlugzeug == "1" OR $istWoelbklappenFlugzeug == "on") ? "d-none" : "" ?>" id="iasVGDiv">
+				<div class="col-12 <?= (isset($istWoelbklappenFlugzeug) AND ($istWoelbklappenFlugzeug == "1" OR $istWoelbklappenFlugzeug == "on")) ? "d-none" : "" ?>" id="iasVGDiv">
 					<h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
 					<div class="col-12">
 					<label for="iasVG" class="form-label">IAS<sub>VG</sub></label>
 						<div class="input-group">
-							<input type="number" name="iasVG" class="form-control" id="iasVG" value="<?= esc($iasVG) ?>">
+							<input type="number" step="1" name="iasVG" class="form-control" id="iasVG" value="<?= isset($iasVG) ? esc($iasVG) : "" ?>">
 							<span class="input-group-text">km/h</span>
 						</div>
 					</div>
@@ -238,7 +239,7 @@
 				<div class="col-12">					
 					<label for="mtow" class="form-label">Maximale Abflugmasse</label>
 					<div class="input-group">
-						<input type="number" name="mtow" class="form-control" id="mtow" value="<?= esc($mtow) ?>" required>
+						<input type="number" step="1" name="mtow" class="form-control" id="mtow" value="<?= isset($mtow) ? esc($mtow) : "" ?>" required>
 						<span class="input-group-text">kg</span>
 					</div>
 				</div>
@@ -247,10 +248,10 @@
 					<label for="leermasseSP" class="form-label">Zulässiger Leermassenschwerpunktbereich</label>
 					<div class="input-group">
 						<span class="input-group-text">von:</span>
-						<input type="text" name="leermasseSPMin" class="form-control" id="leermasseSPMin" value="<?= isset($leermasseSPMin) ? esc($leermasseSPMin) : "" ?>">
+						<input type="number" name="leermasseSPMin" step="0.01" class="form-control" id="leermasseSPMin" value="<?= isset($leermasseSPMin) ? esc($leermasseSPMin) : "" ?>">
 						<span class="input-group-text">mm h. BP</span>
 						<span class="input-group-text">bis:</span>
-						<input type="text" name="leermasseSPMax" class="form-control" id="leermasseSPMax" value="<?= isset($leermasseSPMax) ? esc($leermasseSPMax) : "" ?>">
+						<input type="number" name="leermasseSPMax" step="0.01" class="form-control" id="leermasseSPMax" value="<?= isset($leermasseSPMax) ? esc($leermasseSPMax) : "" ?>">
 						<span class="input-group-text">mm h. BP</span>
 					</div>
 				</div>
@@ -259,10 +260,10 @@
 					<label  class="form-label">Zulässiger Flugschwerpunktbereich</label>
 					<div class="input-group">
 						<span class="input-group-text">von:</span>
-						<input type="text" name="flugSPMin" class="form-control" id="flugSPMin" value="<?= isset($flugSPMin) ? esc($flugSPMin) : "" ?>">
+						<input type="number" name="flugSPMin" step="0.01" class="form-control" id="flugSPMin" value="<?= isset($flugSPMin) ? esc($flugSPMin) : "" ?>">
 						<span class="input-group-text">mm h. BP</span>
 						<span class="input-group-text">bis:</span>
-						<input type="text" name="flugSPMax" class="form-control" id="flugSPMax" value="<?= isset($flugSPMax) ? esc($flugSPMax) : "" ?>">
+						<input type="number" name="flugSPMax" step="0.01" class="form-control" id="flugSPMax" value="<?= isset($flugSPMax) ? esc($flugSPMax) : "" ?>">
 						<span class="input-group-text">mm h. BP</span>
 					</div>
 				</div>
@@ -309,7 +310,7 @@
 						<div class="row g-1" id="hebelarm<?= $key ?>">
 						
 							<div class="col-1 text-center">
-								<?php if($beschreibung != "Pilot" OR ($istDoppelsitzer == "1" AND $beschreibung != "Copilot")) : ?>
+								<?php if($beschreibung != "Pilot" OR (isset($istDoppelsitzer) AND ($istDoppelsitzer == "1" AND $beschreibung != "Copilot"))) : ?>
 									<button type="button" id="loescheHebelarme<?= $key ?>" class="btn-danger btn-close loescheHebelarm" aria-label="Close"></button>
 								<?php endif ?>
 							</div>
@@ -321,7 +322,7 @@
 							
 							<div class="col-6">
 								<div class="input-group">
-									<input type="text" name="hebelarmLänge[<?= $key ?>]" class="form-control" id="hebelarmLänge<?= $key ?>" value="<?= esc($hebelarmLänge[$key]) ?>" <?= ($beschreibung == "Pilot" OR (($istDoppelsitzer == "1" OR $istDoppelsitzer == "on") AND $beschreibung == "Copilot")) ? "required" : "" ?>>						
+									<input type="number" step="0.01" name="hebelarmLänge[<?= $key ?>]" class="form-control" id="hebelarmLänge<?= $key ?>" value="<?= isset($hebelarmLänge) ? esc($hebelarmLänge[$key]) : "" ?>" <?= ($beschreibung == "Pilot" OR (isset($istDoppelsitzer) AND ($istDoppelsitzer == "1" OR $istDoppelsitzer == "on") AND $beschreibung == "Copilot")) ? "required" : "" ?>>						
 									<select class="form-select input-group-text text-start" name="auswahlVorOderHinter[<?= $key ?>]" id="auswahlVorOderHinter<?= $key ?>">
 										<option value="hinterBP" <?= (isset($auswahlVorOderHinter[$key]) AND ($auswahlVorOderHinter[$key] == "hinterBP" OR $auswahlVorOderHinter[$key] == "")) ? "selected" : ""?>>mm h. BP</option>
 										<option value="vorBP" <?= (isset($auswahlVorOderHinter[$key]) AND $auswahlVorOderHinter[$key] == "vorBP") ? "selected" : ""?>>mm v. BP</option>
@@ -350,10 +351,10 @@
 					<label  class="form-label">Zulässige Zuladung</label>
 					<div class="input-group">
 						<span class="input-group-text">min:</span>
-						<input type="text" class="form-control" name="zuladungMin" id="zuladungMin" value="<?= isset($zuladungMin) ? esc($zuladungMin) : "" ?>" required>
+						<input type="number" class="form-control" step="0.1" name="zuladungMin" id="zuladungMin" value="<?= isset($zuladungMin) ? esc($zuladungMin) : "" ?>" required>
 						<span class="input-group-text">kg</span>
 						<span class="input-group-text">max:</span>
-						<input type="text" class="form-control" name="zuladungMax" id="zuladungMax" value="<?= isset($zuladungMax) ? esc($zuladungMax) : "" ?>" required>
+						<input type="number" class="form-control" step="0.1" name="zuladungMax" id="zuladungMax" value="<?= isset($zuladungMax) ? esc($zuladungMax) : "" ?>" required>
 						<span class="input-group-text">kg</span>
 					</div>
 				</div>
@@ -361,7 +362,7 @@
 				<div class="col-12">
 					<label for="leermasse" class="form-label">Leermasse</label>
 					<div class="input-group">
-						<input type="number" class="form-control" name="leermasse" id="leermasse"  value="<?= isset($leermasse) ? esc($leermasse) : "" ?>" required>
+						<input type="number" class="form-control" name="leermasse" id="leermasse" step="0.01" value="<?= isset($leermasse) ? esc($leermasse) : "" ?>" required>
 						<span class="input-group-text">kg</span>
 					</div>
 				</div>
@@ -369,7 +370,7 @@
 				<div class="col-12">
 					<label for="schwerpunkt" class="form-label">Leermassenschwerpunkt</label>
 					<div class="input-group">
-						<input type="number" class="form-control" id="schwerpunkt" name="schwerpunkt" value="<?= isset($schwerpunkt) ? esc($schwerpunkt) : "" ?>" required>
+						<input type="number" class="form-control" id="schwerpunkt" step="0.01" name="schwerpunkt" value="<?= isset($schwerpunkt) ? esc($schwerpunkt) : "" ?>" required>
 						<span class="input-group-text">mm h. BP</span>
 					</div>
 				</div>

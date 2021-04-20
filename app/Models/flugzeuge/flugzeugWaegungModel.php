@@ -15,6 +15,9 @@ class flugzeugWaegungModel extends Model
     protected $DBGroup 			= 'flugzeugeDB';
 	protected $table      		= 'flugzeug_waegung';
     protected $primaryKey 		= 'id';
+	protected $validationRules 	= 'flugzeugWaegung';
+	
+	protected $allowedFields 	= ['flugzeugID', 'leermasse', 'schwerpunkt', 'zuladungMin', 'zuladungMax', 'datum'];
 
 		/*
 		* Diese Funktion ruft nur die Flugzeugdetails mit

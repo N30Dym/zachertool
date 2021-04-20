@@ -41,7 +41,7 @@ $(document).ready(function() {
 		zaehler++;
 		if ( zaehler < 20 )
 		{
-			$( "#woelbklappenListe" ).append( '<div class="row col-12 g-1" id="woelbklappe'+ zaehler +'"><div class="col-1 text-center align-middle"><button type="button" id="loesche'+ zaehler +'" class="btn-danger btn-close loeschen"></button></div><div class="col-3"><input type="text" class="form-control" name ="stellungBezeichnung['+ zaehler +']" id="stellungBezeichnung'+ zaehler +'"></div><div class="col-3"><div class="input-group"><input type="text" class="form-control" name="stellungWinkel['+ zaehler +']" id="stellungWinkel'+ zaehler +'"><span class="input-group-text">°</span></div></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="neutral" id="neutral" value="'+ zaehler +'" required></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="kreisflug" id="kreisflug" value="'+ zaehler +'" required></div><div class="col-2 iasVG"></div><div class="col-1"></div></div>'); 
+			$( "#woelbklappenListe" ).append( '<div class="row col-12 g-1" id="woelbklappe'+ zaehler +'"><div class="col-1 text-center align-middle"><button type="button" id="loesche'+ zaehler +'" class="btn-danger btn-close loeschen"></button></div><div class="col-3"><input type="text" class="form-control" name ="stellungBezeichnung['+ zaehler +']" id="stellungBezeichnung'+ zaehler +'"></div><div class="col-3"><div class="input-group"><input type="number" step="0.1" class="form-control" name="stellungWinkel['+ zaehler +']" id="stellungWinkel'+ zaehler +'"><span class="input-group-text">°</span></div></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="neutral" id="neutral" value="'+ zaehler +'" required></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="kreisflug" id="kreisflug" value="'+ zaehler +'" required></div><div class="col-2 iasVG"></div><div class="col-1"></div></div>'); 
 		}
 	});
 	
@@ -60,7 +60,7 @@ $(document).ready(function() {
 		zaehler++;
 		if ( zaehler < 10 )
 		{
-			$( "#hebelarmListe" ).append('<div class="row g-1 col-12" id="hebelarm' + zaehler + '"><div class="col-1 text-center"><button type="button" id="loescheHebelarme' + zaehler + '" class="btn-danger btn-close loescheHebelarm"></button></div><div class="col-5"><input type="text" class="form-control" name="hebelarmBeschreibung[' + zaehler + ']" id="hebelarmBeschreibung' + zaehler + '" value=""></div><div class="col-6"><div class="input-group"><input type="text" class="form-control" name="hebelarmLänge[' + zaehler + ']" id="hebelarmLänge' + zaehler + '" value=""><select class="form-select input-group-text text-start" name="auswahlVorOderHinter[' + zaehler + ']" id="auswahlVorOderHinter' + zaehler + '"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 
+			$( "#hebelarmListe" ).append('<div class="row g-1 col-12" id="hebelarm' + zaehler + '"><div class="col-1 text-center"><button type="button" id="loescheHebelarme' + zaehler + '" class="btn-danger btn-close loescheHebelarm"></button></div><div class="col-5"><input type="text" class="form-control" name="hebelarmBeschreibung[' + zaehler + ']" id="hebelarmBeschreibung' + zaehler + '" value=""></div><div class="col-6"><div class="input-group"><input type="number" step="0.01" class="form-control" name="hebelarmLänge[' + zaehler + ']" id="hebelarmLänge' + zaehler + '" value=""><select class="form-select input-group-text text-start" name="auswahlVorOderHinter[' + zaehler + ']" id="auswahlVorOderHinter' + zaehler + '"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 
 		}
 	});	
 		
@@ -79,7 +79,7 @@ $(document).ready(function() {
 		$( '#iasVGNeutral').remove();
 		
 		var neueNeutralWoelbklappe = $( '#neutral:checked' ).val();
-		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueNeutralWoelbklappe ).children( '.iasVG' ).append('<input type="number" class="form-control" id="iasVGNeutral" name="iasVGNeutral" value="'+ aktuellerIasVGNeutralWert +'">');
+		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueNeutralWoelbklappe ).children( '.iasVG' ).append('<input type="number" step="1" class="form-control" id="iasVGNeutral" name="iasVGNeutral" value="'+ aktuellerIasVGNeutralWert +'">');
 		
 		$( 'input[type=radio][id=kreisflug]' ).removeAttr( 'disabled' );
 		$( 'input[type=radio][id=kreisflug][value=' + neueNeutralWoelbklappe + ']' ).attr( 'disabled', true );
@@ -100,7 +100,7 @@ $(document).ready(function() {
 		$( '#iasVGKreisflug').remove();
 		
 		var neueKreisflugWoelbklappe = $( '#kreisflug:checked' ).val();
-		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueKreisflugWoelbklappe ).children( '.iasVG' ).append( '<input type="number" class="form-control" id="iasVGKreisflug" name="iasVGKreisflug" value="'+ aktuellerIasVGKreisflugWert +'">');
+		$( '#woelbklappenListe' ).children( '#woelbklappe' + neueKreisflugWoelbklappe ).children( '.iasVG' ).append( '<input type="number" step="1" class="form-control" id="iasVGKreisflug" name="iasVGKreisflug" value="'+ aktuellerIasVGKreisflugWert +'">');
 		
 		$( 'input[type=radio][id=neutral]' ).removeAttr( 'disabled' );
 		$( 'input[type=radio][id=neutral][value=' + neueKreisflugWoelbklappe + ']' ).attr( 'disabled', true );
@@ -130,7 +130,7 @@ $(document).ready(function() {
 	{
 		if ($( this ).is( ':checked' ))
 		{
-			$( '#hebelarm0' ).after( '<div class="row g-1 col-12" id="hebelarm1"><div class="col-1 text-center"></div><div class="col-5"><input type="text" class="form-control" name="hebelarmBeschreibung[1]" id="hebelarmBeschreibung1" value="Copilot"></div><div class="col-6"><div class="input-group"><input type="text" class="form-control" name="hebelarmLänge[1]" id="hebelarmLänge1" value="" required><select class="form-select input-group-text text-start" name="auswahlVorOderHinter[1]" id="auswahlVorOderHinter1"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 		
+			$( '#hebelarm0' ).after( '<div class="row g-1 col-12" id="hebelarm1"><div class="col-1 text-center"></div><div class="col-5"><input type="text" class="form-control" name="hebelarmBeschreibung[1]" id="hebelarmBeschreibung1" value="Copilot"></div><div class="col-6"><div class="input-group"><input type="number" step="0.01" class="form-control" name="hebelarmLänge[1]" id="hebelarmLänge1" value="" required><select class="form-select input-group-text text-start" name="auswahlVorOderHinter[1]" id="auswahlVorOderHinter1"><option value="hinterBP" selected>mm h. BP</option><option value="vorBP" >mm v. BP</option></select></div></div></div>'); 		
 		}
 		else 
 		{

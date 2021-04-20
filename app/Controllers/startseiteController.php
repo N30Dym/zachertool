@@ -42,11 +42,6 @@ class startseiteController extends Controller
 			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
 			'title' => $title
 		];
-		$result = ($musterModel->selectMax("id")->getWhere(["musterSchreibweise" => "DG-51000", "musterKlarname" => "dg1000", "musterZusatz" => "S"])->getResultArray());
-		echo $result[0]["id"];
-		/*selectMax('id')->where("musterSchreibweise", "DG-1000")
-										->where("musterKlarname", "dg1000")
-										->where("musterZusatz", "S"));*/
 		
 		foreach($protokolleLetztesJahr as $protokolle)
 		{

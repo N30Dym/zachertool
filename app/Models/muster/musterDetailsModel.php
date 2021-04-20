@@ -17,7 +17,7 @@ class musterDetailsModel extends Model
 	protected $createdField  	= 'erstelltAm';
 	protected $validationRules 	= 'musterDetails';
 	
-	protected $allowedFields 	= ['musterID', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'zuladungMin', 'zuladungMax', 'bezugspunkt', 'anstellwinkel'];
+	protected $allowedFields 	= ['musterID', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel'];
 
 	/*
 	* Diese Funktion ruft nur die Musterdetails mit

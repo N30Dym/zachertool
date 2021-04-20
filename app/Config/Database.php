@@ -110,7 +110,7 @@ class Database extends Config
 		'port'     => 3306,
 	];
 	
-	public $layoutsDB = [
+	public $protokolllayoutDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
 		'username' => 'root',

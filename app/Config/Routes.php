@@ -39,6 +39,7 @@ $routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeuController::f
 $routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/');
 $routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\flugzeugNeuController::flugzeugSpeichern');
 $routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\flugzeugNeuController::test');
+$routes->get('erfolg', 'erfolgController::erfolg');
 
 
 //$routes->get('(:any)', 'Pages::view/$1');

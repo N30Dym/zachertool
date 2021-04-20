@@ -455,7 +455,12 @@ class flugzeugNeuController extends Controller
 				// Wenn bei der Validierung keine Fehler aufgetreten sind, können die Daten nun in die Datenbank eingetragen werden
 			if($validationErfolgreich == TRUE)
 			{
-				echo "Das hat geklappt";
+				echo view('templates/ladenView');
+				
+				$datenNachricht = [
+					'nachricht' => 'Flugzeug erfolgreich angelegt',
+					'link'		=> '/zachern-dev/'
+				];
 				
 					// Wenn noch keine musterID vorhanden ist, muss zunächst das Muster angelegt werden und die neue musterID gespeichert werden
 				if(!isset($datenArray['musterID']) OR $datenArray['musterID'] == "")
@@ -513,24 +518,25 @@ class flugzeugNeuController extends Controller
 				}
 				else
 				{
-					echo "Flugzeug bereits vorhanden";
+					$datenNachricht['nachricht'] = "Flugzeug bereits vorhanden";
 				}
 				
-				echo view("flugzeuge/erfolg");
+					// Speichern erfolgreich
+				$session = session();
+				$session->setFlashdata('nachricht', $datenNachricht['nachricht']);
+				$session->setFlashdata('link', $datenNachricht['link']);
+				return redirect()->to('/zachern-dev/erfolg');
 			}
-			else
+			else // if($validationErfolgreich == TRUE)
 			{
-				return redirect()->back()->withInput();
-				echo "Das hättest du wohl gerne, aber:";
-				echo $validation->listErrors();				
+					// Wenn bei der Validierung nicht alles in Ordnung war, zurück zur Eingabemaske mit den eingegebenen Daten
+				return redirect()->back()->withInput();			
 			}
 		}
-		else
+		else // if($this->request->getMethod() === 'post' && $this->request->getPost())
 		{
-			echo "Hello<br>";
-			echo "Post:". $this->request->getMethod() === 'post'."<br>";
-			var_dump($this->request->getPost());
-			//return redirect()->to('neu');
+				// Falls man irgendwie ohne Input auf ../flugzeugNeu/flugzeugSpeicher gelangt, wird man zurückgeleitet
+			return redirect()->to('/');
 		}
 			
 		
@@ -539,8 +545,14 @@ class flugzeugNeuController extends Controller
 	
 	public function test()
 	{
-		echo view('templates/headerView');
-		echo view('templates/ladenView');	
-		echo view('templates/footerView');			
+		
+		//echo view('templates/ladenView');
+		//echo view('templates/nachrichtView', ["nachricht" => "Flugzeug bereits vorhanden", "link" => "/zachern-dev/"]);	
+		$session = session();
+		$session->setFlashdata('nachricht', 'Flugzeug bereits vorhanden');
+		$session->setFlashdata('link', '/zachern-dev/');
+		var_dump($session->get());
+		return redirect()->to('/zachern-dev/erfolg');
+		
 	}
 }

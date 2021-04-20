@@ -47,7 +47,7 @@
 							Protokolle
 						</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="#">Neues Protokoll</a>
+							<a class="dropdown-item" href="/zachern-dev/protokolle/eingabe">Neues Protokoll</a>
 							<a class="dropdown-item" href="#">Offene Protokolle</a>
 							<a class="dropdown-item" href="#">Fertige Protokolle</a>
 						</div>

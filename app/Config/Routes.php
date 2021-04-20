@@ -40,12 +40,13 @@ $routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeuController::flug
 $routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\flugzeugNeuController::flugzeugSpeichern');
 $routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\flugzeugNeuController::test');
 $routes->get('erfolg', 'erfolgController::erfolg');
+$routes->get('protokolle/eingabe', 'protokolle\protokollEingabeController::eingabe/');
+$routes->get('protokolle/eingabe/(:num)', 'protokolle\protokollEingabeController::eingabe/$1');
+$routes->get('protokolle/kapitel/1', 'protokolle\protokollEingabeController::eingabe/');
+$routes->get('protokolle/kapitel/(:num)', 'protokolle\protokollEingabeController::kapitel/$1');
 
 
-//$routes->get('(:any)', 'Pages::view/$1');
-//$routes->get('news/(:segment)', 'News::view/$1');
-//$routes->get('news', 'News::index');
-//$routes->get('(:any)', 'Pages::view/$1');*/
+
 
 /*
  * --------------------------------------------------------------------

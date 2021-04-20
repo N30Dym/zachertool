@@ -23,4 +23,9 @@ class protokollTypenModel extends Model
 	{		
 		return($this->findAll());
 	}
+	
+	public function getAlleVerfügbarenProtokollTypen()
+	{		
+		return($this->where("verfuegbar",1)->findAll());
+	}
 }

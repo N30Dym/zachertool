@@ -10,8 +10,7 @@ Dazu sind neben den Zacherprotokollen noch folgende Daten notwendig, die ebenfal
 * Das Anlegen und Verwalten von (Segel-)Flugzeugen
 
 Auf den folgenden Seiten werden die Möglichkeiten und Grenzen des Zachertools dargestellt, außerdem soll auf die Struktur und den Aufbau
-des Zachertools sowie der Datenbanken eingegangen werden und es werden Beispiele gegeben, um neue Funktionen zu implementieren 
-und 
+des Zachertools sowie der Datenbanken eingegangen werden und es werden Beispiele gegeben, um neue Funktionen zu implementieren.
 
 .. _Codeigniter: https://codeigniter.com/
 

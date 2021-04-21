@@ -56,7 +56,7 @@ class datenModel extends Model
 		* @param mix $multipelNr standard = "0"
 		* @return array
 		*/
-	public function getDatenSpezifisch($protokollSpeicherID, $protokollInputID, $woelbklappenstellung = "0", $linksUndRechts = "0", $multipelNr = "0")
+	/*public function getDatenSpezifisch($protokollSpeicherID, $protokollInputID, $woelbklappenstellung = "0", $linksUndRechts = "0", $multipelNr = "0")
 	{
 		$erlaubteEingabenWoelbklappe = [0, "0", "Neutral", "Kreisflug"];
 		$erlaubteEingabenLinksUndRechts = [0, "0", "Links", "Rechts"];
@@ -65,6 +65,6 @@ class datenModel extends Model
 			$query = "SELECT wert FROM daten WHERE protokollSpeicherID = " . $protokollSpeicherID . " AND protokollInputID = " . $protokollInputID . " AND wölbklappenstellung = " . $woelbklappenstellung . " AND linksUndRechts = " . $linksUndRechts . " AND multipelNr = " . $multipelNr;
 		}
 		return $this->query($query)->getResultArray();
-	}
+	}*/
 	
 }

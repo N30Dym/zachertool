@@ -19,6 +19,6 @@ class startseiteModel extends Model {
 		{
 			echo "Query failed!";
 		}
-		return $db->query('SELECT kennung as VARIABLE_NAME, erstelltAm as VARIABLE_VALUE FROM flugzeuge')
+		return $db->query('SELECT kennung as VARIABLE_NAME, erstelltAm as VARIABLE_VALUE FROM flugzeuge');
 	}
 }

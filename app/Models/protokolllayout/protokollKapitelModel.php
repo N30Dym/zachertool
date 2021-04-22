@@ -19,11 +19,11 @@ class protokollKapitelModel extends Model
 	
 	//protected $allowedFields 	= ['protokollTypID', 'kapitelNummer', 'bezeichnung', 'zusatztext', 'woelbklappen', 'kommentar'];
 
-	public function getProtokollKapitelNachID($id)
+	public function getProtokollKapitelNachProtokollID($protokollID)
 	{
-		if(is_int(trim($id)) OR is_numeric(trim($id)))
+		if(is_int(trim($protokollID)) OR is_numeric(trim($protokollID)))
 		{	
-			return($this->where("id", $id)->first());
+			return($this->where("protokollID", $protokollID)->findAll());
 		}
 		else
 		{
@@ -31,4 +31,33 @@ class protokollKapitelModel extends Model
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
+	
+	
+	public function getProtokollKapitelNummerNachID($id)
+	{
+		if(is_int(trim($id)) OR is_numeric(trim($id)))
+		{	
+
+			return($this->select("kapitelNummer")->where("id", $id)->first());
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+	
+	public function getProtokollKapitelBezeichnungNachID($id)
+	{
+		if(is_int(trim($id)) OR is_numeric(trim($id)))
+		{	
+			return($this->select("bezeichnung")->where("id", $id)->first());
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+
 }

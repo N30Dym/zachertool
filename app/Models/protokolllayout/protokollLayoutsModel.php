@@ -18,5 +18,11 @@ class protokollLayoutsModel extends Model
 	
 	//protected $allowedFields 	= ['protokollID ', 'protokollKapitelID ', 'protokollUnterkapitelID ', 'protokollEingabeID ', 'protokollInputID '];
 
-
+	public function getProtokollLayoutNachProtokollID($protokollID)
+	{
+		if(is_int(trim($protokollID)) OR is_numeric(trim($protokollID)))
+		{
+			return $this->where("protokollID", $protokollID)->findAll();
+		}
+	}
 }

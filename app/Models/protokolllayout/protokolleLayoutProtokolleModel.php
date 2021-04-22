@@ -4,7 +4,7 @@ namespace App\Models\protokolllayout;
 
 use CodeIgniter\Model;
 
-class protokolleModel extends Model
+class protokolleLayoutProtokolleModel extends Model
 {
 	/*
 	 * Verbindungsvariablen für den Zugriff zur
@@ -24,6 +24,20 @@ class protokolleModel extends Model
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{	
 			return($this->where("id", $id)->first());
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+	
+	public function getProtokollAktuelleProtokollIDNachProtokollTypID($protokollTypID)
+	{
+		if(is_int(trim($protokollTypID)) OR is_numeric(trim($protokollTypID)))
+		{	
+			$query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND datumVon < CURRENT_DATE AND datumBis > CURRENT_DATE OR (protokollTypID = " . $protokollTypID . " AND datumVon < CURRENT_DATE AND datumBis IS NULL)";
+			return($this->query($query)->getResultArray());
 		}
 		else
 		{

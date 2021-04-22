@@ -15,7 +15,7 @@ use App\Models\flugzeuge\flugzeugWaegungModel;
 
 
 
-class flugzeugNeuController extends Controller
+class Flugzeugneucontroller extends Controller
 {
 		/*
 		* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):

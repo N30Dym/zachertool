@@ -32,18 +32,26 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+
+    // Startseite
 $routes->get('/', 'startseiteController::index');
 $routes->get('startseite', 'startseiteController::index');
+
+    // Flugzeuge
 $routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeuController::index');
 $routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/$1');
 $routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/');
 $routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\flugzeugNeuController::flugzeugSpeichern');
 $routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\flugzeugNeuController::test');
+
+    // Nachrichten
 $routes->get('erfolg', 'erfolgController::erfolg');
-$routes->get('protokolle/eingabe', 'protokolle\protokollEingabeController::eingabe/');
-$routes->get('protokolle/eingabe/(:num)', 'protokolle\protokollEingabeController::eingabe/$1');
-$routes->get('protokolle/kapitel/1', 'protokolle\protokollEingabeController::eingabe/');
-$routes->get('protokolle/kapitel/(:num)', 'protokolle\protokollEingabeController::kapitel/$1');
+
+    // Protokolle
+$routes->get('protokolle/eingabe', 'protokolle\Protokolleingabecontroller::eingabe/');
+$routes->match(['get', 'post'], 'protokolle/eingabe/(:num)', 'protokolle\Protokolleingabecontroller::eingabe/$1');
+$routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokolleingabecontroller::eingabe/');
+$routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protokolleingabecontroller::kapitel/$1');
 
 
 

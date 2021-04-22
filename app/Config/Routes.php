@@ -34,18 +34,18 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
     // Startseite
-$routes->get('/', 'startseiteController::index');
-$routes->get('startseite', 'startseiteController::index');
+$routes->get('/', 'Startseitecontroller::index');
+$routes->get('startseite', 'Startseitecontroller::index');
 
     // Flugzeuge
-$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\flugzeugNeuController::index');
-$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/$1');
-$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\flugzeugNeuController::flugzeugAnlegen/');
-$routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\flugzeugNeuController::flugzeugSpeichern');
-$routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\flugzeugNeuController::test');
+$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\Flugzeugneucontroller::index');
+$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\Flugzeugneucontroller::flugzeugAnlegen/$1');
+$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\Flugzeugneucontroller::flugzeugAnlegen/');
+$routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\Flugzeugneucontroller::flugzeugSpeichern');
+$routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\Flugzeugneucontroller::test');
 
     // Nachrichten
-$routes->get('erfolg', 'erfolgController::erfolg');
+$routes->get('erfolg', 'Nachrichtencontroller::erfolg');
 
     // Protokolle
 $routes->get('protokolle/eingabe', 'protokolle\Protokolleingabecontroller::eingabe/');

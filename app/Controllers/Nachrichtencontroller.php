@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 
-class erfolgController extends Controller
+class Nachrichtencontroller extends Controller
 {
 	public function erfolg(/*$nachricht, $link*/)
 	{

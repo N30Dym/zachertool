@@ -10,7 +10,7 @@ use App\Models\muster\musterModel;
 helper("array");
 helper("konvertiereHStWegeInProzent");
 
-class startseiteController extends Controller
+class Startseitecontroller extends Controller
 {
 	/*
 	* Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):

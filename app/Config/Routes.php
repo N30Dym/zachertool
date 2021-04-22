@@ -49,9 +49,15 @@ $routes->get('erfolg', 'Nachrichtencontroller::erfolg');
 
     // Protokolle
 $routes->get('protokolle/eingabe', 'protokolle\Protokolleingabecontroller::eingabe/');
+$routes->get('protokolle/kapitel', 'protokolle\Protokolleingabecontroller::eingabe/');
 $routes->match(['get', 'post'], 'protokolle/eingabe/(:num)', 'protokolle\Protokolleingabecontroller::eingabe/$1');
 $routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokolleingabecontroller::eingabe/');
 $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protokolleingabecontroller::kapitel/$1');
+$routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokolleingabecontroller::speichern/');
+
+
+
+$routes->get('sessionAufheben', 'Startseitecontroller::index');
 
 
 

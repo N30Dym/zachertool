@@ -72,24 +72,29 @@ class Protokolleingabecontroller extends Controller
 	
     public function kapitel($kapitelNummer)
     {
+        if($this->request->getPost("protokollTypen") == null && ! isset($_SESSION['gewaehlteProtokollTypen']))
+        {
+            return redirect()->to('/zachern-dev/protokolle/eingabe');
+        }
+        
         $_SESSION['aktuellesKapitel'] = $kapitelNummer;
         $this->before();
+        
+        if( ! isset($_SESSION['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['kapitelNummern']))
+        {
+            return redirect()->back();
+        }        
         
         $datenHeader = [
                 'title'         => $_SESSION['protokollInformationen']['titel'],
                 'description'   => "Das übliche halt"
         ];
         
-        //var_dump($_SESSION['gewaehlteProtokollTypen']);
-        //var_dump($_SESSION['protokollInformationen']);
-        
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollEingabeScript');
         echo view('templates/navbarView');
         echo view('protokolle/protokollEingabeView');
-        echo view('templates/footerView');
-        
-       
+        echo view('templates/footerView');     
     }	
 
     public function speichern($protokollSpeicherID = null)
@@ -101,8 +106,9 @@ class Protokolleingabecontroller extends Controller
     {
         if($_SESSION['aktuellesKapitel'] > 0)
         {
+            
             isset($_SESSION['gewaehlteProtokollTypen']) ? null : $_SESSION['gewaehlteProtokollTypen'] = $this->request->getPost("protokollTypen");
-                
+
             if( ! isset($_SESSION['protokollInformationen']))
             {
                 $_SESSION['protokollInformationen']['datum']        = $this->request->getPost("datum");
@@ -123,25 +129,24 @@ class Protokolleingabecontroller extends Controller
                 $protokollTypenModel                = new protokollTypenModel();
                 $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
 
-                
+
                 $_SESSION['kapitelNummern'] = [];
                 $_SESSION['kapitelBezeichnungen']   = [];
-                $_SESSION['protokollLayout']['kapitelNummer']['protokollUnterkapitelID']  = [];
-
+                
                 $_SESSION['protokollIDs'] = [];
                 foreach($_SESSION['gewaehlteProtokollTypen'] as $gewaehlterProtokollTyp)
                 {
                     $protokollLayoutID = $protokolleLayoutProtokolleModel->getProtokollAktuelleProtokollIDNachProtokollTypID($gewaehlterProtokollTyp);
                     array_push($_SESSION['protokollIDs'], $protokollLayoutID[0]["id"]);
                 }
-                    
+
                     // Für jede ProtokollID muss das Layout aufgebaut werden
                 foreach($_SESSION['protokollIDs'] as $protokollID)
                 {
                         // Laden des Protokoll Layouts für die entsprechende ProtokollID das sind sehr viele Reihen
                     $protokollLayout = $protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID);
                     //var_dump($protokollLayout);
-                   
+
                         // Für jede Zeile des Layouts wird nun die Kapitelnummer und Kapitelname rausgesucht und anschließend das 
                         // Array $_SESSION['protokollLayout'] bestückt
                     foreach($protokollLayout as $protokollItem)
@@ -155,17 +160,19 @@ class Protokolleingabecontroller extends Controller
                             $_SESSION['kapitelBezeichnungen'][$kapitelNummer['kapitelNummer']] = $kapitelBezeichnung['bezeichnung'];
                         }
                         
-                        in_array($kapitelNummer['kapitelNummer'], $_SESSION['protokollLayout']) ? : array_push($_SESSION['protokollLayout'], $kapitelNummer['kapitelNummer']);
-                        //in_array($protokollItem['protokollUnterkapitelID'], $_SESSION['protokollLayout'][$kapitelNummer['kapitelNummer']]) ? : $_SESSION['protokollLayout'][$protokollItem['protokollUnterkapitelID']]['protokollUnterkapitelID'] = $protokollItem['protokollUnterkapitelID'];
-                    }
+                        $_SESSION['protokollLayout'][$kapitelNummer['kapitelNummer']][$protokollItem['protokollUnterkapitelID']][$protokollItem['protokollEingabeID']] = [$protokollItem['protokollInputID']];
                    
-                    
+                    }
+
+
                 } 
                 asort($_SESSION['kapitelNummern']);
                 var_dump($_SESSION['protokollLayout']);
             }
-            
         }
+
+            
+        
          
     }
 }

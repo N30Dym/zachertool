@@ -15,4 +15,11 @@ class Nachrichtencontroller extends Controller
 		];
 		echo view('templates/nachrichtView', $datenNachricht);
 	}
+	
+	public function sessionAufheben()
+	{
+		session_destroy();
+                $_SESSION = [];
+		return redirect()->to('/zachern-dev');
+	}
 }

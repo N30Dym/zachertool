@@ -2,13 +2,29 @@
 
 
 <div class="row">
+    
+    <div class="col-6">
+    </div>
+    <div class="col-2 ">
+        <a href="<?= site_url('/sessionAufheben') ?>">
+            <input type="button" class="btn btn-danger col-12" formaction="" value="Abbrechen"></button>
+        </a>
+    </div>
+    <div class="col-3">
+        <a href="<?= site_url('/protokolle/speichern') ?>">
+            <input type="button" class="btn btn-success col-12" formaction="" value="Speichern und Zurück"></button>
+        </a>
+    </div>
+    <div class="col-1">
+    </div>
+    
     <div class="col-1">
     </div>
     <div class="col-10">
 
         <?=  form_open(site_url('protokolle/kapitel/2'), ["class" => "needs-validation", "method" => "post", /*"novalidate" => "novalidate"*/]) ?>
 
-        <h3 class="m-4">Informationen zum Protokoll</h3>
+        <h3 class="m-4">1. - Informationen zum Protokoll</h3>
         <div class="row g-3">
             <div class="col-sm-7">
                 <label for="datum" class="form-label">Datum des ersten Fluges</label>
@@ -37,15 +53,14 @@
                 <div class="col-1">
                 </div>
 
-                <div class="col-8">
+                <div class="col-11">
                 
                     <input type="checkbox" class="form-check-input" name="protokollTypen[]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
                     <label class="form-check-label" <?= (isset($_SESSION['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label>
 
                 </div>
 
-                <div class="col-3">
-                </div>
+                
             <?php endforeach ?>
         </div>
         
@@ -64,13 +79,13 @@
                                     <option value="<?= esc($kapitelNummer) ?>"><?= esc($kapitelNummer) . " - " . esc($_SESSION['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
                                 <?php endforeach ?>
                             </select>
-                            <button type="submit" id="kapitelGo" class="btn btn-success" formaction="">Go!</botton>
+                            <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>
                         </div>           
                     </div>
                 <?php endif ?>
             </div>
             <div class="col-3">
-                <button type="submit" class="btn btn-success col-12">Weiter ></button>
+                <button type="submit" class="btn btn-secondary col-12">Weiter ></button>
             </div>
 
         </div>

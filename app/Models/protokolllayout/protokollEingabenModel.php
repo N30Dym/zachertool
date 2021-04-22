@@ -22,7 +22,7 @@ class protokollEingabenModel extends Model
 	{
 		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{	
-			return($this->where("id", $id)->findAll());
+			return($this->where("id", $id)->first());
 		}
 		else
 		{

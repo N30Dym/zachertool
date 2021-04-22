@@ -12,6 +12,10 @@ use App\Models\protokolllayout\protokollKapitelModel;
 use App\Models\protokolllayout\protokollLayoutsModel;
 use App\Models\protokolllayout\protokollTypenModel;
 use App\Models\protokolllayout\protokollUnterkapitelModel;
+use App\Models\flugzeuge\flugzeugeModel;
+use App\Models\muster\musterModel;
+use App\Models\piloten\pilotenModel;
+use App\Models\piloten\pilotenDetailsModel;
 //use App\Models\protokolllayout\;
 $session = session();
 
@@ -86,14 +90,23 @@ class Protokolleingabecontroller extends Controller
         }        
         
         $datenHeader = [
-                'title'         => $_SESSION['protokollInformationen']['titel'],
-                'description'   => "Das übliche halt"
+            'title'                             => $_SESSION['protokollInformationen']['titel'],
+            'description'                       => "Das übliche halt"
+        ];
+        $datenInhalt = [
+            'kapitelDatenArray'         => $this->getKapitelNachKapitelID($_SESSION['kapitelIDs'][$kapitelNummer]),
+            'unterkapitelDatenArray'    => $this->getUnterkapitel($kapitelNummer),
+            'eingabenDatenArray'        => $this->getEingaben($kapitelNummer),
+            'inputsDatenArray'          => $this->getInputs($kapitelNummer),
+            /*'auswahllistenDatenArray'   => $this->
+            'flugzeugeDatenArray'       => $this->getFlugzeuge(),
+            'pilotenDatenArray'         => $this->getPiloten()   */            
         ];
         
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollEingabeScript');
         echo view('templates/navbarView');
-        echo view('protokolle/protokollEingabeView');
+        echo view('protokolle/protokollEingabeView', $datenInhalt);
         echo view('templates/footerView');     
     }	
 
@@ -106,6 +119,9 @@ class Protokolleingabecontroller extends Controller
     {
         if($_SESSION['aktuellesKapitel'] > 0)
         {
+            $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
+            $protokollLayoutsModel              = new protokollLayoutsModel();
+            $protokollKapitelModel              = new protokollKapitelModel();
             
             isset($_SESSION['gewaehlteProtokollTypen']) ? null : $_SESSION['gewaehlteProtokollTypen'] = $this->request->getPost("protokollTypen");
 
@@ -119,17 +135,6 @@ class Protokolleingabecontroller extends Controller
 
             if( ! isset($_SESSION['protokollLayout']) && $this->request->getMethod() !== "POST")
             {
-                $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
-                $protokollLayoutsModel              = new protokollLayoutsModel();
-                $auswahllistenModel                 = new auswahllistenModel();
-                $inputsModel                        = new inputsModel();
-                $protokollEingabenModel             = new protokollEingabenModel();
-                $protokollInputsModel               = new protokollInputsModel();
-                $protokollKapitelModel              = new protokollKapitelModel();        
-                $protokollTypenModel                = new protokollTypenModel();
-                $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
-
-
                 $_SESSION['kapitelNummern'] = [];
                 $_SESSION['kapitelBezeichnungen']   = [];
                 
@@ -145,14 +150,13 @@ class Protokolleingabecontroller extends Controller
                 {
                         // Laden des Protokoll Layouts für die entsprechende ProtokollID das sind sehr viele Reihen
                     $protokollLayout = $protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID);
-                    //var_dump($protokollLayout);
 
                         // Für jede Zeile des Layouts wird nun die Kapitelnummer und Kapitelname rausgesucht und anschließend das 
                         // Array $_SESSION['protokollLayout'] bestückt
                     foreach($protokollLayout as $protokollItem)
                     {
                         $kapitelNummer = $protokollKapitelModel->getProtokollKapitelNummerNachID($protokollItem["protokollKapitelID"]);
-                        //var_dump ($protokollItem['id']);
+                        $_SESSION['kapitelIDs'][$kapitelNummer['kapitelNummer']] = $protokollItem["protokollKapitelID"];
                         if( ! in_array($kapitelNummer['kapitelNummer'], $_SESSION['kapitelNummern']))
                         {                          
                             array_push($_SESSION['kapitelNummern'], $kapitelNummer['kapitelNummer']);
@@ -160,19 +164,121 @@ class Protokolleingabecontroller extends Controller
                             $_SESSION['kapitelBezeichnungen'][$kapitelNummer['kapitelNummer']] = $kapitelBezeichnung['bezeichnung'];
                         }
                         
-                        $_SESSION['protokollLayout'][$kapitelNummer['kapitelNummer']][$protokollItem['protokollUnterkapitelID']][$protokollItem['protokollEingabeID']] = [$protokollItem['protokollInputID']];
-                   
+                        if($protokollItem['protokollUnterkapitelID'])
+                        {
+                            $_SESSION['protokollLayout'][$kapitelNummer['kapitelNummer']][$protokollItem['protokollUnterkapitelID']][$protokollItem['protokollEingabeID']][$protokollItem['protokollInputID']] = [];                   
+                        }
+                        else
+                        {
+                            $_SESSION['protokollLayout'][$kapitelNummer['kapitelNummer']][0][$protokollItem['protokollEingabeID']][$protokollItem['protokollInputID']] = [];                   
+                        }
                     }
-
-
-                } 
+               } 
                 asort($_SESSION['kapitelNummern']);
-                var_dump($_SESSION['protokollLayout']);
+                //var_dump($_SESSION['protokollLayout']);
+            }
+        }   
+    }
+    
+    protected function getKapitelNachKapitelID($protokollKapitelID)
+    {
+        $protokollKapitelModel = new protokollKapitelModel();
+        
+        return $protokollKapitelModel->getProtokollKapitelNachID($protokollKapitelID);     
+    }
+    
+    protected function getUnterkapitel($kapitelNummer)
+    {
+
+        $protokollUnterkapitelModel = new protokollUnterkapitelModel();
+        
+        $temporaeresUnterkapitelArray = [];
+
+        if(!isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
+        {           
+            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
+            {
+                $temporaeresUnterkapitelArray[$key] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($key);   
             }
         }
-
-            
+        return $temporaeresUnterkapitelArray;
         
-         
+        
     }
+    
+    protected function getEingaben($kapitelNummer) 
+    {
+        $protokollEingabenModel = new protokollEingabenModel();
+        
+        $temporaeresEingabeArray = [];
+
+        if(isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
+        {           
+            foreach($_SESSION['protokollLayout'][$kapitelNummer][0] as $key => $eingaben)
+            {
+                $temporaeresEingabeArray[$key] = $protokollEingabenModel->getProtokollEingabeNachID($key);
+            }
+        }
+        else
+        {
+            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
+            {
+                foreach($_SESSION['protokollLayout'][$kapitelNummer][$key] as $index => $eingaben)
+                {
+                    $temporaeresEingabeArray[$index] = $protokollEingabenModel->getProtokollEingabeNachID($index);
+                }
+            }
+        }
+        return $temporaeresEingabeArray;             
+    }
+    
+    protected function getInputs($kapitelNummer)
+    {
+        $inputsModel            = new inputsModel();
+        $protokollInputsModel   = new protokollInputsModel();        
+        $protokollEingabenModel = new protokollEingabenModel();       
+        $temporaeresInputArray  = [];
+
+        if(isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
+        {           
+            foreach($_SESSION['protokollLayout'][$kapitelNummer][0] as $key => $unterkapitel)
+            {
+                foreach($_SESSION['protokollLayout'][$kapitelNummer][0][$key] as $index => $eingaben)
+                {
+                    $temporaeresInputArray[$index] = $protokollInputsModel->getProtokollInputNachID($index);
+                }
+            }
+        }
+        else
+        {
+            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
+            {
+                foreach($_SESSION['protokollLayout'][$kapitelNummer][$key] as $index => $eingaben)
+                {
+                    foreach($_SESSION['protokollLayout'][$kapitelNummer][$key][$index] as $kartoffel => $eingaben)
+                    {
+                        $temporaeresInputArray[$kartoffel] = $protokollInputsModel->getProtokollInputNachID($kartoffel);
+                    }
+                }
+            }
+        }
+        return $temporaeresInputArray;  
+    }
+    
+    protected function getAuswahllisten($kapitelNummer) 
+    {
+        $auswahllistenModel = new auswahllistenModel();
+
+    }
+    
+    protected function getFlugzeuge()
+    {
+        $flugzeugeModel = new flugzeugeModel();
+        $musterModel    = new musterModel();
+    }
+    
+    protected function getPiloten()
+    {
+        
+    }   
 }

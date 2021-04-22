@@ -32,6 +32,19 @@ class protokollKapitelModel extends Model
 		}
 	}
 	
+	public function getProtokollKapitelNachID($id)
+	{
+		if(is_int(trim($id)) OR is_numeric(trim($id)))
+		{	
+			return($this->where("id", $id)->first());
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+	
 	
 	public function getProtokollKapitelNummerNachID($id)
 	{

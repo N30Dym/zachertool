@@ -23,23 +23,70 @@
     
     <div class="col-10">
 
-        <h3 class="m-4"><?= $_SESSION['aktuellesKapitel'] . " - " . $_SESSION['kapitelBezeichnungen'][$_SESSION['aktuellesKapitel']] ?></h3>
-
-        <!--<form class="needs-validation" method="post" action="/flugzeuge/flugzeugNeu/15" novalidate=""><!--  novalidate="" nur zum testen!! -->
-        <?=  form_open('', ["class" => "needs-validation"]) ?>
+        <h3 class="m-4"><?= $_SESSION['aktuellesKapitel'] . ". - " . $_SESSION['kapitelBezeichnungen'][$_SESSION['aktuellesKapitel']] ?></h3>
         
+        <!--<form class="needs-validation" method="post" action="/flugzeuge/flugzeugNeu/15" novalidate=""><!--  novalidate="" nur zum testen!! -->
+        
+        
+        <?= form_open('', ["class" => "needs-validation"]) ?>
+        
+        <div class="row g-3">
+            
         <?php 
-            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $unterkapitel)
-            {
-                foreach($unterkapitel as $eingabe)
+            //var_dump($_SESSION['kapitelIDs']);
+            
+            switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]) : 
+                case 1: 
+                    var_dump($kapitelDatenArray);
+                    var_dump($unterkapitelDatenArray);
+                    
+                    ?>
+                    <div class="col-sm-7">
+                        <label for="datum" class="form-label">Datum des ersten Fluges</label>
+                        <input type="date" class="form-control" name="datum" id="datum" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
+                    </div>
+
+                    <div class="col-2">
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="flugzeit" class="form-label">Gesamtflugzeit</label>
+                        <input type="time" class="form-control" name="flugzeit" id="flugzeit" placeholder="" value="<?= isset($_SESSION["protokollInformationen"]["flugzeit"]) ? $_SESSION["protokollInformationen"]["flugzeit"] : "" ?>"> 
+                    </div>
+
+                    <div class="col-12 ms-3">
+                        <small class="text-muted">Bitte nur das Datum des ersten Fluges angeben und die Gesamtzeit aller Flüge, die für das Protokoll geflogen wurden</small>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="bemerkung" class="form-label">Anmerkungen zum Protokoll (optional)</label>
+                        <input name="bemerkung" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll" value="<?= isset($_SESSION["protokollInformationen"]["bemerkung"]) ? $_SESSION["protokollInformationen"]["bemerkung"] : "" ?>" >
+                    </div>
+
+                    <h4 class="m-4">Wähle aus was du eingeben möchtest</h4>
+
+        <?php
+                break;
+            default:
+                //var_dump($kapitelDatenArray);
+                
+                
+                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $keyUnterkapitel => $unterkapitel)
                 {
-                    foreach($eingabe as $input)
+                    
+                     
+                    foreach($unterkapitel as $keyEingaben => $eingabe)
                     {
-                        echo "Hi";
+                        //var_dump($eingabenDatenArray[$keyEingaben]);
+
+                        foreach($eingabe as $keyInput => $input)
+                        {
+                           var_dump($inputsDatenArray[$keyInput]);
+                        }
                     }
                 }
-            }
 
+            endswitch;
             ?>
 
         <div class="mt-5 row"> 

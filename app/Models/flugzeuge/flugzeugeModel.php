@@ -39,4 +39,9 @@ class flugzeugeModel extends Model
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
+	
+	public function getAlleSichtbarenFlugzeuge()
+	{			
+		return($this->where("sichtbar", 1)->findAll());	
+	}
 }

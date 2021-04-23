@@ -176,7 +176,18 @@
 <!---------------------------------------->   
 <!--          Beladungszustand          --> 
 <!----------------------------------------> 
-        <?= var_dump($hebelarmDatenArray) ?>
+    <div class="col-1">
+    </div>
+
+    <div class="col-10">
+        Test
+         <?= var_dump($hebelarmDatenArray) ?>
+    </div>
+
+    <div class="col-1">
+    </div>
+
+
             
      <?php $_SESSION['eingegebeneDaten'][12]["wert"] = "Hal7lo" ?>
      <?php

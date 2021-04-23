@@ -16,18 +16,25 @@ class auswahllistenModel extends Model
     protected $primaryKey 		= 'id';
 	//protected $validationRules 	= '';
 	
-	//protected $allowedFields 	= ['eingabeID ', 'option'];
+	//protected $allowedFields 	= ['protokollInputID ', 'option'];
 
-	public function getAuswahllisteNachEingabeID($eingabeID)
+	public function getDistinctAlleProtokollInputIDs()
 	{
-		if(is_int(trim($eingabeID)) OR is_numeric(trim($eingabeID)))
-		{	
-			return($this->where("eingabeID", $eingabeID)->findAll());
-		}
-		else
-		{
-			// Fehler beim übergebenen Wert
-			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-		}
+		return $this->distinct("protokollInputID")->findAll();
 	}
+
+    public function getAuswahllisteNachProtokollInputID($protokollInputID) 
+    {
+        if(is_int(trim($protokollInputID)) OR is_numeric(trim($protokollInputID)))
+        {	
+            return $this->where("protokollInputID", $protokollInputID)->findAll();
+        }
+        else
+        {
+            // Fehler beim übergebenen Wert
+            throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+        }
+    }
+    
+
 }

@@ -18,4 +18,8 @@ class flugzeugHebelarmeModel extends Model
 	
 	protected $allowedFields 	= ['flugzeugID', 'beschreibung', 'hebelarm'];
 	
+	public function getHebelarmeNachFlugzeugID($flugzeugID)
+	{
+		return $this->where('flugzeugID', $flugzeugID)->findAll();
+	}
 }

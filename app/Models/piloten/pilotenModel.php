@@ -12,15 +12,20 @@ class pilotenModel extends Model
 	 * Tabelle piloten
 	 */
     protected $DBGroup 			= 'pilotenDB';
-	protected $table     		= 'piloten';
+    protected $table     		= 'piloten';
     protected $primaryKey 		= 'id';
-	protected $createdField  	= 'erstelltAm';
-	//protected $validationRules 	= '';
-	
-	//protected $allowedFields 	= ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar'];
-	
-	public function getAlleSichtbarePiloten()
-	{
-		return $this->where("sichtbar", 1)->findAll();
-	}
+    protected $createdField  	= 'erstelltAm';
+    //protected $validationRules 	= '';
+
+    //protected $allowedFields 	= ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar'];
+
+    public function getAlleSichtbarePiloten()
+    {
+        return $this->where("sichtbar", 1)->findAll();
+    }
+
+    public function getPilotenDiesesJahr()
+    {
+        return $this->where(["geaendertAm >" => date("Y-m-d", strtotime("-24 months")), "sichtbar" => 1])->findAll();
+    }
 }

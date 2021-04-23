@@ -55,20 +55,10 @@ class Protokolleingabecontroller extends Controller
                 'title' 		=> $_SESSION['protokollInformationen']['titel'],
                 'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
             ];
-
-            echo view('templates/headerView', $datenHeader);
-            echo view('protokolle/scripts/protokollErsteSeiteScript');
-            echo view('templates/navbarView');
-            echo view('protokolle/protokollErsteSeiteView', $datenInhalt);
-            echo view('templates/footerView');
             
-            unset(
-                $_SESSION['gewaehlteProtokollTypen'],
-                $_SESSION['protokollInformationen'],
-                $_SESSION['protokollLayout'],
-                $_SESSION['kapitelNummern'],
-                $_SESSION['kapitelBezeichnungen'],
-            );
+            $this->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
+            
+            $this->sessionDatenLöschen();
         }
 
 
@@ -93,21 +83,18 @@ class Protokolleingabecontroller extends Controller
             'title'                             => $_SESSION['protokollInformationen']['titel'],
             'description'                       => "Das übliche halt"
         ];
+        
         $datenInhalt = [
-            'kapitelDatenArray'         => $this->getKapitelNachKapitelID($_SESSION['kapitelIDs'][$kapitelNummer]),
-            'unterkapitelDatenArray'    => $this->getUnterkapitel($kapitelNummer),
-            'eingabenDatenArray'        => $this->getEingaben($kapitelNummer),
-            'inputsDatenArray'          => $this->getInputs($kapitelNummer),
-            /*'auswahllistenDatenArray'   => $this->
-            'flugzeugeDatenArray'       => $this->getFlugzeuge(),
-            'pilotenDatenArray'         => $this->getPiloten()   */            
+            'kapitelDatenArray'         => $this->getKapitelNachKapitelID(),
+            'unterkapitelDatenArray'    => $this->getUnterkapitel(),                  
         ];
         
-        echo view('templates/headerView', $datenHeader);
-        echo view('protokolle/scripts/protokollEingabeScript');
-        echo view('templates/navbarView');
-        echo view('protokolle/protokollEingabeView', $datenInhalt);
-        echo view('templates/footerView');     
+        $datenHeader += $this->datenZumDatenInhaltHinzufügen();
+        
+        //var_dump($datenHeader);
+        
+        $this->ladenDesProtokollEingabeView($datenHeader, $datenInhalt);
+    
     }	
 
     public function speichern($protokollSpeicherID = null)
@@ -180,94 +167,88 @@ class Protokolleingabecontroller extends Controller
         }   
     }
     
-    protected function getKapitelNachKapitelID($protokollKapitelID)
+        /*
+         * 
+         * 
+         * 
+         * @return: array 
+         */
+    
+    protected function getKapitelNachKapitelID()
     {
         $protokollKapitelModel = new protokollKapitelModel();
         
-        return $protokollKapitelModel->getProtokollKapitelNachID($protokollKapitelID);     
+        return $protokollKapitelModel->getProtokollKapitelNachID($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]);     
     }
     
-    protected function getUnterkapitel($kapitelNummer)
+    protected function getUnterkapitel()
     {
-
         $protokollUnterkapitelModel = new protokollUnterkapitelModel();
         
         $temporaeresUnterkapitelArray = [];
-
-        if(!isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
-        {           
-            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
+        
+       // if(!isset($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][0]))
+       // {           
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $key => $unterkapitel)
             {
                 $temporaeresUnterkapitelArray[$key] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($key);   
             }
-        }
+        //}
+       
         return $temporaeresUnterkapitelArray;
         
         
     }
     
-    protected function getEingaben($kapitelNummer) 
+    protected function getEingaben() 
     {
         $protokollEingabenModel = new protokollEingabenModel();
         
         $temporaeresEingabeArray = [];
 
-        if(isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
-        {           
-            foreach($_SESSION['protokollLayout'][$kapitelNummer][0] as $key => $eingaben)
-            {
-                $temporaeresEingabeArray[$key] = $protokollEingabenModel->getProtokollEingabeNachID($key);
-            }
-        }
-        else
+
+        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $i => $unterkapitel)
         {
-            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i] as $j => $eingaben)
             {
-                foreach($_SESSION['protokollLayout'][$kapitelNummer][$key] as $index => $eingaben)
-                {
-                    $temporaeresEingabeArray[$index] = $protokollEingabenModel->getProtokollEingabeNachID($index);
-                }
+
+                $temporaeresEingabeArray[$j] = $protokollEingabenModel->getProtokollEingabeNachID($j);
             }
         }
-        return $temporaeresEingabeArray;             
+
+        return $temporaeresEingabeArray;            
     }
     
-    protected function getInputs($kapitelNummer)
+    protected function getInputs()
     {
         $inputsModel            = new inputsModel();
         $protokollInputsModel   = new protokollInputsModel();        
-        $protokollEingabenModel = new protokollEingabenModel();       
+      
         $temporaeresInputArray  = [];
 
-        if(isset($_SESSION['protokollLayout'][$kapitelNummer][0]))
-        {           
-            foreach($_SESSION['protokollLayout'][$kapitelNummer][0] as $key => $unterkapitel)
+        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $i => $unterkapitel)
+        {
+            echo "UnterkapitelID: ". $i;
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i] as $j => $eingaben)
             {
-                foreach($_SESSION['protokollLayout'][$kapitelNummer][0][$key] as $index => $eingaben)
+                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i][$j] as $k => $eingaben)
                 {
-                    $temporaeresInputArray[$index] = $protokollInputsModel->getProtokollInputNachID($index);
+                    $temporaeresInputArray[$k] = $protokollInputsModel->getProtokollInputNachID($k);
                 }
             }
         }
-        else
+
+        foreach($temporaeresInputArray as $i => $InputArray)
         {
-            foreach($_SESSION['protokollLayout'][$kapitelNummer] as $key => $unterkapitel)
-            {
-                foreach($_SESSION['protokollLayout'][$kapitelNummer][$key] as $index => $eingaben)
-                {
-                    foreach($_SESSION['protokollLayout'][$kapitelNummer][$key][$index] as $kartoffel => $eingaben)
-                    {
-                        $temporaeresInputArray[$kartoffel] = $protokollInputsModel->getProtokollInputNachID($kartoffel);
-                    }
-                }
-            }
+            $temporaeresInputArray[$i]['inputTyp'] = $inputsModel->getInputNachID($InputArray['inputID']);
         }
         return $temporaeresInputArray;  
     }
     
-    protected function getAuswahllisten($kapitelNummer) 
+    protected function getAuswahllisten() 
     {
         $auswahllistenModel = new auswahllistenModel();
+        
 
     }
     
@@ -275,10 +256,81 @@ class Protokolleingabecontroller extends Controller
     {
         $flugzeugeModel = new flugzeugeModel();
         $musterModel    = new musterModel();
+        $flugzeuge = $flugzeugeModel->getAlleSichtbarenFlugzeuge();
+        $temporaeresFlugzeugArray = [];
+        
+        foreach($flugzeuge as $i => $flugzeug)
+        {
+            $temporaeresFlugzeugArray[$i]['id']                 = $flugzeug['id'];
+            $temporaeresFlugzeugArray[$i]['kennung']            = $flugzeug['kennung'];
+            
+            $temporaeresMusterArray                             = $musterModel->getMusterNachID($flugzeug['musterID']);
+            $temporaeresFlugzeugArray[$i]['musterSchreibweise'] = $temporaeresMusterArray['musterSchreibweise'];
+            $temporaeresFlugzeugArray[$i]['musterZusatz']       = $temporaeresMusterArray['musterZusatz'];
+            $temporaeresFlugzeugArray[$i]['musterKlarname']     = $temporaeresMusterArray['musterKlarname'];
+        }
+        array_sort_by_multiple_keys($temporaeresFlugzeugArray, ["musterKlarname" => SORT_ASC]);
+        return $temporaeresFlugzeugArray;
     }
     
     protected function getPiloten()
     {
         
     }   
+    
+    protected function datenZumDatenInhaltHinzufügen() 
+    {
+        $inhaltZusatz = [];
+        echo $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']];
+        switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']])
+        {
+            case 1:
+                $inhaltZusatz['flugzeugeDatenArray'] = $this->getFlugzeuge();
+                break;
+            case 2:
+                $inhaltZusatz['pilotenDatenArray'] = []; //$this->getPiloten();
+                break;
+            case 3:
+                // if(isset($_SESSION['flugzeugID']
+                // $datenInhalt += Flugzeughebelarm
+                break;
+            default:
+                $inhaltZusatz = [
+                    'eingabenDatenArray'        => $this->getEingaben(),
+                    'inputsDatenArray'          => $this->getInputs(),
+                    //'auswahllistenDatenArray'   => $this->
+                ];
+        }
+        
+        return $inhaltZusatz;
+    }
+    
+    protected function ladenDesErsteSeiteView($datenHeader, $datenInhalt)
+    {
+        echo view('templates/headerView', $datenHeader);
+        echo view('protokolle/scripts/protokollErsteSeiteScript');
+        echo view('templates/navbarView');
+        echo view('protokolle/protokollErsteSeiteView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
+    protected function ladenDesProtokollEingabeView($datenHeader, $datenInhalt)
+    {             
+        echo view('templates/headerView', $datenHeader);
+        echo view('protokolle/scripts/protokollEingabeScript');
+        echo view('templates/navbarView');
+        echo view('protokolle/protokollEingabeView', $datenInhalt);
+        echo view('templates/footerView');  
+    }
+    
+    protected function sessionDatenLöschen()
+    {
+        unset(
+            $_SESSION['gewaehlteProtokollTypen'],
+            $_SESSION['protokollInformationen'],
+            $_SESSION['protokollLayout'],
+            $_SESSION['kapitelNummern'],
+            $_SESSION['kapitelBezeichnungen'],
+        );
+    }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Apr 2021 um 10:49
+-- Erstellungszeit: 25. Apr 2021 um 08:57
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -32,7 +32,7 @@ USE `testzachern_protokolllayout`;
 DROP TABLE IF EXISTS `auswahllisten`;
 CREATE TABLE `auswahllisten` (
   `id` int(11) NOT NULL,
-  `eingabeID` int(11) NOT NULL,
+  `protokollInputID` int(11) NOT NULL,
   `option` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -40,7 +40,7 @@ CREATE TABLE `auswahllisten` (
 -- Daten für Tabelle `auswahllisten`
 --
 
-INSERT INTO `auswahllisten` (`id`, `eingabeID`, `option`) VALUES
+INSERT INTO `auswahllisten` (`id`, `protokollInputID`, `option`) VALUES
 (1, 33, 'zu klein'),
 (2, 33, 'klein'),
 (3, 33, 'angenehm'),
@@ -400,6 +400,7 @@ DROP TABLE IF EXISTS `protokoll_layouts`;
 CREATE TABLE `protokoll_layouts` (
   `id` int(11) NOT NULL,
   `protokollID` int(11) NOT NULL,
+  `kapitelNummer` int(11) NOT NULL,
   `protokollKapitelID` int(11) DEFAULT NULL,
   `protokollUnterkapitelID` int(11) DEFAULT NULL,
   `protokollEingabeID` int(11) DEFAULT NULL,
@@ -410,108 +411,108 @@ CREATE TABLE `protokoll_layouts` (
 -- Daten für Tabelle `protokoll_layouts`
 --
 
-INSERT INTO `protokoll_layouts` (`id`, `protokollID`, `protokollKapitelID`, `protokollUnterkapitelID`, `protokollEingabeID`, `protokollInputID`) VALUES
-(1, 1, 1, NULL, NULL, NULL),
-(2, 1, 2, NULL, NULL, NULL),
-(3, 1, 3, NULL, NULL, NULL),
-(4, 1, 4, NULL, 1, 1),
-(5, 1, 5, 1, 2, 2),
-(6, 1, 5, 1, 2, 94),
-(7, 1, 5, 1, 4, 4),
-(8, 1, 5, 1, 4, 95),
-(9, 1, 5, 2, 7, 7),
-(10, 1, 5, 2, 6, 6),
-(11, 1, 5, 3, 8, 8),
-(12, 1, 5, 3, 9, 9),
-(13, 1, 6, NULL, 10, 10),
-(14, 1, 6, NULL, 11, 11),
-(15, 1, 6, NULL, 11, 12),
-(16, 1, 6, NULL, 11, 13),
-(17, 1, 6, NULL, 12, 14),
-(18, 1, 6, NULL, 12, 15),
-(19, 1, 6, NULL, 12, 16),
-(20, 1, 7, 4, 13, 17),
-(21, 1, 7, 4, 14, 18),
-(22, 1, 7, 4, 15, 19),
-(23, 1, 7, 5, 16, 20),
-(24, 1, 7, 5, 17, 21),
-(25, 1, 7, 5, 18, 22),
-(26, 1, 7, 6, 19, 23),
-(27, 1, 7, 6, 20, 24),
-(28, 1, 7, 6, 21, 25),
-(29, 1, 8, NULL, 22, 26),
-(30, 1, 8, NULL, 23, 27),
-(31, 1, 9, NULL, 24, 28),
-(32, 1, 10, NULL, 25, 29),
-(33, 1, 10, NULL, 25, 30),
-(34, 1, 10, NULL, 26, 31),
-(35, 1, 10, NULL, 26, 32),
-(36, 1, 10, NULL, 27, 33),
-(37, 1, 11, NULL, 28, 34),
-(38, 1, 11, NULL, 28, 35),
-(39, 1, 11, NULL, 29, 36),
-(40, 1, 11, NULL, 29, 37),
-(41, 1, 12, NULL, 32, 38),
-(42, 1, 12, NULL, 32, 96),
-(43, 1, 12, NULL, 34, 40),
-(44, 1, 12, NULL, 35, 41),
-(45, 1, 12, NULL, 36, 42),
-(46, 1, 12, NULL, 36, 99),
-(47, 1, 13, NULL, 38, 44),
-(48, 1, 13, NULL, 39, 45),
-(49, 1, 13, NULL, 40, 46),
-(50, 1, 14, NULL, 41, 47),
-(51, 1, 14, NULL, 42, 48),
-(52, 1, 15, NULL, 43, 49),
-(53, 1, 15, NULL, 44, 50),
-(54, 1, 15, NULL, 45, 51),
-(55, 1, 16, NULL, 46, 52),
-(56, 1, 16, NULL, 47, 53),
-(57, 1, 16, NULL, 48, 54),
-(58, 1, 17, NULL, 49, 55),
-(59, 1, 17, NULL, 50, 56),
-(60, 1, 17, NULL, 51, 57),
-(61, 1, 17, NULL, 52, 58),
-(62, 1, 17, NULL, 53, 59),
-(63, 1, 17, NULL, 54, 60),
-(64, 1, 17, NULL, 55, 61),
-(65, 1, 17, NULL, 56, 62),
-(66, 1, 17, NULL, 57, 63),
-(67, 1, 17, NULL, 58, 64),
-(68, 1, 17, NULL, 59, 65),
-(69, 1, 17, NULL, 60, 66),
-(70, 1, 17, NULL, 61, 67),
-(71, 1, 17, NULL, 62, 68),
-(83, 2, 1, NULL, NULL, NULL),
-(84, 2, 2, NULL, NULL, NULL),
-(85, 2, 3, NULL, NULL, NULL),
-(86, 2, 18, NULL, 63, 69),
-(87, 2, 19, NULL, 64, 70),
-(88, 2, 19, NULL, 64, 71),
-(89, 2, 19, NULL, 65, 72),
-(90, 2, 19, NULL, 65, 73),
-(91, 2, 19, NULL, 66, 74),
-(92, 2, 19, NULL, 67, 75),
-(93, 2, 20, 7, 68, 76),
-(94, 2, 20, 7, 69, 77),
-(95, 2, 20, 8, 70, 78),
-(96, 2, 20, 8, 71, 79),
-(97, 1, 17, NULL, 49, 80),
-(98, 1, 17, NULL, 50, 81),
-(99, 1, 17, NULL, 51, 82),
-(100, 1, 17, NULL, 52, 83),
-(101, 1, 17, NULL, 53, 84),
-(102, 1, 17, NULL, 54, 85),
-(103, 1, 17, NULL, 55, 86),
-(104, 1, 17, NULL, 56, 87),
-(105, 1, 17, NULL, 57, 88),
-(106, 1, 17, NULL, 58, 89),
-(107, 1, 17, NULL, 59, 90),
-(108, 1, 17, NULL, 60, 91),
-(109, 1, 17, NULL, 61, 92),
-(110, 1, 17, NULL, 62, 93),
-(111, 1, 12, NULL, 34, 97),
-(113, 1, 12, NULL, 35, 98);
+INSERT INTO `protokoll_layouts` (`id`, `protokollID`, `kapitelNummer`, `protokollKapitelID`, `protokollUnterkapitelID`, `protokollEingabeID`, `protokollInputID`) VALUES
+(1, 1, 2, 1, NULL, NULL, NULL),
+(2, 1, 3, 2, NULL, NULL, NULL),
+(3, 1, 4, 3, NULL, NULL, NULL),
+(4, 1, 5, 4, NULL, 1, 1),
+(5, 1, 6, 5, 1, 2, 2),
+(6, 1, 6, 5, 1, 2, 94),
+(7, 1, 6, 5, 1, 4, 4),
+(8, 1, 6, 5, 1, 4, 95),
+(9, 1, 6, 5, 2, 7, 7),
+(10, 1, 6, 5, 2, 6, 6),
+(11, 1, 6, 5, 3, 8, 8),
+(12, 1, 6, 5, 3, 9, 9),
+(13, 1, 7, 6, NULL, 10, 10),
+(14, 1, 7, 6, NULL, 11, 11),
+(15, 1, 7, 6, NULL, 11, 12),
+(16, 1, 7, 6, NULL, 11, 13),
+(17, 1, 7, 6, NULL, 12, 14),
+(18, 1, 7, 6, NULL, 12, 15),
+(19, 1, 7, 6, NULL, 12, 16),
+(20, 1, 8, 7, 4, 13, 17),
+(21, 1, 8, 7, 4, 14, 18),
+(22, 1, 8, 7, 4, 15, 19),
+(23, 1, 8, 7, 5, 16, 20),
+(24, 1, 8, 7, 5, 17, 21),
+(25, 1, 8, 7, 5, 18, 22),
+(26, 1, 8, 7, 6, 19, 23),
+(27, 1, 8, 7, 6, 20, 24),
+(28, 1, 8, 7, 6, 21, 25),
+(29, 1, 9, 8, NULL, 22, 26),
+(30, 1, 9, 8, NULL, 23, 27),
+(31, 1, 10, 9, NULL, 24, 28),
+(32, 1, 11, 10, NULL, 25, 29),
+(33, 1, 11, 10, NULL, 25, 30),
+(34, 1, 11, 10, NULL, 26, 31),
+(35, 1, 11, 10, NULL, 26, 32),
+(36, 1, 11, 10, NULL, 27, 33),
+(37, 1, 12, 11, NULL, 28, 34),
+(38, 1, 12, 11, NULL, 28, 35),
+(39, 1, 12, 11, NULL, 29, 36),
+(40, 1, 12, 11, NULL, 29, 37),
+(41, 1, 13, 12, NULL, 32, 38),
+(42, 1, 13, 12, NULL, 32, 96),
+(43, 1, 13, 12, NULL, 34, 40),
+(44, 1, 13, 12, NULL, 35, 41),
+(45, 1, 13, 12, NULL, 36, 42),
+(46, 1, 13, 12, NULL, 36, 99),
+(47, 1, 14, 13, NULL, 38, 44),
+(48, 1, 14, 13, NULL, 39, 45),
+(49, 1, 14, 13, NULL, 40, 46),
+(50, 1, 19, 14, NULL, 41, 47),
+(51, 1, 19, 14, NULL, 42, 48),
+(52, 1, 20, 15, NULL, 43, 49),
+(53, 1, 20, 15, NULL, 44, 50),
+(54, 1, 20, 15, NULL, 45, 51),
+(55, 1, 21, 16, NULL, 46, 52),
+(56, 1, 21, 16, NULL, 47, 53),
+(57, 1, 21, 16, NULL, 48, 54),
+(58, 1, 22, 17, NULL, 49, 55),
+(59, 1, 22, 17, NULL, 50, 56),
+(60, 1, 22, 17, NULL, 51, 57),
+(61, 1, 22, 17, NULL, 52, 58),
+(62, 1, 22, 17, NULL, 53, 59),
+(63, 1, 22, 17, NULL, 54, 60),
+(64, 1, 22, 17, NULL, 55, 61),
+(65, 1, 22, 17, NULL, 56, 62),
+(66, 1, 22, 17, NULL, 57, 63),
+(67, 1, 22, 17, NULL, 58, 64),
+(68, 1, 22, 17, NULL, 59, 65),
+(69, 1, 22, 17, NULL, 60, 66),
+(70, 1, 22, 17, NULL, 61, 67),
+(71, 1, 22, 17, NULL, 62, 68),
+(83, 2, 2, 1, NULL, NULL, NULL),
+(84, 2, 3, 2, NULL, NULL, NULL),
+(85, 2, 4, 3, NULL, NULL, NULL),
+(86, 2, 15, 18, NULL, 63, 69),
+(87, 2, 16, 19, NULL, 64, 70),
+(88, 2, 16, 19, NULL, 64, 71),
+(89, 2, 16, 19, NULL, 65, 72),
+(90, 2, 16, 19, NULL, 65, 73),
+(91, 2, 16, 19, NULL, 66, 74),
+(92, 2, 16, 19, NULL, 67, 75),
+(93, 2, 17, 20, 7, 68, 76),
+(94, 2, 17, 20, 7, 69, 77),
+(95, 2, 17, 20, 8, 70, 78),
+(96, 2, 17, 20, 8, 71, 79),
+(97, 1, 22, 17, NULL, 49, 80),
+(98, 1, 22, 17, NULL, 50, 81),
+(99, 1, 22, 17, NULL, 51, 82),
+(100, 1, 22, 17, NULL, 52, 83),
+(101, 1, 22, 17, NULL, 53, 84),
+(102, 1, 22, 17, NULL, 54, 85),
+(103, 1, 22, 17, NULL, 55, 86),
+(104, 1, 22, 17, NULL, 56, 87),
+(105, 1, 22, 17, NULL, 57, 88),
+(106, 1, 22, 17, NULL, 58, 89),
+(107, 1, 22, 17, NULL, 59, 90),
+(108, 1, 22, 17, NULL, 60, 91),
+(109, 1, 22, 17, NULL, 61, 92),
+(110, 1, 22, 17, NULL, 62, 93),
+(111, 1, 22, 12, NULL, 34, 97),
+(113, 1, 22, 12, NULL, 35, 98);
 
 -- --------------------------------------------------------
 
@@ -523,7 +524,7 @@ DROP TABLE IF EXISTS `protokoll_typen`;
 CREATE TABLE `protokoll_typen` (
   `id` int(11) NOT NULL,
   `bezeichnung` varchar(255) NOT NULL,
-  `verfügbar` tinyint(1) NOT NULL,
+  `verfuegbar` tinyint(1) NOT NULL,
   `erstelltAm` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -531,9 +532,9 @@ CREATE TABLE `protokoll_typen` (
 -- Daten für Tabelle `protokoll_typen`
 --
 
-INSERT INTO `protokoll_typen` (`id`, `bezeichnung`, `verfügbar`, `erstelltAm`) VALUES
-(1, 'Zachern ohne \\\"Statische\\\"', 1, '2019-07-08 17:59:59'),
-(2, '\\\"Statische\\\"', 1, '2019-07-08 17:59:59');
+INSERT INTO `protokoll_typen` (`id`, `bezeichnung`, `verfuegbar`, `erstelltAm`) VALUES
+(1, 'Zacherprotokoll ohne \"Statische\"', 1, '2019-07-08 17:59:59'),
+(2, '\"Statische\"', 1, '2019-07-08 17:59:59');
 
 -- --------------------------------------------------------
 
@@ -574,7 +575,7 @@ INSERT INTO `protokoll_unterkapitel` (`id`, `protokollTypID`, `unterkapitelNumme
 --
 ALTER TABLE `auswahllisten`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `EingabeId` (`eingabeID`);
+  ADD KEY `EingabeId` (`protokollInputID`);
 
 --
 -- Indizes für die Tabelle `inputs`

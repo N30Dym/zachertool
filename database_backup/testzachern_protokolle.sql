@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Apr 2021 um 10:48
+-- Erstellungszeit: 25. Apr 2021 um 08:56
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -22,6 +22,143 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `testzachern_protokolle` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `testzachern_protokolle`;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `beladung`
+--
+
+DROP TABLE IF EXISTS `beladung`;
+CREATE TABLE `beladung` (
+  `id` int(11) NOT NULL,
+  `protokollSpeicherID` int(11) NOT NULL,
+  `flugzeugHebelarmID` int(11) DEFAULT NULL,
+  `bezeichnung` varchar(255) DEFAULT NULL,
+  `gewicht` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `beladung`
+--
+
+INSERT INTO `beladung` (`id`, `protokollSpeicherID`, `flugzeugHebelarmID`, `bezeichnung`, `gewicht`) VALUES
+(3, 138, 4, NULL, 6),
+(14, 138, NULL, 'PilotFS', 7),
+(15, 138, NULL, 'CopilotFS', 7),
+(16, 138, NULL, 'CopilotGewicht', 75),
+(17, 155, NULL, 'PilotFS', 7),
+(18, 156, NULL, 'PilotFS', 7),
+(19, 157, NULL, 'PilotFS', 7),
+(20, 159, NULL, 'PilotFS', 7),
+(21, 164, 20, NULL, 10),
+(22, 164, NULL, 'PilotFS', 7),
+(23, 167, NULL, 'PilotFS', 7),
+(24, 174, NULL, 'PilotFS', 7),
+(25, 176, NULL, 'PilotFS', 7),
+(26, 176, NULL, 'CopilotFS', 7),
+(27, 176, NULL, 'CopilotGewicht', 63),
+(28, 179, NULL, 'PilotFS', 17),
+(29, 180, 37, NULL, 4.4),
+(30, 180, NULL, 'PilotFS', 7),
+(31, 181, NULL, 'PilotFS', 7),
+(32, 182, 37, NULL, 4.4),
+(33, 182, NULL, 'PilotFS', 7),
+(34, 184, NULL, 'PilotFS', 17),
+(35, 186, 37, NULL, 4.4),
+(36, 186, NULL, 'PilotFS', 7),
+(37, 187, NULL, 'PilotFS', 6),
+(38, 188, NULL, 'PilotFS', 17),
+(39, 189, 37, NULL, 4.4),
+(40, 189, NULL, 'PilotFS', 7),
+(41, 190, 37, NULL, 2.2),
+(42, 190, NULL, 'PilotFS', 8),
+(43, 193, NULL, 'PilotFS', 7),
+(44, 194, 20, NULL, 5),
+(45, 194, NULL, 'PilotFS', 7),
+(46, 195, NULL, 'PilotFS', 7),
+(47, 196, NULL, 'PilotFS', 6),
+(48, 197, NULL, 'PilotFS', 7),
+(49, 198, 33, NULL, 5),
+(50, 198, NULL, 'PilotFS', 7),
+(51, 198, NULL, 'CopilotFS', 7),
+(52, 199, 33, NULL, 5),
+(53, 199, NULL, 'PilotFS', 7),
+(54, 199, NULL, 'CopilotFS', 7),
+(55, 200, 33, NULL, 5),
+(56, 200, NULL, 'PilotFS', 7),
+(57, 200, NULL, 'CopilotFS', 7),
+(58, 201, 33, NULL, 5),
+(59, 201, NULL, 'PilotFS', 7),
+(60, 201, NULL, 'CopilotFS', 7),
+(61, 202, NULL, 'PilotFS', 7),
+(62, 203, NULL, 'PilotFS', 7),
+(63, 205, NULL, 'PilotFS', 7),
+(64, 206, NULL, 'PilotFS', 7),
+(65, 207, NULL, 'PilotFS', 7),
+(66, 208, NULL, 'PilotFS', 7),
+(67, 209, 26, NULL, 3.3),
+(68, 209, NULL, 'PilotFS', 7),
+(69, 210, NULL, 'PilotFS', 7),
+(70, 211, 26, NULL, 1.1),
+(71, 211, NULL, 'PilotFS', 7),
+(72, 212, 26, NULL, 1.1),
+(73, 212, NULL, 'PilotFS', 7),
+(74, 213, NULL, 'PilotFS', 5),
+(75, 214, NULL, 'PilotFS', 5),
+(76, 215, 24, NULL, 7.5),
+(77, 215, NULL, 'PilotFS', 7),
+(78, 216, NULL, 'PilotFS', 7),
+(79, 217, NULL, 'PilotFS', 7),
+(80, 218, NULL, 'PilotFS', 7),
+(81, 219, NULL, 'PilotFS', 22),
+(82, 220, NULL, 'PilotFS', 7),
+(83, 220, NULL, 'CopilotFS', 7),
+(84, 221, NULL, 'PilotFS', 6),
+(85, 221, NULL, 'CopilotFS', 6),
+(86, 222, NULL, 'PilotFS', 7),
+(87, 222, NULL, 'CopilotFS', 5),
+(88, 223, NULL, 'PilotFS', 7),
+(89, 223, NULL, 'CopilotFS', 12),
+(90, 225, NULL, 'PilotFS', 6),
+(91, 225, NULL, 'CopilotFS', 6),
+(92, 226, NULL, 'PilotFS', 6),
+(93, 226, NULL, 'CopilotFS', 6),
+(94, 227, NULL, 'PilotFS', 7),
+(95, 229, NULL, 'PilotFS', 7),
+(96, 231, NULL, 'PilotFS', 7),
+(97, 233, NULL, 'PilotFS', 7),
+(98, 235, NULL, 'PilotFS', 7),
+(99, 237, NULL, 'PilotFS', 7),
+(100, 238, NULL, 'PilotFS', 7),
+(101, 239, NULL, 'PilotFS', 7),
+(102, 242, 51, NULL, 13.5),
+(103, 243, NULL, 'PilotFS', 7),
+(104, 228, NULL, 'PilotFS', 7),
+(105, 244, NULL, 'PilotFS', 6),
+(106, 244, NULL, 'CopilotFS', 6),
+(107, 247, 51, NULL, 7.5),
+(108, 253, NULL, 'PilotFS', 7),
+(109, 254, NULL, 'PilotFS', 6),
+(110, 254, NULL, 'CopilotFS', 6),
+(111, 256, NULL, 'PilotFS', 7),
+(112, 257, 53, NULL, 10),
+(113, 257, NULL, 'PilotFS', 7),
+(114, 258, 53, NULL, 10),
+(115, 258, NULL, 'PilotFS', 6),
+(116, 259, 53, NULL, 7),
+(117, 259, NULL, 'PilotFS', 6),
+(118, 260, NULL, 'PilotFS', 7),
+(119, 260, NULL, 'CopilotFS', 7),
+(120, 261, NULL, 'PilotFS', 7),
+(121, 261, NULL, 'CopilotFS', 7),
+(122, 262, NULL, 'PilotFS', 7),
+(123, 262, NULL, 'CopilotFS', 7),
+(124, 263, NULL, 'PilotFS', 7),
+(125, 263, NULL, 'CopilotFS', 7),
+(126, 264, 51, NULL, 7.5),
+(127, 264, NULL, 'PilotFS', 82),
+(128, 265, NULL, 'PilotFS', 18.1);
 
 -- --------------------------------------------------------
 
@@ -7384,7 +7521,8 @@ CREATE TABLE `protokolle` (
   `pilotID` int(11) DEFAULT NULL,
   `copilotID` int(11) DEFAULT NULL,
   `flugzeit` time DEFAULT NULL,
-  `bestätigt` tinyint(1) DEFAULT NULL,
+  `bemerkung` text DEFAULT NULL,
+  `bestaetigt` tinyint(1) DEFAULT NULL,
   `fertig` tinyint(1) DEFAULT NULL,
   `datum` date DEFAULT NULL,
   `erstelltAm` timestamp NOT NULL DEFAULT current_timestamp()
@@ -7394,227 +7532,99 @@ CREATE TABLE `protokolle` (
 -- Daten für Tabelle `protokolle`
 --
 
-INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`, `bestätigt`, `fertig`, `datum`, `erstelltAm`) VALUES
-(138, 1, 1, NULL, NULL, NULL, 1, '2018-08-15', '2019-07-11 13:26:00'),
-(154, 8, 3, 4, NULL, NULL, 1, '2018-08-20', '2019-07-18 14:20:20'),
-(155, 9, 1, NULL, NULL, NULL, 1, '2018-08-22', '2019-07-30 13:36:05'),
-(164, 10, 6, NULL, NULL, NULL, 1, '2018-08-10', '2019-08-20 16:56:47'),
-(167, 12, 5, NULL, '01:48:00', NULL, 1, '2019-08-22', '2019-08-22 19:44:26'),
-(174, 9, 8, NULL, '03:23:00', NULL, 1, '2019-08-24', '2019-08-27 12:19:24'),
-(176, 11, 9, NULL, '03:46:00', NULL, 1, '2019-08-21', '2019-08-27 13:27:37'),
-(179, 23, 10, NULL, NULL, NULL, 1, '2018-08-10', '2019-11-05 12:08:47'),
-(180, 23, 8, NULL, NULL, NULL, 1, '2018-08-09', '2019-11-05 12:23:09'),
-(181, 23, 11, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 12:55:16'),
-(182, 23, 11, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 13:33:44'),
-(184, 23, 12, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-05 13:45:50'),
-(186, 23, 13, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-19 08:51:31'),
-(187, 23, 14, NULL, NULL, NULL, 1, '2018-08-20', '2019-11-19 09:17:17'),
-(188, 23, 15, NULL, NULL, NULL, 1, '2018-08-21', '2019-11-19 09:46:57'),
-(189, 23, 16, NULL, NULL, NULL, 1, '2018-08-16', '2019-11-19 10:47:22'),
-(190, 23, 17, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-19 12:38:57'),
-(193, 10, 5, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 11:40:58'),
-(194, 10, 16, NULL, NULL, NULL, 1, '2018-08-13', '2019-12-20 12:55:46'),
-(195, 10, 18, NULL, NULL, NULL, 1, '2018-08-17', '2019-12-20 14:07:26'),
-(196, 10, 14, NULL, NULL, NULL, 1, '2018-08-18', '2019-12-20 14:16:59'),
-(197, 10, 1, NULL, NULL, NULL, 1, '2018-08-23', '2019-12-20 14:31:11'),
-(198, 20, 5, 20, NULL, NULL, 1, '2018-08-14', '2019-12-20 16:18:57'),
-(199, 20, 1, 21, NULL, NULL, 1, '2018-08-20', '2019-12-20 16:47:29'),
-(200, 20, 9, 22, NULL, NULL, 1, '2018-08-22', '2019-12-20 17:13:46'),
-(201, 20, 6, 23, NULL, NULL, 1, '2018-08-22', '2019-12-20 21:12:14'),
-(202, 19, 24, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 22:05:51'),
-(203, 19, 25, NULL, NULL, NULL, 1, '2018-08-08', '2019-12-20 22:36:33'),
-(204, 9, 5, NULL, NULL, NULL, NULL, '2018-08-16', '2020-03-27 09:41:02'),
-(205, 9, 5, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 09:42:48'),
-(206, 9, 5, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 10:01:55'),
-(207, 13, 10, NULL, '03:10:00', NULL, 1, '2019-08-23', '2020-03-31 13:20:33'),
-(208, 13, 26, NULL, '05:01:00', NULL, NULL, '2019-08-20', '2020-04-01 12:20:33'),
-(209, 13, 8, NULL, '02:15:00', NULL, 1, '2019-08-14', '2020-04-01 12:35:47'),
-(210, 13, 14, NULL, '01:46:00', NULL, 1, '2019-08-20', '2020-04-01 12:55:38'),
-(211, 13, 24, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-15 12:57:27'),
-(212, 13, 24, NULL, NULL, NULL, 1, '2019-08-19', '2020-04-15 13:14:10'),
-(213, 13, 27, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-24 12:12:17'),
-(214, 13, 27, NULL, '02:35:00', NULL, 1, '2019-08-21', '2020-04-24 12:33:14'),
-(215, 12, 28, NULL, '03:29:00', NULL, 1, '2019-08-22', '2020-04-28 12:28:17'),
-(216, 12, 29, NULL, '01:58:00', NULL, 1, '2019-08-22', '2020-04-28 12:52:41'),
-(217, 12, 30, NULL, '02:30:00', NULL, 1, '2019-08-28', '2020-04-28 13:06:39'),
-(218, 12, 5, NULL, '01:48:00', NULL, 1, '2019-08-21', '2020-04-28 13:16:48'),
-(219, 17, 3, NULL, NULL, NULL, 1, '2018-08-22', '2020-04-29 12:59:15'),
-(220, 26, 32, 8, '04:03:00', NULL, 1, '2019-08-27', '2020-05-18 13:05:31'),
-(221, 26, 14, 33, NULL, NULL, 1, '2018-08-22', '2020-05-19 08:32:39'),
-(222, 26, 16, 21, NULL, NULL, 1, '2018-08-22', '2020-05-19 13:29:31'),
-(223, 11, 34, 12, '02:54:00', NULL, 1, '2019-08-14', '2020-05-19 13:44:16'),
-(225, 27, 35, 36, '02:20:00', NULL, 1, '2020-08-18', '2020-08-21 07:50:17'),
-(226, 27, 35, 36, '02:20:00', NULL, 1, '2020-08-18', '2020-08-21 08:35:49'),
-(227, 21, 38, NULL, '02:17:00', NULL, 1, '2020-08-19', '2020-08-24 13:18:16'),
-(228, 18, 9, NULL, '03:21:00', NULL, NULL, '2020-08-24', '2020-08-27 11:58:16'),
-(229, 18, 9, NULL, '03:21:00', NULL, NULL, '2020-08-24', '2020-08-27 12:02:04'),
-(230, 21, 12, NULL, '03:37:00', NULL, NULL, '2020-08-19', '2020-08-27 12:23:03'),
-(231, 21, 12, NULL, '03:37:00', NULL, 1, '2020-08-19', '2020-08-27 12:43:02'),
-(233, 21, 5, NULL, '05:28:00', NULL, 1, '2020-08-24', '2020-09-02 08:37:58'),
-(235, 21, 39, NULL, '03:00:00', NULL, 1, '2020-08-24', '2020-09-02 09:27:13'),
-(237, 28, 27, NULL, '02:24:00', NULL, 1, '2020-08-31', '2020-09-02 20:15:00'),
-(238, 28, 35, NULL, '04:13:00', NULL, 1, '2020-08-20', '2020-09-02 20:38:09'),
-(239, 28, 30, NULL, '01:55:00', NULL, 1, '2020-08-31', '2020-09-03 13:39:28'),
-(242, 29, 32, NULL, '03:59:00', NULL, 1, '2020-08-19', '2020-09-03 16:18:22'),
-(243, 28, 41, NULL, '02:42:00', NULL, 1, '2020-08-20', '2020-09-03 17:44:09'),
-(244, 30, 37, 40, '04:12:00', NULL, 1, '2020-08-19', '2020-09-03 18:40:57'),
-(245, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-09-03 19:01:27'),
-(247, 29, 3, NULL, '03:30:00', NULL, 1, '2020-08-19', '2020-09-03 21:04:00'),
-(250, 8, 21, 9, '01:00:00', NULL, NULL, '2020-08-01', '2020-09-03 23:47:28'),
-(251, 20, 9, NULL, '00:01:00', NULL, NULL, '2020-02-02', '2020-09-03 23:55:11'),
-(253, 28, 29, NULL, NULL, NULL, 1, '2020-08-31', '2020-10-15 09:07:00'),
-(254, 30, 37, 42, '04:12:00', NULL, 1, '2020-08-19', '2020-10-15 10:03:30'),
-(256, 31, 43, NULL, '02:14:00', NULL, 1, '2020-09-03', '2020-11-17 12:00:13'),
-(257, 31, 12, NULL, NULL, NULL, 1, '2020-08-25', '2020-11-17 12:27:10'),
-(258, 31, 44, NULL, NULL, NULL, 1, '2020-08-31', '2020-11-17 12:46:29'),
-(259, 31, 45, NULL, '02:00:00', NULL, 1, '2020-08-19', '2020-11-17 13:10:14'),
-(260, 32, 27, 38, '01:47:00', NULL, NULL, '2020-09-02', '2020-12-01 13:15:03'),
-(261, 32, 27, 38, '01:47:00', NULL, 1, '2020-09-02', '2020-12-01 13:22:01'),
-(262, 32, 27, 5, '01:47:00', NULL, 1, '2020-09-02', '2020-12-01 13:34:30'),
-(263, 32, 43, 38, '01:47:00', NULL, 1, '2020-09-01', '2020-12-01 13:37:24'),
-(264, 29, 39, NULL, '02:15:00', NULL, 1, '2020-08-20', '2020-12-01 14:06:10'),
-(265, 18, 9, NULL, '03:21:00', NULL, NULL, '2020-08-24', '2020-12-01 14:32:21');
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `trimballast`
---
-
-DROP TABLE IF EXISTS `trimballast`;
-CREATE TABLE `trimballast` (
-  `id` int(11) NOT NULL,
-  `protokollSpeicherID` int(11) NOT NULL,
-  `flugzeugHebelarmID` int(11) DEFAULT NULL,
-  `bezeichnung` varchar(255) DEFAULT NULL,
-  `gewicht` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `trimballast`
---
-
-INSERT INTO `trimballast` (`id`, `protokollSpeicherID`, `flugzeugHebelarmID`, `bezeichnung`, `gewicht`) VALUES
-(3, 138, 4, NULL, 6),
-(14, 138, NULL, 'PilotFS', 7),
-(15, 138, NULL, 'CopilotFS', 7),
-(16, 138, NULL, 'CopilotGewicht', 75),
-(17, 155, NULL, 'PilotFS', 7),
-(18, 156, NULL, 'PilotFS', 7),
-(19, 157, NULL, 'PilotFS', 7),
-(20, 159, NULL, 'PilotFS', 7),
-(21, 164, 20, NULL, 10),
-(22, 164, NULL, 'PilotFS', 7),
-(23, 167, NULL, 'PilotFS', 7),
-(24, 174, NULL, 'PilotFS', 7),
-(25, 176, NULL, 'PilotFS', 7),
-(26, 176, NULL, 'CopilotFS', 7),
-(27, 176, NULL, 'CopilotGewicht', 63),
-(28, 179, NULL, 'PilotFS', 17),
-(29, 180, 37, NULL, 4.4),
-(30, 180, NULL, 'PilotFS', 7),
-(31, 181, NULL, 'PilotFS', 7),
-(32, 182, 37, NULL, 4.4),
-(33, 182, NULL, 'PilotFS', 7),
-(34, 184, NULL, 'PilotFS', 17),
-(35, 186, 37, NULL, 4.4),
-(36, 186, NULL, 'PilotFS', 7),
-(37, 187, NULL, 'PilotFS', 6),
-(38, 188, NULL, 'PilotFS', 17),
-(39, 189, 37, NULL, 4.4),
-(40, 189, NULL, 'PilotFS', 7),
-(41, 190, 37, NULL, 2.2),
-(42, 190, NULL, 'PilotFS', 8),
-(43, 193, NULL, 'PilotFS', 7),
-(44, 194, 20, NULL, 5),
-(45, 194, NULL, 'PilotFS', 7),
-(46, 195, NULL, 'PilotFS', 7),
-(47, 196, NULL, 'PilotFS', 6),
-(48, 197, NULL, 'PilotFS', 7),
-(49, 198, 33, NULL, 5),
-(50, 198, NULL, 'PilotFS', 7),
-(51, 198, NULL, 'CopilotFS', 7),
-(52, 199, 33, NULL, 5),
-(53, 199, NULL, 'PilotFS', 7),
-(54, 199, NULL, 'CopilotFS', 7),
-(55, 200, 33, NULL, 5),
-(56, 200, NULL, 'PilotFS', 7),
-(57, 200, NULL, 'CopilotFS', 7),
-(58, 201, 33, NULL, 5),
-(59, 201, NULL, 'PilotFS', 7),
-(60, 201, NULL, 'CopilotFS', 7),
-(61, 202, NULL, 'PilotFS', 7),
-(62, 203, NULL, 'PilotFS', 7),
-(63, 205, NULL, 'PilotFS', 7),
-(64, 206, NULL, 'PilotFS', 7),
-(65, 207, NULL, 'PilotFS', 7),
-(66, 208, NULL, 'PilotFS', 7),
-(67, 209, 26, NULL, 3.3),
-(68, 209, NULL, 'PilotFS', 7),
-(69, 210, NULL, 'PilotFS', 7),
-(70, 211, 26, NULL, 1.1),
-(71, 211, NULL, 'PilotFS', 7),
-(72, 212, 26, NULL, 1.1),
-(73, 212, NULL, 'PilotFS', 7),
-(74, 213, NULL, 'PilotFS', 5),
-(75, 214, NULL, 'PilotFS', 5),
-(76, 215, 24, NULL, 7.5),
-(77, 215, NULL, 'PilotFS', 7),
-(78, 216, NULL, 'PilotFS', 7),
-(79, 217, NULL, 'PilotFS', 7),
-(80, 218, NULL, 'PilotFS', 7),
-(81, 219, NULL, 'PilotFS', 22),
-(82, 220, NULL, 'PilotFS', 7),
-(83, 220, NULL, 'CopilotFS', 7),
-(84, 221, NULL, 'PilotFS', 6),
-(85, 221, NULL, 'CopilotFS', 6),
-(86, 222, NULL, 'PilotFS', 7),
-(87, 222, NULL, 'CopilotFS', 5),
-(88, 223, NULL, 'PilotFS', 7),
-(89, 223, NULL, 'CopilotFS', 12),
-(90, 225, NULL, 'PilotFS', 6),
-(91, 225, NULL, 'CopilotFS', 6),
-(92, 226, NULL, 'PilotFS', 6),
-(93, 226, NULL, 'CopilotFS', 6),
-(94, 227, NULL, 'PilotFS', 7),
-(95, 229, NULL, 'PilotFS', 7),
-(96, 231, NULL, 'PilotFS', 7),
-(97, 233, NULL, 'PilotFS', 7),
-(98, 235, NULL, 'PilotFS', 7),
-(99, 237, NULL, 'PilotFS', 7),
-(100, 238, NULL, 'PilotFS', 7),
-(101, 239, NULL, 'PilotFS', 7),
-(102, 242, 51, NULL, 13.5),
-(103, 243, NULL, 'PilotFS', 7),
-(104, 228, NULL, 'PilotFS', 7),
-(105, 244, NULL, 'PilotFS', 6),
-(106, 244, NULL, 'CopilotFS', 6),
-(107, 247, 51, NULL, 7.5),
-(108, 253, NULL, 'PilotFS', 7),
-(109, 254, NULL, 'PilotFS', 6),
-(110, 254, NULL, 'CopilotFS', 6),
-(111, 256, NULL, 'PilotFS', 7),
-(112, 257, 53, NULL, 10),
-(113, 257, NULL, 'PilotFS', 7),
-(114, 258, 53, NULL, 10),
-(115, 258, NULL, 'PilotFS', 6),
-(116, 259, 53, NULL, 7),
-(117, 259, NULL, 'PilotFS', 6),
-(118, 260, NULL, 'PilotFS', 7),
-(119, 260, NULL, 'CopilotFS', 7),
-(120, 261, NULL, 'PilotFS', 7),
-(121, 261, NULL, 'CopilotFS', 7),
-(122, 262, NULL, 'PilotFS', 7),
-(123, 262, NULL, 'CopilotFS', 7),
-(124, 263, NULL, 'PilotFS', 7),
-(125, 263, NULL, 'CopilotFS', 7),
-(126, 264, 51, NULL, 7.5),
-(127, 264, NULL, 'PilotFS', 82),
-(128, 265, NULL, 'PilotFS', 18.1);
+INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`, `bemerkung`, `bestaetigt`, `fertig`, `datum`, `erstelltAm`) VALUES
+(138, 1, 1, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-07-11 13:26:00'),
+(154, 8, 3, 4, NULL, NULL, NULL, 1, '2018-08-20', '2019-07-18 14:20:20'),
+(155, 9, 1, NULL, NULL, NULL, NULL, 1, '2018-08-22', '2019-07-30 13:36:05'),
+(164, 10, 6, NULL, NULL, NULL, NULL, 1, '2018-08-10', '2019-08-20 16:56:47'),
+(167, 12, 5, NULL, '01:48:00', NULL, NULL, 1, '2019-08-22', '2019-08-22 19:44:26'),
+(174, 9, 8, NULL, '03:23:00', NULL, NULL, 1, '2019-08-24', '2019-08-27 12:19:24'),
+(176, 11, 9, NULL, '03:46:00', NULL, NULL, 1, '2019-08-21', '2019-08-27 13:27:37'),
+(179, 23, 10, NULL, NULL, NULL, NULL, 1, '2018-08-10', '2019-11-05 12:08:47'),
+(180, 23, 8, NULL, NULL, NULL, NULL, 1, '2018-08-09', '2019-11-05 12:23:09'),
+(181, 23, 11, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 12:55:16'),
+(182, 23, 11, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 13:33:44'),
+(184, 23, 12, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-05 13:45:50'),
+(186, 23, 13, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-19 08:51:31'),
+(187, 23, 14, NULL, NULL, NULL, NULL, 1, '2018-08-20', '2019-11-19 09:17:17'),
+(188, 23, 15, NULL, NULL, NULL, NULL, 1, '2018-08-21', '2019-11-19 09:46:57'),
+(189, 23, 16, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2019-11-19 10:47:22'),
+(190, 23, 17, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-19 12:38:57'),
+(193, 10, 5, NULL, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 11:40:58'),
+(194, 10, 16, NULL, NULL, NULL, NULL, 1, '2018-08-13', '2019-12-20 12:55:46'),
+(195, 10, 18, NULL, NULL, NULL, NULL, 1, '2018-08-17', '2019-12-20 14:07:26'),
+(196, 10, 14, NULL, NULL, NULL, NULL, 1, '2018-08-18', '2019-12-20 14:16:59'),
+(197, 10, 1, NULL, NULL, NULL, NULL, 1, '2018-08-23', '2019-12-20 14:31:11'),
+(198, 20, 5, 20, NULL, NULL, NULL, 1, '2018-08-14', '2019-12-20 16:18:57'),
+(199, 20, 1, 21, NULL, NULL, NULL, 1, '2018-08-20', '2019-12-20 16:47:29'),
+(200, 20, 9, 22, NULL, NULL, NULL, 1, '2018-08-22', '2019-12-20 17:13:46'),
+(201, 20, 6, 23, NULL, NULL, NULL, 1, '2018-08-22', '2019-12-20 21:12:14'),
+(202, 19, 24, NULL, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 22:05:51'),
+(203, 19, 25, NULL, NULL, NULL, NULL, 1, '2018-08-08', '2019-12-20 22:36:33'),
+(204, 9, 5, NULL, NULL, NULL, NULL, NULL, '2018-08-16', '2020-03-27 09:41:02'),
+(205, 9, 5, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 09:42:48'),
+(206, 9, 5, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 10:01:55'),
+(207, 13, 10, NULL, '03:10:00', NULL, NULL, 1, '2019-08-23', '2020-03-31 13:20:33'),
+(208, 13, 26, NULL, '05:01:00', NULL, NULL, NULL, '2019-08-20', '2020-04-01 12:20:33'),
+(209, 13, 8, NULL, '02:15:00', NULL, NULL, 1, '2019-08-14', '2020-04-01 12:35:47'),
+(210, 13, 14, NULL, '01:46:00', NULL, NULL, 1, '2019-08-20', '2020-04-01 12:55:38'),
+(211, 13, 24, NULL, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-15 12:57:27'),
+(212, 13, 24, NULL, NULL, NULL, NULL, 1, '2019-08-19', '2020-04-15 13:14:10'),
+(213, 13, 27, NULL, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-24 12:12:17'),
+(214, 13, 27, NULL, '02:35:00', NULL, NULL, 1, '2019-08-21', '2020-04-24 12:33:14'),
+(215, 12, 28, NULL, '03:29:00', NULL, NULL, 1, '2019-08-22', '2020-04-28 12:28:17'),
+(216, 12, 29, NULL, '01:58:00', NULL, NULL, 1, '2019-08-22', '2020-04-28 12:52:41'),
+(217, 12, 30, NULL, '02:30:00', NULL, NULL, 1, '2019-08-28', '2020-04-28 13:06:39'),
+(218, 12, 5, NULL, '01:48:00', NULL, NULL, 1, '2019-08-21', '2020-04-28 13:16:48'),
+(219, 17, 3, NULL, NULL, NULL, NULL, 1, '2018-08-22', '2020-04-29 12:59:15'),
+(220, 26, 32, 8, '04:03:00', NULL, NULL, 1, '2019-08-27', '2020-05-18 13:05:31'),
+(221, 26, 14, 33, NULL, NULL, NULL, 1, '2018-08-22', '2020-05-19 08:32:39'),
+(222, 26, 16, 21, NULL, NULL, NULL, 1, '2018-08-22', '2020-05-19 13:29:31'),
+(223, 11, 34, 12, '02:54:00', NULL, NULL, 1, '2019-08-14', '2020-05-19 13:44:16'),
+(225, 27, 35, 36, '02:20:00', NULL, NULL, 1, '2020-08-18', '2020-08-21 07:50:17'),
+(226, 27, 35, 36, '02:20:00', NULL, NULL, 1, '2020-08-18', '2020-08-21 08:35:49'),
+(227, 21, 38, NULL, '02:17:00', NULL, NULL, 1, '2020-08-19', '2020-08-24 13:18:16'),
+(228, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 11:58:16'),
+(229, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 12:02:04'),
+(230, 21, 12, NULL, '03:37:00', NULL, NULL, NULL, '2020-08-19', '2020-08-27 12:23:03'),
+(231, 21, 12, NULL, '03:37:00', NULL, NULL, 1, '2020-08-19', '2020-08-27 12:43:02'),
+(233, 21, 5, NULL, '05:28:00', NULL, NULL, 1, '2020-08-24', '2020-09-02 08:37:58'),
+(235, 21, 39, NULL, '03:00:00', NULL, NULL, 1, '2020-08-24', '2020-09-02 09:27:13'),
+(237, 28, 27, NULL, '02:24:00', NULL, NULL, 1, '2020-08-31', '2020-09-02 20:15:00'),
+(238, 28, 35, NULL, '04:13:00', NULL, NULL, 1, '2020-08-20', '2020-09-02 20:38:09'),
+(239, 28, 30, NULL, '01:55:00', NULL, NULL, 1, '2020-08-31', '2020-09-03 13:39:28'),
+(242, 29, 32, NULL, '03:59:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 16:18:22'),
+(243, 28, 41, NULL, '02:42:00', NULL, NULL, 1, '2020-08-20', '2020-09-03 17:44:09'),
+(244, 30, 37, 40, '04:12:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 18:40:57'),
+(245, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-09-03 19:01:27'),
+(247, 29, 3, NULL, '03:30:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 21:04:00'),
+(250, 8, 21, 9, '01:00:00', NULL, NULL, NULL, '2020-08-01', '2020-09-03 23:47:28'),
+(251, 20, 9, NULL, '00:01:00', NULL, NULL, NULL, '2020-02-02', '2020-09-03 23:55:11'),
+(253, 28, 29, NULL, NULL, NULL, NULL, 1, '2020-08-31', '2020-10-15 09:07:00'),
+(254, 30, 37, 42, '04:12:00', NULL, NULL, 1, '2020-08-19', '2020-10-15 10:03:30'),
+(256, 31, 43, NULL, '02:14:00', NULL, NULL, 1, '2020-09-03', '2020-11-17 12:00:13'),
+(257, 31, 12, NULL, NULL, NULL, NULL, 1, '2020-08-25', '2020-11-17 12:27:10'),
+(258, 31, 44, NULL, NULL, NULL, NULL, 1, '2020-08-31', '2020-11-17 12:46:29'),
+(259, 31, 45, NULL, '02:00:00', NULL, NULL, 1, '2020-08-19', '2020-11-17 13:10:14'),
+(260, 32, 27, 38, '01:47:00', NULL, NULL, NULL, '2020-09-02', '2020-12-01 13:15:03'),
+(261, 32, 27, 38, '01:47:00', NULL, NULL, 1, '2020-09-02', '2020-12-01 13:22:01'),
+(262, 32, 27, 5, '01:47:00', NULL, NULL, 1, '2020-09-02', '2020-12-01 13:34:30'),
+(263, 32, 43, 38, '01:47:00', NULL, NULL, 1, '2020-09-01', '2020-12-01 13:37:24'),
+(264, 29, 39, NULL, '02:15:00', NULL, NULL, 1, '2020-08-20', '2020-12-01 14:06:10'),
+(265, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-12-01 14:32:21');
 
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `beladung`
+--
+ALTER TABLE `beladung`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
+  ADD KEY `PlaneLeverID` (`flugzeugHebelarmID`);
 
 --
 -- Indizes für die Tabelle `daten`
@@ -7650,17 +7660,14 @@ ALTER TABLE `protokolle`
   ADD KEY `FlugzeugID` (`flugzeugID`);
 
 --
--- Indizes für die Tabelle `trimballast`
---
-ALTER TABLE `trimballast`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
-  ADD KEY `PlaneLeverID` (`flugzeugHebelarmID`);
-
---
 -- AUTO_INCREMENT für exportierte Tabellen
 --
+
+--
+-- AUTO_INCREMENT für Tabelle `beladung`
+--
+ALTER TABLE `beladung`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT für Tabelle `daten`
@@ -7685,12 +7692,6 @@ ALTER TABLE `kommentare`
 --
 ALTER TABLE `protokolle`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
-
---
--- AUTO_INCREMENT für Tabelle `trimballast`
---
-ALTER TABLE `trimballast`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -159,11 +159,11 @@ class Protokolleingabecontroller extends Controller
             
             if($muster['istWoelbklappenFlugzeug'] == 1)
             {
-                $_SESSION['WoelbklappenFlugzeug'] = ["Neutral", "Kreisflug"]; 
+                $_SESSION['woelbklappenFlugzeug'] = ["Neutral", "Kreisflug"]; 
             }
             else 
             {
-                $_SESSION['WoelbklappenFlugzeug'] = [0];
+                unset($_SESSION['woelbklappenFlugzeug']);
             }
         }
         

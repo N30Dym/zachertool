@@ -26,7 +26,7 @@
     </div>
 
 <!---------------------------------------->   
-<!--        Titel und <Form>            --> 
+<!--        Titel und <form>            --> 
 <!----------------------------------------> 
     <div class="col-1">
     </div>
@@ -37,8 +37,6 @@
         
         <form class="needs-validation" method="post" ><!--  novalidate="" nur zum testen!! -->       
         
-        <?php //form_open('', ["class" => "needs-validation", "method" => "post"]) ?>
-        
 <!---------------------------------------->   
 <!--            Inhalt                  --> 
 <!---------------------------------------->         
@@ -46,7 +44,7 @@
         <div class="row g-3">
            
         <?php 
-            //var_dump($_SESSION['kapitelIDs']);
+
             echo form_hidden("aktuellesKapitel", $_SESSION['aktuellesKapitel']);
             
             switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]) : 
@@ -54,32 +52,30 @@
 <!---------------------------------------->   
 <!--       Flugzeugauswahl              --> 
 <!---------------------------------------->           
-            
-                    
-        <div class="col-2">
-        </div>
-
-        <div class="col-8 row">
-
-            <div class="col-12">
-                <input class="form-control" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
-                <br>
+                   
+            <div class="col-2">
             </div>
 
-            <div class="col-12">
-                <select id="flugzeugAuswahl" name="flugzeugID" class="form-select form-select-lg" size="10" required>
-                    <?php foreach($flugzeugeDatenArray as $flugzeug) :  ?>
-                        <option value="<?= esc($flugzeug['id']) ?>" <?= (isset($_SESSION['flugzeugID']) && $_SESSION['flugzeugID'] === $flugzeug['id']) ? "selected" : "" ?>>
-                            <?=  $flugzeug["kennung"] . " - " . $flugzeug["musterSchreibweise"].$flugzeug["musterZusatz"] ?>
-                        </option>                   
-                    <?php endforeach ?>
-                </select>
+            <div class="col-8 row">
+
+                <div class="col-12">
+                    <input class="form-control" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
+                    <br>
+                </div>
+
+                <div class="col-12">
+                    <select id="flugzeugAuswahl" name="flugzeugID" class="form-select form-select-lg" size="10" required>
+                        <?php foreach($flugzeugeDatenArray as $flugzeug) :  ?>
+                            <option value="<?= esc($flugzeug['id']) ?>" <?= (isset($_SESSION['flugzeugID']) && $_SESSION['flugzeugID'] === $flugzeug['id']) ? "selected" : "" ?>>
+                                <?=  $flugzeug["kennung"] . " - " . $flugzeug["musterSchreibweise"].$flugzeug["musterZusatz"] ?>
+                            </option>                   
+                        <?php endforeach ?>
+                    </select>
+                </div>
             </div>
 
-        </div>
-        <div class="col-2">
-
-        </div>
+            <div class="col-2">
+            </div>
                   
 
     <?php
@@ -92,17 +88,18 @@
 <!---------------------------------------->   
 <!--          Pilotenauswahl            --> 
 <!----------------------------------------> 
+
     <?php if (isset($_SESSION['Doppelsitzer'])) : ?>
-            <div class="col-12 text-center">
-                <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
-            </div>
+        <div class="col-12 text-center">
+            <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
+        </div>
         
         <div class="col-5">
             <div class="col-12 text-center">  
                 <h4>Pilotenauswahl</h4>
             </div>
     <?php else: ?> <!-- Einsitzer -->
-            
+
         <div class="col-2">
         </div>
 
@@ -110,29 +107,27 @@
 
     <?php endif ?>
                         
-        <div class="col-12">
-            <input class="form-control" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
-            <br>
-        </div>
-        <div class="col-12">
-            <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
-                <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                    <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
-                        <?= esc($pilot["vorname"]) ?>
-                        <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
-                        <?= esc($pilot["nachname"]) ?>
-                    </option>                   
-                <?php endforeach ?>
-            </select>
+            <div class="col-12">
+                <input class="form-control" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
+                <br>
+            </div>
+            <div class="col-12">
+                <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
+                    <?php foreach($pilotenDatenArray as $pilot) :  ?>
+                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                            <?= esc($pilot["vorname"]) ?>
+                            <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
+                            <?= esc($pilot["nachname"]) ?>
+                        </option>                   
+                    <?php endforeach ?>
+                </select>
+            </div>
                         
     <?php if(isset($_SESSION['Doppelsitzer'])) : ?>    
-            </div>
-
+            
         </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-1">
+    
+        <div class="col-2">
         </div>
 
         <div class="col-5">
@@ -156,19 +151,17 @@
                     <?php endforeach ?>
                 </select>
             </div>
-        </div>
+
        
 
     <?php else: ?> <!-- Einsitzer -->
-            </div>
+            
         </div>
             
-            <div class="col-2">
-                
+        <div class="col-2">
+      
     <?php endif ?> 
-               
-            </div>
-        
+        </div>      
          
     <?php   
             unset($_SESSION['pilotID']);
@@ -178,6 +171,7 @@
 <!---------------------------------------->   
 <!--          Beladungszustand          --> 
 <!----------------------------------------> 
+
     <div class="col-1">
     </div>
 
@@ -343,27 +337,69 @@
         <?php
                 unset($_SESSION['beladungszustand']);
                 break;
-            default:
- 
-                var_dump($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']]);
+            default: ?>
+                <small><?= esc($kapitelDatenArray['zusatztext']) ?></small>
+                
+            <?php
+                //var_dump($unterkapitelDatenArray);
                 //var_dump($_SESSION['eingegebeneDaten']);
                 //isset($auswahllistenDatenArray) ? var_dump($auswahllistenDatenArray) : ""; 
+                $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0];
+                $unterkapitelNummer = 0;
+                $hStWegFeldBenoetigt = false;
                 foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $keyUnterkapitel => $unterkapitel): ?>
                 
-                    <small><?= esc($kapitelDatenArray['zusatztext']) ?></small>
+                <!-- Unterkapitel Titel und Nummer -->
+                    <?php if($keyUnterkapitel > 0) : ?>
+                        <?php $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$keyUnterkapitel]['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0]; ?>
+                        <?php $unterkapitelNummer++ ?>
+                        <h4 class="ms-4"><?= $_SESSION["aktuellesKapitel"] . "." . $unterkapitelNummer . " - " . esc($unterkapitelDatenArray[$keyUnterkapitel]['bezeichnung']) ?></h4>
+                        <small><?= $unterkapitelDatenArray[$keyUnterkapitel]['zusatztext'] ?></small>
+                    <?php endif ?>    
                      
-                    <?php foreach($unterkapitel as $keyEingaben => $eingabe) : ?>
-                    
-                        <?php //var_dump($eingabenDatenArray[$keyEingaben]) ?>
+                    <?php foreach($woelbklappe as $wk) : ?>
+                        <?= $wk != 0 ? '<h5 class="col-12">' . $wk . '</h5>'  : "" ?>
                         
-                        <?php foreach($_SESSION['WoelbklappenFlugzeug'] as $wk) : ?>
-                        
+                        <?php foreach($unterkapitel as $keyEingaben => $eingabe) : ?>
+                            <?php switch(count($eingabe)) : 
+                               case 1: ?>
+                                <?php case 2: ?>
+                                    <div class="col-4 text-end border">
+                                <?php break ?> 
+                                <?php case 3: ?>
+                                    <div class="col-3 text-end border">    
+                                <?php break ?> 
+                                <?php default: ?>
+                                     <div class="col-2 text-end border">                                          
+                            <?php endswitch ?>
+                            
+                            <?= esc($eingabenDatenArray[$keyEingaben]['bezeichnung']) ?>
+                            </div>
+                            <?php var_dump($eingabenDatenArray[$keyEingaben]) ?>
+
+                                
+
                             <?php foreach($eingabe as $keyInput => $input) : ?>
-                            
-                                Test
-                            
-                            <?php endforeach ?>        
+                                <?php switch(count($eingabe)) : 
+                               case 1: ?>
+                                    <div class="col-8">
+                                <?php break ?>
+                                <?php case 2: ?>
+                                    <div class="col-4">
+                                <?php break ?> 
+                                <?php case 3: ?>
+                                    <div class="col-3">    
+                                <?php break ?> 
+                                <?php default: ?>
+                                     <div class="col-2">                                          
+                            <?php endswitch ?>
+                                  
+                            </div>
+                            <?php endforeach ?>
+                                
                         <?php endforeach ?> 
+                        
+                        
                     <?php endforeach ?>  
                                 
                              
@@ -374,9 +410,10 @@
                 <?php endif ?>   
             <?php endswitch ?>
 
-
+             
        
-        <div class="mt-5 row"> 
+    </div>
+                    <div class="mt-5 row"> 
 
             <div class="col-3">
                 <button type="submit" class="btn btn-secondary col-12" formaction="<?= array_search($_SESSION['aktuellesKapitel'], $_SESSION['kapitelNummern']) <= 0 ? site_url('/protokolle/kapitel/1') : site_url('/protokolle/kapitel/' . $_SESSION['kapitelNummern'][array_search($_SESSION['aktuellesKapitel'], $_SESSION['kapitelNummern']) - 1] ) ?>">< Zurück</button>

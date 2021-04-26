@@ -168,6 +168,12 @@ class Protokolleingabecontroller extends Controller
         {
             $_SESSION['copilotID'] = $postDaten["copilotID"];
         }
+        
+        if(isset($postDaten['gewichtPilot']))
+        {
+            $_SESSION['beladungszustand'] = $postDaten;
+        }
+        
     }
         /*
          * 
@@ -361,7 +367,7 @@ class Protokolleingabecontroller extends Controller
     protected function getMusterIDNachFlugzeugID($flugzeugID)
     {
         $flugzeugeModel = new flugzeugeModel();
-        $flugzeug       = $flugzeugeModel->getFlugzeugeFuerAuswahlNachID($flugzeugID);
+        $flugzeug       = $flugzeugeModel->getFlugzeugeNachID($flugzeugID);
       
         return $flugzeug['musterID'];
     }
@@ -370,7 +376,33 @@ class Protokolleingabecontroller extends Controller
     {
         $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
         
-        return $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($_SESSION['flugzeugID']);
+        $musterHebelarme = $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($_SESSION['flugzeugID']);
+        $musterHebelarmeSortiert = [];
+        $indexPilot = $indexCopilot = false;
+        
+        foreach($musterHebelarme as $key => $musterhebelarm)			
+        {
+                array_search("Pilot", $musterHebelarme[$key]) ?  $indexPilot = $key : "";
+                array_search("Copilot", $musterHebelarme[$key]) ?  $indexCopilot = $key : "";
+        }
+
+                // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+        $musterHebelarmeSortiert[0] = $musterHebelarme[$indexPilot];
+        if($indexCopilot)
+        {
+                $musterHebelarmeSortiert[1] = $musterHebelarme[$indexCopilot];
+        }
+
+                // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+        foreach($musterHebelarme as $key => $musterHebelarm)
+        {
+                if($key != $indexPilot AND $key != $indexCopilot)
+                {
+                        array_push($musterHebelarmeSortiert,$musterHebelarm);
+                }
+        }
+        
+        return $musterHebelarmeSortiert;
     }
 
 
@@ -386,7 +418,14 @@ class Protokolleingabecontroller extends Controller
         $pilotenModel = new pilotenModel();
 
         return $pilotenModel->getAlleSichtbarePiloten();
-    }   
+    }  
+    
+    protected function getPilotGewichtNachPilotID($pilotID) 
+    {
+        $pilotenDetailsModel = new pilotenDetailsModel();
+        
+        return $pilotenDetailsModel->getPilotenGewichtNachPilotIDUndDatum($pilotID);
+    }
     
     protected function datenZumDatenInhaltHinzufügen() 
     {
@@ -404,6 +443,14 @@ class Protokolleingabecontroller extends Controller
                  if(isset($_SESSION['flugzeugID']))
                  {
                      $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
+                     if(isset($_SESSION['pilotID']))
+                     {
+                         $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['pilotID']);
+                     }
+                     if(isset($_SESSION['copilotID']))
+                     {
+                         $inhaltZusatz['copilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['copilotID']);
+                     }
                  }
                  
                 break;

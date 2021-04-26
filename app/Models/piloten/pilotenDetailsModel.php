@@ -19,10 +19,17 @@ class pilotenDetailsModel extends Model
 
     //protected $allowedFields 	= ['pilotID', 'datum', 'stundenNachSchein', 'geflogeneKm', 'typenAnzahl', 'gewicht'];
 	
-    public function getPilotenDetailsNachPilotIDUndDatum($pilotID, $datum)
+    public function getPilotenDetailsNachPilotIDUndDatum($pilotID, $datum = "")
     {
         $datum = $datum === "" ? date('Y-m-d') : $datum;
         
-        return $this->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum");
+        return $this->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum")->findAll();
+    }
+    
+    public function getPilotenGewichtNachPilotIDUndDatum($pilotID, $datum = "")
+    {
+        $datum = $datum === "" ? date('Y-m-d') : $datum;
+        
+        return $this->select("gewicht")->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum")->first();
     }
 }

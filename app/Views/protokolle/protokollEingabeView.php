@@ -65,8 +65,7 @@
             </div>
 
             <div class="col-12">
-                <select id="flugzeugAuswahl" name="flugzeugID" class="form-select form-select-lg" size="10">
-                    <option></option>
+                <select id="flugzeugAuswahl" name="flugzeugID" class="form-select form-select-lg" size="10" required>
                     <?php foreach($flugzeugeDatenArray as $flugzeug) :  ?>
                         <option value="<?= esc($flugzeug['id']) ?>" <?= (isset($_SESSION['flugzeugID']) && $_SESSION['flugzeugID'] === $flugzeug['id']) ? "selected" : "" ?>>
                             <?=  $flugzeug["kennung"] . " - " . $flugzeug["musterSchreibweise"].$flugzeug["musterZusatz"] ?>
@@ -114,7 +113,7 @@
             <br>
         </div>
         <div class="col-12">
-            <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10">
+            <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
                 <?php foreach($pilotenDatenArray as $pilot) :  ?>
                     <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
                         <?= esc($pilot["vorname"]) ?>
@@ -179,18 +178,167 @@
     <div class="col-1">
     </div>
 
-    <div class="col-10">
-        Test
-         <?= var_dump($hebelarmDatenArray) ?>
+    <div class="col-10 g-2 row">
+        <?php if ( ! isset($_SESSION['flugzeugID'])) : ?>
+            <span class="text-danger">Es wurde kein Flugzeug ausgewählt</span>
+
+        <?php elseif (! isset($_SESSION['pilotID'])) : ?> 
+            <span class="text-danger">Es wurde kein Pilot ausgewählt</span>
+        
+        <?php elseif ($pilotGewicht == null) : ?>
+            <span class="text-danger">Für den Pilot wurde kein Gewicht gefunden. Bitte Pilotengewicht unter Pilot -> Pilotenliste -> bearbeiten hinzufügen</span>
+            
+        <?php else: ?>
+        <!-- Überschriften -->
+            <div class="col-4">
+                <b>Hebelarmbezeichnung</b>
+            </div>
+            <div class="col-3">
+                <b>Hebelarmlänge</b>
+            </div>
+            <div class="col-3">
+                <b>Gewicht</b>
+            </div>
+            <div class="col-2"></div>
+        
+        <!-- Pilot erste Zeile -->
+            <div class="col-4">
+                Pilot
+            </div>
+            <div class="col-3">
+                <?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <input type="number" class="form-control" step="0.1" min="0" name="gewichtPilot" id="gewichtPilot" value="<?= esc($pilotGewicht['gewicht']) ?>" readonly>
+                    <span class="input-group-text">kg</span>
+                </div>
+            </div>
+            <div class="col-2"></div>
+            
+        <!-- Pilot zweite Zeile -->
+            <div class="col-4">
+                Fallschirm Pilot
+            </div>
+            <div class="col-3">
+                <?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <input type="number" class="form-control" step="0.1" min="0" name="gewichtFSPilot" id="gewichtFSPilot" value="<?= isset($_SESSION['beladungszustand']['gewichtFSPilot']) ? $_SESSION['beladungszustand']['gewichtFSPilot'] : "" ?>" required>
+                    <span class="input-group-text">kg</span>
+                </div>
+            </div>
+            <div class="col-2"></div>
+            
+        <!-- Pilot dritte Zeile -->
+            <div class="col-4">
+                Zusatzgewicht im Pilotensitz
+            </div>
+            <div class="col-3">
+                <?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <input type="number" class="form-control" step="0.1" name="gewichtZusatzPilot" id="gewichtZusatzPilot" value="<?= isset($_SESSION['beladungszustand']['gewichtZusatzPilot']) ? $_SESSION['beladungszustand']['gewichtZusatzPilot'] : "" ?>">
+                    <span class="input-group-text">kg</span>
+                </div>
+            </div>
+            <div class="col-2"></div>
+            
+            <?php if(isset($_SESSION['Doppelsitzer'])) : ?>
+            <!-- Begleiter erste Zeile -->
+                <div class="col-4">
+                    Begleiter
+                </div>
+                <div class="col-3">
+                    <?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="number" class="form-control" step="0.1" min="0" name="gewichtCopilot" id="gewichtCopilot" value="<?= (isset($_SESSION['copilotID']) && $copilotGewicht != null) ? esc($copilotGewicht['gewicht']) . "\" readonly" : (isset($_SESSION['beladungszustand']['gewichtCopilot']) ? $_SESSION['beladungszustand']['gewichtCopilot'] . '"' : '"') ?> >
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+
+            <!-- Begleiter zweite Zeile -->
+                <div class="col-4">
+                    Fallschirm Begleiter
+                </div>
+                <div class="col-3">
+                    <?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="number" class="form-control" step="0.1" min="0" name="gewichtFSCopilot" id="gewichtFSCopilot" value="<?= isset($_SESSION['beladungszustand']['gewichtFSCopilot']) ? $_SESSION['beladungszustand']['gewichtFSCopilot'] : "" ?>">
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+
+            <!-- Begleiter dritte Zeile -->
+                <div class="col-4">
+                    Zusatzgewicht im Begleitersitz
+                </div>
+                <div class="col-3">
+                    <?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="number" class="form-control" step="0.1" name="gewichtZusatzCopilot" id="gewichtZusatzCopilot" value="<?= isset($_SESSION['beladungszustand']['gewichtZusatzCopilot']) ? $_SESSION['beladungszustand']['gewichtZusatzCopilot'] : "" ?>">
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+                
+            <?php endif ?>
+                
+        <!-- Trimmballast Zeilen -->
+            <?php for($i = 2; $i < count($hebelarmDatenArray); $i++) : ?>
+                <div class="col-4">
+                     <?= esc($hebelarmDatenArray[$i]['beschreibung']) ?>
+                </div>
+                <div class="col-3">
+                    <?= esc($hebelarmDatenArray[$i]['hebelarm']) ?> mm h. BP
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <input type="number" class="form-control" step="0.1" name="gewichtHebelarm<?= $i ?>" id="gewichtHebelarm<?= $i ?>" value="<?= isset($_SESSION['beladungszustand']['gewichtHebelarm'. $i ]) ? $_SESSION['beladungszustand']['gewichtHebelarm'. $i ] : "" ?>">
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+                
+            <?php endfor ?>
+        
+        <!-- Leerzeile -->
+        <small>Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden</small>
+            <div class="col-3">
+                <input type="text" class="form-control" name="beschreibungWeitererHebelarm" id="beschreibungWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['beschreibungWeitererHebelarm']) ? $_SESSION['beladungszustand']['beschreibungWeitererHebelarm'] : "" ?>">
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    <input type="number" class="form-control" step="0.1" name="hebelarmWeitererHebelarm" id="hebelarmWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['hebelarmWeitererHebelarm']) ? $_SESSION['beladungszustand']['hebelarmWeitererHebelarm'] : "" ?>">
+                    <span class="input-group-text">mm h. BP</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <input type="number" class="form-control" step="0.1" name="gewichtWeitererHebelarm" id="gewichtWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['gewichtWeitererHebelarm']) ? $_SESSION['beladungszustand']['gewichtWeitererHebelarm'] : "" ?>">
+                    <span class="input-group-text">kg</span>
+                </div>
+            </div>
+            <div class="col-2"></div>
+        
+        <?php endif ?>
     </div>
 
     <div class="col-1">
     </div>
-
-
-            
-     <?php $_SESSION['eingegebeneDaten'][12]["wert"] = "Hal7lo" ?>
-     <?php
+        
+        <?php
+                unset($_SESSION['beladungszustand']);
                 break;
             default:
                 //var_dump($kapitelDatenArray);

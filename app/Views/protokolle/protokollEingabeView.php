@@ -3,6 +3,7 @@
 <?php //unset($_SESSION['Doppelsitzer']) 
       //  $_SESSION['Doppelsitzer'] = [];
       
+      
 ?>
 
 <div class="row">
@@ -43,9 +44,10 @@
 <!---------------------------------------->         
 
         <div class="row g-3">
-            
+           
         <?php 
             //var_dump($_SESSION['kapitelIDs']);
+            echo form_hidden("aktuellesKapitel", $_SESSION['aktuellesKapitel']);
             
             switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]) : 
                 case 1:    ?>  
@@ -159,6 +161,7 @@
 
     <?php else: ?> <!-- Einsitzer -->
             </div>
+        </div>
             
             <div class="col-2">
                 
@@ -313,7 +316,7 @@
             <?php endfor ?>
         
         <!-- Leerzeile -->
-        <small>Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden</small>
+        <small class="m-3">Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden</small>
             <div class="col-3">
                 <input type="text" class="form-control" name="beschreibungWeitererHebelarm" id="beschreibungWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['beschreibungWeitererHebelarm']) ? $_SESSION['beladungszustand']['beschreibungWeitererHebelarm'] : "" ?>">
             </div>
@@ -341,27 +344,37 @@
                 unset($_SESSION['beladungszustand']);
                 break;
             default:
-                //var_dump($kapitelDatenArray);
+ 
+                var_dump($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']]);
                 //var_dump($_SESSION['eingegebeneDaten']);
+                //isset($auswahllistenDatenArray) ? var_dump($auswahllistenDatenArray) : ""; 
+                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $keyUnterkapitel => $unterkapitel): ?>
                 
-                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $keyUnterkapitel => $unterkapitel)
-                {
-                    //isset($auswahllistenDatenArray) ? var_dump($auswahllistenDatenArray) : ""; 
-                
+                    <small><?= esc($kapitelDatenArray['zusatztext']) ?></small>
                      
-                    foreach($unterkapitel as $keyEingaben => $eingabe)
-                    {
-                        //var_dump($eingabenDatenArray[$keyEingaben]);
+                    <?php foreach($unterkapitel as $keyEingaben => $eingabe) : ?>
+                    
+                        <?php //var_dump($eingabenDatenArray[$keyEingaben]) ?>
+                        
+                        <?php foreach($_SESSION['WoelbklappenFlugzeug'] as $wk) : ?>
+                        
+                            <?php foreach($eingabe as $keyInput => $input) : ?>
+                            
+                                Test
+                            
+                            <?php endforeach ?>        
+                        <?php endforeach ?> 
+                    <?php endforeach ?>  
+                                
+                             
+                <?php endforeach ?>
+                <?php if($kapitelDatenArray["kommentar"] == 1) : ?>
+                    <label for="kommentar" class="form-label">Hier kannst du weitere Kommentare einfügen:</label>
+                    <textarea class="form-control" id="kommentar" name="kommentar[<?= $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']] ?>]" rows="3"><?= isset($_SESSION['kommentare'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]) ? $_SESSION['kommentare'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]] : "" ?></textarea>
+                <?php endif ?>   
+            <?php endswitch ?>
 
-                        foreach($eingabe as $keyInput => $input)
-                        {
-                          
-                        }
-                    }
-                }
 
-            endswitch;
-            ?>
        
         <div class="mt-5 row"> 
 

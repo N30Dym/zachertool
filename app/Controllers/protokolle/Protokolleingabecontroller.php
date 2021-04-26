@@ -18,7 +18,10 @@ use App\Models\muster\musterModel;
 use App\Models\piloten\pilotenModel;
 use App\Models\piloten\pilotenDetailsModel;
 //use App\Models\protokolllayout\;
-$session = session();
+if(!isset($_SESSION)){
+    $session = session();
+}
+
 
 helper(['form', 'url', 'array']);
 
@@ -127,6 +130,11 @@ class Protokolleingabecontroller extends Controller
                 
                 asort($_SESSION['kapitelNummern']);
             }
+            
+            if( ! isset($_SESSION['kommentare']))
+            {
+                $_SESSION['kommentare'] = [];
+            }
         }   
     }
     
@@ -155,7 +163,7 @@ class Protokolleingabecontroller extends Controller
             }
             else 
             {
-                unset($_SESSION['WoelbklappenFlugzeug']);
+                $_SESSION['WoelbklappenFlugzeug'] = [0];
             }
         }
         
@@ -174,6 +182,10 @@ class Protokolleingabecontroller extends Controller
             $_SESSION['beladungszustand'] = $postDaten;
         }
         
+        if(isset($postDaten['kommentar']))
+        {        
+            $_SESSION['kommentare'][key($postDaten['kommentar'])] = $postDaten['kommentar'][key($postDaten['kommentar'])];
+        }
     }
         /*
          * 
@@ -239,7 +251,7 @@ class Protokolleingabecontroller extends Controller
             // Wenn schon Daten gespeichert waren und die erste Seite aufgerufen wurde, werden die gespeichert Daten neu
             // geladen, um zu verhindern, dass im eingegebenenDaten Array Daten sind, die nicht zu den gewählten Protokollen
             // passen, wenn ein ProtkollTyp abgewählt wurde
-        if($DatenArray !== [] & isset($DatenArray[$protokollInputID]) && $DatenArray[$protokollInputID] !== "")
+        if($DatenArray !== [] && isset($DatenArray[$protokollInputID]) && $DatenArray[$protokollInputID] !== "")
         {
             $_SESSION['eingegebeneDaten'][$protokollInputID] = $DatenArray[$protokollInputID];
         }

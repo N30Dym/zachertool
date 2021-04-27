@@ -86,7 +86,7 @@ class Protokolleingabecontroller extends Controller
         {
             return redirect()->back();
         } 
-            
+        
         $datenHeader = [
             'title'                             => $_SESSION['protokollInformationen']['titel'],
             'description'                       => "Das übliche halt"
@@ -128,7 +128,7 @@ class Protokolleingabecontroller extends Controller
                 
                 $this->protokollLayoutSetzen();
                 
-                asort($_SESSION['kapitelNummern']);
+                sort($_SESSION['kapitelNummern']);
             }
             
             if( ! isset($_SESSION['kommentare']))
@@ -141,6 +141,8 @@ class Protokolleingabecontroller extends Controller
     protected function pruefePostInhalt() {
         
         $postDaten = $this->request->getPost();
+        
+        var_dump($postDaten);
         
         if( ! isset($_SESSION['flugzeugID']) && isset($postDaten["flugzeugID"]))
         {
@@ -182,7 +184,7 @@ class Protokolleingabecontroller extends Controller
             $_SESSION['beladungszustand'] = $postDaten;
         }
         
-        if(isset($postDaten['kommentar']))
+        if(isset($postDaten['kommentar']) && $postDaten['kommentar'] != "")
         {        
             $_SESSION['kommentare'][key($postDaten['kommentar'])] = $postDaten['kommentar'][key($postDaten['kommentar'])];
         }
@@ -310,7 +312,7 @@ class Protokolleingabecontroller extends Controller
                 $temporaeresEingabeArray[$j] = $protokollEingabenModel->getProtokollEingabeNachID($j);
             }
         }
-
+        //var_dump($temporaeresEingabeArray);
         return $temporaeresEingabeArray;            
     }
     
@@ -334,7 +336,7 @@ class Protokolleingabecontroller extends Controller
 
         foreach($temporaeresInputArray as $i => $InputArray)
         {
-            $temporaeresInputArray[$i]['inputTyp'] = $inputsModel->getInputNachID($InputArray['inputID']);
+            $temporaeresInputArray[$i]['inputTyp'] = $inputsModel->getInputNachID($InputArray['inputID'])['inputTyp'];
         }
         
         return $temporaeresInputArray;  
@@ -349,7 +351,7 @@ class Protokolleingabecontroller extends Controller
         foreach($this->getProtokollInputs() as $protokollInput)
         {
             
-            if($protokollInput["inputTyp"]["inputTyp"] === "Auswahloptionen")
+            if($protokollInput["inputTyp"] === "Auswahloptionen")
             {
                 $temporaeresAuswahllistenArray[$protokollInput["id"]] = $auswahllistenModel->getAuswahllisteNachProtokollInputID($protokollInput["id"]);
             }   

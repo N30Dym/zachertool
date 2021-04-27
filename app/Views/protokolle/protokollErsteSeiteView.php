@@ -71,7 +71,7 @@
             </div>
             <div class="col-6">
                 <?php if(isset($_SESSION['kapitelNummern'])) : ?>
-                    <div class="d-flex row">
+                    <div class="d-flex row d-none" id="springeZu">
                         <div class="input-group mb-3">
                             <select id="kapitelAuswahl" class="form-select">
                                 <option value="1" selected>1 - Informationen zum Protokoll</option>

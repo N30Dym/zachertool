@@ -45,7 +45,7 @@
            
         <?php 
 
-            echo form_hidden("aktuellesKapitel", $_SESSION['aktuellesKapitel']);
+            //echo form_hidden("aktuellesKapitel", $_SESSION['aktuellesKapitel']);
             
             switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]) : 
                 case 1:    ?>  
@@ -59,7 +59,7 @@
             <div class="col-8 row">
 
                 <div class="col-12">
-                    <input class="form-control" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
+                    <input class="form-control d-none" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
                     <br>
                 </div>
 
@@ -89,79 +89,88 @@
 <!--          Pilotenauswahl            --> 
 <!----------------------------------------> 
 
-    <?php if (isset($_SESSION['Doppelsitzer'])) : ?>
-        <div class="col-12 text-center">
-            <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
-        </div>
-        
-        <div class="col-5">
-            <div class="col-12 text-center">  
-                <h4>Pilotenauswahl</h4>
+    <?php if( ! isset($_SESSION['flugzeugID'])) : ?>
+        <span class="text-danger">Es wurde kein Flugzeug ausgewählt</span>
+        <?php 
+            unset($_SESSION['pilotID']);
+            unset($_SESSION['copilotID']);
+        ?>    
+
+    <?php else: ?>
+        <?php if (isset($_SESSION['Doppelsitzer'])) : ?>
+            <div class="col-12 text-center">
+                <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
             </div>
-    <?php else: ?> <!-- Einsitzer -->
 
-        <div class="col-2">
-        </div>
+            <div class="col-5">
+                <div class="col-12 text-center">  
+                    <h4>Pilotenauswahl</h4>
+                </div>
+        <?php else: ?> <!-- Einsitzer -->
 
-        <div class="col-8">
+            <div class="col-2">
+            </div>
 
+            <div class="col-8">
+
+        <?php endif ?>
+
+                <div class="col-12">
+                    <input class="form-control d-none" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
+                    <br>
+                </div>
+                <div class="col-12">
+                    <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
+                        <?php foreach($pilotenDatenArray as $pilot) :  ?>
+                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                                <?= esc($pilot["vorname"]) ?>
+                                <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
+                                <?= esc($pilot["nachname"]) ?>
+                            </option>                   
+                        <?php endforeach ?>
+                    </select>
+                </div>
+
+        <?php if(isset($_SESSION['Doppelsitzer'])) : ?>    
+
+            </div>
+
+            <div class="col-2">
+            </div>
+
+            <div class="col-5">
+                <div class="col-12 text-center">  
+                    <h4>Begleiterauswahl</h4>
+                </div>
+                <div class="col-12">
+                    <input class="form-control d-none" id="copilotSuche" type="text" placeholder="Suche nach Begleiter...">
+                    <br>
+                </div>
+
+                <div class="col-12">
+                    <select id="copilotAuswahl" name="copilotID" class="form-select form-select-lg" size="10">
+                        <option></option>
+                        <?php foreach($pilotenDatenArray as $pilot) :  ?>
+                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['copilotID']) && $_SESSION['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                                <?= esc($pilot["vorname"]) ?>
+                                <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
+                                <?= esc($pilot["nachname"]) ?>
+                            </option>                      
+                        <?php endforeach ?>
+                    </select>
+                </div>
+
+
+
+        <?php else: ?> <!-- Einsitzer -->
+
+            </div>
+
+            <div class="col-2">
+
+        <?php endif ?> 
+            </div>  
     <?php endif ?>
-                        
-            <div class="col-12">
-                <input class="form-control" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
-                <br>
-            </div>
-            <div class="col-12">
-                <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
-                    <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
-                            <?= esc($pilot["vorname"]) ?>
-                            <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
-                            <?= esc($pilot["nachname"]) ?>
-                        </option>                   
-                    <?php endforeach ?>
-                </select>
-            </div>
-                        
-    <?php if(isset($_SESSION['Doppelsitzer'])) : ?>    
-            
-        </div>
-    
-        <div class="col-2">
-        </div>
-
-        <div class="col-5">
-            <div class="col-12 text-center">  
-                <h4>Begleiterauswahl</h4>
-            </div>
-            <div class="col-12">
-                <input class="form-control" id="copilotSuche" type="text" placeholder="Suche nach Begleiter...">
-                <br>
-            </div>
-
-            <div class="col-12">
-                <select id="copilotAuswahl" name="copilotID" class="form-select form-select-lg" size="10">
-                    <option></option>
-                    <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['copilotID']) && $_SESSION['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
-                            <?= esc($pilot["vorname"]) ?>
-                            <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
-                            <?= esc($pilot["nachname"]) ?>
-                        </option>                      
-                    <?php endforeach ?>
-                </select>
-            </div>
-
-       
-
-    <?php else: ?> <!-- Einsitzer -->
-            
-        </div>
-            
-        <div class="col-2">
-      
-    <?php endif ?> 
-        </div>      
          
     <?php   
             unset($_SESSION['pilotID']);
@@ -338,18 +347,22 @@
                 unset($_SESSION['beladungszustand']);
                 break;
             default: ?>
+<!---------------------------------------->   
+<!--               Kapitel              --> 
+<!---------------------------------------->
                 <small><?= esc($kapitelDatenArray['zusatztext']) ?></small>
                 
             <?php
-                //var_dump($unterkapitelDatenArray);
-                //var_dump($_SESSION['eingegebeneDaten']);
-                //isset($auswahllistenDatenArray) ? var_dump($auswahllistenDatenArray) : ""; 
+                
                 $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0];
                 $unterkapitelNummer = 0;
                 $hStWegFeldBenoetigt = false;
                 foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $keyUnterkapitel => $unterkapitel): ?>
+ 
+<!---------------------------------------->   
+<!--   Unterkapitel Titel und Nummer    --> 
+<!---------------------------------------->                
                 
-                <!-- Unterkapitel Titel und Nummer -->
                     <?php if($keyUnterkapitel > 0) : ?>
                         <?php $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$keyUnterkapitel]['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0]; ?>
                         <?php $unterkapitelNummer++ ?>
@@ -358,69 +371,148 @@
                     <?php endif ?>    
                      
                     <?php foreach($woelbklappe as $wk) : ?>
+<!---------------------------------------->   
+<!--      Wölbklappen Ja / Nein         --> 
+<!---------------------------------------->                        
+                        
                         <?= $wk != 0 ? '<h5 class="col-12">' . $wk . '</h5>'  : "" ?>
                         
                         <?php foreach($unterkapitel as $keyEingaben => $eingabe) : ?>
-                            <?php switch(count($eingabe)) : 
-                               case 1: ?>
-                                <?php case 2: ?>
-                                    <div class="col-4 text-end border">
-                                <?php break ?> 
-                                <?php case 3: ?>
-                                    <div class="col-3 text-end border">    
-                                <?php break ?> 
-                                <?php default: ?>
-                                     <div class="col-2 text-end border">                                          
-                            <?php endswitch ?>
+<!---------------------------------------->   
+<!--         Kapiteleingaben            --> 
+<!----------------------------------------> 
+                            <?php $eingabenDatenArray[$keyEingaben]['wegHSt'] == 1 ? $hStWegFeldBenoetigt = true : "" ?>
+                            <?php if($eingabenDatenArray[$keyEingaben]['multipel'] == 0) : ?>
+                                
+                        <!-- Breite der Felder nach Anzahl der Inputfelder -->        
+                                <?php switch(count($eingabe)) :  
+                                   case 1: ?>
+                                    <?php case 2: ?>
+                                        <div class="col-4 text-end border">
+                                    <?php break ?> 
+                                    <?php case 3: ?>
+                                        <div class="col-3 text-end border">    
+                                    <?php break ?> 
+                                    <?php default: ?>
+                                         <div class="col-2 text-end border">                                          
+                                <?php endswitch ?>
+
+                                <?= esc($eingabenDatenArray[$keyEingaben]['bezeichnung']) ?>
+                                </div>
+                                <?php //var_dump($eingabenDatenArray[$keyEingaben]) ?>
+
+                                <?php foreach($eingabe as $keyInput => $input) : ?>
+<!---------------------------------------->   
+<!--           Kapitelinputs            --> 
+<!---------------------------------------->
+                            <!-- Breite der Inputfelder nach Anzahl der Inputfelder -->
+                                    <?php switch(count($eingabe)) : 
+                                    case 1: ?>
+                                         <div class="col-8 border">
+                                        <?php break ?>
+                                        <?php case 2: ?>
+                                            <div class="col-4 border">
+                                        <?php break ?> 
+                                        <?php case 3: ?>
+                                            <div class="col-3 border">    
+                                        <?php break ?> 
+                                        <?php default: ?>
+                                          <div class="col-2 border">                                          
+                                    <?php endswitch ?>
+<!---------------------------------------->   
+<!--             Inputfelder            --> 
+<!----------------------------------------> 
+                                   
+                                    <?php switch($inputsDatenArray[$keyInput]['inputTyp']) :          
+                                        case "Dezimalzahl": ?>
+
+                                            <div class="input-group">
+                                                <?php if($eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1) : ?>
+                                                    <select class="form-select LinksOderRechts" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" id="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" >
+                                                        <option value="">Ohne Richtung</option>
+                                                        <option value="Links" selected>Linkskurve</option>
+                                                        <option value="Rechts">Rechtskurve</option>
+                                                    </select>
+                                                <?php endif ?>
+                                                
+                                                <?php if($inputsDatenArray[$keyInput]['bezeichnung'] != "") : ?>
+                                                    <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['bezeichnung']) ?></span>
+                                                <?php endif ?>
+                                                    
+                                                <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][Links][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>">
+                                                
+                                                <?php if($inputsDatenArray[$keyInput]['einheit'] != "") : ?>
+                                                    <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['einheit']) ?></span>
+                                                <?php endif ?>
+                                            </div>
+                                                <div class="input-group">
+                                                    <?php if($eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1) : ?>
+                                                        <select class="form-select LinksOderRechts" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" id="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" disabled>
+                                                            <option value="Rechts">Rechtskurve</option>
+                                                        </select>
+                                                    <?php endif ?>
+                                                    
+                                                    <?php if($inputsDatenArray[$keyInput]['bezeichnung'] != "") : ?>
+                                                        <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['bezeichnung']) ?></span>
+                                                    <?php endif ?>
+                                                        
+                                                    <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][Rechts][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>">
+                                                    
+                                                    <?php if($inputsDatenArray[$keyInput]['einheit'] != "") : ?>
+                                                        <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['einheit']) ?></span>
+                                                    <?php endif ?>
+                                                </div>
+
+                                        <?php break ?> <!-- case "Dezimalzahl" -->
+                                        <?php default: ?>
+                                            <?= esc($inputsDatenArray[$keyInput]['inputTyp']) ?>
+                                    <?php endswitch ?> <!-- Inputfelder -->
+
+
+                                    </div>
+                                <?php endforeach ?> <!--  Kapitelinputs -->
+                                
+                            <?php else : ?> <!-- if Multipel -->
+                                Dies ist ein Multiples Feld
+                            <?php endif ?> <!-- if Multipel -->
                             
-                            <?= esc($eingabenDatenArray[$keyEingaben]['bezeichnung']) ?>
-                            </div>
-                            <?php var_dump($eingabenDatenArray[$keyEingaben]) ?>
-
-                                
-
-                            <?php foreach($eingabe as $keyInput => $input) : ?>
-                                <?php switch(count($eingabe)) : 
-                               case 1: ?>
-                                    <div class="col-8">
-                                <?php break ?>
-                                <?php case 2: ?>
-                                    <div class="col-4">
-                                <?php break ?> 
-                                <?php case 3: ?>
-                                    <div class="col-3">    
-                                <?php break ?> 
-                                <?php default: ?>
-                                     <div class="col-2">                                          
-                            <?php endswitch ?>
-                                  
-                            </div>
-                            <?php endforeach ?>
-                                
-                        <?php endforeach ?> 
+                        <?php endforeach ?> <!-- Kapiteleingaben -->
                         
                         
-                    <?php endforeach ?>  
+                    <?php endforeach ?> <!-- Wölbklappen Ja / Nein) -->  
                                 
                              
-                <?php endforeach ?>
+                <?php endforeach ?> <!-- Unterkapitel Titel und Nummer -->
+
+<!---------------------------------------->   
+<!--           Höhensteuerwege          --> 
+<!---------------------------------------->                
+                <?php if($hStWegFeldBenoetigt) : ?>
+                    Hier könnten Ihre Höhensteuer Wege stehen
+                <?php endif ?>
+                    
+<!---------------------------------------->   
+<!--           Kommentarfelder          --> 
+<!---------------------------------------->                     
                 <?php if($kapitelDatenArray["kommentar"] == 1) : ?>
                     <label for="kommentar" class="form-label">Hier kannst du weitere Kommentare einfügen:</label>
                     <textarea class="form-control" id="kommentar" name="kommentar[<?= $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']] ?>]" rows="3"><?= isset($_SESSION['kommentare'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]) ? $_SESSION['kommentare'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]] : "" ?></textarea>
-                <?php endif ?>   
-            <?php endswitch ?>
-
-             
-       
-    </div>
-                    <div class="mt-5 row"> 
+                <?php endif ?> 
+                    
+            <?php endswitch ?> <!-- switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]) -->      
+        </div>
+                                                
+<!---------------------------------------->   
+<!--        Seitennavigation            --> 
+<!---------------------------------------->                                                
+        <div class="mt-5 row"> 
 
             <div class="col-3">
                 <button type="submit" class="btn btn-secondary col-12" formaction="<?= array_search($_SESSION['aktuellesKapitel'], $_SESSION['kapitelNummern']) <= 0 ? site_url('/protokolle/kapitel/1') : site_url('/protokolle/kapitel/' . $_SESSION['kapitelNummern'][array_search($_SESSION['aktuellesKapitel'], $_SESSION['kapitelNummern']) - 1] ) ?>">< Zurück</button>
             </div>
 
             <div class="col-6 d-flex">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none" id="springeZu">
                     <select id="kapitelAuswahl" class="form-select">
                         <option value="1">1 - Informationen zum Protokoll</option>
                         <?php foreach($_SESSION['kapitelNummern'] as $kapitelNummer) : ?>
@@ -439,6 +531,6 @@
 
         </form>
 
-        </div>
+    </div>
 
 </div>

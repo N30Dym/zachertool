@@ -151,38 +151,65 @@ class Protokolleingabecontroller extends Controller
             {
                 foreach($datenSatz as $woelbklappenStellung => $datenRichtungUndWert)
                 {
-                    //echo(isset($datenSatz[$protokollInputID."eineSeite"]));
-                    //var_dump($postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]);
-                    if(isset($datenRichtungUndWert["eineSeite"]) && $postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung] != "")
+                    //echo(isset($datenSatz[$protokollInputID."eineRichtung"]));
+                    //var_dump($postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]);
+                    if(isset($datenRichtungUndWert["eineRichtung"]) && $postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung] != "")
                     {
-                        if($datenRichtungUndWert["eineSeite"][0] != "")
+                        if($datenRichtungUndWert["eineRichtung"][0] != "")
                         {
-                            echo "Links";
-                            var_dump($postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]);
-                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][/*$postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]*/"Links"] = $datenRichtungUndWert['eineSeite'];
-
-                            if($datenRichtungUndWert["andereSeite"][0] != "")
+                            //echo "Links";
+                            
+                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['eineRichtung'];
+                            var_dump($_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung]);
+                            if($datenRichtungUndWert["andereRichtung"][0] != "")
                             {    
                                 //var_dump($postDaten);
-                                echo"Rechts";
-                                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][/*$postDaten[$protokollInputID."andereSeite"][$woelbklappenStellung]*/"Rechts"] = $datenRichtungUndWert['andereSeite'];    
+                                //echo"Rechts";
+                                echo($postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]);
+                                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['andereRichtung'];    
                             }
                         }
                             
                     }
                     else 
                     {                     
-                        if($datenRichtungUndWert["eineSeite"][0] != "")
+                        var_dump($datenRichtungUndWert);
+                        if(isset($datenRichtungUndWert["eineRichtung"]) && $datenRichtungUndWert["eineRichtung"][0] != "" )
                         {
                             //echo "Tschüss";
-                            var_dump($datenSatz[$woelbklappenStellung]['eineSeite']);
-                            //$_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung]['eineSeite'];
+                            //var_dump($datenSatz[$woelbklappenStellung]['eineRichtung']);
+                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung]['eineRichtung'];
+                        }
+                        else if(isset($datenRichtungUndWert[0]) && $datenRichtungUndWert[0][0] != "")
+                        {
+                            //echo "Tschö mit ö";
+                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung][0];
                         }
                     }
                 }
             }
         }
         //var_dump($_SESSION['eingegebeneDaten']);
+        $this->zeigeEingegebeneDaten();
+    }
+    
+    protected function zeigeEingegebeneDaten()
+    {
+        foreach($_SESSION['eingegebeneDaten'] as $kapitelInputID => $inputs)
+        {
+            
+            foreach($inputs as $woelbklappenStellung => $richtungUndWert)
+            {
+                foreach($richtungUndWert as $richtung => $wert)
+                {
+                    echo "<br>";
+                    echo " ".$kapitelInputID.": ";
+                    echo " ".$woelbklappenStellung.": ";
+                    echo " ".$richtung.": ";
+                    echo " ".$wert[0];
+                }
+            }
+        }
     }
     
     protected function pruefePostInhalt() {

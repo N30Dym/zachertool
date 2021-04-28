@@ -82,6 +82,8 @@ class Protokolleingabecontroller extends Controller
         
         $this->pruefePostInhalt();
         
+        $this->eingegebeneDaten();
+        
         if( ! isset($_SESSION['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['kapitelNummern']))
         {
             return redirect()->back();
@@ -138,11 +140,56 @@ class Protokolleingabecontroller extends Controller
         }   
     }
     
+    protected function eingegebeneDaten()
+    {
+        //var_dump( $_SESSION['eingegebeneDaten']);
+        $postDaten = $this->request->getPost();
+        foreach($postDaten as $protokollInputID => $datenSatz)
+        {            
+            //var_dump($datenSatz);
+            if(isset($_SESSION['eingegebeneDaten'][$protokollInputID]))
+            {
+                foreach($datenSatz as $woelbklappenStellung => $datenRichtungUndWert)
+                {
+                    //echo(isset($datenSatz[$protokollInputID."eineSeite"]));
+                    //var_dump($postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]);
+                    if(isset($datenRichtungUndWert["eineSeite"]) && $postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung] != "")
+                    {
+                        if($datenRichtungUndWert["eineSeite"][0] != "")
+                        {
+                            echo "Links";
+                            var_dump($postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]);
+                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][/*$postDaten[$protokollInputID."eineSeite"][$woelbklappenStellung]*/"Links"] = $datenRichtungUndWert['eineSeite'];
+
+                            if($datenRichtungUndWert["andereSeite"][0] != "")
+                            {    
+                                //var_dump($postDaten);
+                                echo"Rechts";
+                                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][/*$postDaten[$protokollInputID."andereSeite"][$woelbklappenStellung]*/"Rechts"] = $datenRichtungUndWert['andereSeite'];    
+                            }
+                        }
+                            
+                    }
+                    else 
+                    {                     
+                        if($datenRichtungUndWert["eineSeite"][0] != "")
+                        {
+                            //echo "Tschüss";
+                            var_dump($datenSatz[$woelbklappenStellung]['eineSeite']);
+                            //$_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung]['eineSeite'];
+                        }
+                    }
+                }
+            }
+        }
+        //var_dump($_SESSION['eingegebeneDaten']);
+    }
+    
     protected function pruefePostInhalt() {
         
         $postDaten = $this->request->getPost();
         
-        var_dump($postDaten);
+        //var_dump($postDaten);
         
         if( ! isset($_SESSION['flugzeugID']) && isset($postDaten["flugzeugID"]))
         {

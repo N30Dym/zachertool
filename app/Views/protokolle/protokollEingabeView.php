@@ -426,12 +426,12 @@
                                     <?php switch($inputsDatenArray[$keyInput]['inputTyp']) :          
                                         case "Dezimalzahl": ?>
 
-                                            <div class="input-group">
+                                            <div class="input-group eineSeite">
                                                 <?php if($eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1) : ?>
-                                                    <select class="form-select LinksOderRechts" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" id="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" >
-                                                        <option value="">Ohne Richtung</option>
+                                                    <select class="form-select input-group-text linksOderRechts" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>eineSeite[<?= esc($wk) ?>]" >
+                                                        <option value="">Ohne Richtungsangabe</option>
                                                         <option value="Links" selected>Linkskurve</option>
-                                                        <option value="Rechts">Rechtskurve</option>
+                                                        <option value="Rechts" disabled>Rechtskurve</option>
                                                     </select>
                                                 <?php endif ?>
                                                 
@@ -439,31 +439,39 @@
                                                     <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['bezeichnung']) ?></span>
                                                 <?php endif ?>
                                                     
-                                                <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][Links][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>">
+                                                <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][<?= $eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1 ? "eineSeite" : 0 ?>][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk]['Links'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk]['Links'][0]) : "" ?><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk][0][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk][0][0]) : "" ?>">
                                                 
                                                 <?php if($inputsDatenArray[$keyInput]['einheit'] != "") : ?>
                                                     <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['einheit']) ?></span>
                                                 <?php endif ?>
                                             </div>
-                                                <div class="input-group">
-                                                    <?php if($eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1) : ?>
-                                                        <select class="form-select LinksOderRechts" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" id="<?= esc($inputsDatenArray[$keyInput]['id']) ?>LinksOderRechts" disabled>
-                                                            <option value="Rechts">Rechtskurve</option>
-                                                        </select>
-                                                    <?php endif ?>
-                                                    
+
+                                            <?php if($eingabenDatenArray[$keyEingaben]['linksUndRechts'] == 1) : ?>
+                                                <div class="input-group andereSeite">
+                                                    <select class="form-select input-group-text" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>andereSeite[<?= esc($wk) ?>]" readonly >
+                                                        <option value="Links" disabled>Linkskurve</option>
+                                                        <option value="Rechts" selected>Rechtskurve</option>
+                                                    </select>
+
                                                     <?php if($inputsDatenArray[$keyInput]['bezeichnung'] != "") : ?>
                                                         <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['bezeichnung']) ?></span>
                                                     <?php endif ?>
-                                                        
-                                                    <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][Rechts][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>">
-                                                    
+
+                                                    <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$keyInput]['id']) ?>[<?= esc($wk) ?>][andereSeite][]" min="<?= esc($inputsDatenArray[$keyInput]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$keyInput]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$keyInput]['schrittweite']) ?>" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk]['Rechts'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$keyInput]['id']][$wk]['Rechts'][0]) : "" ?>" >
+
                                                     <?php if($inputsDatenArray[$keyInput]['einheit'] != "") : ?>
                                                         <span class="input-group-text"><?= esc($inputsDatenArray[$keyInput]['einheit']) ?></span>
                                                     <?php endif ?>
                                                 </div>
+                                            <?php endif ?>
 
                                         <?php break ?> <!-- case "Dezimalzahl" -->
+                                        <?php case "Textfeld" : ?>
+                                        
+                                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                                            
+                                        
+                                        <?php break ?> <!-- case "Textfeld" -->
                                         <?php default: ?>
                                             <?= esc($inputsDatenArray[$keyInput]['inputTyp']) ?>
                                     <?php endswitch ?> <!-- Inputfelder -->

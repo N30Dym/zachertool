@@ -54,7 +54,7 @@ $( document ).ready( function() {
     });
     
         
-    $( document ).on( 'click', '#kapitelAuswahl', function(){
+    $( document ).on( 'change', '#kapitelAuswahl', function(){
        $( '#kapitelGo' ).attr( 'formaction', '<?= site_url('/protokolle/kapitel/') ?>' + $( this ).val());
     });
     
@@ -76,7 +76,7 @@ $( document ).ready( function() {
     
         // Wenn bei linksUndRechts-Feldern eine Auswahl der eineRichtung getroffen wird, 
         // wird die andereRichtung entsprechend angepasst, bzw. ausgeblendet 
-    $( document ).on( 'click', 'select.eineRichtung', function(){
+    $( document ).on( 'change', 'select.eineRichtung', function(){
        //alert( $( this ).val() );
        if( $( this ).val() !== "0" )
        {

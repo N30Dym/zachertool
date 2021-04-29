@@ -142,54 +142,34 @@ class Protokolleingabecontroller extends Controller
     
     protected function eingegebeneDaten()
     {
-        //var_dump( $_SESSION['eingegebeneDaten']);
         $postDaten = $this->request->getPost();
+        
         foreach($postDaten as $protokollInputID => $datenSatz)
         {            
-            //var_dump($datenSatz);
             if(isset($_SESSION['eingegebeneDaten'][$protokollInputID]))
             {
                 foreach($datenSatz as $woelbklappenStellung => $datenRichtungUndWert)
                 {
-                    //echo(isset($datenSatz[$protokollInputID."eineRichtung"]));
-                    //var_dump($postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]);
-                    if(isset($datenRichtungUndWert["eineRichtung"]) && $postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung] != "")
+                    if(isset($datenRichtungUndWert["eineRichtung"]) && $datenRichtungUndWert["eineRichtung"][0] != "")
                     {
-                        if($datenRichtungUndWert["eineRichtung"][0] != "")
-                        {
-                            //echo "Links";
-                            
-                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['eineRichtung'];
-                            var_dump($_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung]);
-                            if($datenRichtungUndWert["andereRichtung"][0] != "")
-                            {    
-                                //var_dump($postDaten);
-                                //echo"Rechts";
-                                echo($postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]);
-                                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['andereRichtung'];    
-                            }
-                        }
-                            
-                    }
+                        $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['eineRichtung'];     
+                    }   
                     else 
                     {                     
-                        var_dump($datenRichtungUndWert);
-                        if(isset($datenRichtungUndWert["eineRichtung"]) && $datenRichtungUndWert["eineRichtung"][0] != "" )
+                        if(isset($datenRichtungUndWert[0]) && $datenRichtungUndWert[0][0] != "")
                         {
-                            //echo "Tschüss";
-                            //var_dump($datenSatz[$woelbklappenStellung]['eineRichtung']);
-                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung]['eineRichtung'];
-                        }
-                        else if(isset($datenRichtungUndWert[0]) && $datenRichtungUndWert[0][0] != "")
-                        {
-                            //echo "Tschö mit ö";
                             $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung][0];
                         }
+                    }
+                        // andereRichtung wird ignoriert, wenn "Ohne Richtungsangabe" ausgewählt und ein Wert eingegeben wurde 
+                    if(isset($datenRichtungUndWert["andereRichtung"]) && $datenRichtungUndWert["andereRichtung"][0] != "" && ! ($postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung] === "0" && $datenRichtungUndWert["eineRichtung"][0] !== ""))
+                    {
+                        $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['andereRichtung'];    
                     }
                 }
             }
         }
-        //var_dump($_SESSION['eingegebeneDaten']);
+        
         $this->zeigeEingegebeneDaten();
     }
     

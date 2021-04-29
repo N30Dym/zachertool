@@ -6,20 +6,43 @@ $( document ).ready( function() {
     $( '#pilotSuche' ).removeClass( 'd-none' );
     $( '#copilotSuche' ).removeClass( 'd-none' );
     $( '#flugzeugSuche' ).removeClass( 'd-none' );
-
-        // Beim Laden der Seite werden linksUndRechts-Felder auf "Ohne Richtungsangabe" gesetzt und die zweite Zeile unsichtbar
-        // gemacht. Sollte javaScript nicht aktiv sein, bleiben beide Felder sichtbar
-    $( 'select' ).each(function(){
+    $( '.warnhinweisKeinJS' ).addClass( 'd-none' );
+        
+        /*
+        * Beim Laden der Seite werden linksUndRechts-Felder auf "Ohne Richtungsangabe" gesetzt und die zweite Zeile unsichtbar
+        * gemacht. Sollte javaScript nicht aktiv sein, bleiben beide Felder sichtbar
+        * 
+         */
+    $( 'select.eineRichtung' ).each(function(){
         $( this ).children( 'option[value=Rechts]' ).removeAttr("disabled", true);
-        //alert( $( this ).parent( 'div' ).children( 'input' ).val());
-        if( $( this ). val() === "Rechts" && $( this ).parent( 'div' ).children( 'input' ).val() === "" )
+
+        if( $( this ).val() === "0" && $( this ).parent( 'div.eineRichtung' ).children( 'input' ).val() === "" && $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'input' ).val() !== "" && $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'select.andereRichtung' ).val() === "Rechts")
+        {
+            $( this ).val( 'Rechts' );
+            $( this ).parent( 'div.eineRichtung' ).children( 'input' ).val($( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'input' ).val());
+            $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'input' ).val( '' );
+            $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'select' ).val( 'Links' );
+            $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'select' ).children( 'option[value=Links]' ).removeAttr("disabled", true);
+            $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).children( 'select' ).children( 'option[value=Rechts]' ).attr("disabled", true);
+            
+        }       
+        else if( $( this ).val() === "0" )
+        {
+            $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).addClass( 'd-none' );
+        }
+        
+        /*if( $( this ). val() === "Rechts" && $( this ).parent( 'div.andereRichtung' ).children( 'input' ).val() === "" )
         {
             $( this ).parent( 'div' ).addClass( 'd-none' );
         }
-        else if( $( this ).parent( 'div' ).children( 'input' ).val() === "" )
+        else if()
         {
-            $( this ). val( '' );
+            
         }
+        else if( $( this ).parent( 'div.eineRichtung' ).children( 'input' ).val() === "" )
+        {
+            $( this ). val( '0' );
+        }*/
     });
 
         // Script für das Suchfeld der Flugzeuge
@@ -53,9 +76,9 @@ $( document ).ready( function() {
     
         // Wenn bei linksUndRechts-Feldern eine Auswahl der eineRichtung getroffen wird, 
         // wird die andereRichtung entsprechend angepasst, bzw. ausgeblendet 
-    $( document ).on( 'click', '.linksOderRechts', function(){
+    $( document ).on( 'click', 'select.eineRichtung', function(){
        //alert( $( this ).val() );
-       if( $( this ).val() !== "" )
+       if( $( this ).val() !== "0" )
        {
            if( $( this ).val() === "Links")
            {

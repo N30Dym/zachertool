@@ -30,19 +30,48 @@ $( document ).ready( function() {
         {
             $( this ).parent( 'div' ).parent( 'div' ).children( 'div.andereRichtung' ).addClass( 'd-none' );
         }
-        
-        /*if( $( this ). val() === "Rechts" && $( this ).parent( 'div.andereRichtung' ).children( 'input' ).val() === "" )
+    });
+    
+    $( 'select.noteSelect' ).each(function(){
+        var name = $( this ).attr( 'name' );
+        if ( $( this ).val() == "" )
         {
-            $( this ).parent( 'div' ).addClass( 'd-none' );
+            var value = 0;
         }
-        else if()
+        else
         {
-            
+             var value = $( this ).val();
         }
-        else if( $( this ).parent( 'div.eineRichtung' ).children( 'input' ).val() === "" )
+        var divClass = $( this ).parent( 'div' ).attr( 'class' );
+        $( this ).parent( 'div' ).after( '<div class="' + divClass + '"><span class="input-group-text">Note:</span><input type="text" class="form-control noteAnzeige" value="' + wertZuNote( value ) + '" disabled><div class="col-1"></div><div class="col-9" style="margin: 0; position:relative; top: 0%; -ms-transform: translateY(25%); transform: translateY(25%);"><input class="form-range noteRange" type="range" min="0" max="6" step="1" name="' + name + '" value="' + value + '"></div>' );
+        $( this ).parent( 'div' ).remove(); 
+    });
+    
+    function wertZuNote(wert)
+    {
+        switch(wert)
         {
-            $( this ). val( '0' );
-        }*/
+            case "0":
+                return "--";
+            case "1":
+                return "5";
+            case "2":
+                return "4";
+            case "3":
+                return "3";
+            case "4":
+                return "2";
+            case "5":
+                return "1";
+            case "6":
+                return "1+";
+            default:
+                return "--";
+        }
+    }
+    
+    $( document ).on( 'input', 'input.noteRange', function() {
+        $( this ).parent( 'div' ).parent( 'div' ).children( 'input.noteAnzeige' ).val( wertZuNote( $( this ).val() ) );
     });
 
         // Script für das Suchfeld der Flugzeuge

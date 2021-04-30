@@ -206,11 +206,11 @@ class Protokolleingabecontroller extends Controller
             
             if($muster['istDoppelsitzer'] == 1)
             {
-                $_SESSION['Doppelsitzer'] = []; 
+                $_SESSION['doppelsitzer'] = []; 
             }
             else 
             {
-                unset($_SESSION['Doppelsitzer']);
+                unset($_SESSION['doppelsitzer']);
             }
             
             if($muster['istWoelbklappenFlugzeug'] == 1)

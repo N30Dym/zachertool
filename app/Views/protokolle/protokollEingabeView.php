@@ -1,8 +1,7 @@
-<h2 class="text-center m-4"><?= esc($title) ?></h2>	
+<h2 class="text-center m-4"><?= $title ?></h2>	
 
 <?php //unset($_SESSION['Doppelsitzer']) 
       //  $_SESSION['Doppelsitzer'] = [];
-      esc("&Delta;");
       
 ?>
 
@@ -41,7 +40,7 @@
 <!--            Inhalt                  --> 
 <!---------------------------------------->         
 
-        <div class="row g-3">
+        <div class="row g-3 mt-3">
            
         <?php 
 
@@ -56,7 +55,7 @@
             <div class="col-2">
             </div>
 
-            <div class="col-8 row">
+            <div class="col-8">
 
                 <div class="col-12">
                     <input class="form-control d-none" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
@@ -124,7 +123,7 @@
                         <?php foreach($pilotenDatenArray as $pilot) :  ?>
                             <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
                                 <?= esc($pilot["vorname"]) ?>
-                                <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
+                                <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
                                 <?= esc($pilot["nachname"]) ?>
                             </option>                   
                         <?php endforeach ?>
@@ -153,7 +152,7 @@
                         <?php foreach($pilotenDatenArray as $pilot) :  ?>
                             <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['copilotID']) && $_SESSION['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
                                 <?= esc($pilot["vorname"]) ?>
-                                <?= $pilot["spitzname"] != "" ? " \"" . esc($pilot["spitzname"]) . "\" " : "" ?>
+                                <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
                                 <?= esc($pilot["nachname"]) ?>
                             </option>                      
                         <?php endforeach ?>
@@ -350,8 +349,9 @@
 <!---------------------------------------->   
 <!--               Kapitel              --> 
 <!---------------------------------------->
-                <small><?= esc($kapitelDatenArray['zusatztext']) ?></small>
-                
+                <div class="col-12">
+                    <small><?= $kapitelDatenArray['zusatztext'] ?></small>
+                </div>
             <?php
                 
                 $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0];
@@ -366,8 +366,8 @@
                     <?php if($protokollUnterkapitelID > 0) : ?>
                         <?php $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$protokollUnterkapitelID]['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0]; ?>
                         <?php $unterkapitelNummer++ ?>
-                        <h4 class="ms-2 mt-4"><?= $_SESSION["aktuellesKapitel"] . "." . $unterkapitelNummer . " - " . esc($unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung']) ?></h4>
-                        <small><?= esc($unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext']) ?></small>
+                        <h4 class="ms-2"><?= $_SESSION["aktuellesKapitel"] . "." . $unterkapitelNummer . " - " . $unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung'] ?></h4>
+                        <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
                     <?php endif ?>    
                      
                     <?php foreach($woelbklappe as $woelbklappenStellung) : ?>
@@ -376,7 +376,7 @@
 <!----------------------------------------> 
                     <div class="border p-4 rounded shadow mb-3">
                         
-                        <?= $woelbklappenStellung != 0 ? '<h5 class="ms-4">' . $woelbklappenStellung . '</h5>'  : "" ?>
+                        <?= $woelbklappenStellung != 0 ? '<h5 class="ms-2">' . $woelbklappenStellung . '</h5>'  : "" ?>
                         
                         <?php foreach($unterkapitel as $protokollEingabeID => $eingabe) : ?>
 <!---------------------------------------->   
@@ -395,7 +395,7 @@
                                 <div class="g-3 mt-3">
                                     
                                     <?php //var_dump($eingabenDatenArray[$protokollEingabeID]) ?>
-                                    <label class="form-label ms-5"><b><?= esc($eingabenDatenArray[$protokollEingabeID]['bezeichnung']) ?></b></label>
+                                    <label class="form-label ms-3"><b><?= $eingabenDatenArray[$protokollEingabeID]['bezeichnung'] ?></b></label>
                                     <?php foreach($eingabe as $protokollInputID => $input) : ?>
     <!---------------------------------------->   
     <!--            Inputfelder             --> 
@@ -423,13 +423,13 @@
                                                 case "Dezimalzahl": ?>
             <!-- Dezimalzahl -->
                                                     <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                     <?php endif ?>
 
                                                     <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$protokollInputID]['schrittweite']) ?>" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) : "" ?><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) : "" ?>" <?= $inputsDatenArray[$protokollInputID]['benötigt'] == 1 ? "required" : ""  ?>>
 
                                                     <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
-                                                        <span class="input-group-text col-1 text-center"><?= esc($inputsDatenArray[$protokollInputID]['einheit']) ?></span>
+                                                        <span class="input-group-text col-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
                                                     <?php endif ?>
                                                         
                                                 <?php break ?> <!-- case "Dezimalzahl" -->
@@ -437,13 +437,13 @@
                                                 <?php case "Ganzzahl": ?>
             <!-- Ganzzahl -->
                                                     <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                     <?php endif ?>
 
                                                     <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) : "" ?><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) : "" ?>" <?= $inputsDatenArray[$protokollInputID]['benötigt'] == 1 ? "required" : ""  ?>>
 
                                                     <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
-                                                        <span class="input-group-text col-1 text-center"><?= esc($inputsDatenArray[$protokollInputID]['einheit']) ?></span>
+                                                        <span class="input-group-text col-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
                                                     <?php endif ?>
                                                         
                                                 <?php break ?> <!-- case "Ganzzahl" -->
@@ -457,17 +457,46 @@
                                                         </label>
                                                     </div>
                                         
-                                                <?php break ?> <!-- case "Checkbox -->
+                                                <?php break ?> <!-- case "Checkbox" -->
+                                                
+                                                <?php case "Auswahloptionen" : ?>
+            <!-- Auswahloptionen -->
+                                                    <select class="form-select" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" <?= $inputsDatenArray[$protokollInputID]['groesse'] != "" ? 'size="' . esc($inputsDatenArray[$protokollInputID]['groesse']) . '"' : "" ?> <?= $inputsDatenArray[$protokollInputID]['multipel'] == 1 ? "multiple" : "" ?>>    
+                                                        <option value=""></option>
+                                                        <?php foreach($auswahllistenDatenArray[$protokollInputID] as $auswahlOption) : ?>
+                                                            <option value="<?= $auswahlOption['id'] ?>" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == $auswahlOption['id']) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == $auswahlOption['id']) ? "selected" : "" ?>>
+                                                                <?= $auswahlOption['option'] ?>
+                                                            </option>
+                                                        <?php endforeach ?>
+                                                    </select>
+            
+                                                <?php break ?> <!-- case "Auswahloptionen" -->
 
                                                 <?php case "Textfeld" : ?>
             <!-- Textfeld -->
                                                     <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                        <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                     <?php endif ?>
             
                                                     <textarea class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]"><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) : "" ?><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) : "" ?></textarea>
                                                   
                                                 <?php break ?> <!-- case "Textfeld" -->
+                                                
+                                                <?php case "Note" : ?>
+            <!-- Note -->
+                                                    <span class="input-group-text col-1">Note</span>
+                                                    
+                                                    <select class="form-select noteSelect" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" <?= $inputsDatenArray[$protokollInputID]['groesse'] != "" ? 'size="' . esc($inputsDatenArray[$protokollInputID]['groesse']) . '"' : "" ?> <?= $inputsDatenArray[$protokollInputID]['multipel'] == 1 ? "multiple" : "" ?>>    
+                                                        <option value=""></option>
+                                                        <option value="1" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 1) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 1) ? "selected" : "" ?>>5</option>
+                                                        <option value="2" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 2) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 2) ? "selected" : "" ?>>4</option>
+                                                        <option value="3" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 3) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 3) ? "selected" : "" ?>>3</option>
+                                                        <option value="4" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 4) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 4) ? "selected" : "" ?>>2</option>
+                                                        <option value="5" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 5) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 5) ? "selected" : "" ?>>1</option>                                                        
+                                                        <option value="6" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] == 6) ? "selected" : "" ?> <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] == 6) ? "selected" : "" ?>>1+</option>
+                                                    </select>
+
+                                                <?php break ?> <!-- case "Note" -->
 
                                                 <?php default: ?>
                                                     <?= esc($inputsDatenArray[$protokollInputID]['inputTyp']) ?>
@@ -491,13 +520,13 @@
                                                         case "Dezimalzahl": ?>
             <!-- Dezimalzahl andereRichtung -->
                                                             <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                             <?php endif ?>
 
                                                             <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$protokollInputID]['schrittweite']) ?>" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) : "" ?>" <?= $inputsDatenArray[$protokollInputID]['benötigt'] == 1 ? "required" : ""  ?>>
 
                                                             <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
-                                                                <span class="input-group-text col-1 text-center"><?= esc($inputsDatenArray[$protokollInputID]['einheit']) ?></span>
+                                                                <span class="input-group-text col-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
                                                             <?php endif ?>
 
                                                         </div> <!-- input-group andereRichtung -->
@@ -506,28 +535,68 @@
                                                         <?php case "Ganzzahl": ?>
             <!-- Ganzzahl andereRichtung -->
                                                             <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                             <?php endif ?>
 
                                                             <input type="number" class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) : "" ?>" <?= $inputsDatenArray[$protokollInputID]['benötigt'] == 1 ? "required" : ""  ?>>
 
                                                             <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
-                                                                <span class="input-group-text col-1 text-center"><?= esc($inputsDatenArray[$protokollInputID]['einheit']) ?></span>
+                                                                <span class="input-group-text col-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
                                                             <?php endif ?>
 
                                                         </div> <!-- input-group andereRichtung -->
                                                         <?php break ?> <!-- case "Ganzzahl" -->
-                                                            <?php //isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0]) ? "checked" : "" ?> 
+                                                        
+                                                        <?php case "Checkbox" : ?>
+            <!-- Checkbox andereRichtung -->
+                                                            <div class="form-control-lg">
+                                                                <input type="checkbox" class="form-check-input ms-4" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]" <?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) ? "checked" : "" ?>>
+                                                                <label class="form-check-label">
+                                                                    <small><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></small>
+                                                                </label>
+                                                            </div>
+
+                                                        <?php break ?> <!-- case "Checkbox -->
+                                                        
+                                                        <?php case "Auswahloptionen" : ?>
+            <!-- Auswahloptionen andereRichtung -->
+                                                            <select class="form-select" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]" <?= $inputsDatenArray[$protokollInputID]['groesse'] != "" ? 'size="' . esc($inputsDatenArray[$protokollInputID]['groesse']) . '"' : "" ?> <?= $inputsDatenArray[$protokollInputID]['multipel'] == 1 ? "multiple" : "" ?>>    
+                                                                <option value=""></option>
+                                                                <?php foreach($auswahllistenDatenArray[$protokollInputID] as $auswahlOption) : ?>
+                                                                    <option value="<?= $auswahlOption['id'] ?>" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == $auswahlOption['id']) ? "selected" : "" ?>>
+                                                                        <?= $auswahlOption['option'] ?>
+                                                                    </option>
+                                                                <?php endforeach ?>
+                                                            </select>
+
+                                                        <?php break ?> <!-- case "Auswahloptionen" -->                                           
+                                                        
                                                         <?php case "Textfeld" : ?>
             <!-- Textfeld andereRichtung -->
                                                             <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateY(-100%); transform: translateX(-100%);"><b><?= esc($inputsDatenArray[$protokollInputID]['bezeichnung']) ?></b></div></span>
+                                                                <span class="input-group-text col-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
                                                             <?php endif ?>                                                
 
                                                             <textarea class="form-control" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]"><?= isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) ? esc($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) : "" ?></textarea>
                                                             
                                                         </div> <!-- input-group andereRichtung -->
-                                                        <?php break ?> <!-- case "Textfeld" -->  
+                                                        <?php break ?> <!-- case "Textfeld" -->
+                                                        
+                                                        <?php case "Note" : ?>
+            <!-- Note andereRichtung -->
+                                                            <span class="input-group-text col-1">Note</span>
+
+                                                            <select class="form-select noteSelect" name="<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>[<?= esc($woelbklappenStellung) ?>][andereRichtung][]" <?= $inputsDatenArray[$protokollInputID]['groesse'] != "" ? 'size="' . esc($inputsDatenArray[$protokollInputID]['groesse']) . '"' : "" ?> <?= $inputsDatenArray[$protokollInputID]['multipel'] == 1 ? "multiple" : "" ?>>    
+                                                                <option value=""></option>
+                                                                <option value="1" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 1) ? "selected" : "" ?>>5</option>
+                                                                <option value="2" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 2) ? "selected" : "" ?>>4</option>
+                                                                <option value="3" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 3) ? "selected" : "" ?>>3</option>
+                                                                <option value="4" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 4) ? "selected" : "" ?>>2</option>
+                                                                <option value="5" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 5) ? "selected" : "" ?>>1</option>                                                        
+                                                                <option value="6" <?= (isset($_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0]) && $_SESSION['eingegebeneDaten'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Rechts'][0] == 6) ? "selected" : "" ?>>1+</option>
+                                                            </select>                                                           
+
+                                                        <?php break ?> <!-- case "Note" -->
 
                                                         <?php default: ?>
                                                             <?= esc($inputsDatenArray[$protokollInputID]['inputTyp']) ?>
@@ -544,8 +613,9 @@
                                     Dies ist ein Multiples Feld
                                 <?php endif ?> <!-- if Multipel -->
                                 
+                                </div> <!-- Eingaben --> 
                             <?php endif ?> <!-- Doppelsitzer -->
-                            </div> <!-- Eingaben -->    
+                               
                         <?php endforeach ?> <!-- Eingaben -->
                         
         </div>  
@@ -598,7 +668,7 @@
                         <option value="1">1 - Informationen zum Protokoll</option>
                         <?php foreach($_SESSION['kapitelNummern'] as $kapitelNummer) : ?>
                             <option value="<?= esc($kapitelNummer) ?>" <?= $_SESSION['aktuellesKapitel'] == $kapitelNummer ? "selected" : "" ?>>
-                                <?= esc($kapitelNummer) . " - " . esc($_SESSION['kapitelBezeichnungen'][$kapitelNummer]) ?>
+                                <?= esc($kapitelNummer) . " - " . $_SESSION['kapitelBezeichnungen'][$kapitelNummer] ?>
                             </option>
                         <?php endforeach ?>
                     </select>

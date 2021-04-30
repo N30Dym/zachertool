@@ -367,7 +367,9 @@
                         <?php $woelbklappe = (isset($_SESSION['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$protokollUnterkapitelID]['woelbklappen']) ? $_SESSION['woelbklappenFlugzeug'] : [0]; ?>
                         <?php $unterkapitelNummer++ ?>
                         <h4 class="ms-2"><?= $_SESSION["aktuellesKapitel"] . "." . $unterkapitelNummer . " - " . $unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung'] ?></h4>
-                        <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
+                        <div class="col-12">
+                            <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
+                        </div>
                     <?php endif ?>    
                      
                     <?php foreach($woelbklappe as $woelbklappenStellung) : ?>

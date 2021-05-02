@@ -32,7 +32,15 @@ class Protokolleingabecontroller extends Controller
     {
         $_SESSION["aktuellesKapitel"]                   = 0;
         $_SESSION['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        
         $this->before();
+        
+        if($this->request->getPost() != null)
+        {
+            $this->pruefePostInhalt();
+
+            $this->eingegebeneDaten();
+        }
         
         if($protokollSpeicherID)
         {
@@ -170,7 +178,7 @@ class Protokolleingabecontroller extends Controller
             }
         }
         
-        $this->zeigeEingegebeneDaten();
+        //$this->zeigeEingegebeneDaten();
     }
     
     protected function zeigeEingegebeneDaten()

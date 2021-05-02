@@ -17,18 +17,26 @@
     </div>
     <div class="col-1">
     </div>
-    
     <div class="col-1">
     </div>
     <div class="col-10">
+        <h3 class="mt-3">1. Informationen zum Protokoll</h3>
+    </div>
+    <div class="col-1">
+    </div>
+    
+    <div class="col-1">
+    </div>
+    
+    <div class="col-10 mt-3 border rounded shadow p-4">
 
         <?=  form_open(site_url('protokolle/kapitel/2'), ["class" => "needs-validation", "method" => "post", /*"novalidate" => "novalidate"*/]) ?>
 
-        <h3 class="m-4">1. - Informationen zum Protokoll</h3>
+        
         <div class="row g-3">
-            <div class="col-sm-7">
+            <div class="col-sm-7 ">
                 <label for="datum" class="form-label">Datum des ersten Fluges</label>
-                <input type="date" class="form-control" name="datum" id="datum" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
+                <input type="date" class="form-control" name="datum" max="<?= date('Y-m-d') ?>" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
             </div>
 
             <div class="col-2">
@@ -63,36 +71,37 @@
                 
             <?php endforeach ?>
         </div>
-        
-        
-        <div class="mt-5 row"> 
-            
-            <div class="col-3">
-            </div>
-            <div class="col-6">
-                <?php if(isset($_SESSION['kapitelNummern'])) : ?>
-                    <div class="d-flex row d-none" id="springeZu">
-                        <div class="input-group mb-3">
-                            <select id="kapitelAuswahl" class="form-select">
-                                <option value="1" selected>1 - Informationen zum Protokoll</option>
-                                <?php foreach($_SESSION['kapitelNummern'] as $kapitelNummer) : ?>
-                                    <option value="<?= esc($kapitelNummer) ?>"><?= esc($kapitelNummer) . " - " . esc($_SESSION['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
-                                <?php endforeach ?>
-                            </select>
-                            <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>
-                        </div>           
-                    </div>
-                <?php endif ?>
-            </div>
-            <div class="col-3">
-                <button type="submit" class="btn btn-secondary col-12">Weiter ></button>
-            </div>
-
-        </div>
-			
-    </div>	
-    <div class="col-1">
     </div>
+        
+        
+    <div class="mt-5 row"> 
 
+        <div class="col-3">
+        </div>
+        <div class="col-6">
+            <?php if(isset($_SESSION['kapitelNummern'])) : ?>
+                <div class="d-flex row d-none" id="springeZu">
+                    <div class="input-group mb-3">
+                        <select id="kapitelAuswahl" class="form-select">
+                            <option value="1" selected>1 - Informationen zum Protokoll</option>
+                            <?php foreach($_SESSION['kapitelNummern'] as $kapitelNummer) : ?>
+                                <option value="<?= esc($kapitelNummer) ?>"><?= esc($kapitelNummer) . " " . esc($_SESSION['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                        <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>
+                    </div>           
+                </div>
+            <?php endif ?>
+        </div>
+        <div class="col-3">
+            <button type="submit" class="btn btn-secondary col-12">Weiter ></button>
+        </div>
+
+    </div>
+			
 </div>	
+<div class="col-1">
+</div>
+
+	
 

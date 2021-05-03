@@ -141,10 +141,10 @@ class Protokolleingabecontroller extends Controller
                 sort($_SESSION['kapitelNummern']);
             }
             
-            if( ! isset($_SESSION['kommentare']))
+            /*if( ! isset($_SESSION['kommentare']))
             {
                 $_SESSION['kommentare'] = [];
-            }
+            }*/
         }   
     }
     
@@ -250,6 +250,13 @@ class Protokolleingabecontroller extends Controller
         {        
             $_SESSION['kommentare'][key($postDaten['kommentar'])] = $postDaten['kommentar'][key($postDaten['kommentar'])];
         }
+        
+         if(isset($postDaten['hStWeg']))
+        {        
+            $_SESSION['hStWege'][key($postDaten['hStWeg'])] = $postDaten['hStWeg'][key($postDaten['hStWeg'])];
+        }
+        
+        isset($_SESSION['hStWege']) ? var_dump($_SESSION['hStWege']) : null;
     }
         /*
          * 

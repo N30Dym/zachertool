@@ -30,7 +30,7 @@
     
     <div class="col-10 mt-3 border rounded shadow p-4">
 
-        <?=  form_open(site_url('protokolle/kapitel/2'), ["class" => "needs-validation", "method" => "post", /*"novalidate" => "novalidate"*/]) ?>
+        <?= form_open(site_url('protokolle/kapitel/2'), ["class" => "needs-validation", "method" => "post", /*"novalidate" => "novalidate"*/]) ?>
 
         
         <div class="row g-3">

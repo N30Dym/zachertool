@@ -636,7 +636,31 @@
 <!--           Höhensteuerwege          --> 
 <!---------------------------------------->                
                 <?php if($hStWegFeldBenoetigt) : ?>
-                    Hier könnten Ihre Höhensteuer Wege stehen
+                    <div class="col-1">
+                    </div>                    
+                    <div class="col-9 row p-4 g-3 border rounded shadow">
+                        <h3 class="ms-2">Höhensteuerwege</h3>
+                        <small class="text-muted">Falls du verschiedene Höhensteuerwege angeben musst, erstelle dafür ein neues Protokoll. Dort neben den Pflichtangaben (Flugzeug, Beladungszustand, usw.) nur dieses Kapitel mit den Höhensteuerwegen und den dazugehörigen Daten eingeben.</small>
+                        <div class="input-group">
+                            <span class="input-group-text col-5">Höhensteuer voll gedrückt:</span>
+                            <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']] ?>][gedruecktHSt]" value="<?= isset($_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['gedruecktHSt']) ? $_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['gedruecktHSt'] : ((isset($_SESSION['hStWege']) && array_values($_SESSION['hStWege'])[0] != null) ? array_values($_SESSION['hStWege'])[0]['gedruecktHSt'] : "") ?>">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-text col-5">Höhensteuer neutral:</span>
+                            <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']] ?>][neutralHSt]" value="<?= isset($_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['neutralHSt']) ? $_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['neutralHSt'] : ((isset($_SESSION['hStWege']) && array_values($_SESSION['hStWege'])[0] != null) ? array_values($_SESSION['hStWege'])[0]['neutralHSt'] : "") ?>">
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-text col-5">Höhensteuer voll gezogen:</span>
+                            <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']] ?>][gezogenHSt]" value="<?= isset($_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['gezogenHSt']) ? $_SESSION['hStWege'][$_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']]]['gezogenHSt'] : ((isset($_SESSION['hStWege']) && array_values($_SESSION['hStWege'])[0] != null) ? array_values($_SESSION['hStWege'])[0]['gezogenHSt'] : "") ?>">
+                        </div>
+                        
+                    </div>
+
+                    <div class="col-2">
+                    </div>
+
                 <?php endif ?>
                     
 <!---------------------------------------->   

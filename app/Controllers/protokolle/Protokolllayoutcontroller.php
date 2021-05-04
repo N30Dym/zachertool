@@ -23,7 +23,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
     }
     
-    protected function protokollLayoutSetzen()
+    protected function setzeProtokollLayout()
     {
         $protokollLayoutsModel              = new protokollLayoutsModel();
         $protokollKapitelModel              = new protokollKapitelModel();
@@ -33,10 +33,10 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
         $temporaeresDatenArray = [];
         
-        if(isset($_SESSION['eingegebeneDaten']))
+        if(isset($_SESSION['eingegebeneWerte']))
         {
-           $temporaeresDatenArray = $_SESSION['eingegebeneDaten'];
-           $_SESSION['eingegebeneDaten'] = [];
+           $temporaeresDatenArray = $_SESSION['eingegebeneWerte'];
+           $_SESSION['eingegebeneWerte'] = [];
         }
         
         foreach($_SESSION['protokollIDs'] as $protokollID)
@@ -76,7 +76,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
        sort($_SESSION['kapitelNummern']);
     }
     
-    protected function protokollIDsSetzen() 
+    protected function setzeProtokollIDs() 
     {
         $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
         $_SESSION['protokollIDs'] = [];
@@ -258,13 +258,13 @@ class Protokolllayoutcontroller extends Protokollcontroller
             // passen, wenn ein ProtkollTyp abgewählt wurde
         if($DatenArray !== [] && isset($DatenArray[$protokollInputID]) && $DatenArray[$protokollInputID] !== "")
         {
-            $_SESSION['eingegebeneDaten'][$protokollInputID] = $DatenArray[$protokollInputID];
+            $_SESSION['eingegebeneWerte'][$protokollInputID] = $DatenArray[$protokollInputID];
         }
         else
         {
                 // Wenn noch keine Daten vorhanden sind, wird für jede protokollInputID ein eigenes leeres Array angelegt
                 // in dem die Daten gespeichert und bei Bedarf wieder aufgerufen werden können
-            $_SESSION['eingegebeneDaten'][$protokollInputID] = [];
+            $_SESSION['eingegebeneWerte'][$protokollInputID] = [];
         }
     }
     

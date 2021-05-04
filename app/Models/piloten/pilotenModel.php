@@ -23,6 +23,11 @@ class pilotenModel extends Model
     {
         return $this->where("sichtbar", 1)->findAll();
     }
+	
+	public function getAllePiloten()
+    {
+        return $this->findAll();
+    }
 
     public function getPilotenDiesesJahr()
     {

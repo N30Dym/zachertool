@@ -3,7 +3,6 @@
 namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
-helper("pruefeString");
 
 class datenModel extends Model
 {
@@ -15,7 +14,14 @@ class datenModel extends Model
     protected $DBGroup 				= 'protokolleDB';
 	protected $table      			= 'daten';
     protected $primaryKey 			= 'id';
-
+	protected $validationRules 		= 'daten';
+	
+	protected $allowedFields		= ['protokollSpeicherID', 'protokollKapitelID', 'wert', 'wölbklappenstellung', 'linksUndRechts', 'multipelNr'];
+	
+	public function getDatenNachProtokollSpeicherID($protokollSpeicherID)
+	{
+		return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
+	}
 
 		/*
 		* Diese Funktion ruft nur den Datensatz mit
@@ -26,7 +32,7 @@ class datenModel extends Model
 		*/
 	public function getDatenNachID($id)
 	{		
-	if(is_int(trim($id)) OR is_numeric(trim($id)))
+		if(is_int(trim($id)) OR is_numeric(trim($id)))
 		{
 			return($this->where("id", $id)->first());
 		}
@@ -36,35 +42,5 @@ class datenModel extends Model
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}	
 	}
-	
-		/*
-		* Diese Funktion ruft nur Datensätze auf die
-		* die folgendenen Angaben Zutreffen
-		*
-		* @param mix $protokollSpeicherID
-		* @param mix $protokollInputID
-		* @param string $woelbklappenstellung standard = "0"
-		*	erlaubte Eingaben sind:
-		*		0
-		*		Neutral
-		*		Kreisflug
-		* @param string $linksUndRechts standard = "0"
-		*	erlaubte Eingaben sind:
-		*		0
-		*		Links
-		*		Rechts
-		* @param mix $multipelNr standard = "0"
-		* @return array
-		*/
-	/*public function getDatenSpezifisch($protokollSpeicherID, $protokollInputID, $woelbklappenstellung = "0", $linksUndRechts = "0", $multipelNr = "0")
-	{
-		$erlaubteEingabenWoelbklappe = [0, "0", "Neutral", "Kreisflug"];
-		$erlaubteEingabenLinksUndRechts = [0, "0", "Links", "Rechts"];
-		if((is_int(trim($protokollSpeicherID)) OR is_numeric(trim($protokollSpeicherID))) AND (is_int(trim($protokollInputID)) OR is_numeric(trim($protokollInputID)) AND (is_int(trim($multipelNr)) OR is_numeric(trim($multipelNr) AND pruefeString($woelbklappenstellung, $erlaubteEingabenWoelbklappe) AND pruefeString($linksUndRechts, $erlaubteEingabenLinksUndRechts))
-		{			
-			$query = "SELECT wert FROM daten WHERE protokollSpeicherID = " . $protokollSpeicherID . " AND protokollInputID = " . $protokollInputID . " AND wölbklappenstellung = " . $woelbklappenstellung . " AND linksUndRechts = " . $linksUndRechts . " AND multipelNr = " . $multipelNr;
-		}
-		return $this->query($query)->getResultArray();
-	}*/
 	
 }

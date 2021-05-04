@@ -44,14 +44,14 @@ class musterModel extends Model
 		return($this->findAll());
 	}
 	
-        public function getMusterNachFlugzeugID($flugzeugID)
-        {
-            $flugzeugeModel = new flugzeugeModel();
-            
-            $musterID = $flugzeugeModel->getMusterIDNachID($flugzeugID);
-            
-            return $this->where("id", $musterID)->first();                    
-        }
+	public function getMusterNachFlugzeugID($flugzeugID)
+	{
+		$flugzeugeModel = new flugzeugeModel();
+		
+		$musterID = $flugzeugeModel->getMusterIDNachID($flugzeugID);
+		
+		return $this->where("id", $musterID)->first();                    
+	}
         
 	/*public function getMusterLeer()
 	{

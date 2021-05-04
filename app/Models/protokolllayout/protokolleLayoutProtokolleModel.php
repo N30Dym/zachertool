@@ -36,8 +36,22 @@ class protokolleLayoutProtokolleModel extends Model
 	{
 		if(is_int(trim($protokollTypID)) OR is_numeric(trim($protokollTypID)))
 		{	
-			$query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND datumVon < CURRENT_DATE AND datumBis > CURRENT_DATE OR (protokollTypID = " . $protokollTypID . " AND datumVon < CURRENT_DATE AND datumBis IS NULL)";
-			return($this->query($query)->getResultArray());
+			$query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < CURRENT_DATE AND datumBis > CURRENT_DATE) OR (datumVon < CURRENT_DATE AND datumBis IS NULL))";
+			return $this->query($query)->getResultArray();
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+	
+	public function getProtokollIDNachProtokollDatumUndProtokollTypID($protokollDatum, $protokollTypID)
+	{
+		if(is_int(trim($protokollTypID)) OR is_numeric(trim($protokollTypID)))
+		{	
+			$query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < '" . $protokollDatum . "' AND datumBis > '" . $protokollDatum . "') OR (datumVon < '" . $protokollDatum . "' AND datumBis IS NULL))";
+			return $this->query($query)->getResultArray();
 		}
 		else
 		{

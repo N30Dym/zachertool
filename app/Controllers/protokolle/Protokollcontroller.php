@@ -59,11 +59,13 @@ class Protokollcontroller extends Controller
 	
     public function kapitel($kapitelNummer = 0)
     {
+        
+        
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
 
-        if($this->request->getPost("protokollTypen") == null && ! isset($_SESSION['gewaehlteProtokollTypen']))
+        if(($this->request->getPost("protokollTypen") == null && ! isset($_SESSION['gewaehlteProtokollTypen'])) OR $kapitelNummer < 2)
         {
             return redirect()->to('/zachern-dev/protokolle/index');
         }
@@ -74,9 +76,9 @@ class Protokollcontroller extends Controller
         {
             $protokollEingabeController->setzeProtokollInformationen($this->request->getPost());
 
-            $protokollLayoutController->protokollIDsSetzen();
+            $protokollLayoutController->setzeProtokollIDs();
 
-            $protokollLayoutController->protokollLayoutSetzen();
+            $protokollLayoutController->setzeProtokollLayout();
         }
 
         $protokollEingabeController->verarbeitungEingegenerDaten($this->request->getPost());
@@ -87,8 +89,8 @@ class Protokollcontroller extends Controller
         } 
 
         $datenHeader = [
-            'title'                             => $_SESSION['protokollInformationen']['titel'],
-            'description'                       => "Das übliche halt"
+            'title'         => $_SESSION['protokollInformationen']['titel'],
+            'description'   => "Das übliche halt"
         ];
 
         $datenInhalt = [
@@ -104,24 +106,8 @@ class Protokollcontroller extends Controller
 	
     public function abbrechen() 
     {
-        session_regenerate_id();
         session_destroy();
-        $_SESSION = [];
         unset($_SESSION);       
-        /*unset(
-            $_SESSION['gewaehlteProtokollTypen'],
-            $_SESSION['protokollInformationen'],
-            $_SESSION['protokollLayout'],
-            $_SESSION['kapitelNummern'],
-            $_SESSION['kapitelBezeichnungen'],
-            $_SESSION['protokollIDs'],
-            $_SESSION['kapitelIDs'],
-            $_SESSION['kommentare'],
-            $_SESSION['flugzeugID'],
-            $_SESSION['pilotID'],
-            $_SESSION['copilotID'],
-            $_SESSION['aktuellesKapitel'],
-        );*/
         return redirect()->to('/zachern-dev/');
     }
 	
@@ -163,34 +149,50 @@ class Protokollcontroller extends Controller
         $_SESSION["protokollSpeicherID"] = $protokollSpeicherID;
 
         $protokollFertig = $this->protokollDatenLaden($protokollSpeicherID);
+        
+        $this->layoutLaden();
 
-        if($protokollFertig)
+        /*if($protokollFertig)
         {
                 //redirect zu ../kapitel/2
                 //ersteSeite soll nicht mehr geladen werden
         }
         else
-        {
-                //lade erste Seite
-        }
-        // ...
-        // Protokollladecontroller
-        // redirect zu ../kapitel/2
+        {*/
+            $protokollTypenModel = new protokollTypenModel();
+            $protokollAnzeigeController = new Protokollanzeigecontroller();
+
+            $datenHeader = [
+                'title'         => $_SESSION['protokollInformationen']['titel'],
+                'description'   => "Das übliche halt"
+            ];
+
+            $datenInhalt = [
+                'title' 		=> $_SESSION['protokollInformationen']['titel'],
+                'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
+            ];
+
+            $protokollAnzeigeController->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
+//lade erste Seite
+       // }
 
     }
 
     protected function layoutLaden()
     {
-        $protokollAnzeigeController = new Protokollanzeigecontroller;
+        $protokollLayoutController = new Protokolllayoutcontroller;
+        $protokollEingabeController = new Protokolleingabecontroller;
 
-        $protokollAnzeigeController->protokollLayoutSetzen();
+        $protokollLayoutController->setzeProtokollLayout();
+        
+        $protokollEingabeController->setzeFlugzeugDaten();
     }
 
     protected function protokollDatenLaden($protokollSpeicherID)
     {
         $protokollDatenLadeController = new Protokolldatenladecontroller();
 
-        $protokollDatenLadeController->ladeProtokollDaten($protokollSpeicherID);
+        return $protokollDatenLadeController->ladeProtokollDaten($protokollSpeicherID); 
     }
 
     protected function sessionDatenLöschen()

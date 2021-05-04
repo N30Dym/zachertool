@@ -15,7 +15,21 @@ class hStWegeModel extends Model
     protected $DBGroup 				= 'protokolleDB';
 	protected $table      			= 'hst-wege';
     protected $primaryKey 			= 'id';
-	protected $createdField  		= 'erstelltAm';
+	protected $validationRules 		= 'hst-wege';
+	
+	protected $allowedFields		= ['protokollSpeicherID', 'protokollKapitelID', 'gedruecktHSt', 'neutralHSt', 'gezogenHSt'];
+	
+		/*
+		* Diese Funktion ruft alle HSt-Wege ders
+		* jeweiligen $protokollSpeicherID auf
+		*
+		* @params mix $protokollSpeicherID
+		* @return array
+		*/
+	public function getHStWegeNachProtokollSpeicherID($protokollSpeicherID)
+	{
+		return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
+	}
 	
 		/*
 		* Diese Funktion ruft alle HSt-Wege auf
@@ -47,24 +61,7 @@ class hStWegeModel extends Model
 		}
 	}
 	
-		/*
-		* Diese Funktion ruft alle HSt-Wege ders
-		* jeweiligen $protokollSpeicherID auf
-		*
-		* @params mix $protokollSpeicherID
-		* @return array
-		*/
-	public function getHStWegeNachProtokollSpeicherID($protokollSpeicherID)
-	{	
-		if(is_int(trim($protokollSpeicherID)) OR is_numeric(trim($protokollSpeicherID)))
-		{		
-			return($this->where("protokollSpeicherID", $protokollSpeicherID)->findAll());
-		}
-		else
-		{
-			// Fehler beim übergebenen Wert
-			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-		}
-	}
+		
+
 	
 }

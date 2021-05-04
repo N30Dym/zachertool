@@ -16,6 +16,10 @@ class protokolleModel extends Model
 	protected $table      		= 'protokolle';
     protected $primaryKey 		= 'id';
 	protected $createdField  	= 'erstelltAm';
+	protected $validationRules 	= 'protokolle';
+	
+	protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
+	
 	
 		/*
 		* Diese Funktion ruft alle Protokolle auf
@@ -28,7 +32,6 @@ class protokolleModel extends Model
 		return $this->query($query)->getResultArray();	
 	}
 	
-	
 		/*
 		* Diese Funktion ruft nur das Protokoll mit
 		* der jeweiligen ID auf
@@ -36,17 +39,9 @@ class protokolleModel extends Model
 		* @param  mix $id int oder string
 		* @return array
 		*/
-	public function getProtokolleNachID($id)
+	public function getProtokollNachID($id)
 	{			
-		if(is_int(trim($id)) OR is_numeric(trim($id)))
-		{
-			return($this->where("id", $id)->first());	
-		}
-		else
-		{
-			// Fehler beim übergebenen Wert
-			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-		}
+		return $this->where("id", $id)->first();	
 	}
 	
 	
@@ -71,7 +66,7 @@ class protokolleModel extends Model
 		*/
 	public function getFertigeProtokolle()
 	{			
-		return($this->where("bestaetigt", 1)->where("fertig", null)->findAll());
+		return($this->where("bestaetigt", null)->where("fertig", 1)->findAll());
 	}
 	
 	
@@ -108,5 +103,10 @@ class protokolleModel extends Model
 			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
 		}
 	}
-		
+	
+	public function getProtokollIDsNachProtokollSpeicherID($protokollSpeicherID)
+	{
+		$query = "SELECT DISTINCT protokollID FROM testzachern_protokolllayout.protokoll_layouts JOIN testzachern_protokolle.daten ON protokoll_layouts.protokollInputID = daten.protokollInputID WHERE daten.protokollSpeicherID = ". $protokollSpeicherID; 
+		return $this->query($query)->getResultArray();
+	}
 }	

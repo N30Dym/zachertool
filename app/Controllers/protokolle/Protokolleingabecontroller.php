@@ -46,50 +46,28 @@ class Protokolleingabecontroller extends Protokollcontroller
     
     protected function eingegebeneDaten($postDaten)
     {
-        foreach($postDaten as $protokollInputID => $datenSatz)
+        foreach($postDaten as $arrayIndex => $datenSatz)
         {            
-            if(isset($_SESSION['eingegebeneDaten'][$protokollInputID]))
+            if(isset($_SESSION['eingegebeneDaten'][$arrayIndex]))
             {
-                foreach($datenSatz as $woelbklappenStellung => $datenRichtungUndWert)
-                {
-                    if(isset($datenRichtungUndWert["eineRichtung"]) && $datenRichtungUndWert["eineRichtung"][0] != "")
-                    {
-                        $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['eineRichtung'];     
-                    }   
-                    else 
-                    {                     
-                        if(isset($datenRichtungUndWert[0]) && $datenRichtungUndWert[0][0] != "")
-                        {
-                            $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung][0];
-                        }
-                    }
-                        // andereRichtung wird ignoriert, wenn "Ohne Richtungsangabe" ausgewählt und ein Wert eingegeben wurde 
-                    if(isset($datenRichtungUndWert["andereRichtung"]) && $datenRichtungUndWert["andereRichtung"][0] != "" && ! ($postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung] === "0" && $datenRichtungUndWert["eineRichtung"][0] !== ""))
-                    {
-                        $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['andereRichtung'];    
-                    }
-                }
+                $this->datenZwischenSpeichern($postDaten, $arrayIndex, $datenSatz);  
             }
-            else if($protokollInputID === "kommentar" && $postDaten[$protokollInputID] !== "")
+            else if($arrayIndex === "kommentar" && $postDaten[$arrayIndex] !== "")
             {        
-                $_SESSION['kommentare'][key($postDaten[$protokollInputID])] = $postDaten[$protokollInputID][key($postDaten[$protokollInputID])];
+                $_SESSION['kommentare'][key($postDaten[$arrayIndex])] = $postDaten[$arrayIndex][key($postDaten[$arrayIndex])];
             }
-            else if($protokollInputID === "hStWeg")
+            else if($arrayIndex === "hStWeg")
             {        
-                $_SESSION['hStWege'][key($postDaten[$protokollInputID])] = $postDaten[$protokollInputID][key($postDaten[$protokollInputID])];
+                $_SESSION['hStWege'][key($postDaten[$arrayIndex])] = $postDaten[$arrayIndex][key($postDaten[$arrayIndex])];
             }
-        }
-
-        //isset($_SESSION['hStWege']) ? var_dump($_SESSION['hStWege']) : null;
-        
+        }        
         //$this->zeigeEingegebeneDaten();
     }
     
-    protected function zeigeEingegebeneDaten($eingegebeneDaten)
+    protected function zeigeEingegebeneDaten()
     {
         foreach($_SESSION['eingegebeneDaten'] as $kapitelInputID => $inputs)
-        {
-            
+        {            
             foreach($inputs as $woelbklappenStellung => $richtungUndWert)
             {
                 foreach($richtungUndWert as $richtung => $wert)
@@ -104,6 +82,29 @@ class Protokolleingabecontroller extends Protokollcontroller
         }
     }
     
+    protected function datenZwischenSpeichern($postDaten, $protokollInputID, $datenSatz)
+    {
+        foreach($datenSatz as $woelbklappenStellung => $datenRichtungUndWert)
+        {
+            if(isset($datenRichtungUndWert["eineRichtung"]) && $datenRichtungUndWert["eineRichtung"][0] != "")
+            {
+                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['eineRichtung'];     
+            }   
+            else 
+            {                     
+                if(isset($datenRichtungUndWert[0]) && $datenRichtungUndWert[0][0] != "")
+                {
+                    $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][0] = $datenSatz[$woelbklappenStellung][0];
+                }
+            }
+                // andereRichtung wird ignoriert, wenn "Ohne Richtungsangabe" ausgewählt und ein Wert eingegeben wurde 
+            if(isset($datenRichtungUndWert["andereRichtung"]) && $datenRichtungUndWert["andereRichtung"][0] != "" && ! ($postDaten[$protokollInputID."eineRichtung"][$woelbklappenStellung] === "0" && $datenRichtungUndWert["eineRichtung"][0] !== ""))
+            {
+                $_SESSION['eingegebeneDaten'][$protokollInputID][$woelbklappenStellung][$postDaten[$protokollInputID."andereRichtung"][$woelbklappenStellung]] = $datenRichtungUndWert['andereRichtung'];    
+            }
+        }
+    }
+
     protected function einmaligZuSetzen($postDaten) 
     {        
         $this->setzeFlugzeugDaten($postDaten);

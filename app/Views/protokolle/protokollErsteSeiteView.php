@@ -1,34 +1,15 @@
-<h2 class="text-center m-4"><?= esc($title) ?></h2>	
-
-
-<div class="row">
-    
-    <div class="col-6">
-    </div>
-    <div class="col-2 ">
-        <a href="<?= site_url('/sessionAufheben') ?>">
-            <input type="button" class="btn btn-danger col-12" formaction="" value="Abbrechen"></button>
-        </a>
-    </div>
-    <div class="col-3">
-        <a href="<?= site_url('/protokolle/speichern') ?>">
-            <input type="button" class="btn btn-success col-12" formaction="" value="Speichern und Zurück"></button>
-        </a>
-    </div>
-    <div class="col-1">
-    </div>
-    <div class="col-1">
-    </div>
-    <div class="col-10">
+    <div class="col-sm-1">
+    </div>    
+    <div class="col-lg-10">
         <h3 class="mt-3">1. Informationen zum Protokoll</h3>
     </div>
-    <div class="col-1">
+    <div class="col-sm-1">
     </div>
     
-    <div class="col-1">
+    <div class="col-sm-1">
     </div>
     
-    <div class="col-10 mt-3 border rounded shadow p-4">
+    <div class="col-lg-10 mt-3 border rounded shadow p-4">
 
         <?= form_open(site_url('protokolle/kapitel/2'), ["class" => "needs-validation", "method" => "post", /*"novalidate" => "novalidate"*/]) ?>
 
@@ -100,7 +81,7 @@
     </div>
 			
 </div>	
-<div class="col-1">
+<div class="col">
 </div>
 
 	

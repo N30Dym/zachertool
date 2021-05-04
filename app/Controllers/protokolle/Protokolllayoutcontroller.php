@@ -72,7 +72,8 @@ class Protokolllayoutcontroller extends Protokollcontroller
                     $_SESSION[ 'protokollLayout' ] [ $protokollItem[ 'kapitelNummer' ]] [ 0 ] [ $protokollItem[ 'protokollEingabeID' ]] [ $protokollItem[ 'protokollInputID' ]] = [];  
                 }
             }
-       } 
+       }
+       sort($_SESSION['kapitelNummern']);
     }
     
     protected function protokollIDsSetzen() 
@@ -132,11 +133,11 @@ class Protokolllayoutcontroller extends Protokollcontroller
       
         $temporaeresInputArray  = [];
 
-        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $i => $unterkapitel)
+        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
         {
-            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i] as $j => $eingaben)
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID] as $j => $eingaben)
             {
-                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i][$j] as $k => $eingaben)
+                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID][$j] as $k => $eingaben)
                 {
                     $temporaeresInputArray[$k] = $protokollInputsModel->getProtokollInputNachID($k);
                 }

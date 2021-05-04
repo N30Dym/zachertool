@@ -50,6 +50,7 @@ $routes->get('erfolg', 'Nachrichtencontroller::erfolg');
     // Protokolle
 $routes->get('protokolle/index', 'protokolle\Protokollcontroller::index/');
 $routes->get('protokolle/kapitel', 'protokolle\Protokollcontroller::index/');
+$routes->get('protokolle/abbrechen', 'protokolle\Protokollcontroller::abbrechen/');
 $routes->match(['get', 'post'], 'protokolle/index/(:num)', 'protokolle\Protokollcontroller::index/$1');
 $routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokollcontroller::index/');
 $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protokollcontroller::kapitel/$1');
@@ -57,7 +58,7 @@ $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcon
 
 
 
-$routes->get('sessionAufheben', 'Startseitecontroller::index');
+//$routes->get('sessionAufheben', 'Startseitecontroller::index');
 
 
 

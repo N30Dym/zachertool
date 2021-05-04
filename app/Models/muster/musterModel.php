@@ -3,6 +3,7 @@
 namespace App\Models\muster;
 
 use CodeIgniter\Model;
+use App\Models\flugzeuge\flugzeugeModel;
 
 class musterModel extends Model
 {
@@ -27,15 +28,15 @@ class musterModel extends Model
 	*/
 	public function getMusterNachID($id)
 	{			
-		if(is_int(trim($id)) OR is_numeric(trim($id)))
-		{	
-			return($this->where("id", $id)->first());
-		}
-		else
-		{
-			// Fehler beim übergebenen Wert
-			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-		}
+            if(is_int(trim($id)) OR is_numeric(trim($id)))
+            {	
+                return($this->where("id", $id)->first());
+            }
+            else
+            {
+                // Fehler beim übergebenen Wert
+                throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+            }
 	}
 	
 	public function getMusterAlle()
@@ -43,7 +44,16 @@ class musterModel extends Model
 		return($this->findAll());
 	}
 	
-	public function getMusterLeer()
+        public function getMusterNachFlugzeugID($flugzeugID)
+        {
+            $flugzeugeModel = new flugzeugeModel();
+            
+            $musterID = $flugzeugeModel->getMusterIDNachID($flugzeugID);
+            
+            return $this->where("id", $musterID)->first();                    
+        }
+        
+	/*public function getMusterLeer()
 	{
 		$spaltenNamen = $this->getFieldNames( $this->table );
 
@@ -53,5 +63,5 @@ class musterModel extends Model
 			$returnArray[$spaltenName] = "";
 		}
 		return $returnArray;
-	}
+	}*/
 }

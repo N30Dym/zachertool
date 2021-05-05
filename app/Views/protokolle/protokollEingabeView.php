@@ -159,7 +159,7 @@
 <!---------------------------------------->   
 <!--          Beladungszustand          --> 
 <!----------------------------------------> 
-
+    <?php var_dump($hebelarmDatenArray) ?>
     <div class="col-sm-1">
     </div>
 
@@ -170,7 +170,7 @@
         <?php elseif (! isset($_SESSION['pilotID'])) : ?> 
             <span class="text-danger">Es wurde kein Pilot ausgewählt</span>
         
-        <?php elseif ($pilotGewicht == null) : ?>
+        <?php elseif ((isset($pilotGewicht) AND $pilotGewicht == null) OR (isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['']) && $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][''] == "")) : ?>
             <span class="text-danger">Für den Pilot wurde kein Gewicht gefunden. Bitte Pilotengewicht unter Pilot -> Pilotenliste -> bearbeiten hinzufügen</span>
             
         <?php else: ?>
@@ -195,7 +195,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" min="0" name="gewichtPilot" id="gewichtPilot" value="<?= esc($pilotGewicht['gewicht']) ?>" readonly>
+                        <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][]" id="gewichtPilot" value="<?= isset($pilotGewicht['gewicht']) ? esc($pilotGewicht['gewicht']) : (isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0]) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0] : "") ?>" readonly>
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -210,7 +210,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.1" min="0" name="PilotFS" id="gewichtFSPilot" value="<?= isset($_SESSION['beladungszustand']['PilotFS']) ? $_SESSION['beladungszustand']['gewichtFSPilot'] : "" ?>" required>
+                    <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Fallschirm]" id="gewichtFSPilot" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm'] : "" ?>" required>
                     <span class="input-group-text">kg</span>
                 </div>
             </div>

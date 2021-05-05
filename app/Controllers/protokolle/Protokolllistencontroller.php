@@ -29,8 +29,6 @@ class Protokolllistencontroller extends Controller
         
         $fertigeProtokolle = $protokolleModel->getFertigeProtokolle();
         
-        //var_dump($fertigeProtokolle);
-        
         foreach($fertigeProtokolle as $protokoll)
         {
             $muster = $musterModel->getMusterNachFlugzeugID($protokoll['flugzeugID']);

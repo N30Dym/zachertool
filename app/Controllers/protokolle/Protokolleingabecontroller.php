@@ -2,7 +2,6 @@
 
 namespace App\Controllers\protokolle;
 
-use CodeIgniter\Controller;
 use App\Models\protokolllayout\auswahllistenModel;
 use App\Models\protokolllayout\inputsModel;
 use App\Models\protokolllayout\protokollEingabenModel;
@@ -175,9 +174,9 @@ class Protokolleingabecontroller extends Protokollcontroller
     
     protected function setzeBeladungszustand($postDaten) 
     {
-        if(isset($postDaten['gewichtPilot']))
+        if(isset($postDaten['hebelarm']))
         {
-            $_SESSION['beladungszustand'] = $postDaten;
+            $_SESSION['beladungszustand'] = $postDaten['hebelarm'];
         }  
     }
  }

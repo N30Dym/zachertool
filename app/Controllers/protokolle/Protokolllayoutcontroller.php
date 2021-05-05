@@ -220,12 +220,14 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
         foreach($musterHebelarme as $key => $musterHebelarm)
         {
-                if($key != $indexPilot AND $key != $indexCopilot)
-                {
-                        array_push($musterHebelarmeSortiert,$musterHebelarm);
-                }
+            echo $key;
+            if($key != $indexPilot AND $key != $indexCopilot)
+            {
+                echo $key;
+                array_push($musterHebelarmeSortiert,$musterHebelarm);
+            }
         }
-        
+        //var_dump($musterHebelarmeSortiert);
         return $musterHebelarmeSortiert;
     }
 
@@ -281,18 +283,19 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 $inhaltZusatz['pilotenDatenArray'] = $this->getPilotenFuerAuswahl();
                 break;
             case 3:
-                 if(isset($_SESSION['flugzeugID']))
-                 {
-                     $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
-                     if(isset($_SESSION['pilotID']))
-                     {
-                         $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['pilotID']);
-                     }
-                     if(isset($_SESSION['copilotID']))
-                     {
-                         $inhaltZusatz['copilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['copilotID']);
-                     }
-                 }
+                $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
+                if(isset($_SESSION['flugzeugID']) && ! isset($_SESSION['protokollSpeicherID']))
+                {
+                    //$inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
+                    if(isset($_SESSION['pilotID']))
+                    {
+                        $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['pilotID']);
+                    }
+                    if(isset($_SESSION['copilotID']))
+                    {
+                        $inhaltZusatz['copilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['copilotID']);
+                    }
+                }
                  
                 break;
             default:

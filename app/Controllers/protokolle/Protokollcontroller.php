@@ -3,20 +3,6 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-use App\Models\protokolllayout\auswahllistenModel;
-use App\Models\protokolllayout\inputsModel;
-use App\Models\protokolllayout\protokollEingabenModel;
-use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
-use App\Models\protokolllayout\protokollInputsModel;
-use App\Models\protokolllayout\protokollKapitelModel;
-use App\Models\protokolllayout\protokollLayoutsModel;
-
-use App\Models\protokolllayout\protokollUnterkapitelModel;
-use App\Models\flugzeuge\flugzeugeModel;
-use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\muster\musterModel;
-use App\Models\piloten\pilotenModel;
-use App\Models\piloten\pilotenDetailsModel;
 
 use App\Controllers\protokolle\Protokolleingabecontroller;
 use App\Controllers\protokolle\Protokollanzeigecontroller;
@@ -59,8 +45,6 @@ class Protokollcontroller extends Controller
 	
     public function kapitel($kapitelNummer = 0)
     {
-        
-        
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
@@ -87,7 +71,10 @@ class Protokollcontroller extends Controller
         {
             return redirect()->back();
         } 
-
+        
+        //var_dump($_SESSION['beladungszustand']);
+        //echo $_SESSION['protokollSpeicherID'];
+        
         $datenHeader = [
             'title'         => $_SESSION['protokollInformationen']['titel'],
             'description'   => "Das übliche halt"

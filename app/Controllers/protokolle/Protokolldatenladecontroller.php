@@ -39,10 +39,18 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         $beladungen = $beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID);
         
-        foreach($beladungen as $protokollKapitelID => $beladung)
+        foreach($beladungen as $beladung)
         {
-            $_SESSION['beladungszustand'][$protokollKapitelID] = $beladung; 
+            if($beladung['hebelarm'] !== null)
+            {
+                $_SESSION['beladungszustand'][0][$beladung['bezeichnung']][$beladung['hebelarm']] = $beladung['gewicht'];
+            }
+            else
+            {
+                $_SESSION['beladungszustand'][$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == null ? 0 : $beladung['bezeichnung']] = $beladung['gewicht']; 
+            }
         }
+        var_dump( $_SESSION['beladungszustand']);
     }
             
     protected function ladeWerte($protokollSpeicherID)
@@ -53,14 +61,11 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($protokollDaten as $datenSatz)
         {
-            if($datenSatz['multipelNr'] != null)
-            {
-                $_SESSION['eingegebeneWerte'][$datenSatz['protokollInputID']][$datenSatz['wölbklappenstellung']][$datenSatz['linksUndRechts']][0] = $datenSatz['wert'];
-            }
-            else
-            {
-                $_SESSION['eingegebeneWerte'][$datenSatz['protokollInputID']][$datenSatz['wölbklappenstellung']][$datenSatz['linksUndRechts']][$datenSatz['multipelNr']] = $datenSatz['wert'];
-            }
+            $woelbklappenStellung   = $datenSatz['wölbklappenstellung'] == "" ? 0 : $datenSatz['wölbklappenstellung'];
+            $linksUndRechts         = $datenSatz['linksUndRechts'] == "" ? 0 : $datenSatz['linksUndRechts'];
+            $multipelNr             = $datenSatz['multipelNr'] == "" ? 0 : $datenSatz['multipelNr'];
+               
+            $_SESSION['eingegebeneWerte'][$datenSatz['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $datenSatz['wert'];
         }
     }
             
@@ -70,10 +75,11 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         $hStWege = $hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID);
         
-        foreach($hStWege as $protokollKapitelID => $hStWeg)
+        foreach($hStWege as $hStWeg)
         {
-            $_SESSION['hStWege'][$protokollKapitelID] = $hStWeg; 
+            $_SESSION['hStWege'][$hStWeg['protokollKapitelID']] = $hStWeg; 
         }
+        //var_dump($_SESSION['hStWege']);
     }
             
     protected function ladeKommentare($protokollSpeicherID)
@@ -82,9 +88,9 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         $kommentare = $kommentareModel->getKommentareNachProtokollSpeicherID($protokollSpeicherID);
         
-        foreach($kommentare as $protokollKapitelID => $kommentar)
+        foreach($kommentare as $kommentar)
         {
-            $_SESSION['kommentare'][$protokollKapitelID] = $kommentar;
+            $_SESSION['kommentare'][$kommentar['protokollKapitelID']] = $kommentar['kommentar'];
         }
     }
     
@@ -126,14 +132,12 @@ class Protokolldatenladecontroller extends Protokollcontroller
         {
             array_push($_SESSION['gewaehlteProtokollTypen'], $protokollID['protokollID']);
         }    
-        var_dump($_SESSION['gewaehlteProtokollTypen']);
+   
         foreach($_SESSION['gewaehlteProtokollTypen'] as $protokollTypID)
         {
             $protokollTypIDArray = $protokolleLayoutProtokolleModel->getProtokollIDNachProtokollDatumUndProtokollTypID($_SESSION['protokollInformationen']['datum'], $protokollTypID);
-            var_dump($protokollTypIDArray);
             array_push($_SESSION['protokollIDs'], $protokollTypIDArray[0]['id']);
         }
-        var_dump($_SESSION['protokollIDs']);
     }
 
 }

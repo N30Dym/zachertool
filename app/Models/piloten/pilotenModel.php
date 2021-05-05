@@ -14,7 +14,7 @@ class pilotenModel extends Model
     protected $DBGroup 			= 'pilotenDB';
     protected $table     		= 'piloten';
     protected $primaryKey 		= 'id';
-    protected $createdField  	= 'erstelltAm';
+    protected $createdField             = 'erstelltAm';
     //protected $validationRules 	= '';
 
     //protected $allowedFields 	= ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar'];
@@ -24,7 +24,12 @@ class pilotenModel extends Model
         return $this->where("sichtbar", 1)->findAll();
     }
 	
-	public function getAllePiloten()
+    public function getPilotNachID($id)
+    {
+        return $this->where("id", $id)->first();
+    }
+    
+    public function getAllePiloten()
     {
         return $this->findAll();
     }

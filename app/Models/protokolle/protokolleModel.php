@@ -90,12 +90,36 @@ class protokolleModel extends Model
 		* @param  int $jahr
 		* @return array
 		*/
-	public function getProtokolleNachJahr($jahr)
+	public function getDistinctFlugzeugIDNachJahr($jahr)
 	{		
 		if(is_int(trim($jahr)) OR is_numeric(trim($jahr)))
 		{
-			$query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
-			return $this->query($query)->getResultArray();	
+			//$query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
+			//return $this->query($query)->getResultArray();
+                        return $this->distinct('flugzeugID')->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->findAll();
+		}
+		else
+		{
+			// Fehler beim übergebenen Wert
+			throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+		}
+	}
+        
+        	/*
+		* Diese Funktion ruft nur alle Protokolle auf
+		* der im jeweiligen Jahr geflogen wurden. Das
+		* Erstelldatum wird NICHT berücksichtigt
+		*
+		* @param  int $jahr
+		* @return array
+		*/
+	public function getDistinctPilotIDNachJahr($jahr)
+	{		
+		if(is_int(trim($jahr)) OR is_numeric(trim($jahr)))
+		{
+			//$query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
+			//return $this->query($query)->getResultArray();
+                        return $this->distinct('pilotID')->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->findAll();
 		}
 		else
 		{
@@ -109,4 +133,14 @@ class protokolleModel extends Model
 		$query = "SELECT DISTINCT protokollID FROM testzachern_protokolllayout.protokoll_layouts JOIN testzachern_protokolle.daten ON protokoll_layouts.protokollInputID = daten.protokollInputID WHERE daten.protokollSpeicherID = ". $protokollSpeicherID; 
 		return $this->query($query)->getResultArray();
 	}
+        
+        public function getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $flugzeugID)
+        {
+            return $this->selectCount("id")->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        }
+        
+        public function getAnzahlProtokolleNachJahrUndPilotID($jahr, $pilotID)
+        {
+            return $this->selectCount("id")->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        }
 }	

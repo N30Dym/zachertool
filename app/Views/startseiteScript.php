@@ -1,15 +1,34 @@
 <script>
-    function oeffneJahr(evt, cityName) {
-      var i, tabInhalt, nav-link;
-      tabInhalt = document.getElementsByClassName("tabInhalt");
-      for (i = 0; i < tabInhalt.length; i++) {
-        tabInhalt[i].style.display = "none";
-      }
-      nav-link = document.getElementsByClassName("nav-link");
-      for (i = 0; i < nav-link.length; i++) {
-        nav-link[i].className = nav-link[i].className.replace(" active", "");
-      }
-      document.getElementById(cityName).style.display = "block";
-      evt.currentTarget.className += " active";
+
+    
+    function oeffneJahrFlugzeug(evt, jahr) {
+        var i, tabInhalt, navlink;
+        tabInhalt = document.getElementsByClassName("tabInhalt flugzeuge");
+        for (i = 0; i < tabInhalt.length; i++) {
+            tabInhalt[i].style.display = "none";
+        }
+        navlink = document.getElementsByClassName("nav-link flugzeuge");
+        for (i = 0; i < navlink.length; i++) {
+            navlink[i].className = navlink[i].className.replace(" active", "");
+        }
+        document.getElementById(jahr).style.display = "block";
+        evt.currentTarget.className += " active";
     }
+    
+    function oeffneJahrZacherkoenig(evt, jahr) {
+        var i, tabInhalt, navlink;
+        tabInhalt = document.getElementsByClassName("tabInhalt zacherkoenig");
+        for (i = 0; i < tabInhalt.length; i++) {
+            tabInhalt[i].style.display = "none";
+        }
+        navlink = document.getElementsByClassName("nav-link zacherkoenig");
+        for (i = 0; i < navlink.length; i++) {
+            navlink[i].className = navlink[i].className.replace(" active", "");
+        }
+        document.getElementById(jahr).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+ $( document ).ready( function() {   
+    
+});
 </script>

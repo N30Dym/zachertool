@@ -7,8 +7,9 @@ use CodeIgniter\Controller;
 use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeModel;
 use App\Models\muster\musterModel;
+use App\Models\piloten\pilotenModel;
 helper("array");
-helper("konvertiereHStWegeInProzent");
+//helper("konvertiereHStWegeInProzent");
 
 class Startseitecontroller extends Controller
 {
@@ -30,30 +31,23 @@ class Startseitecontroller extends Controller
             }
 
             $title                  = "Willkommen beim Zachertool";
-            $anzahlJahre            = 5;
-
-            
+            $anzahlJahre            = 5;          
 
             $datenInhalt = [
                     'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
                     'title' => $title
             ];
             
-            $datenInhalt["flugzeuge"] = $this->getProtokolleDerLetztenJahre($anzahlJahre);
-
-            
-
             $datenHeader = [
                     "title" => $title,
                     "description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
             ];
-            /*$datenInhalt = [
-                    'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
-                    'title' => $title
-            ];*/
+            
+            $datenInhalt["flugzeuge"] = $this->getProtokolleDerLetztenJahreProFlugzeug($anzahlJahre);
+            
+            $datenInhalt["zacherkoenig"] = $this->getProtokolleDerLetztenJahreProPilot($anzahlJahre);
 
             $this->ladeStartseiteView($datenHeader, $datenInhalt);
-		
 	}
         
         protected function ladeStartseiteView($datenHeader, $datenInhalt)
@@ -65,29 +59,59 @@ class Startseitecontroller extends Controller
             echo view('templates/footerView');
         }
         
-        protected function getProtokolleDerLetztenJahre($anzahlJahre) 
+        protected function getProtokolleDerLetztenJahreProFlugzeug($anzahlJahre) 
         {
             $protokolleModel        = new protokolleModel();
             $flugzeugeModel         = new flugzeugeModel();
             $musterModel            = new musterModel();
             
-            $temporaeresProtokollArray = [];
-            
-            for($i = date("Y"); $i > date("Y") - $anzahlJahre; $i--)    
+            for($jahr = date("Y"); $jahr > date("Y") - $anzahlJahre; $jahr--)    
             {  
-                $temporaeresProtokollArray[$i] = [];
-                $protokolleLetztesJahr  = $protokolleModel->getProtokolleNachJahr($i);
-                foreach($protokolleLetztesJahr as $protokolle)
+                $temporaeresProtokollArray[$jahr] = [];
+                $protokolleProJahr  = $protokolleModel->getDistinctFlugzeugIDNachJahr($jahr);
+                
+                foreach($protokolleProJahr as $protokoll)
                 {
-                    $protokollFlugzeug = $flugzeugeModel->getFlugzeugeNachID($protokolle["flugzeugID"]);
-                    $datenArray["kennung"] = $protokollFlugzeug["kennung"];
-                    $protokollMuster = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
-                    $datenArray["musterSchreibweise"] = $protokollMuster["musterSchreibweise"];
-                    $datenArray["musterZusatz"] = $protokollMuster["musterZusatz"];
-                    array_push($temporaeresProtokollArray[$i], $datenArray);
+                    $protokollFlugzeug                  = $flugzeugeModel->getFlugzeugeNachID($protokoll["flugzeugID"]);
+                    $datenArray["kennung"]              = $protokollFlugzeug["kennung"];
+                    
+                    $protokollMuster                    = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
+                    $datenArray["musterSchreibweise"]   = $protokollMuster["musterSchreibweise"];
+                    $datenArray["musterZusatz"]         = $protokollMuster["musterZusatz"];
+                    
+                    $datenArray["anzahlProtokolle"]     = $protokolleModel->getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $protokoll["flugzeugID"])["id"];
+                    
+                    array_push($temporaeresProtokollArray[$jahr], $datenArray);
                 }
+                array_sort_by_multiple_keys($temporaeresProtokollArray[$jahr], ['anzahlProtokolle' => SORT_DESC]);
             }
             return $temporaeresProtokollArray;   
         }
 	
+        protected function getProtokolleDerLetztenJahreProPilot($anzahlJahre)
+        {
+            $protokolleModel    = new protokolleModel();
+            $pilotenModel       = new pilotenModel();
+            
+            for($jahr = date("Y"); $jahr > date("Y") - $anzahlJahre; $jahr--)    
+            {
+                $temporaeresProtokollArray[$jahr] = [];
+                $protokolleProJahr  = $protokolleModel->getDistinctPilotIDNachJahr($jahr);
+                
+                foreach($protokolleProJahr as $protokoll)
+                {
+                    $protokollPilot                 = $pilotenModel->getPilotNachID($protokoll["pilotID"]);
+
+                    $datenArray["vorname"]          = $protokollPilot["vorname"];
+                    $datenArray["spitzname"]        = $protokollPilot["spitzname"];
+                    $datenArray["nachname"]         = $protokollPilot["nachname"];
+                    
+                    $datenArray["anzahlProtokolle"] = $protokolleModel->getAnzahlProtokolleNachJahrUndPilotID($jahr, $protokoll["pilotID"])["id"];
+
+                    array_push($temporaeresProtokollArray[$jahr], $datenArray);
+                }
+                array_sort_by_multiple_keys($temporaeresProtokollArray[$jahr], ['anzahlProtokolle' => SORT_DESC]);
+            }
+            return $temporaeresProtokollArray;  
+        }
 }

@@ -41,13 +41,15 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($beladungen as $beladung)
         {
-            if($beladung['hebelarm'] !== null)
+            if($beladung['hebelarm'] !== "")
             {
-                $_SESSION['beladungszustand'][0][$beladung['bezeichnung']][$beladung['hebelarm']] = $beladung['gewicht'];
+                $_SESSION['beladungszustand'][$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == "" ? 0 : $beladung['bezeichnung']] = $beladung['gewicht'];
             }
             else
             {
-                $_SESSION['beladungszustand'][$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == null ? 0 : $beladung['bezeichnung']] = $beladung['gewicht']; 
+                $_SESSION['beladungszustand']['weiterer']['bezeichnung'] = $beladung['bezeichnung']; 
+                $_SESSION['beladungszustand']['weiterer']['laenge'] = $beladung['hebelarm']; 
+                $_SESSION['beladungszustand']['weiterer']['gewicht'] = $beladung['gewicht']; 
             }
         }
         var_dump( $_SESSION['beladungszustand']);

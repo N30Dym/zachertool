@@ -159,7 +159,6 @@
 <!---------------------------------------->   
 <!--          Beladungszustand          --> 
 <!----------------------------------------> 
-    <?php var_dump($hebelarmDatenArray) ?>
     <div class="col-sm-1">
     </div>
 
@@ -195,7 +194,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][]" id="gewichtPilot" value="<?= isset($pilotGewicht['gewicht']) ? esc($pilotGewicht['gewicht']) : (isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0]) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0] : "") ?>" readonly>
+                        <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][]" value="<?= isset($pilotGewicht['gewicht']) ? esc($pilotGewicht['gewicht']) : (isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0]) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']][0] : "") ?>" readonly>
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -210,7 +209,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Fallschirm]" id="gewichtFSPilot" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm'] : "" ?>" required>
+                    <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Fallschirm]" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm'] : "" ?>" required>
                     <span class="input-group-text">kg</span>
                 </div>
             </div>
@@ -225,7 +224,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.1" name="gewichtZusatzPilot" id="gewichtZusatzPilot" value="<?= isset($_SESSION['beladungszustand']['gewichtZusatzPilot']) ? $_SESSION['beladungszustand']['gewichtZusatzPilot'] : "" ?>">
+                    <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Zusatz]" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Zusatz']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[0]['id']]['Zusatz'] : "" ?>">
                     <span class="input-group-text">kg</span>
                 </div>
             </div>
@@ -241,7 +240,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" min="0" name="gewichtCopilot" id="gewichtCopilot" value="<?= (isset($_SESSION['copilotID']) && $copilotGewicht != null) ? esc($copilotGewicht['gewicht']) . "\" readonly" : (isset($_SESSION['beladungszustand']['gewichtCopilot']) ? $_SESSION['beladungszustand']['gewichtCopilot'] . '"' : '"') ?> >
+                        <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][]" value="<?= (isset($_SESSION['copilotID']) && isset($copilotGewicht) && $copilotGewicht != null) ? esc($copilotGewicht['gewicht']) . "\" readonly" : (isset($_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']][0]) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']][0]  . '" readonly' : '"') ?> >
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -256,7 +255,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" min="0" name="gewichtFSCopilot" id="gewichtFSCopilot" value="<?= isset($_SESSION['beladungszustand']['gewichtFSCopilot']) ? $_SESSION['beladungszustand']['gewichtFSCopilot'] : "" ?>">
+                        <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][Fallschirm]" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']]['Fallschirm']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']]['Fallschirm'] : "" ?>">
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -271,7 +270,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" name="gewichtZusatzCopilot" id="gewichtZusatzCopilot" value="<?= isset($_SESSION['beladungszustand']['gewichtZusatzCopilot']) ? $_SESSION['beladungszustand']['gewichtZusatzCopilot'] : "" ?>">
+                        <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][Zusatz]" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']]['Zusatz']) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[1]['id']]['Zusatz'] : "" ?>">
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -289,7 +288,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <input type="number" class="form-control" step="0.1" name="gewichtHebelarm<?= $i ?>" id="gewichtHebelarm<?= $i ?>" value="<?= isset($_SESSION['beladungszustand']['gewichtHebelarm'. $i ]) ? $_SESSION['beladungszustand']['gewichtHebelarm'. $i ] : "" ?>">
+                        <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[$i]['id'] ?>][]" value="<?= isset($_SESSION['beladungszustand'][$hebelarmDatenArray[$i]['id']][0]) ? $_SESSION['beladungszustand'][$hebelarmDatenArray[$i]['id']][0] : "" ?>">
                         <span class="input-group-text">kg</span>
                     </div>
                 </div>
@@ -300,17 +299,17 @@
         <!-- Leerzeile -->
         <small class="m-3">Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden</small>
             <div class="col-sm-4">
-                <input type="text" class="form-control" name="beschreibungWeitererHebelarm" id="beschreibungWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['beschreibungWeitererHebelarm']) ? $_SESSION['beladungszustand']['beschreibungWeitererHebelarm'] : "" ?>">
+                <input type="text" class="form-control" name="hebelarm[weiterer][bezeichnung]" value="<?= isset($_SESSION['beladungszustand']['weiterer']['bezeichnung']) ? $_SESSION['beladungszustand']['weiterer']['bezeichnung'] : "" ?>">
             </div>
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.1" name="hebelarmWeitererHebelarm" id="hebelarmWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['hebelarmWeitererHebelarm']) ? $_SESSION['beladungszustand']['hebelarmWeitererHebelarm'] : "" ?>">
+                    <input type="number" class="form-control" step="0.1" name="hebelarm[weiterer][laenge]" value="<?= isset($_SESSION['beladungszustand']['weiterer']['laenge']) ? $_SESSION['beladungszustand']['weiterer']['laenge'] : "" ?>">
                     <span class="input-group-text">mm h. BP</span>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.1" name="gewichtWeitererHebelarm" id="gewichtWeitererHebelarm" value="<?= isset($_SESSION['beladungszustand']['gewichtWeitererHebelarm']) ? $_SESSION['beladungszustand']['gewichtWeitererHebelarm'] : "" ?>">
+                    <input type="number" class="form-control" step="0.1" name="hebelarm[weiterer][gewicht]" value="<?= isset($_SESSION['beladungszustand']['weiterer']['gewicht']) ? $_SESSION['beladungszustand']['weiterer']['gewicht'] : "" ?>">
                     <span class="input-group-text">kg</span>
                 </div>
             </div>

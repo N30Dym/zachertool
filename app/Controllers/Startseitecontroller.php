@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use App\Models\startseiteModel;
+//use App\Models\startseiteModel;
 use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeModel;
 use App\Models\muster\musterModel;
@@ -23,50 +23,71 @@ class Startseitecontroller extends Controller
 	*/
 	public function index()
 	{
-		if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
-		{
-			// Whoops, we don't have a page for that!
-			throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
-		}
+            if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
+            {
+                    // Whoops, we don't have a page for that!
+                    throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
+            }
+
+            $title                  = "Willkommen beim Zachertool";
+            $anzahlJahre            = 5;
+
+            
+
+            $datenInhalt = [
+                    'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
+                    'title' => $title
+            ];
+            
+            $datenInhalt["flugzeuge"] = $this->getProtokolleDerLetztenJahre($anzahlJahre);
+
+            
+
+            $datenHeader = [
+                    "title" => $title,
+                    "description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
+            ];
+            /*$datenInhalt = [
+                    'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
+                    'title' => $title
+            ];*/
+
+            $this->ladeStartseiteView($datenHeader, $datenInhalt);
 		
-		$title = "Willkommen beim Zachertool";
-			
-		$protokolleModel = new protokolleModel();
-		$flugzeugeModel = new flugzeugeModel();
-		$musterModel = new musterModel();
-		
-		$protokolleLetztesJahr = $protokolleModel->getProtokolleNachJahr(date("Y")-1);
-		
-		$datenInhalt = [
-			'flugzeuge' => [],
-			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
-			'title' => $title
-		];
-		
-		foreach($protokolleLetztesJahr as $protokolle)
-		{
-			
-			$protokollFlugzeug = $flugzeugeModel->getFlugzeugeNachID($protokolle["flugzeugID"]);
-			$datenArray["kennung"] = $protokollFlugzeug["kennung"];
-			$protokollMuster = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
-			$datenArray["musterSchreibweise"] = $protokollMuster["musterSchreibweise"];
-			$datenArray["musterZusatz"] = $protokollMuster["musterZusatz"];
-			array_push($datenInhalt["flugzeuge"], $datenArray);
-		}
-		
-		$datenHeader = [
-			"title" => $title,
-			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
-		];
-		/*$datenInhalt = [
-			'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
-			'title' => $title
-		];*/
-		
-		echo view('templates/headerView', $datenHeader);
-		echo view('templates/navbarView');
-		echo view('startseiteView', $datenInhalt);
-		echo view('templates/footerView');
 	}
+        
+        protected function ladeStartseiteView($datenHeader, $datenInhalt)
+        {
+            echo view('templates/headerView', $datenHeader);
+            echo view('startseiteScript');
+            echo view('templates/navbarView');
+            echo view('startseiteView', $datenInhalt);
+            echo view('templates/footerView');
+        }
+        
+        protected function getProtokolleDerLetztenJahre($anzahlJahre) 
+        {
+            $protokolleModel        = new protokolleModel();
+            $flugzeugeModel         = new flugzeugeModel();
+            $musterModel            = new musterModel();
+            
+            $temporaeresProtokollArray = [];
+            
+            for($i = date("Y"); $i > date("Y") - $anzahlJahre; $i--)    
+            {  
+                $temporaeresProtokollArray[$i] = [];
+                $protokolleLetztesJahr  = $protokolleModel->getProtokolleNachJahr($i);
+                foreach($protokolleLetztesJahr as $protokolle)
+                {
+                    $protokollFlugzeug = $flugzeugeModel->getFlugzeugeNachID($protokolle["flugzeugID"]);
+                    $datenArray["kennung"] = $protokollFlugzeug["kennung"];
+                    $protokollMuster = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
+                    $datenArray["musterSchreibweise"] = $protokollMuster["musterSchreibweise"];
+                    $datenArray["musterZusatz"] = $protokollMuster["musterZusatz"];
+                    array_push($temporaeresProtokollArray[$i], $datenArray);
+                }
+            }
+            return $temporaeresProtokollArray;   
+        }
 	
 }

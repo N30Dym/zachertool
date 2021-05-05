@@ -200,41 +200,42 @@ class Protokolllayoutcontroller extends Protokollcontroller
     {
         $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
         
-        $musterHebelarme = $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($_SESSION['flugzeugID']);
-        $musterHebelarmeSortiert = [];
-        $indexPilot = $indexCopilot = false;
+        $flugzeugHebelarme = $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($_SESSION['flugzeugID']);
+        $flugzeugHebelarmeSortiert = [];
+        $indexPilot = $indexCopilot = null;
         
-        foreach($musterHebelarme as $key => $musterhebelarm)			
-        {
-                array_search("Pilot", $musterHebelarme[$key]) ?  $indexPilot = $key : "";
-                array_search("Copilot", $musterHebelarme[$key]) ?  $indexCopilot = $key : "";
+        foreach($flugzeugHebelarme as $key => $flugzeugHebelarm)			
+        {  
+            array_search("Pilot", $flugzeugHebelarme[$key]) ?  $indexPilot = $key : "";
+            array_search("Copilot", $flugzeugHebelarme[$key]) ?  $indexCopilot = $key : "";
         }
 
-                // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
-        $musterHebelarmeSortiert[0] = $musterHebelarme[$indexPilot];
+            // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+        $flugzeugHebelarmeSortiert[0] = $flugzeugHebelarme[$indexPilot];
         if($indexCopilot)
         {
-                $musterHebelarmeSortiert[1] = $musterHebelarme[$indexCopilot];
+            $flugzeugHebelarmeSortiert[1] = $flugzeugHebelarme[$indexCopilot];
+        }
+        else 
+        {
+            $flugzeugHebelarmeSortiert[1] = [];
         }
 
-                // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
-        foreach($musterHebelarme as $key => $musterHebelarm)
+            // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+        foreach($flugzeugHebelarme as $key => $flugzeugHebelarm)
         {
-            echo $key;
-            if($key != $indexPilot AND $key != $indexCopilot)
+            if($key !== $indexPilot AND $key !== $indexCopilot)
             {
-                echo $key;
-                array_push($musterHebelarmeSortiert,$musterHebelarm);
+                array_push($flugzeugHebelarmeSortiert,$flugzeugHebelarm);
             }
         }
-        //var_dump($musterHebelarmeSortiert);
-        return $musterHebelarmeSortiert;
+        return $flugzeugHebelarmeSortiert;
     }
 
 
     protected function getMusterFuerFlugzeug($musterID)
     {
-        $musterModel                            = new musterModel();
+        $musterModel = new musterModel();
         
         return $musterModel->getMusterNachID($musterID); 
     }

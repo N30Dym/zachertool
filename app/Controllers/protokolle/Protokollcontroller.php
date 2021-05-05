@@ -73,7 +73,7 @@ class Protokollcontroller extends Controller
         } 
         
         //var_dump($_SESSION['beladungszustand']);
-        //echo $_SESSION['protokollSpeicherID'];
+        echo isset($_SESSION['protokollSpeicherID']) ? $_SESSION['protokollSpeicherID'] : "";
         
         $datenHeader = [
             'title'         => $_SESSION['protokollInformationen']['titel'],

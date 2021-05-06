@@ -18,12 +18,7 @@ use App\Models\piloten\pilotenDetailsModel;
 
 class Protokolllayoutcontroller extends Protokollcontroller
 {
-    protected function leeresProtokoll()
-    {
-        
-    }
-    
-    protected function setzeProtokollLayout()
+    protected function ladeProtokollLayout()
     {
         $protokollLayoutsModel              = new protokollLayoutsModel();
         $protokollKapitelModel              = new protokollKapitelModel();
@@ -74,18 +69,6 @@ class Protokolllayoutcontroller extends Protokollcontroller
             }
        }
        sort($_SESSION['kapitelNummern']);
-    }
-    
-    protected function setzeProtokollIDs() 
-    {
-        $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
-        $_SESSION['protokollIDs'] = [];
-        
-        foreach($_SESSION['gewaehlteProtokollTypen'] as $gewaehlterProtokollTyp)
-        {
-            $protokollLayoutID = $protokolleLayoutProtokolleModel->getProtokollAktuelleProtokollIDNachProtokollTypID($gewaehlterProtokollTyp);
-            array_push($_SESSION['protokollIDs'], $protokollLayoutID[0]["id"]);
-        }
     }
     
     protected function getKapitelNachKapitelID()

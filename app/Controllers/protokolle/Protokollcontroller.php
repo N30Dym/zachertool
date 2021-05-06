@@ -30,7 +30,7 @@ class Protokollcontroller extends Controller
         {
             $protokollEingabeController = new Protokolleingabecontroller;
 						
-            $protokollEingabeController->verarbeitungEingegenerDaten($this->request->getPost());
+            $protokollEingabeController->uebergebeneWerteVerarbeiten($this->request->getPost());
         }
         
         if($protokollSpeicherID)
@@ -48,31 +48,30 @@ class Protokollcontroller extends Controller
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
-
-        if(($this->request->getPost("protokollTypen") == null && ! isset($_SESSION['gewaehlteProtokollTypen'])) OR $kapitelNummer < 2)
+        
+        if((! isset($_SESSION['gewaehlteProtokollTypen']) && $this->request->getPost("protokollInformation")["protokollTypen"] == null) OR $kapitelNummer < 2)
         {
             return redirect()->to('/zachern-dev/protokolle/index');
         }
 
         $_SESSION['aktuellesKapitel'] = $kapitelNummer;
+        
+        $protokollEingabeController->uebergebeneWerteVerarbeiten($this->request->getPost());
 
         if( ! isset($_SESSION['protokollLayout']) && $this->request->getMethod() !== "POST")
         {
-            $protokollEingabeController->setzeProtokollInformationen($this->request->getPost());
+            //$protokollEingabeController->setzeProtokollInformationen($this->request->getPost());
 
-            $protokollLayoutController->setzeProtokollIDs();
+            $protokollEingabeController->setzeProtokollIDs();
 
-            $protokollLayoutController->setzeProtokollLayout();
+            $protokollLayoutController->ladeProtokollLayout();
         }
-
-        $protokollEingabeController->verarbeitungEingegenerDaten($this->request->getPost());
 
         if( ! isset($_SESSION['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['kapitelNummern']))
         {
             return redirect()->back();
         } 
         
-        //var_dump($_SESSION['beladungszustand']);
         echo isset($_SESSION['protokollSpeicherID']) ? $_SESSION['protokollSpeicherID'] : "";
         
         $datenHeader = [
@@ -160,17 +159,16 @@ class Protokollcontroller extends Controller
             ];
 
             $protokollAnzeigeController->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
-//lade erste Seite
        // }
 
     }
 
     protected function layoutLaden()
     {
-        $protokollLayoutController = new Protokolllayoutcontroller;
+        $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
 
-        $protokollLayoutController->setzeProtokollLayout();
+        $protokollLayoutController->ladeProtokollLayout();
         
         $protokollEingabeController->setzeFlugzeugDaten();
     }

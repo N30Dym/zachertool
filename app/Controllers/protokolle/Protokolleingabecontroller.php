@@ -134,7 +134,11 @@ class Protokolleingabecontroller extends Protokollcontroller
         $_SESSION['beladungszustand']                   = $hebelarme;
         $_SESSION['beladungszustand']['flugzeugID']     = $_SESSION['flugzeugID'];
         $_SESSION['beladungszustand']['pilotID']        = $_SESSION['pilotID'];
-        $_SESSION['beladungszustand']['copilotID']      = $_SESSION['copilotID'];
+        
+        if(isset($_SESSION['copilotID']))
+        {
+            $_SESSION['beladungszustand']['copilotID']  = $_SESSION['copilotID'];
+        }
     }
     
     protected function setzeEingegebeneWerte($werte, $eineRichtung, $andereRichtung)
@@ -185,7 +189,6 @@ class Protokolleingabecontroller extends Protokollcontroller
     
     protected function setzeHStWege($hStWege)
     {
-        var_dump($hStWege);
         $_SESSION['hStWege'][key($hStWege)] = $hStWege[key($hStWege)];
     }
     

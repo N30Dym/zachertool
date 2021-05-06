@@ -85,13 +85,8 @@ class Protokollcontroller extends Controller
         ];
 
         $datenHeader += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
-
         
-        isset($_SESSION['beladungszustand']) ? var_dump($_SESSION['beladungszustand']) : null;
         $protokollAnzeigeController->ladenDesProtokollEingabeView($datenHeader, $datenInhalt);
-        
-        
-
     }
 	
     public function abbrechen() 
@@ -103,7 +98,7 @@ class Protokollcontroller extends Controller
 	
     public function speichern()
     {
-
+        echo "Test";
     }
 
     public function absenden()
@@ -128,13 +123,11 @@ class Protokollcontroller extends Controller
 
         $protokollAnzeigeController->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
 
-        $this->sessionDatenLöschen();
+        $this->layoutDatenLöschen();
     }
 
     protected function gespeichertesProtokoll($protokollSpeicherID)
     {
-        echo $protokollSpeicherID; 
-
         //if( Checken ob fertiges oder abgegebenes Protokoll. Dann natürlich nicht bearbeiten
         $_SESSION["protokollSpeicherID"] = $protokollSpeicherID;
 
@@ -183,7 +176,7 @@ class Protokollcontroller extends Controller
         return $protokollDatenLadeController->ladeProtokollDaten($protokollSpeicherID); 
     }
 
-    protected function sessionDatenLöschen()
+    protected function layoutDatenLöschen()
     {
         unset(
             $_SESSION['gewaehlteProtokollTypen'],

@@ -2,27 +2,8 @@
 
 namespace App\Controllers\protokolle;
 
-use App\Models\protokolllayout\auswahllistenModel;
-use App\Models\protokolllayout\inputsModel;
-use App\Models\protokolllayout\protokollEingabenModel;
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
-use App\Models\protokolllayout\protokollInputsModel;
-use App\Models\protokolllayout\protokollKapitelModel;
-use App\Models\protokolllayout\protokollLayoutsModel;
-use App\Models\protokolllayout\protokollTypenModel;
-use App\Models\protokolllayout\protokollUnterkapitelModel;
-use App\Models\flugzeuge\flugzeugeModel;
-use App\Models\flugzeuge\flugzeugHebelarmeModel;
 use App\Models\muster\musterModel;
-use App\Models\piloten\pilotenModel;
-use App\Models\piloten\pilotenDetailsModel;
-//use App\Models\protokolllayout\;
-if(!isset($_SESSION)){
-    $session = session();
-}
-
-
-helper(['form', 'url', 'array']);
 
 class Protokolleingabecontroller extends Protokollcontroller
 {	   
@@ -56,7 +37,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         }
         if(isset($postDaten['kommentar']))
         {     
-            $_SESSION['kommentare'][key($postDaten['kommentar'])] = $postDaten['kommentar'][key($postDaten['kommentar'])];
+            $this->setzeKommentare($postDaten['kommentar']);
         }
         if(isset($postDaten['hStWeg']))
         {        
@@ -118,21 +99,42 @@ class Protokolleingabecontroller extends Protokollcontroller
                 unset($_SESSION['woelbklappenFlugzeug']);
             }
         }
+        
+        if(isset($_SESSION['beladungszustand']['flugzeugID']) && $_SESSION['flugzeugID'] != $_SESSION['beladungszustand']['flugzeugID'])
+        {
+            unset($_SESSION['beladungszustand']);
+        }
     }
     
     protected function setzePilotID($pilotID)
     {
         $_SESSION['pilotID'] = $pilotID;
+        
+        if(isset($_SESSION['beladungszustand']['pilotID']) && $_SESSION['pilotID'] != $_SESSION['beladungszustand']['pilotID'])
+        {
+            unset($_SESSION['beladungszustand']);
+        }
     }
     
     protected function setzeCopilotID($copilotID)
     {
-        $_SESSION['copilotID'] = $copilotID;
+        if(isset($_SESSION['pilotID']) && $_SESSION['pilotID'] != $copilotID)
+        {
+            $_SESSION['copilotID'] = $copilotID;
+        }
+        
+        if(isset($_SESSION['beladungszustand']['copilotID']) && $_SESSION['copilotID'] != $_SESSION['beladungszustand']['copilotID'])
+        {
+            unset($_SESSION['beladungszustand']);
+        }
     }
     
     protected function setzeBeladungszustand($hebelarme) 
     {
-        $_SESSION['beladungszustand'] = $hebelarme;
+        $_SESSION['beladungszustand']                   = $hebelarme;
+        $_SESSION['beladungszustand']['flugzeugID']     = $_SESSION['flugzeugID'];
+        $_SESSION['beladungszustand']['pilotID']        = $_SESSION['pilotID'];
+        $_SESSION['beladungszustand']['copilotID']      = $_SESSION['copilotID'];
     }
     
     protected function setzeEingegebeneWerte($werte, $eineRichtung, $andereRichtung)
@@ -176,8 +178,14 @@ class Protokolleingabecontroller extends Protokollcontroller
         }
     }
     
+    protected function setzeKommentare($kommentar)
+    {
+        $_SESSION['kommentare'][key($kommentar)] = $kommentar[key($kommentar)];
+    }
+    
     protected function setzeHStWege($hStWege)
     {
+        var_dump($hStWege);
         $_SESSION['hStWege'][key($hStWege)] = $hStWege[key($hStWege)];
     }
     
@@ -206,11 +214,5 @@ class Protokolleingabecontroller extends Protokollcontroller
       
         return $flugzeug['musterID'];
     }*/
-
-    
-    
-    
-    
-    
  }
 

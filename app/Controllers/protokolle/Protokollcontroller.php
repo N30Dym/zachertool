@@ -6,7 +6,7 @@ use CodeIgniter\Controller;
 
 use App\Controllers\protokolle\Protokolleingabecontroller;
 use App\Controllers\protokolle\Protokollanzeigecontroller;
-use App\Controllers\protokolle\Protokollspeichercontroller;
+//use App\Controllers\protokolle\Protokollspeichercontroller;
 use App\Controllers\protokolle\Protokolldatenladecontroller;
 use App\Controllers\protokolle\Protokolllayoutcontroller;
 
@@ -86,7 +86,11 @@ class Protokollcontroller extends Controller
 
         $datenHeader += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
 
+        
+        isset($_SESSION['beladungszustand']) ? var_dump($_SESSION['beladungszustand']) : null;
         $protokollAnzeigeController->ladenDesProtokollEingabeView($datenHeader, $datenInhalt);
+        
+        
 
     }
 	
@@ -160,7 +164,6 @@ class Protokollcontroller extends Controller
 
             $protokollAnzeigeController->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
        // }
-
     }
 
     protected function layoutLaden()

@@ -19,14 +19,14 @@ do
             <ul class="nav nav-tabs">
                 <?php foreach($flugzeuge as $jahrFlugzeuge => $flugzeugeProJahr) : ?>
                     <li class="nav-item">
-                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "active" : "" ?>" onclick="oeffneJahrFlugzeug(event, '<?= $jahrFlugzeuge?>')"><b><?= $jahrFlugzeuge?></b></button>
+                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "active" : "" ?>" id="<?= $jahrFlugzeuge?>"><b><?= $jahrFlugzeuge?></b></button>
                     </li>
                 <?php endforeach ?>   
             </ul>
             <?php foreach($flugzeuge as $jahrFlugzeuge=> $flugzeugeProJahr) : ?>
-                <div id="<?= $jahrFlugzeuge?>" class="tabInhalt flugzeuge" style="<?= $jahrFlugzeuge== $letztesJahrInDemProtokolleExistieren ? "display:inline" : "display:none" ?>" >
+                <div id="<?= $jahrFlugzeuge?>" class="table-responsive-md tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>" style="overflow:auto; max-height:500px;">
                     <?php if($flugzeugeProJahr == null): ?>
-                            <div class="text-center">
+                            <div class="text-center m-3">
                                     In diesem Jahr sind<?= date("Y") == $jahrFlugzeuge? " noch " : " " ?>keine Flugzeuge gezachert worden
                             </div>
                     <?php else: ?>
@@ -41,7 +41,7 @@ do
                             </thead>   
                             <?php foreach($flugzeugeProJahr as $flugzeug_item) : ?>
 
-                                <tr class="text-center">
+                                <tr class="text-center" style="color: ">
                                     <td><?= esc($flugzeug_item["musterSchreibweise"]) ?><?= esc($flugzeug_item["musterZusatz"]) ?></td>
                                     <td><?= esc($flugzeug_item["kennung"]) ?></td>
                                     <td><?= esc($flugzeug_item["anzahlProtokolle"]) ?></td>
@@ -67,18 +67,18 @@ do
         <div class="p-4 rounded shadow border">
             <h4 class="text-center mt-2">Zacherkönig</h4>
             <ul class="nav nav-tabs">
-                <?php foreach($flugzeuge as $jahrZacherkoenig => $flugzeugeProJahr) : ?>
+                <?php foreach($zacherkoenig as $jahrZacherkoenig => $zacherPilotenProJahr) : ?>
                     <li class="nav-item zacherkonig">
-                        <button class="nav-link <?= $jahrZacherkoenig== $letztesJahrInDemProtokolleExistieren ? "active" : "" ?>" onclick="oeffneJahrZacherkoenig(event, '<?= $jahrZacherkoenig?>')"><b><?= $jahrZacherkoenig?></b></button>
+                        <button class="nav-link zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "active" : ""?>" id="<?= $jahrZacherkoenig?>"><b><?= $jahrZacherkoenig?></b></button>
                     </li>
                 <?php endforeach ?>   
             </ul>
-            <?php foreach($zacherkoenig as $jahrZacherkoenig=> $zacherPilotenProJahr) : ?>
-                <div id="<?= $jahrZacherkoenig?>" class="tabInhalt zacherkoenig" style="" >
-                    <?php if($flugzeugeProJahr == null): ?>
-                            <div class="text-center">
-                                    In diesem Jahr sind<?= date("Y") == $jahrZacherkoenig? " noch " : " " ?>keine Flugzeuge gezachert worden
-                            </div>
+            <?php foreach($zacherkoenig as $jahrZacherkoenig => $zacherPilotenProJahr) : ?>
+                <div id="<?= $jahrZacherkoenig?>" class="table-responsive-md tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>" style="overflow:auto; max-height:500px;">
+                    <?php if($zacherPilotenProJahr == null): ?>
+                        <div class="text-center m-3">
+                            In diesem Jahr sind<?= date("Y") == $jahrZacherkoenig? " noch " : " " ?>keine Flugzeuge gezachert worden
+                        </div>
                     <?php else: ?>
                         <table class="table table-light table-striped table-hover border rounded">
                             <thead>
@@ -87,13 +87,13 @@ do
                                     <th>Anzahl Protokolle</th>
                                 </tr>
                             </thead>   
-                            <?php foreach($zacherPilotenProJahr as $zacherPilot_item) : ?>
-
+                            <?php foreach($zacherPilotenProJahr as $index => $zacherPilot_item) : ?>
+                            
                                 <tr class="text-center">
-                                    <td><?= esc($zacherPilot_item["voranme"]) ?><?= $zacherPilot_item["voranme"] != "" ?  ' "' . $zacherPilot_item["voranme"] . '" ' : " " ?><?= esc($zacherPilot_item["nachname"]) ?></td>
+                                    <td><?= esc($zacherPilot_item["vorname"]) ?><?= $zacherPilot_item["spitzname"] != "" ?  ' "' . $zacherPilot_item["spitzname"] . '" ' : " " ?><?= esc($zacherPilot_item["nachname"]) ?></td>
                                     <td><?= esc($zacherPilot_item["anzahlProtokolle"]) ?></td>
                                 </tr>
-                                <?php $gesamtZahlProtokolle += (int)$flugzeug_item["anzahlProtokolle"] ?>
+                                
                             <?php endforeach ?> 
                         </table>
 

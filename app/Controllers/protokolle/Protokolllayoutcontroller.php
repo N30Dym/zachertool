@@ -5,7 +5,7 @@ namespace App\Controllers\protokolle;
 use App\Models\protokolllayout\auswahllistenModel;
 use App\Models\protokolllayout\inputsModel;
 use App\Models\protokolllayout\protokollEingabenModel;
-use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
+//use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
 use App\Models\protokolllayout\protokollInputsModel;
 use App\Models\protokolllayout\protokollKapitelModel;
 use App\Models\protokolllayout\protokollLayoutsModel;
@@ -26,13 +26,20 @@ class Protokolllayoutcontroller extends Protokollcontroller
         $_SESSION['kapitelNummern']         = [];
         $_SESSION['kapitelBezeichnungen']   = [];
         
-        $temporaeresDatenArray = [];
+        $temporaeresDatenArray              = [];
+        $temporaeresKommentarArray          = [];
         
         if(isset($_SESSION['eingegebeneWerte']))
         {
-           $temporaeresDatenArray = $_SESSION['eingegebeneWerte'];
-           $_SESSION['eingegebeneWerte'] = [];
+           $temporaeresDatenArray           = $_SESSION['eingegebeneWerte'];
+           $_SESSION['eingegebeneWerte']    = [];
         }
+        
+        if(isset($_SESSION['kommentare']))
+        {
+            $temporaeresKommentarArray   = $_SESSION['kommentare'];
+            $_SESSION['kommentare']     = [];     
+        }   
         
         foreach($_SESSION['protokollIDs'] as $protokollID)
         {
@@ -54,9 +61,15 @@ class Protokolllayoutcontroller extends Protokollcontroller
                     $_SESSION['kapitelBezeichnungen'][$protokollItem['kapitelNummer']] = $kapitelBezeichnung['bezeichnung'];
                 }
 
-                    // eingegebene Daten werden bei ProtokollTyp wechsel geändert bzw gespeichert
-                $this->erhalteEingebebeneDatenBeiProtokollWechsel($temporaeresDatenArray, $protokollItem['protokollInputID']);
+                    // eingegebene Daten werden bei ProtokollTyp-wechsel geändert bzw gespeichert
+                (isset($temporaeresDatenArray) && $temporaeresDatenArray !== null) ? $this->erhalteEingebebeneDatenBeiProtokollWechsel($temporaeresDatenArray, $protokollItem['protokollInputID']) : null;
             
+                    // eingegebene Kommentare werden bei ProtokollTyp-wechsel geändert bzw gespeichert
+                if(array_key_exists($protokollItem['kapitelNummer'], $temporaeresKommentarArray) && ! array_key_exists($protokollItem['kapitelNummer'], $_SESSION['kommentare']))
+                {
+                    $this->erhalteEingebebeneKommentareBeiProtokollWechsel($temporaeresKommentarArray, $protokollItem['kapitelNummer']);
+                }
+                
                     // Hier wird das Protokoll Layout gespeichert indem jede Zeile einfach in das Array geladen wird
                 if($protokollItem['protokollUnterkapitelID'])
                 {
@@ -214,8 +227,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
         }
         return $flugzeugHebelarmeSortiert;
     }
-
-
+    
     protected function getMusterFuerFlugzeug($musterID)
     {
         $musterModel = new musterModel();
@@ -237,20 +249,28 @@ class Protokolllayoutcontroller extends Protokollcontroller
         return $pilotenDetailsModel->getPilotenGewichtNachPilotIDUndDatum($pilotID);
     }
     
-    protected function erhalteEingebebeneDatenBeiProtokollWechsel($DatenArray, $protokollInputID)
+    protected function erhalteEingebebeneDatenBeiProtokollWechsel($datenArray, $protokollInputID)
     {
             // Wenn schon Daten gespeichert waren und die erste Seite aufgerufen wurde, werden die gespeichert Daten neu
             // geladen, um zu verhindern, dass im eingegebenenDaten Array Daten sind, die nicht zu den gewählten Protokollen
             // passen, wenn ein ProtkollTyp abgewählt wurde
-        if($DatenArray !== [] && isset($DatenArray[$protokollInputID]) && $DatenArray[$protokollInputID] !== "")
+        if($datenArray !== [] && isset($datenArray[$protokollInputID]) && $datenArray[$protokollInputID] !== "")
         {
-            $_SESSION['eingegebeneWerte'][$protokollInputID] = $DatenArray[$protokollInputID];
+            $_SESSION['eingegebeneWerte'][$protokollInputID] = $datenArray[$protokollInputID];
         }
         else
         {
                 // Wenn noch keine Daten vorhanden sind, wird für jede protokollInputID ein eigenes leeres Array angelegt
                 // in dem die Daten gespeichert und bei Bedarf wieder aufgerufen werden können
             $_SESSION['eingegebeneWerte'][$protokollInputID] = [];
+        }
+    }
+    
+    protected function erhalteEingebebeneKommentareBeiProtokollWechsel($datenArray, $protokollKapitelID) 
+    {
+        if($datenArray !== [])
+        {
+            $_SESSION['kommentare'][$protokollKapitelID] = $datenArray[$protokollKapitelID];
         }
     }
     
@@ -292,6 +312,4 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
         return $inhaltZusatz;
     }
-    
-    
 }

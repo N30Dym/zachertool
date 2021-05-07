@@ -58,7 +58,6 @@ class Flugzeugneucontroller extends Controller
 			// Daten für den Header aufbereiten
 		$datenHeader = [
 			"title" => $title,
-			"description" => "Das webbasierte Tool zur Zacherdatenverarbeitung"
 		];
 		
 			// Daten für den Inhalt aufbereiten

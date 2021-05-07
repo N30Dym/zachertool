@@ -49,7 +49,7 @@ class Protokollcontroller extends Controller
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
         
-        if((! isset($_SESSION['gewaehlteProtokollTypen']) && $this->request->getPost("protokollInformation")["protokollTypen"] == null) OR $kapitelNummer < 2)
+        if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")["protokollTypen"])) OR $kapitelNummer < 2)
         {
             return redirect()->to('/zachern-dev/protokolle/index');
         }
@@ -76,7 +76,6 @@ class Protokollcontroller extends Controller
         
         $datenHeader = [
             'title'         => $_SESSION['protokollInformationen']['titel'],
-            'description'   => "Das übliche halt"
         ];
 
         $datenInhalt = [
@@ -113,7 +112,6 @@ class Protokollcontroller extends Controller
 
         $datenHeader = [
             'title'         => $_SESSION['protokollInformationen']['titel'],
-            'description'   => "Das übliche halt"
         ];
 
         $datenInhalt = [
@@ -142,12 +140,11 @@ class Protokollcontroller extends Controller
         }
         else
         {*/
-            $protokollTypenModel = new protokollTypenModel();
+            $protokollTypenModel        = new protokollTypenModel();
             $protokollAnzeigeController = new Protokollanzeigecontroller();
 
             $datenHeader = [
-                'title'         => $_SESSION['protokollInformationen']['titel'],
-                'description'   => "Das übliche halt"
+                'title'                 => $_SESSION['protokollInformationen']['titel'],
             ];
 
             $datenInhalt = [

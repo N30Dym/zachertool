@@ -34,7 +34,6 @@ class Startseitecontroller extends Controller
         $anzahlJahre            = 5;          
 
         $datenInhalt = [
-            'description' => "Das webbasierte Tool zur Zacherdatenverarbeitung",
             'title' => $title
         ];
 
@@ -92,7 +91,7 @@ class Startseitecontroller extends Controller
     {
         $protokolleModel    = new protokolleModel();
 
-        $zacherkoenig = $protokolleModel->getZehnMeisteZacherer();
+        $zacherkoenig       = $protokolleModel->getZehnMeisteZacherer();
         
         $temporaeresProtokollArray['Gesamt'] = [];
         

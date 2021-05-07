@@ -72,9 +72,9 @@
 
  
  	<meta charset="UTF-8">
-	<?php if (isset($description)) : ?>
-		<meta name="description" content="<?= esc($description) ?>">
-	<?php endif ?>
+
+        <meta name="description" content="Das webbasierte Tool zur Zacherdatenverarbeitung">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 

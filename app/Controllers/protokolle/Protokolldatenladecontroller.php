@@ -9,16 +9,11 @@ use App\Models\protokolle\kommentareModel;
 use App\Models\protokolle\protokolleModel;
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
 
-
-
-
-helper(['form', 'url', 'array']);
-
 class Protokolldatenladecontroller extends Protokollcontroller
 {	
     protected function ladeProtokollDaten($protokollSpeicherID)
     {
-        $protokollFertig = $this->ladeProtokollInformationen($protokollSpeicherID);
+        $this->ladeProtokollInformationen($protokollSpeicherID);
         
         $this->ladeBeladungszustand($protokollSpeicherID);
         
@@ -28,9 +23,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         $this->ladeKommentare($protokollSpeicherID);
         
-        $this->ladeProtokollIDs($protokollSpeicherID);
-        
-        return $protokollFertig;   
+        $this->ladeProtokollIDs($protokollSpeicherID); 
     }
 
     protected function ladeBeladungszustand($protokollSpeicherID)
@@ -47,9 +40,9 @@ class Protokolldatenladecontroller extends Protokollcontroller
             }
             else
             {
-                $_SESSION['beladungszustand']['weiterer']['bezeichnung'] = $beladung['bezeichnung']; 
-                $_SESSION['beladungszustand']['weiterer']['laenge'] = $beladung['hebelarm']; 
-                $_SESSION['beladungszustand']['weiterer']['gewicht'] = $beladung['gewicht']; 
+                $_SESSION['beladungszustand']['weiterer']['bezeichnung']    = $beladung['bezeichnung']; 
+                $_SESSION['beladungszustand']['weiterer']['laenge']         = $beladung['hebelarm']; 
+                $_SESSION['beladungszustand']['weiterer']['gewicht']        = $beladung['gewicht']; 
             }
         }
         var_dump( $_SESSION['beladungszustand']);
@@ -113,7 +106,8 @@ class Protokolldatenladecontroller extends Protokollcontroller
             $_SESSION['pilotID']                                = $protokollInformationen["pilotID"];
             $_SESSION['copilotID']                              = $protokollInformationen["copilotID"];   
 
-            return $protokollInformationen["fertig"];
+            $protokollInformationen["fertig"]       == 1 ? $_SESSION['fertig'] = [] : null;
+            $protokollInformationen["bestaetigt"]   == 1 ? $_SESSION['bestaetigt'] = [] : null;
         }
         else
         {
@@ -138,6 +132,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
         foreach($_SESSION['gewaehlteProtokollTypen'] as $protokollTypID)
         {
             $protokollTypIDArray = $protokolleLayoutProtokolleModel->getProtokollIDNachProtokollDatumUndProtokollTypID($_SESSION['protokollInformationen']['datum'], $protokollTypID);
+            
             array_push($_SESSION['protokollIDs'], $protokollTypIDArray[0]['id']);
         }
     }

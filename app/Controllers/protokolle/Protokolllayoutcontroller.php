@@ -65,9 +65,9 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 (isset($temporaeresDatenArray) && $temporaeresDatenArray !== null) ? $this->erhalteEingebebeneDatenBeiProtokollWechsel($temporaeresDatenArray, $protokollItem['protokollInputID']) : null;
             
                     // eingegebene Kommentare werden bei ProtokollTyp-wechsel geändert bzw gespeichert
-                if(array_key_exists($protokollItem['kapitelNummer'], $temporaeresKommentarArray) && ! array_key_exists($protokollItem['kapitelNummer'], $_SESSION['kommentare']))
+                if(array_key_exists($_SESSION['kapitelIDs'][$protokollItem['kapitelNummer']], $temporaeresKommentarArray) && ! array_key_exists($_SESSION['kapitelIDs'][$protokollItem['kapitelNummer']], $_SESSION['kommentare']))
                 {
-                    $this->erhalteEingebebeneKommentareBeiProtokollWechsel($temporaeresKommentarArray, $protokollItem['kapitelNummer']);
+                    $this->erhalteEingebebeneKommentareBeiProtokollWechsel($temporaeresKommentarArray, $_SESSION['kapitelIDs'][$protokollItem['kapitelNummer']]);
                 }
                 
                     // Hier wird das Protokoll Layout gespeichert indem jede Zeile einfach in das Array geladen wird

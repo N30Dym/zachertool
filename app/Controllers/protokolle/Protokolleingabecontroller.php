@@ -67,7 +67,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         $_SESSION['protokollInformationen']['datum']        = $protokollInformationen["datum"];
         $_SESSION['protokollInformationen']['flugzeit']     = $protokollInformationen["flugzeit"];
         $_SESSION['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
-        //$_SESSION['protokollInformationen']['titel']        = isset($_SESSION['protokollSpeicherID']) ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        $_SESSION['protokollInformationen']['titel']        = isset($_SESSION['protokollSpeicherID']) ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
 
             // Wenn protokollSpeicherID existiert, werden gewaehlteProtokollTypen und protokollIDs im Protokolldatenladecontroller geladen
         if( ! isset($_SESSION['protokollSpeicherID']))
@@ -305,7 +305,7 @@ class Protokolleingabecontroller extends Protokollcontroller
          */
     protected function setzeKommentare($kommentar)
     {
-        if($kommentar[key($kommentar)] !== null)
+        if($kommentar[key($kommentar)] !== "")
         {
             $_SESSION['kommentare'][key($kommentar)] = $kommentar[key($kommentar)];
         }

@@ -33,7 +33,7 @@ class Protokollcontroller extends Controller
         */
     public function index($protokollSpeicherID = null) // Leeres Protokoll
     {
-        $_SESSION["aktuellesKapitel"]                   = 0;
+        $_SESSION['aktuellesKapitel']                   = 0;
         $_SESSION['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
         
             // Wenn bereits Werte eingegeben wurden und auf die ersteSeite zurückgekehrt wird, werden die 
@@ -113,6 +113,7 @@ class Protokollcontroller extends Controller
 
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
         echo isset($_SESSION['protokollSpeicherID']) ? $_SESSION['protokollSpeicherID'] : "";
+        isset($_SESSION['kommentare']) ? var_dump($_SESSION['kommentare']) : "";
         
             // datenHeader mit Titel füttern
         $datenHeader = [

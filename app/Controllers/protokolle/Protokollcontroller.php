@@ -21,15 +21,19 @@ helper(['form', 'url', 'array']);
 
 class Protokollcontroller extends Controller
 {
-        /*
+        /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/index/...
+        * -> /protokolle/index/...*
         *
         * Wenn eine protokollSpeicherID gegeben ist, werden die jeweilige Daten geladen. Ist das Protokoll als "fertig" markiert,
         * kann die ersteSeite nicht mehr aufgerufen werden.
         * 
         * Wenn die protokollSpeicherID einmal gesetzt ist, wird diese nicht mehr geändert und ist somit als Referenz gültig
         * ob es sich um ein neues oder ein bereits gespeichertes Protokoll handelt
+         * 
+         * @param int|null   Die protokollSpeicherID zeigt, dass das Protokoll schon eingegeben wurde und nun geladen wird
+         *          
+         * @return void    
         */
     public function index($protokollSpeicherID = null) // Leeres Protokoll
     {
@@ -45,7 +49,7 @@ class Protokollcontroller extends Controller
             $protokollEingabeController->uebergebeneWerteVerarbeiten($this->request->getPost());
         }
         
-            /* 
+            /** 
             * Wenn noch keine protokollSpeicherID in der Session gesetzt ist, wird dies hier gemacht und anschließend
             * werden die Daten mit der jeweiligen protokollSpeicherID geladen. Da die Daten nicht bei jedem zurückkehren auf die 
             * erste Seite neu geladen werden sollen, passiert dies nur einmal am Anfang.
@@ -53,7 +57,7 @@ class Protokollcontroller extends Controller
             */
         if($protokollSpeicherID && ! isset($_SESSION['protokollSpeicherID']))
         {
-            $_SESSION["protokollSpeicherID"] = $protokollSpeicherID;
+            $_SESSION['protokollSpeicherID'] = $protokollSpeicherID;
 
             $this->protokollDatenLaden($protokollSpeicherID);
         }
@@ -69,15 +73,19 @@ class Protokollcontroller extends Controller
         {
             $this->ersteSeiteAnzeigen();
             
-            $this->layoutDatenLöschen();          
+            $this->loescheLayoutDaten();          
         }
     }
     
-	/*
+	/**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/kapitel/...
+        * -> /protokolle/kapitel/...*
         *
         * Wenn eine Kapitelnummer gegeben ist, wird das jeweilige Protokollkapitel aufgerufen
+        * 
+        * @param int
+        * 
+        * @return void
         */
     public function kapitel($kapitelNummer = 0)
     {
@@ -86,7 +94,7 @@ class Protokollcontroller extends Controller
         $protokollEingabeController = new Protokolleingabecontroller;
 
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
-        if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")["protokollTypen"])) OR $kapitelNummer < 2)
+        if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
         {
             return redirect()->to('/zachern-dev/protokolle/index');
         }
@@ -133,38 +141,43 @@ class Protokollcontroller extends Controller
         $protokollAnzeigeController->ladenDesProtokollEingabeView($datenHeader, $datenInhalt);
     }
  
-        /*
+        /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/abbrechen
+        * -> /protokolle/abbrechen*
+         * 
         * Das geschieht zum Beispiel wenn man auf den "Abbrechen"-Knopf in der Protokolleingabe drückt
         *
         * Wenn diese Funktion aufgerufen wird werden ALLE Session-Daten gelöscht und es wird zur Startseite umgeleitet.
+         * 
+         * @return void
         */
     public function abbrechen() 
     {
-        session_destroy();
-        unset($_SESSION);       
+        $this->loescheSessionDatenUndZurStartseite();
+        
         return redirect()->to('/zachern-dev/');
     }
 	
-        /*
+        /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/speichern
+        * -> /protokolle/speichern*
+         * 
         * Das geschieht zum Beispiel wenn man auf den "Speichern und Zurück"-Knopf in der Protokolleingabe drückt
         *
-        * 
+        * @return void
         */
     public function speichern()
     {
         echo "Test";
     }
 
-        /*
+        /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/absenden
+        * -> /protokolle/absenden*
+         * 
         * Das geschieht zum Beispiel wenn man auf den "Absenden"-Knopf am Ende der Protokolleingabe drückt
         *
-        * 
+        * @return void
         */
     public function absenden()
     {
@@ -175,6 +188,7 @@ class Protokollcontroller extends Controller
         * Diese geschützte Funktion lädt die erste Seite in der das Datum und die ProtokollTypen ausgewählt werden können.
         * Diese Seite soll nicht geladen werden wenn das Protokoll als "fertig" markiert ist
         *  
+        * @return void 
         */
     protected function ersteSeiteAnzeigen()
     {
@@ -202,6 +216,7 @@ class Protokollcontroller extends Controller
          * 
          * Wenn die protokollSpeicherID nicht gefunden werden kann, wird ein Fehler gemeldet
          * 
+         * @return void
          */
     protected function protokollDatenLaden($protokollSpeicherID)
     {
@@ -209,14 +224,27 @@ class Protokollcontroller extends Controller
 
         $protokollDatenLadeController->ladeProtokollDaten($protokollSpeicherID); 
     }
+    
+        /*
+        * Löschen aller Session-Daten
+        *
+        * @return void
+        */
+    
+    protected function loescheSessionDaten() 
+    {
+        session_destroy();
+        unset($_SESSION);       
+    }
 
         /*
-         * Diese Funktion wird am Ende der erstenSeite (index) aufgerufen, um bei Änderungen
-         * der gewähltenProtokolle das entsprechende Layout laden zu können. Die geschieht
-         * aber auch, wenn die ersteSeite aufgerufen wird und keine Änderung vorgenommen wurde 
-         * 
-         */
-    protected function layoutDatenLöschen()
+        * Diese Funktion wird am Ende der erstenSeite (index) aufgerufen, um bei Änderungen
+        * der gewähltenProtokolle das entsprechende Layout laden zu können. Die geschieht
+        * aber auch, wenn die ersteSeite aufgerufen wird und keine Änderung vorgenommen wurde 
+        * 
+         * @return void
+        */
+    protected function loescheLayoutDaten()
     {
         unset(
             $_SESSION['gewaehlteProtokollTypen'],

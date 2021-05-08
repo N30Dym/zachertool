@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Apr 2021 um 08:56
+-- Erstellungszeit: 08. Mai 2021 um 13:20
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -48,7 +48,7 @@ CREATE TABLE `piloten` (
 INSERT INTO `piloten` (`id`, `vorname`, `spitzname`, `nachname`, `groesse`, `sichtbar`, `erstelltAm`, `geaendertAm`) VALUES
 (1, 'Roberto', 'Chilli', 'Fillbrandt', 179, 1, '2019-07-11 11:47:29', '2019-07-11 11:47:29'),
 (3, 'Stefan', 'Zischi', 'Zistler', 176, 1, '2019-07-16 15:32:51', '2020-08-27 14:33:20'),
-(4, 'Philipp', '', 'Döring', 193, 1, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
+(4, 'Philipp', '', 'Döring', 193, NULL, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
 (5, 'Matthias', 'Teilnehmer', 'Molitor', 178, 1, '2019-07-30 15:58:25', '2019-08-22 21:43:54'),
 (6, 'Thomas', '', 'Stolte', 167, 1, '2019-08-20 18:45:44', '2019-12-20 22:11:17'),
 (8, 'Lukas', 'Kerby', 'Nickel', 186, 1, '2019-08-27 14:16:42', '2019-11-05 11:50:25'),

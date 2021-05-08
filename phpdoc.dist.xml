@@ -13,6 +13,7 @@
         <api>
             <source dsn=".">
                 <path>app</path>
+                <path>user_guide/source</path>
             </source>
         </api>
     </version>

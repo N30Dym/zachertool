@@ -45,7 +45,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
                 $_SESSION['beladungszustand']['weiterer']['gewicht']        = $beladung['gewicht']; 
             }
         }
-        var_dump( $_SESSION['beladungszustand']);
+        //var_dump( $_SESSION['beladungszustand']);
     }
             
     protected function ladeWerte($protokollSpeicherID)

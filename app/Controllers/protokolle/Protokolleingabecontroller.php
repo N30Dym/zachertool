@@ -70,7 +70,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         $_SESSION['protokollInformationen']['titel']        = isset($_SESSION['protokollSpeicherID']) ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
 
             // Wenn protokollSpeicherID existiert, werden gewaehlteProtokollTypen und protokollIDs im Protokolldatenladecontroller geladen
-        if( ! isset($_SESSION['protokollSpeicherID']))
+        if( ! isset($_SESSION['fertig']))
         {
                 // Nur wenn gewahlteProtokollTypen nicht existert; gewahlteProtokollTypen wird bei jedem Laden der ersten Seite zurückgesetzt
             isset($_SESSION['gewaehlteProtokollTypen']) ? null : $_SESSION['gewaehlteProtokollTypen'] = $protokollInformationen["protokollTypen"];       

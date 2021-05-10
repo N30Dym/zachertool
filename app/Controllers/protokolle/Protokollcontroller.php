@@ -60,6 +60,7 @@ class Protokollcontroller extends Controller
             $_SESSION['protokollSpeicherID'] = $protokollSpeicherID;
 
             $this->protokollDatenLaden($protokollSpeicherID);
+	
         }
         
             // Wenn das Protokoll als "fertig" markiert ist, wird direkt zur Eingabe umgeleitet
@@ -92,7 +93,7 @@ class Protokollcontroller extends Controller
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         $protokollEingabeController = new Protokolleingabecontroller;
-
+		
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
         if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
         {

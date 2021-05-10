@@ -17,7 +17,7 @@
         <div class="row g-3">
             <div class="col-sm-7 ">
                 <label for="datum" class="form-label">Datum des ersten Fluges</label>
-                <input type="date" class="form-control" name="protokollInformation[datum]" max="<?= date('Y-m-d') ?>" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
+                <input type="date" class="form-control" name="protokollInformation[datum]" max="<?= date('Y-m-d') ?>" placeholder="TT.MM.JJJJ" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
             </div>
 
             <div class="col-2">
@@ -25,7 +25,7 @@
 
             <div class="col-sm-3">
                 <label for="flugzeit" class="form-label">Gesamtflugzeit</label>
-                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="" value="<?= isset($_SESSION["protokollInformationen"]["flugzeit"]) ? $_SESSION["protokollInformationen"]["flugzeit"] : "" ?>"> 
+                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION["protokollInformationen"]["flugzeit"]) ? $_SESSION["protokollInformationen"]["flugzeit"] : "" ?>"> 
             </div>
 
             <div class="col-12 ms-3">

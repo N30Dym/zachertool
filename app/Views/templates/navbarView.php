@@ -15,7 +15,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-   <div class="collapse  navbar-collapse flex" id="navbarNav">
+    <div class="collapse  navbar-collapse flex" id="navbarNav">
         <ul class="navbar-nav col-md-6">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white" id="navbardrop" data-toggle="dropdown" style="cursor:pointer;">

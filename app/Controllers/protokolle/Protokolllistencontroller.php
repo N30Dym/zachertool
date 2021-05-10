@@ -16,8 +16,45 @@ class Protokolllistencontroller extends Controller
     
     public function angefangeneProtokolle()
     {
-        $protokolleModel = new protokolleModel(); 
+        $protokolleModel    = new protokolleModel();
+        $pilotenModel       = new pilotenModel();
+        $musterModel        = new musterModel();
+        $flugzeugArray      = [];
+        $pilotenArray       = [];
+        
+        $fertigeProtokolle = $protokolleModel->getUnfertigeProtokolle();
+        
+        foreach($fertigeProtokolle as $protokoll)
+        {
+            $muster = $musterModel->getMusterNachFlugzeugID($protokoll['flugzeugID']);
+            
+            $flugzeugArray[$protokoll['id']]['musterSchreibweise']   = $muster['musterSchreibweise'];
+            $flugzeugArray[$protokoll['id']]['musterZusatz']         = $muster['musterZusatz'];
+        }
+        //var_dump($flugzeugArray);
+        
+        foreach($pilotenModel->getAllePiloten() as $pilot)
+        {
+            $pilotenArray[$pilot['id']]['vorname']      = $pilot['vorname'];
+            $pilotenArray[$pilot['id']]['spitzname']    = $pilot['spitzname'];
+            $pilotenArray[$pilot['id']]['nachname']     = $pilot['nachname'];
+        }
+        
+        $datenHeader = [
+            'title'         => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
+            'description'   => "Das übliche halt"
+        ];
+
+        $datenInhalt = [
+            'title'             => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
+            'protokolleArray'   => $fertigeProtokolle,
+            'pilotenArray'      => $pilotenArray,
+            'flugzeugArray'     => $flugzeugArray
+        ];
+        
+        $this->ladeListenView($datenInhalt, $datenHeader);
     }
+  
     
     public function fertigeProtokolle()
     {

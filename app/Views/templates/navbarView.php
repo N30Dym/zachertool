@@ -48,7 +48,7 @@
 						</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="/zachern-dev/protokolle/index">Neues Protokoll</a>
-							<a class="dropdown-item" href="#">Offene Protokolle</a>
+							<a class="dropdown-item" href="/zachern-dev/protokolle/protokollListe/offen">Offene Protokolle</a>
 							<a class="dropdown-item" href="/zachern-dev/protokolle/protokollListe/fertig">Fertige Protokolle</a>
 						</div>
 					</li>

@@ -58,6 +58,8 @@ $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcon
 
 $routes->get('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
 $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencontroller::fertigeProtokolle');
+$routes->get('protokolle/protokollListe/offen', 'protokolle\Protokolllistencontroller::angefangeneProtokolle');
+
 
 //$routes->get('sessionAufheben', 'Startseitecontroller::index');
 

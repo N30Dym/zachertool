@@ -46,7 +46,7 @@ $( document ).ready( function() {
         $( this ).parent( 'div' ).after( '<div class="' + divClass + '"><span class="input-group-text">Note:</span><input type="text" class="form-control noteAnzeige" value="' + wertZuNote( value ) + '" disabled><div class="col-1"></div><div class="col-9" style="margin: 0; position:relative; top: 0%; -ms-transform: translateY(25%); transform: translateY(25%);"><input class="form-range noteRange" type="range" min="0" max="6" step="1" name="' + name + '" value="' + value + '"></div>' );
         $( this ).parent( 'div' ).remove(); 
     });
-    
+	
     function wertZuNote(wert)
     {
         switch(wert)
@@ -75,7 +75,7 @@ $( document ).ready( function() {
     });
 
         // Script für das Suchfeld der Flugzeuge
-    $( "#flugzeugSuche" ).on( "keyup", function() {
+    $( "#flugzeugSuche" ).on( 'change', function() {
         var value = $( this ).val().toLowerCase();
         $( "#flugzeugAuswahl option" ).filter( function() {
             $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1);
@@ -87,13 +87,22 @@ $( document ).ready( function() {
        $( '#kapitelGo' ).attr( 'formaction', '<?= site_url('/protokolle/kapitel/') ?>' + $( this ).val());
     });
     
+	var pilotenListe = $( "#pilotAuswahl option" );
+	
         // Script für das Suchfeld der Piloten
-    $( "#pilotSuche" ).on( "keyup", function() {
+    $( document ).on( "keyup", "#pilotSuche", function() {
+		$("#pilotAuswahl option").remove();
+		$("#pilotAuswahl").append(pilotenListe);
         var value = $( this ).val().toLowerCase();
-        $( "#pilotAuswahl option" ).filter( function() {
-            $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1);
-        });
+		$( "#pilotAuswahl option" ).filter( function() {
+			if($( this ).text().toLowerCase().indexOf(value) == -1)
+			{
+				$(this).remove();
+			}
+		});		
     });
+	
+	//$( '#pilotAuswahl' ).children( 'option' ).hide();
     
         // Script für das Suchfeld der Begleiter
     $( "#copilotSuche" ).on( "keyup", function() {

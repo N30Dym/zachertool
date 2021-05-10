@@ -1,6 +1,10 @@
 <script type="text/javascript">    
 $( document ).ready( function() {
 
+    var pilotenListe = $( '#pilotAuswahl option' );
+    var copilotenListe = $( '#copilotAuswahl option' );
+    var flugzeugListe = $( '#flugzeugAuswahl option' );
+    
         // Sollte javaScript deaktiviert sein, bleiben diese Felder unsichtbar, da sowieso nicht zu gebrauchen
     $( '#springeZu' ).removeClass( 'd-none' );
     $( '#pilotSuche' ).removeClass( 'd-none' );
@@ -73,43 +77,49 @@ $( document ).ready( function() {
     $( document ).on( 'input', 'input.noteRange', function() {
         $( this ).parent( 'div' ).parent( 'div' ).children( 'input.noteAnzeige' ).val( wertZuNote( $( this ).val() ) );
     });
-
-        // Script für das Suchfeld der Flugzeuge
-    $( "#flugzeugSuche" ).on( 'change', function() {
-        var value = $( this ).val().toLowerCase();
-        $( "#flugzeugAuswahl option" ).filter( function() {
-            $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
     
-        
+            
     $( document ).on( 'change', '#kapitelAuswahl', function(){
        $( '#kapitelGo' ).attr( 'formaction', '<?= site_url('/protokolle/kapitel/') ?>' + $( this ).val());
     });
     
-	var pilotenListe = $( "#pilotAuswahl option" );
-	
-        // Script für das Suchfeld der Piloten
-    $( document ).on( "keyup", "#pilotSuche", function() {
-		$("#pilotAuswahl option").remove();
-		$("#pilotAuswahl").append(pilotenListe);
+        // Script für das Suchfeld der Flugzeuge
+    $( document ).on( 'keyup', '#flugzeugSuche', function() {
+        $( '#flugzeugAuswahl option' ).remove();
+        $( '#flugzeugAuswahl' ).append( flugzeugListe );
         var value = $( this ).val().toLowerCase();
-		$( "#pilotAuswahl option" ).filter( function() {
-			if($( this ).text().toLowerCase().indexOf(value) == -1)
-			{
-				$(this).remove();
-			}
-		});		
+        $( '#flugzeugAuswahl option' ).filter( function() {
+            if($( this ).text().toLowerCase().indexOf(value) === -1)
+            {
+                $( this ).remove();
+            }
+        });		
     });
 	
-	//$( '#pilotAuswahl' ).children( 'option' ).hide();
+        // Script für das Suchfeld der Piloten
+    $( document ).on( 'keyup', '#pilotSuche', function() {
+        $( '#pilotAuswahl option' ).remove();
+        $( '#pilotAuswahl' ).append( pilotenListe );
+        var value = $( this ).val().toLowerCase();
+        $( '#pilotAuswahl option' ).filter( function() {
+            if($( this ).text().toLowerCase().indexOf(value) === -1)
+            {
+                $( this ).remove();
+            }
+        });		
+    });
     
         // Script für das Suchfeld der Begleiter
-    $( "#copilotSuche" ).on( "keyup", function() {
+    $( document ).on( 'keyup', '#copilotSuche', function() {
+        $( '#copilotAuswahl option' ).remove();
+        $( '#copilotAuswahl' ).append( copilotenListe );
         var value = $( this ).val().toLowerCase();
-        $( "#copilotAuswahl option" ).filter( function() {
-            $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1);
-        });
+        $( '#copilotAuswahl option' ).filter( function() {
+            if($( this ).text().toLowerCase().indexOf(value) === -1)
+            {
+                $( this ).remove();
+            }
+        });		
     });
     
         // Wenn bei linksUndRechts-Feldern eine Auswahl der eineRichtung getroffen wird, 

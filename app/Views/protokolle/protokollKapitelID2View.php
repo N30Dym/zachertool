@@ -34,15 +34,23 @@
                 <br>
             </div>
             <div class="col-12">
-
+                <?php //var_dump($pilotenDatenArray) ?>
                 <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
-                    <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
-                            <?= esc($pilot["vorname"]) ?>
-                            <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
-                            <?= esc($pilot["nachname"]) ?>
-                        </option>                   
-                    <?php endforeach ?>
+                    <?php if(isset($_SESSION['fertig'])) : ?>
+                        <option value="<?= esc($_SESSION['pilotID']) ?>" selected>
+                            <?= esc($pilotenDatenArray[$_SESSION['pilotID']]["vorname"]) ?>
+                            <?= $pilotenDatenArray[$_SESSION['pilotID']]["spitzname"] != "" ? " \"" . $pilotenDatenArray[$_SESSION['pilotID']]["spitzname"] . "\" " : "" ?>
+                            <?= esc($pilotenDatenArray[$_SESSION['pilotID']]["nachname"]) ?>
+                        </option>
+                    <?php else: ?>    
+                        <?php foreach($pilotenDatenArray as $pilot) :  ?>
+                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                                <?= esc($pilot["vorname"]) ?>
+                                <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
+                                <?= esc($pilot["nachname"]) ?>
+                            </option>                   
+                        <?php endforeach ?>
+                    <?php endif ?>
                 </select>
             </div>
 

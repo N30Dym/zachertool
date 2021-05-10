@@ -173,12 +173,14 @@ class Protokolllayoutcontroller extends Protokollcontroller
         $flugzeuge                  = $flugzeugeModel->getAlleSichtbarenFlugzeuge();
         $temporaeresFlugzeugArray   = [];
         
-        foreach($flugzeuge as $i => $flugzeug)
+        //var_dump($flugzeuge);
+        
+        foreach($flugzeuge as $flugzeug)
         {
-            $temporaeresFlugzeugArray[$i]['id']                 = $flugzeug['id'];
-            $temporaeresFlugzeugArray[$i]['kennung']            = $flugzeug['kennung'];
+            $temporaeresFlugzeugArray[$flugzeug['id']]['id']        = $flugzeug['id'];
+            $temporaeresFlugzeugArray[$flugzeug['id']]['kennung']   = $flugzeug['kennung'];
             
-            $temporaeresFlugzeugArray[$i] += $this->getMusterFuerFlugzeug($flugzeug['musterID']);     
+            $temporaeresFlugzeugArray[$flugzeug['id']]              += $this->getMusterFuerFlugzeug($flugzeug['musterID']);     
         }
         
         array_sort_by_multiple_keys($temporaeresFlugzeugArray, ["musterKlarname" => SORT_ASC]);
@@ -238,9 +240,16 @@ class Protokolllayoutcontroller extends Protokollcontroller
     
     protected function getPilotenFuerAuswahl()
     {
-        $pilotenModel = new pilotenModel();
+        $pilotenModel           = new pilotenModel();
+        
+        $temporaeresPilotArray  = [];
 
-        return $pilotenModel->getAlleSichtbarePiloten();
+        foreach($pilotenModel->getAlleSichtbarePiloten() as $pilot)
+        {
+            $temporaeresPilotArray[$pilot['id']] = $pilot;
+        }
+         
+        return $temporaeresPilotArray;
     }  
     
     protected function getPilotGewichtNachPilotID($pilotID) 

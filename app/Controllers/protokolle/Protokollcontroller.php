@@ -153,7 +153,7 @@ class Protokollcontroller extends Controller
         */
     public function abbrechen() 
     {
-        $this->loescheSessionDatenUndZurStartseite();
+        $this->loescheSessionDaten();
         
         return redirect()->to('/zachern-dev/');
     }

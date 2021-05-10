@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\protokolllayout\auswahllistenModel;
-use App\Models\protokolllayout\inputsModel;
+use App\Models\protokolllayout\inputTypenModel;
 use App\Models\protokolllayout\protokollEingabenModel;
 //use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
 use App\Models\protokolllayout\protokollInputsModel;
@@ -97,9 +97,9 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
         $temporaeresUnterkapitelArray = [];
                 
-        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $key => $unterkapitel)
+        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
         {
-            $temporaeresUnterkapitelArray[$key] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($key);   
+            $temporaeresUnterkapitelArray[$protokollKapitelID] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($protokollKapitelID);   
         }
       
         return $temporaeresUnterkapitelArray;  
@@ -111,11 +111,11 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
         $temporaeresEingabeArray = [];
 
-        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $i => $unterkapitel)
+        foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
         {
-            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$i] as $j => $eingaben)
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID] as $protokollUnterkapitelID => $eingaben)
             {
-                $temporaeresEingabeArray[$j] = $protokollEingabenModel->getProtokollEingabeNachID($j);
+                $temporaeresEingabeArray[$protokollUnterkapitelID] = $protokollEingabenModel->getProtokollEingabeNachID($protokollUnterkapitelID);
             }
         }
         //var_dump($temporaeresEingabeArray);
@@ -124,25 +124,26 @@ class Protokolllayoutcontroller extends Protokollcontroller
     
     protected function getProtokollInputs()
     {
-        $inputsModel            = new inputsModel();
+        $inputTypenModel        = new inputTypenModel();
         $protokollInputsModel   = new protokollInputsModel();        
       
         $temporaeresInputArray  = [];
 
         foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
         {
-            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID] as $j => $eingaben)
+            foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID] as $protokollUnterkapitelID => $eingaben)
             {
-                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID][$j] as $k => $eingaben)
+                foreach($_SESSION['protokollLayout'][$_SESSION['aktuellesKapitel']][$protokollKapitelID][$protokollUnterkapitelID] as $protokollEingabeID => $inputs)
                 {
-                    $temporaeresInputArray[$k] = $protokollInputsModel->getProtokollInputNachID($k);
+                    $temporaeresInputArray[$protokollEingabeID] = $protokollInputsModel->getProtokollInputNachID($protokollEingabeID);
                 }
             }
         }
 
-        foreach($temporaeresInputArray as $i => $InputArray)
+        foreach($temporaeresInputArray as $protokollInputID => $InputArray)
         {
-            $temporaeresInputArray[$i]['inputTyp'] = $inputsModel->getInputNachID($InputArray['inputID'])['inputTyp'];
+     
+            $temporaeresInputArray[$protokollInputID]['inputTyp'] = $inputTypenModel->getInputTypNachID($InputArray['inputID'])["inputTyp"];
         }
         
         return $temporaeresInputArray;  

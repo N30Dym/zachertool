@@ -17,7 +17,7 @@
         <div class="row g-3">
             <div class="col-sm-7 ">
                 <label for="datum" class="form-label">Datum des ersten Fluges</label>
-                <input type="date" class="form-control" name="protokollInformation[datum]" max="<?= date('Y-m-d') ?>" placeholder="TT.MM.JJJJ" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
+                <input type="date" class="form-control datepicker" name="protokollInformation[datum]" max="<?= date('Y-m-d') ?>" placeholder="TT.MM.JJJJ" value="<?= isset($_SESSION["protokollInformationen"]["datum"]) ? $_SESSION["protokollInformationen"]["datum"] : "" ?>" required>
             </div>
 
             <div class="col-2">

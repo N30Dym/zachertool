@@ -453,7 +453,7 @@ class Protokolleingabecontroller extends Protokollcontroller
     {
         $pilotenModel = new pilotenModel();
 
-        return $pilotenModel->getAlleSichtbarePiloten();
+        return $pilotenModel->getSichtbarePiloten();
     }  
     
     protected function getPilotGewichtNachPilotID($pilotID) 

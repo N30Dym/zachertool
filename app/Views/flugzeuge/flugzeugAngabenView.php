@@ -379,7 +379,7 @@
                     <div class="row gx-3 mt-5">
                             <div class="col-6">
                                     <a href="/zachern-dev">
-                                            <button type="button" class="btn btn-danger col-12">Abbrechen</button>
+                                            <button type="button" id="Abbrechen" class="btn btn-danger col-12">Abbrechen</button>
                                     </a>
                             </div>
                             <div class="col-6">

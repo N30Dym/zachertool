@@ -19,8 +19,8 @@
                             <th>Flugzeugmuster</th>
                             <th>Pilot</th>
                             <th>Begleiter</th>
-                            <th>Anzeigen</th>
-                            <th>Bearbeiten</th>
+                            <th></th>
+                            <th></th>
                         </tr>
 
                         <?php foreach($protokolleArray as $protokoll) : ?>
@@ -34,8 +34,8 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
-                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-success">Bearbeiten: <?= $protokoll['id'] ?></button></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
+                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten</button></a></td>
                             </tr>
 
                         <?php endforeach ?>  
@@ -61,7 +61,7 @@
                             <th>Flugzeugmuster</th>
                             <th>Pilot</th>
                             <th>Begleiter</th>
-                            <th>Anzeigen</th>
+                            <th></th>
                         </tr>
                        
                         <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
@@ -75,7 +75,7 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
                             </tr>
                             
                         <?php endforeach ?>  

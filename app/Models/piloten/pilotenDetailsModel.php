@@ -32,4 +32,9 @@ class pilotenDetailsModel extends Model
         
         return $this->select("gewicht")->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum")->first();
     }
+    
+    public function getPilotDetailsNachPilotID($pilotID)
+    {
+        return $this->where('pilotID', $pilotID)->findAll();
+    }
 }

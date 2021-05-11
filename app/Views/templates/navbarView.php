@@ -22,8 +22,8 @@
                     Piloten
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Pilotenliste</a>
-                    <a class="dropdown-item" href="#">Piloten hinzufügen</a>
+                    <a class="dropdown-item" href="/zachern-dev/piloten/liste">Pilotenliste</a>
+                    <a class="dropdown-item" href="/zachern-dev/piloten/neu">Piloten hinzufügen</a>
                 </div>
             </li>
             <li class="nav-item dropdown">

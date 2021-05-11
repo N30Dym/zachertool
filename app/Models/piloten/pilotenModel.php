@@ -19,7 +19,7 @@ class pilotenModel extends Model
 
     //protected $allowedFields 	= ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar'];
 
-    public function getAlleSichtbarePiloten()
+    public function getSichtbarePiloten()
     {
         return $this->where("sichtbar", 1)->findAll();
     }

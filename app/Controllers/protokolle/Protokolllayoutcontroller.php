@@ -218,7 +218,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
         
         $temporaeresPilotArray  = [];
 
-        foreach($pilotenModel->getAlleSichtbarePiloten() as $pilot)
+        foreach($pilotenModel->getSichtbarePiloten() as $pilot)
         {
             $temporaeresPilotArray[$pilot['id']] = $pilot;
         }

@@ -3,13 +3,11 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-//use App\Models\startseiteModel;
 use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeMitMusterModel;
-
 use App\Models\piloten\pilotenModel;
+
 helper("array");
-//helper("konvertiereHStWegeInProzent");
 
 class Startseitecontroller extends Controller
 {
@@ -26,12 +24,12 @@ class Startseitecontroller extends Controller
     {
         if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
         {
-                // Whoops, we don't have a page for that!
-                throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
+            // Whoops, we don't have a page for that!
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
         }
 
-        $title                  = "Willkommen beim Zachertool";
-        $anzahlJahre            = 5;          
+        $title          = "Willkommen beim Zachertool";
+        $anzahlJahre    = 5;          
 
         $datenInhalt = [
             'title' => $title
@@ -84,6 +82,7 @@ class Startseitecontroller extends Controller
         return $temporaeresProtokollArray;   
     }
 
+// Das muss in Zukunft auf "bestaetigt"e Protokolle umgestellt werden
     protected function getProtokolleDerLetztenJahreProPilot($anzahlJahre)
     {
         $protokolleModel    = new protokolleModel();
@@ -126,13 +125,13 @@ class Startseitecontroller extends Controller
     
     protected function getPilotenNamen($pilotID)
     {
-        $pilotenModel       = new pilotenModel();
+        $pilotenModel               = new pilotenModel();
         
-        $protokollPilot                 = $pilotenModel->getPilotNachID($pilotID);
+        $protokollPilot             = $pilotenModel->getPilotNachID($pilotID);
 
-        $datenArray["vorname"]          = $protokollPilot["vorname"];
-        $datenArray["spitzname"]        = $protokollPilot["spitzname"];
-        $datenArray["nachname"]         = $protokollPilot["nachname"];
+        $datenArray["vorname"]      = $protokollPilot["vorname"];
+        $datenArray["spitzname"]    = $protokollPilot["spitzname"];
+        $datenArray["nachname"]     = $protokollPilot["nachname"];
         
         return $datenArray;
     }

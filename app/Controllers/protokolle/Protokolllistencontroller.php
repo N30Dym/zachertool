@@ -35,7 +35,7 @@ class Protokolllistencontroller extends Controller
     public function abgegebeneProtokolle()
     {
         $protokolleModel        = new protokolleModel();     
-        $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolle();      
+        $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolleNachJahrenSoriert();      
         $titel                  = 'Abgegebenes Protokoll zur Anzeige wählen';
         
         $this->ladeZuUebermittelndeDatenUndAnzeigen($bestaetigteProtokolle, $titel); 
@@ -46,15 +46,32 @@ class Protokolllistencontroller extends Controller
         if($protokolle !== null)
         {
             $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
-
             $flugzeugeArray             = [];
-
-            foreach($protokolle as $protokoll)
+            
+                // Wenn die Protokolle nich nach Jahr sortiert sind, fängt der Index bei 0 an
+            if(isset($protokolle[0]))
             {
-                $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
+                foreach($protokolle as $protokoll)
+                {
+                    $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
 
-                $flugzeugeArray[$protokoll['id']]['musterSchreibweise']   = $flugzeugMitMuster['musterSchreibweise'];
-                $flugzeugeArray[$protokoll['id']]['musterZusatz']         = $flugzeugMitMuster['musterZusatz'];
+                    $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] = $flugzeugMitMuster['musterSchreibweise'];
+                    $flugzeugeArray[$protokoll['id']]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
+                }
+            }
+                // Hier nur Protokolle, die nach Jahr sortiert sind
+            else 
+            {
+                foreach($protokolle as $protokolleProJahr)
+                {
+                    foreach($protokolleProJahr as $protokoll)
+                    {
+                        $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
+
+                        $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] = $flugzeugMitMuster['musterSchreibweise'];
+                        $flugzeugeArray[$protokoll['id']]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
+                    }
+                }
             }
 
             return $flugzeugeArray;
@@ -63,8 +80,7 @@ class Protokolllistencontroller extends Controller
     
     protected function ladeAllePiloten() 
     {
-        $pilotenModel = new pilotenModel();
-        
+        $pilotenModel = new pilotenModel();       
         $pilotenArray = [];
         
         foreach($pilotenModel->getAllePiloten() as $pilot)
@@ -77,7 +93,7 @@ class Protokolllistencontroller extends Controller
         return $pilotenArray;
     }
     
-    protected function ladeZuUebermittelndeDatenUndAnzeigen($protokollArray, $titel)
+    protected function ladeZuUebermittelndeDatenUndAnzeigen($protokolleArray, $titel)
     {
         $datenHeader = [
             'title'         => $titel,
@@ -85,11 +101,11 @@ class Protokolllistencontroller extends Controller
 
         $datenInhalt = [
             'title'             => $titel,
-            'protokolleArray'   => $protokollArray,
+            'protokolleArray'   => $protokolleArray,
             'pilotenArray'      => $this->ladeAllePiloten(),
-            'flugzeugArray'     => $this->ladeFlugzeugeUndMuster($protokollArray)
+            'flugzeugeArray'     => $this->ladeFlugzeugeUndMuster($protokolleArray)
         ];
-        
+
         $this->ladeListenView($datenInhalt, $datenHeader);
     }
 

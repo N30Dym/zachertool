@@ -51,9 +51,17 @@ class protokolleModel extends Model
         *
         * @return array
         */
-    public function getBestaetigteProtokolle()
+    public function getBestaetigteProtokolleNachJahrenSoriert()
     {			
-        return $this->where("bestaetigt", 1)->orderBy('datum')->findAll();				
+        $protokolleNachJahrenSortiert = [];
+        $protokolle = $this->where("bestaetigt", 1)->orderBy('datum')->findAll();
+        
+        foreach($protokolle as $protokoll)
+        {
+            $protokolleNachJahrenSortiert[date('Y', strtotime($protokoll['datum']))][$protokoll['id']] = $protokoll;
+        }
+        
+        return $protokolleNachJahrenSortiert;
     }
 
 

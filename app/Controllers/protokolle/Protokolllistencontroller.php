@@ -5,103 +5,94 @@ namespace App\Controllers\protokolle;
 use CodeIgniter\Controller;
 use App\Models\protokolle\protokolleModel;
 use App\Models\piloten\pilotenModel;
-use App\Models\muster\musterModel;
+use App\Models\flugzeuge\flugzeugeMitMusterModel;
 
 class Protokolllistencontroller extends Controller
 {    
     public function index()
     {
-            
+         // GEdacht für kein JS aktiv. Seite mit Links zu den jeweiligen Listen   
     }
     
     public function angefangeneProtokolle()
     {
-        $protokolleModel    = new protokolleModel();
-        $pilotenModel       = new pilotenModel();
-        $musterModel        = new musterModel();
-        $flugzeugArray      = [];
-        $pilotenArray       = [];
-        
-        $fertigeProtokolle = $protokolleModel->getUnfertigeProtokolle();
-        
-        foreach($fertigeProtokolle as $protokoll)
-        {
-            $muster = $musterModel->getMusterNachFlugzeugID($protokoll['flugzeugID']);
-            
-            $flugzeugArray[$protokoll['id']]['musterSchreibweise']   = $muster['musterSchreibweise'];
-            $flugzeugArray[$protokoll['id']]['musterZusatz']         = $muster['musterZusatz'];
-        }
-        //var_dump($flugzeugArray);
-        
-        foreach($pilotenModel->getAllePiloten() as $pilot)
-        {
-            $pilotenArray[$pilot['id']]['vorname']      = $pilot['vorname'];
-            $pilotenArray[$pilot['id']]['spitzname']    = $pilot['spitzname'];
-            $pilotenArray[$pilot['id']]['nachname']     = $pilot['nachname'];
-        }
-        
-        $datenHeader = [
-            'title'         => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
-            'description'   => "Das übliche halt"
-        ];
+        $protokolleModel        = new protokolleModel();     
+        $angefangeneProtokolle  = $protokolleModel->getAngefangeneProtokolle();     
+        $titel                  = "Angefangenes Protokoll zur Anzeige oder Bearbeitung wählen";
 
-        $datenInhalt = [
-            'title'             => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
-            'protokolleArray'   => $fertigeProtokolle,
-            'pilotenArray'      => $pilotenArray,
-            'flugzeugArray'     => $flugzeugArray
-        ];
-        
-        $this->ladeListenView($datenInhalt, $datenHeader);
-    }
-  
+        $this->ladeZuUebermittelndeDatenUndAnzeigen($angefangeneProtokolle, $titel); 
+    } 
     
     public function fertigeProtokolle()
     {
-        $protokolleModel    = new protokolleModel();
-        $pilotenModel       = new pilotenModel();
-        $musterModel        = new musterModel();
-        $flugzeugArray      = [];
-        $pilotenArray       = [];
-        
-        $fertigeProtokolle = $protokolleModel->getFertigeProtokolle();
-        
-        foreach($fertigeProtokolle as $protokoll)
-        {
-            $muster = $musterModel->getMusterNachFlugzeugID($protokoll['flugzeugID']);
-            
-            $flugzeugArray[$protokoll['id']]['musterSchreibweise']   = $muster['musterSchreibweise'];
-            $flugzeugArray[$protokoll['id']]['musterZusatz']         = $muster['musterZusatz'];
-        }
-        //var_dump($flugzeugArray);
-        
-        foreach($pilotenModel->getAllePiloten() as $pilot)
-        {
-            $pilotenArray[$pilot['id']]['vorname']      = $pilot['vorname'];
-            $pilotenArray[$pilot['id']]['spitzname']    = $pilot['spitzname'];
-            $pilotenArray[$pilot['id']]['nachname']     = $pilot['nachname'];
-        }
-        
-        $datenHeader = [
-            'title'         => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
-            'description'   => "Das übliche halt"
-        ];
+        $protokolleModel    = new protokolleModel();       
+        $fertigeProtokolle  = $protokolleModel->getFertigeProtokolle();
+        $titel              = 'Fertiges Protokoll zur Anzeige oder Bearbeitung wählen';
 
-        $datenInhalt = [
-            'title'             => 'Fertiges Protokoll zur Anzeige und Bearbeitung wählen',
-            'protokolleArray'   => $fertigeProtokolle,
-            'pilotenArray'      => $pilotenArray,
-            'flugzeugArray'     => $flugzeugArray
-        ];
-        
-        $this->ladeListenView($datenInhalt, $datenHeader);
+        $this->ladeZuUebermittelndeDatenUndAnzeigen($fertigeProtokolle, $titel); 
     }
     
     public function abgegebeneProtokolle()
     {
-        $protokolleModel = new protokolleModel();
+        $protokolleModel        = new protokolleModel();     
+        $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolle();      
+        $titel                  = 'Abgegebenes Protokoll zur Anzeige wählen';
+        
+        $this->ladeZuUebermittelndeDatenUndAnzeigen($bestaetigteProtokolle, $titel); 
     }
     
+    protected function ladeFlugzeugeUndMuster($protokolle) 
+    {
+        if($protokolle !== null)
+        {
+            $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+
+            $flugzeugeArray             = [];
+
+            foreach($protokolle as $protokoll)
+            {
+                $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
+
+                $flugzeugeArray[$protokoll['id']]['musterSchreibweise']   = $flugzeugMitMuster['musterSchreibweise'];
+                $flugzeugeArray[$protokoll['id']]['musterZusatz']         = $flugzeugMitMuster['musterZusatz'];
+            }
+
+            return $flugzeugeArray;
+        }
+    }
+    
+    protected function ladeAllePiloten() 
+    {
+        $pilotenModel = new pilotenModel();
+        
+        $pilotenArray = [];
+        
+        foreach($pilotenModel->getAllePiloten() as $pilot)
+        {
+            $pilotenArray[$pilot['id']]['vorname']      = $pilot['vorname'];
+            $pilotenArray[$pilot['id']]['spitzname']    = $pilot['spitzname'];
+            $pilotenArray[$pilot['id']]['nachname']     = $pilot['nachname'];
+        }
+        
+        return $pilotenArray;
+    }
+    
+    protected function ladeZuUebermittelndeDatenUndAnzeigen($protokollArray, $titel)
+    {
+        $datenHeader = [
+            'title'         => $titel,
+        ];
+
+        $datenInhalt = [
+            'title'             => $titel,
+            'protokolleArray'   => $protokollArray,
+            'pilotenArray'      => $this->ladeAllePiloten(),
+            'flugzeugArray'     => $this->ladeFlugzeugeUndMuster($protokollArray)
+        ];
+        
+        $this->ladeListenView($datenInhalt, $datenHeader);
+    }
+
     protected function ladeListenView($datenInhalt, $datenHeader)
     {
         echo view('templates/headerView', $datenHeader);

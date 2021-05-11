@@ -12,9 +12,9 @@ class protokolleModel extends Model
          * Datenbank zachern_protokolle auf die 
          * Tabelle protokolle
          */
-    protected $DBGroup 			= 'protokolleDB';
-    protected $table      		= 'protokolle';
-    protected $primaryKey 		= 'id';
+    protected $DBGroup          = 'protokolleDB';
+    protected $table            = 'protokolle';
+    protected $primaryKey       = 'id';
     protected $createdField  	= 'erstelltAm';
     protected $validationRules 	= 'protokolle';
 
@@ -53,7 +53,7 @@ class protokolleModel extends Model
         */
     public function getBestaetigteProtokolle()
     {			
-        return($this->where("bestaetigt", 1)->findAll());				
+        return $this->where("bestaetigt", 1)->orderBy('datum')->findAll();				
     }
 
 
@@ -66,7 +66,7 @@ class protokolleModel extends Model
         */
     public function getFertigeProtokolle()
     {			
-        return($this->where("bestaetigt", null)->where("fertig", 1)->findAll());
+        return $this->where("bestaetigt", null)->where("fertig", 1)->orderBy('datum')->findAll();
     }
 
 
@@ -76,9 +76,9 @@ class protokolleModel extends Model
         *
         * @return array
         */
-    public function getUnfertigeProtokolle()
+    public function getAngefangeneProtokolle()
     {			
-        return($this->where("bestaetigt", null)->where("fertig", null)->findAll());
+        return $this->where("bestaetigt", null)->where("fertig", null)->orderBy('datum')->findAll();
     }
 
 

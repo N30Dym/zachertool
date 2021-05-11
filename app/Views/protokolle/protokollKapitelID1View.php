@@ -23,7 +23,7 @@
                     </option>
             <?php else: ?>
                 <?php foreach($flugzeugeDatenArray as $flugzeug) :  ?>
-                    <option value="<?= esc($flugzeug['id']) ?>" <?= (isset($_SESSION['flugzeugID']) && $_SESSION['flugzeugID'] === $flugzeug['id']) ? "selected" : "" ?>>
+                    <option value="<?= esc($flugzeug['flugzeugID']) ?>" <?= (isset($_SESSION['flugzeugID']) && $_SESSION['flugzeugID'] === $flugzeug['flugzeugID']) ? "selected" : "" ?>>
                         <?=  $flugzeug["kennung"] . " - " . $flugzeug["musterSchreibweise"].$flugzeug["musterZusatz"] ?>
                     </option>                   
                 <?php endforeach ?>

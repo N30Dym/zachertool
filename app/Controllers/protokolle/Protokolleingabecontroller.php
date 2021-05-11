@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
-use App\Models\muster\musterModel;
+use App\Models\flugzeuge\flugzeugeMitMusterModel;
 
 class Protokolleingabecontroller extends Protokollcontroller
 {	   
@@ -118,11 +118,11 @@ class Protokolleingabecontroller extends Protokollcontroller
  
         if(isset($_SESSION['flugzeugID']))
         {       
-            $musterModel = new musterModel();
+            $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
 
-            $muster = $musterModel->getMusterNachFlugzeugID($_SESSION['flugzeugID']);
+            $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($_SESSION['flugzeugID']);
 
-            if($muster['istDoppelsitzer'] == 1)
+            if($flugzeugMitMuster['istDoppelsitzer'] == 1)
             {
                 $_SESSION['doppelsitzer'] = []; 
             }
@@ -131,7 +131,7 @@ class Protokolleingabecontroller extends Protokollcontroller
                 unset($_SESSION['doppelsitzer']);
             }
 
-            if($muster['istWoelbklappenFlugzeug'] == 1)
+            if($flugzeugMitMuster['istWoelbklappenFlugzeug'] == 1)
             {
                 $_SESSION['woelbklappenFlugzeug'] = ["Neutral", "Kreisflug"]; 
             }

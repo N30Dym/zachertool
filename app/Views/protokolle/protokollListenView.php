@@ -12,13 +12,15 @@
                     Keine Protokolle gefunden
                 <?php else : ?>
 
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover text-center">
+                        
                         <tr>
                             <th>Datum</th>
                             <th>Flugzeugmuster</th>
                             <th>Pilot</th>
                             <th>Begleiter</th>
                             <th>Anzeigen</th>
+                            <th>Bearbeiten</th>
                         </tr>
 
                         <?php foreach($protokolleArray as $protokoll) : ?>
@@ -32,23 +34,28 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>">Anzeigen: <?= $protokoll['id'] ?></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
+                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-success">Bearbeiten: <?= $protokoll['id'] ?></button></a></td>
                             </tr>
 
-                        <?php endforeach ?>        
+                        <?php endforeach ?>  
+                            
                     </table>
+                    
                 <?php endif ?>
                     
         <?php else : ?>
                     
-            <?php foreach($protokolleArray as $jahr => $protokolleProJahr) : ?>
+            <?php if($protokolleArray == null) : ?>
+                    Keine Protokolle gefunden  
+            <?php else : ?>
                     
-                <?php if($protokolleArray[$jahr] == null) : ?>
-                    Keine Protokolle gefunden
-                <?php else : ?>
+                <?php foreach($protokolleArray as $jahr => $protokolleProJahr) : ?>
                     
                     <h3 class="m-3">Protokolle aus dem Jahr <?= $jahr ?></h3>
-                    <table class="table table-striped table-hover">
+                    
+                    <table class="table table-striped table-hover text-center">
+                       
                         <tr>
                             <th>Datum</th>
                             <th>Flugzeugmuster</th>
@@ -56,7 +63,9 @@
                             <th>Begleiter</th>
                             <th>Anzeigen</th>
                         </tr>
+                       
                         <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
+                        
                             <tr>
                                 <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
                                 <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
@@ -66,13 +75,15 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>">Anzeigen: <?= $protokoll['id'] ?></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
                             </tr>
-                        <?php endforeach ?>        
+                            
+                        <?php endforeach ?>  
+                            
                     </table>
-                <?php endif ?>
-            <?php endforeach ?>   
-            
+                
+                <?php endforeach ?>   
+            <?php endif ?> 
         <?php endif?>
     </div>
 

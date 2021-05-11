@@ -40,14 +40,14 @@ do
                                 </tr>
                             </thead>   
                             <?php foreach($flugzeugeProJahr as $flugzeug_item) : ?>
-								<?php if($flugzeug_item["anzahlProtokolle"] > 0) : ?>
-									<tr class="text-center" style="color: ">
-										<td><?= esc($flugzeug_item["musterSchreibweise"]) ?><?= esc($flugzeug_item["musterZusatz"]) ?></td>
-										<td><?= esc($flugzeug_item["kennung"]) ?></td>
-										<td><?= esc($flugzeug_item["anzahlProtokolle"]) ?></td>
-									</tr>
-									<?php $gesamtZahlProtokolle += (int)$flugzeug_item["anzahlProtokolle"] ?>
-								<?php endif ?>
+                                <?php if($flugzeug_item["anzahlProtokolle"] > 0) : ?>
+                                    <tr class="text-center" style="color: ">
+                                        <td><?= esc($flugzeug_item["musterSchreibweise"]) ?><?= esc($flugzeug_item["musterZusatz"]) ?></td>
+                                        <td><?= esc($flugzeug_item["kennung"]) ?></td>
+                                        <td><?= esc($flugzeug_item["anzahlProtokolle"]) ?></td>
+                                    </tr>
+                                    <?php $gesamtZahlProtokolle += (int)$flugzeug_item["anzahlProtokolle"] ?>
+                                <?php endif ?>
                             <?php endforeach ?> 
                                 <tfoot>
                                     <tr>
@@ -89,12 +89,12 @@ do
                                 </tr>
                             </thead>   
                             <?php foreach($zacherPilotenProJahr as $index => $zacherPilot_item) : ?>
-								<?php if($zacherPilot_item["anzahlProtokolle"] > 0) : ?>
-									<tr class="text-center">
-										<td><?= esc($zacherPilot_item["vorname"]) ?><?= $zacherPilot_item["spitzname"] != "" ?  ' "' . $zacherPilot_item["spitzname"] . '" ' : " " ?><?= esc($zacherPilot_item["nachname"]) ?></td>
-										<td><?= esc($zacherPilot_item["anzahlProtokolle"]) ?></td>
-									</tr>
-								<?php endif ?>
+                                <?php if($zacherPilot_item["anzahlProtokolle"] > 0) : ?>
+                                    <tr class="text-center">
+                                        <td><?= esc($zacherPilot_item["vorname"]) ?><?= $zacherPilot_item["spitzname"] != "" ?  ' "' . $zacherPilot_item["spitzname"] . '" ' : " " ?><?= esc($zacherPilot_item["nachname"]) ?></td>
+                                        <td><?= esc($zacherPilot_item["anzahlProtokolle"]) ?></td>
+                                    </tr>
+                                <?php endif ?>
                                 
                             <?php endforeach ?> 
                         </table>

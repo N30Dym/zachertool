@@ -6,7 +6,9 @@ namespace App\Models\flugzeuge;
 use CodeIgniter\Model;
 
 /**
- * Description of flugzeugeMitMusterModel
+ * flugzeuge_mit_muster ist keine eigene Datenbanktabelle,
+ * sondern ein "View". Es werden also immer die aktuellen Daten aus den Tabellen
+ * flugzeuge und muster verwendet
  *
  * @author Lars
  */

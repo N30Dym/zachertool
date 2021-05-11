@@ -5,8 +5,8 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 //use App\Models\startseiteModel;
 use App\Models\protokolle\protokolleModel;
-use App\Models\flugzeuge\flugzeugeModel;
-use App\Models\muster\musterModel;
+use App\Models\flugzeuge\flugzeugeMitMusterModel;
+
 use App\Models\piloten\pilotenModel;
 helper("array");
 //helper("konvertiereHStWegeInProzent");
@@ -58,11 +58,13 @@ class Startseitecontroller extends Controller
         echo view('templates/footerView');
     }
 
+    
+// Das muss in Zukunft auf "bestaetigt"e Protokolle umgestellt werden
     protected function getProtokolleDerLetztenJahreProFlugzeug($anzahlJahre) 
     {
-        $protokolleModel        = new protokolleModel();
-        $flugzeugeModel         = new flugzeugeModel();
-        $musterModel            = new musterModel();
+        $protokolleModel            = new protokolleModel();
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+
 
         for($jahr = date("Y"); $jahr > date("Y") - $anzahlJahre; $jahr--)    
         {  
@@ -71,16 +73,11 @@ class Startseitecontroller extends Controller
 
             foreach($protokolleProJahr as $protokoll)
             {
-                $protokollFlugzeug                  = $flugzeugeModel->getFlugzeugeNachID($protokoll["flugzeugID"]);
-                $datenArray["kennung"]              = $protokollFlugzeug["kennung"];
+                $protokollFlugzeug = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll["flugzeugID"]);
 
-                $protokollMuster                    = $musterModel->getMusterNachID($protokollFlugzeug["musterID"]);
-                $datenArray["musterSchreibweise"]   = $protokollMuster["musterSchreibweise"];
-                $datenArray["musterZusatz"]         = $protokollMuster["musterZusatz"];
-
-                $datenArray["anzahlProtokolle"]     = $protokolleModel->getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $protokoll["flugzeugID"])["id"];
-
-                array_push($temporaeresProtokollArray[$jahr], $datenArray);
+                $temporaeresProtokollArray[$jahr][$protokoll["flugzeugID"]] = $protokollFlugzeug;
+                
+                $temporaeresProtokollArray[$jahr][$protokoll["flugzeugID"]]['anzahlProtokolle'] = $protokolleModel->getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $protokoll["flugzeugID"])['id'];
             }
             array_sort_by_multiple_keys($temporaeresProtokollArray[$jahr], ['anzahlProtokolle' => SORT_DESC]);
         }

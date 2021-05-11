@@ -10,9 +10,8 @@ use App\Models\protokolllayout\protokollInputsModel;
 use App\Models\protokolllayout\protokollKapitelModel;
 use App\Models\protokolllayout\protokollLayoutsModel;
 use App\Models\protokolllayout\protokollUnterkapitelModel;
-use App\Models\flugzeuge\flugzeugeModel;
+use App\Models\flugzeuge\flugzeugeMitMusterModel;
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\muster\musterModel;
 use App\Models\piloten\pilotenModel;
 use App\Models\piloten\pilotenDetailsModel;
 
@@ -26,12 +25,12 @@ class Protokolllayoutcontroller extends Protokollcontroller
         $_SESSION['kapitelNummern']         = [];
         $_SESSION['kapitelBezeichnungen']   = [];
         
-        $temporaeresDatenArray              = [];
+        $temporaeresWerteArray              = [];
         $temporaeresKommentarArray          = [];
         
         if(isset($_SESSION['eingegebeneWerte']))
         {
-           $temporaeresDatenArray           = $_SESSION['eingegebeneWerte'];
+           $temporaeresWerteArray           = $_SESSION['eingegebeneWerte'];
            $_SESSION['eingegebeneWerte']    = [];
         }
         
@@ -62,7 +61,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 }
 
                     // eingegebene Daten werden bei ProtokollTyp-wechsel geändert bzw gespeichert
-                (isset($temporaeresDatenArray) && $temporaeresDatenArray !== null) ? $this->erhalteEingebebeneDatenBeiProtokollWechsel($temporaeresDatenArray, $protokollItem['protokollInputID']) : null;
+                (isset($temporaeresWerteArray) && $temporaeresWerteArray !== null) ? $this->erhalteEingebebeneDatenBeiProtokollWechsel($temporaeresWerteArray, $protokollItem['protokollInputID']) : null;
             
                     // eingegebene Kommentare werden bei ProtokollTyp-wechsel geändert bzw gespeichert
                 if(array_key_exists($_SESSION['kapitelIDs'][$protokollItem['kapitelNummer']], $temporaeresKommentarArray) && ! array_key_exists($_SESSION['kapitelIDs'][$protokollItem['kapitelNummer']], $_SESSION['kommentare']))
@@ -169,30 +168,12 @@ class Protokolllayoutcontroller extends Protokollcontroller
     
     protected function getFlugzeugeFuerAuswahl()
     {
-        $flugzeugeModel             = new flugzeugeModel();
-        $flugzeuge                  = $flugzeugeModel->getAlleSichtbarenFlugzeuge();
-        $temporaeresFlugzeugArray   = [];
+        $flugzeugeMitMusterModel        = new flugzeugeMitMusterModel();
+        $sichtbareFlugzeugeMitMuster    = $flugzeugeMitMusterModel->getAlleSichtbarenFlugzeugeMitMuster();
+              
+        array_sort_by_multiple_keys($sichtbareFlugzeugeMitMuster, ["musterKlarname" => SORT_ASC]);
         
-        //var_dump($flugzeuge);
-        
-        foreach($flugzeuge as $flugzeug)
-        {
-            $temporaeresFlugzeugArray[$flugzeug['id']]['id']        = $flugzeug['id'];
-            $temporaeresFlugzeugArray[$flugzeug['id']]['kennung']   = $flugzeug['kennung'];
-            
-            $temporaeresFlugzeugArray[$flugzeug['id']]              += $this->getMusterFuerFlugzeug($flugzeug['musterID']);     
-        }
-        
-        array_sort_by_multiple_keys($temporaeresFlugzeugArray, ["musterKlarname" => SORT_ASC]);
-        return $temporaeresFlugzeugArray;
-    }
-    
-    protected function getMusterIDNachFlugzeugID($flugzeugID)
-    {
-        $flugzeugeModel = new flugzeugeModel();
-        $flugzeug       = $flugzeugeModel->getFlugzeugeNachID($flugzeugID);
-      
-        return $flugzeug['musterID'];
+        return $sichtbareFlugzeugeMitMuster;
     }
     
     protected function getFlugzeugHebelarme()
@@ -229,13 +210,6 @@ class Protokolllayoutcontroller extends Protokollcontroller
             }
         }
         return $flugzeugHebelarmeSortiert;
-    }
-    
-    protected function getMusterFuerFlugzeug($musterID)
-    {
-        $musterModel = new musterModel();
-        
-        return $musterModel->getMusterNachID($musterID); 
     }
     
     protected function getPilotenFuerAuswahl()

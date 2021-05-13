@@ -2,7 +2,7 @@
 
 </main>
 <div style="height:5rem !important"></div>
-<footer class="footer fixed-bottom mt-auto py-3 bg-light">
+<footer class="footer fixed-bottom py-3 bg-light">
 	<div class="container-fluid">
 		<div class="row mx-3 flex-nowrap justify-content-between align-items-center">
 		  <div class="col-6 d-flex">

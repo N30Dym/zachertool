@@ -6,14 +6,16 @@ use CodeIgniter\Controller;
 
 class Nachrichtencontroller extends Controller
 {
-	public function erfolg(/*$nachricht, $link*/)
+	public function nachricht()
 	{
 		$session = session();
 		$datenNachricht = [
 			'nachricht' => $_SESSION["nachricht"],
-			'link' 		=> $_SESSION["link"]
+			'link'      => $_SESSION["link"]
 		];
+                echo view('templates/headerView');
 		echo view('templates/nachrichtView', $datenNachricht);
+                echo view('templates/footerView');
 	}
 	
 	public function sessionAufheben()

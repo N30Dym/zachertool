@@ -52,7 +52,7 @@ $routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flug
 $routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\Flugzeugneucontroller::test');
 
     // Nachrichten
-$routes->get('erfolg', 'Nachrichtencontroller::erfolg');
+$routes->get('nachricht', 'Nachrichtencontroller::nachricht');
 
     // Protokolle
 $routes->get('protokolle/index', 'protokolle\Protokollcontroller::index/');

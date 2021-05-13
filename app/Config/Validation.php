@@ -875,7 +875,51 @@ class Validation
         ]
     ];
     
+    public $pilotDetailsOhnePilotID = [
+        'stundenNachSchein' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die Stunden nach Schein wurden nicht angegeben.',
+                'numeric' => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
+            ]
+        ], 
+        'geflogeneKm' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die geflogenen Kilometer wurden nicht angegeben.',
+                'numeric' => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
+            ]
+        ], 
+        'typenAnzahl' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
+                'numeric' => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
+            ]
+        ],
+        'gewicht' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Das Pilotengewicht wurde nicht angegeben.',
+                'numeric' => 'Das Pilotengewicht enthält ungültige Zeichen.'
+            ]
+        ],
+        'datum' => [
+            'rules'  => 'permit_empty|valid_date',
+            'errors' => [
+                'valid_date' => 'Das Datum hat ein falsches Format.'
+            ]
+        ]
+    ];
+    
     public $pilotDetails = [
+        'pilotID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required' => 'Die pilotID fehlt.',
+                'is_natural' => 'Die pilotId ist ungültig'
+            ]
+        ],
         'stundenNachSchein' => [
             'rules'  => 'required|numeric',
             'errors' => [

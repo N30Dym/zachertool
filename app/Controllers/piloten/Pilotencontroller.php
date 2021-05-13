@@ -23,6 +23,14 @@ class Pilotencontroller extends Controller
         
         $datenInhalt = [];
         
+        if(old("pilot") !== null OR old("pilotDetails") !== null)
+        {
+            $datenInhalt = [
+                'pilot'         => old("pilot"),
+                'pilotDetail'   => old("pilotDetail")
+            ];
+        }
+        
         $pilotenAnzeigeController->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
     
@@ -51,11 +59,7 @@ class Pilotencontroller extends Controller
             'titel' => $titel
         ];
         
-        $datenInhalt = [
-            'pilotID'               => $pilotID,
-            'pilotArray'            => $this->ladePilotDaten($pilotID),
-            'pilotDetailsArray'     => $this->ladePilotDetails($pilotID),
-        ];
+        $datenInhalt = $this->setzeDatenInhaltPilotBearbeiten($pilotID);
         
         $pilotenAnzeigeController->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
@@ -67,9 +71,23 @@ class Pilotencontroller extends Controller
     
     public function pilotSpeichern()
     {
-        //$this->zeigeWarteSeite();
-        
-        if($this->speicherPilotenDaten($this->request->getPost()))
+        if($this->request->getPost() != null)
+        {
+            //$this->zeigeWarteSeite();
+
+            if($this->speicherPilotenDaten($this->request->getPost()))
+            {
+                $session = session();
+                $session->setFlashdata('nachricht', "Pilotendaten erfolgreich gespeichert");
+                $session->setFlashdata('link', '/zachern-dev/');
+                return redirect()->to('/zachern-dev/nachricht');
+            }
+            else 
+            {
+                return redirect()->back()->withInput();
+            }
+        }
+        else
         {
             return redirect()->to('/zachern-dev/');
         }
@@ -108,5 +126,31 @@ class Pilotencontroller extends Controller
         $pilotenAnzeigeController = new Pilotenanzeigecontroller();
         
         $pilotenAnzeigeController->zeigeWarteSeite();
+    }
+    
+    protected function setzeDatenInhaltPilotBearbeiten($pilotID)
+    {
+        $datenInhalt = [];
+        
+        if(old("pilot") !== null OR old("pilotDetail") !== null)
+        {
+            $datenInhalt = [
+                'pilotID'           => old('pilotID'),
+                'pilot'             => old("pilot"),
+                'pilotDetail'       => old("pilotDetail"),
+                'pilotDetailsArray' => $this->ladePilotDetails($pilotID)
+            ];
+            var_dump(old("pilotDetail"));
+        }
+        else
+        {        
+            $datenInhalt = [
+                'pilotID'           => $pilotID,
+                'pilot'             => $this->ladePilotDaten($pilotID),
+                'pilotDetailsArray' => $this->ladePilotDetails($pilotID),
+            ];
+        }
+        
+        return $datenInhalt;
     }
 }

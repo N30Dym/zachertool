@@ -24,23 +24,23 @@ td {
                 </div>
                 <div class="col-sm-4">
                     <label for="vorname" class="form-label ms-2"><b>Vorname</b></label>
-                    <input type="text" class="form-control" name="pilot[vorname]" value="<?= isset($pilotArray['vorname']) ? esc($pilotArray['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
                 </div>
 
                 <div class="col-sm-4">
                     <label for="spitzname" class="form-label ms-2"><b>Spitzname</b></label>
-                    <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilotArray['spitzname']) ? esc($pilotArray['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "readonly" : "" ?>>
                 </div>
 
                 <div class="col-sm-4">
                     <label for="nachname" class="form-label ms-2"><b>Nachname</b></label>
-                    <input type="text" class="form-control" name="pilot[nachname]" value="<?= isset($pilotArray['nachname']) ? esc($pilotArray['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
                 </div>
 
                 <div class="col-12">
                     <label for="groesse" class="form-label ms-2"><b>Größe</b></label>
                     <div class="input-group">
-                        <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilotArray['groesse']) ? esc($pilotArray['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                        <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
                         <span class="input-group-text">cm</span>
                     </div>
                 </div>
@@ -56,26 +56,26 @@ td {
                                 <th>Pilotengewicht</th>
                             </tr>
                         </thead>
-                    <?php if(isset($pilotID)) : ?>
-                        <?php foreach($pilotDetailsArray as $pilotDetail) : ?>
+                    <?php if(isset($pilotDetailsArray)) : ?>
+                        <?php foreach($pilotDetailsArray as $pilotDetailAusDB) : ?>
                             <tr>
-                                <td><input type="date" class="form-control" min="0" value="<?= $pilotDetail['datum'] ?>" disabled></td>
+                                <td><input type="date" class="form-control" min="0" value="<?= $pilotDetailAusDB['datum'] ?>" disabled></td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][stundenNachSchein]" min="0" step="1" value="<?= $pilotDetail['stundenNachSchein'] ?>" disabled>
+                                        <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][stundenNachSchein]" min="0" step="1" value="<?= $pilotDetailAusDB['stundenNachSchein'] ?>" disabled>
                                         <span class="input-group-text">h</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][geflogeneKm]" min="0" value="<?= $pilotDetail['geflogeneKm'] ?>" disabled>
+                                        <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][geflogeneKm]" min="0" value="<?= $pilotDetailAusDB['geflogeneKm'] ?>" disabled>
                                         <span class="input-group-text">km</span>
                                     </div>
                                 </td>
-                                <td><input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][typenAnzahl]" min="0" value="<?= $pilotDetail['typenAnzahl'] ?>" disabled></td>
+                                <td><input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][typenAnzahl]" min="0" value="<?= $pilotDetailAusDB['typenAnzahl'] ?>" disabled></td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][gewicht]" min="0" value="<?= $pilotDetail['gewicht'] ?>" disabled>
+                                        <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][gewicht]" min="0" value="<?= $pilotDetailAusDB['gewicht'] ?>" disabled>
                                         <span class="input-group-text">kg</span>
                                     </div>
                                 </td>
@@ -87,20 +87,20 @@ td {
                                 <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= $stundenNachSchein ?? "" ?>" required>
+                                        <input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= $pilotDetail['stundenNachSchein'] ?? "" ?>" required>
                                         <span class="input-group-text">h</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= $geflogeneKm ?? "" ?>" required>
+                                        <input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= $pilotDetail['geflogeneKm'] ?? "" ?>" required>
                                         <span class="input-group-text">km</span>
                                     </div>
                                 </td>
-                                <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= $typenAnzahl ?? "" ?>" required></td>
+                                <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= $pilotDetail['typenAnzahl'] ?? "" ?>" required></td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= $gewicht ?? "" ?>" required>
+                                        <input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= $pilotDetail['gewicht'] ?? "" ?>" required>
                                         <span class="input-group-text">kg</span>
                                     </div>
                                 </td>

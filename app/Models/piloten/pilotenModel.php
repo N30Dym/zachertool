@@ -14,10 +14,15 @@ class pilotenModel extends Model
     protected $DBGroup 			= 'pilotenDB';
     protected $table     		= 'piloten';
     protected $primaryKey 		= 'id';
+    
+    protected $useAutoIncrement         = true;
+    
+    protected $useTimestamps            = true;
     protected $createdField             = 'erstelltAm';
-    //protected $validationRules 	= '';
-
-    //protected $allowedFields 	= ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar'];
+    
+    protected $validationRules          = 'pilot';
+    
+    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar', 'geaendertAm'];
 
     public function getSichtbarePiloten()
     {
@@ -34,8 +39,13 @@ class pilotenModel extends Model
         return $this->findAll();
     }
 
-    public function getPilotenDiesesJahr()
+    /*public function getPilotenDiesesJahr()
     {
         return $this->where(["geaendertAm >" => date("Y-m-d", strtotime("-24 months")), "sichtbar" => 1])->findAll();
+    }*/
+    
+    public function getPilotNachVornameUndSpitzname($vorname, $spitzname) 
+    {
+        return $this->where(["vorname" => $vorname, "spitzname" => $spitzname])->first();
     }
 }

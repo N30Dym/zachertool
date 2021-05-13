@@ -11,13 +11,13 @@ class pilotenDetailsModel extends Model
 	 * Datenbank zachern_piloten auf die 
 	 * Tabelle piloten_details
 	 */
-    protected $DBGroup      = 'pilotenDB';
-    protected $table        = 'piloten_details';
-    protected $primaryKey   = 'id';
-    protected $createdField = 'erstelltAm';
-    //protected $validationRules 	= '';
+    protected $DBGroup          = 'pilotenDB';
+    protected $table            = 'piloten_details';
+    protected $primaryKey       = 'id';
+    protected $createdField     = 'erstelltAm';
+    protected $validationRules 	= 'pilotDetails';
 
-    //protected $allowedFields 	= ['pilotID', 'datum', 'stundenNachSchein', 'geflogeneKm', 'typenAnzahl', 'gewicht'];
+    protected $allowedFields 	= ['pilotID', 'datum', 'stundenNachSchein', 'geflogeneKm', 'typenAnzahl', 'gewicht'];
 	
     public function getPilotenDetailsNachPilotIDUndDatum($pilotID, $datum = "")
     {

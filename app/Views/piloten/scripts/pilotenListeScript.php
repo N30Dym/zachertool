@@ -2,7 +2,7 @@
     $(document).ready(function(){
         $("#pilotSuche").on("keyup", function() {
             var value = $(this).val().toLowerCase();
-            $("#pilotAuswahl tr").filter(function() {
+            $("#pilotAuswahl tr.pilot").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });

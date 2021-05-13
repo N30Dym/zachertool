@@ -19,8 +19,8 @@
                             <th>Flugzeugmuster</th>
                             <th>Pilot</th>
                             <th>Begleiter</th>
-                            <th></th>
-                            <th></th>
+                            <th>Anzeigen</th>
+                            <th>Bearbeiten</th>
                         </tr>
 
                         <?php foreach($protokolleArray as $protokoll) : ?>
@@ -34,8 +34,8 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
-                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten</button></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success"><?= $protokoll['id'] ?> &raquo;</button></a></td>
                             </tr>
 
                         <?php endforeach ?>  
@@ -75,7 +75,8 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary">Anzeigen: <?= $protokoll['id'] ?></button></a></td>
+                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                <td></td>
                             </tr>
                             
                         <?php endforeach ?>  

@@ -1,6 +1,6 @@
 <h2 class="text-center m-3"><?= esc($titel) ?></h2>	
 <div class="row">
-    <div class="col-2">
+    <div class="col-3">
         <div class="sticky-top row">
             <span class="col-3" style="height: 3rem !important"></span>
             <span class=" ">
@@ -8,7 +8,7 @@
             </span>
         </div>
     </div>
-    <div class="row col-8 d-flex justify-content-center">	
+    <div class="row col-6 d-flex justify-content-center">	
         <?php if($pilotenArray == null): ?>
             <div class="text-center">
                 Die Verbindung ist fehlgeschlagen
@@ -25,23 +25,23 @@
                         <th>Vorname</th>
                         <th>Spitzname</th>
                         <th>Nachname</th>
-                        <th></th>
-                        <th></th>                   
+                        <th>Anzeigen</th>
+                        <th>Bearbeiten</th>                   
                     </tr>
 
                     <?php foreach($pilotenArray as $pilot) : ?>
-                        <tr class="text-center">
+                        <tr class="text-center pilot">
                             <td><?= esc($pilot['vorname']) ?></td>
                             <td><?= $pilot['spitzname'] !== "" ? '<b>"'. $pilot['spitzname'] . '"</b>' : "" ?></td>
                             <td><?= esc($pilot['nachname']) ?></td>
                             <td>
                                 <a href="/zachern-dev/piloten/anzeigen/<?= esc($pilot["id"]) ?>">
-                                    <button class="btn btn-sm btn-secondary">Anzeigen</button>
+                                    <button class="btn btn-sm btn-secondary">&raquo;</button>
                                 </a>
                             </td>
                             <td>
                                 <a href="/zachern-dev/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
-                                    <button class="btn btn-sm btn-success">Bearbeiten</button>
+                                    <button class="btn btn-sm btn-success">&raquo;</button>
                                 </a>
                             </td>
                         </tr>

@@ -12,10 +12,12 @@ td {
     <div class="col-10 row">
         <form action="/zachern-dev/piloten/speichern" method="post">
             
-            <input type="hidden" name="pilotID" value="<?= isset($pilotID) ? $pilotID : "" ?>">
+            <input type="hidden" name="pilotID" value="<?= $pilotID ?? "" ?>">
             
             <div class="row g-3">
                 <h3 class="m-3 text-center">Informationen zum Piloten</h3>
+                
+                <?= \Config\Services::validation()->listErrors() ?>
             
                 <div class="col-12 <?= isset($pilotID) ? "" : "d-none" ?>">
                      <small class="text-muted ms-5">Der Name und die Größe können nur von einem Admin geändert werden</small>
@@ -47,7 +49,7 @@ td {
                     <table class="table mt-5">
                         <thead>
                             <tr class="text-center">
-                                <?php if(isset($pilotID)) : ?><th>Datum</th><?php endif ?>
+                                <?= isset($pilotID) ? "<th>Datum</th>" : "" ?>
                                 <th>Segelflugstunden nach Lizenz</th>
                                 <th>Summe geflogener Überlandkilometer nach Schein</th>
                                 <th>Anzahl geflogener Segelflugzeugtypen</th>
@@ -57,21 +59,51 @@ td {
                     <?php if(isset($pilotID)) : ?>
                         <?php foreach($pilotDetailsArray as $pilotDetail) : ?>
                             <tr>
-                            <td><input type="date" class="form-control" min="0" value="<?= $pilotDetail['datum'] ?>" disabled></td>
-                            <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" step="1" value="<?= $pilotDetail['stundenNachSchein'] ?>" disabled><span class="input-group-text">h</span></div></td>
-                            <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= $pilotDetail['geflogeneKm'] ?>" disabled><span class="input-group-text">km</span></div></td>
-                            <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= $pilotDetail['typenAnzahl'] ?>" disabled></td>
-                            <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= $pilotDetail['gewicht'] ?>" disabled><span class="input-group-text">kg</span></div></td>
-                        </tr>
+                                <td><input type="date" class="form-control" min="0" value="<?= $pilotDetail['datum'] ?>" disabled></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][stundenNachSchein]" min="0" step="1" value="<?= $pilotDetail['stundenNachSchein'] ?>" disabled>
+                                        <span class="input-group-text">h</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][geflogeneKm]" min="0" value="<?= $pilotDetail['geflogeneKm'] ?>" disabled>
+                                        <span class="input-group-text">km</span>
+                                    </div>
+                                </td>
+                                <td><input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][typenAnzahl]" min="0" value="<?= $pilotDetail['typenAnzahl'] ?>" disabled></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[<?= $pilotDetail['id'] ?>][gewicht]" min="0" value="<?= $pilotDetail['gewicht'] ?>" disabled>
+                                        <span class="input-group-text">kg</span>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php endforeach ?>
                     <?php endif ?>
                         <tfoot>
                             <tr>
                                 <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
-                                <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= isset($stundenNachSchein) ? esc($stundenNachSchein) : "" ?>" required><span class="input-group-text">h</span></div></td>
-                                <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= isset($geflogeneKm) ? esc($geflogeneKm) : "" ?>" required><span class="input-group-text">km</span></div></td>
-                                <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= isset($typenAnzahl) ? esc($typenAnzahl) : "" ?>" required></td>
-                                <td><div class="input-group"><input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= isset($gewicht) ? esc($gewicht) : "" ?>" required><span class="input-group-text">kg</span></div></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= $stundenNachSchein ?? "" ?>" required>
+                                        <span class="input-group-text">h</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= $geflogeneKm ?? "" ?>" required>
+                                        <span class="input-group-text">km</span>
+                                    </div>
+                                </td>
+                                <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= $typenAnzahl ?? "" ?>" required></td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= $gewicht ?? "" ?>" required>
+                                        <span class="input-group-text">kg</span>
+                                    </div>
+                                </td>
                             </tr>
                         </tfoot>
                     </table>

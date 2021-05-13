@@ -849,21 +849,66 @@ class Validation
         'vorname' => [
             'rules'  => 'required|alpha_space',
             'errors' => [
-                'required' => 'Das Muster wurde nicht angegeben.',
-                'alpha_space' => 'Das Muster wurde nicht angegeben.'
+                'required' => 'Der Vorname wurde nicht angegeben.',
+                'alpha_space' => 'Der Vorname enthält ungültige Zeichen.'
             ]
         ], 
         'nachname' => [
-            'rules'  => 'required|alpha_numeric',
+            'rules'  => 'required|alpha_space',
             'errors' => [
-                'required' => 'Der Klarname fehlt.',
-                    'alpha_numeric' => 'Etwas ist beim Konvertieren des Klarnames schiefgelaufen.'
+                'required' => 'Der Nachname wurde nicht angegeben.',
+                'alpha_space' => 'Der Nachname enthält ungültige Zeichen.'
+            ]
+        ], 
+        'spitzname' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string' => 'Der Spitzname enthält ungültige Zeichen.'
             ]
         ],
-        'spitzname' => 'permit_empty', 
         'groesse' => [
-            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
-            'errors' => 'Der Wert für Doppelsitzer ist kein Boolean.'
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die Größe wurde nicht angegeben.',
+                'numeric' => 'Die Größe enthält ungültige Zeichen.'
+            ]
+        ]
+    ];
+    
+    public $pilotDetails = [
+        'stundenNachSchein' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die Stunden nach Schein wurden nicht angegeben.',
+                'numeric' => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
+            ]
+        ], 
+        'geflogeneKm' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die geflogenen Kilometer wurden nicht angegeben.',
+                'numeric' => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
+            ]
+        ], 
+        'typenAnzahl' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
+                'numeric' => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
+            ]
+        ],
+        'gewicht' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required' => 'Das Pilotengewicht wurde nicht angegeben.',
+                'numeric' => 'Das Pilotengewicht enthält ungültige Zeichen.'
+            ]
+        ],
+        'datum' => [
+            'rules'  => 'permit_empty|valid_date',
+            'errors' => [
+                'valid_date' => 'Das Datum hat ein falsches Format.'
+            ]
         ]
     ];
 }

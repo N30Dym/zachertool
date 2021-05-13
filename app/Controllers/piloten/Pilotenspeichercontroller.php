@@ -3,8 +3,7 @@
 namespace App\Controllers\piloten;
 
 use App\Controllers\piloten\Pilotencontroller;
-use App\Models\piloten\pilotenModel;
-use App\Models\piloten\pilotenDetailsModel;
+use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
 
 class Pilotenspeichercontroller extends Pilotencontroller 
 {
@@ -43,15 +42,20 @@ class Pilotenspeichercontroller extends Pilotencontroller
     protected function pruefeDaten($uebergebeneDaten)
     {
         $validation             = \Config\Services::validation();
-        $pilotenModel           = new pilotenModel();        
-        $pilotenDetailsModel    = new pilotenDetailsModel();
         
         if(isset($uebergebeneDaten['pilot']))
         {
-            $validation->run($datenArray, "pilot") ?  : false;
+            if( ! $validation->run($uebergebeneDaten['pilot'], "pilot"))
+            {
+                return redirect()->back()->withInput();
+            }
         }
         
-        
+        if( ! $validation->run($uebergebeneDaten['pilotDetails'], "pilotDetails"))
+        {
+            return redirect()->back()->withInput();
+        }
+  
     }
     
         /*

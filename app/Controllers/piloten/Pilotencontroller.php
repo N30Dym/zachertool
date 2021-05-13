@@ -3,10 +3,7 @@
 namespace App\Controllers\piloten;
 
 use CodeIgniter\Controller;
-use App\Controllers\piloten\Pilotenladecontroller;
-use App\Controllers\piloten\Pilotenspeichercontroller;
-use App\Controllers\piloten\Pilotenadmincontroller;
-use App\Controllers\piloten\Pilotenanzeigecontroller;
+use App\Controllers\piloten\{Pilotenladecontroller, Pilotenspeichercontroller, Pilotenadmincontroller, Pilotenanzeigecontroller};
 
 class Pilotencontroller extends Controller 
 {
@@ -65,7 +62,7 @@ class Pilotencontroller extends Controller
     
     public function pilotAnzeigen($pilotID)
     {
-        // Lade PilotEingabeView mit disableten Feldern
+        // Lade PilotAnzeigeView (alles eine Tabelle ohne veränderbare Werte)
     }
     
     public function pilotSpeichern()
@@ -80,28 +77,28 @@ class Pilotencontroller extends Controller
     
     protected function ladePilotenDaten()
     {
-        $pilotenLadeController = new Pilotenladecontroller;
+        $pilotenLadeController = new Pilotenladecontroller();
         
         return $pilotenLadeController->ladeSichtbarePilotenDaten();
     }
     
     protected function ladePilotDaten($pilotID) 
     {
-        $pilotenLadeController = new Pilotenladecontroller;
+        $pilotenLadeController = new Pilotenladecontroller();
         
         return $pilotenLadeController->ladePilotDaten($pilotID);
     }
     
     protected function ladePilotDetails($pilotID) 
     {
-        $pilotenLadeController = new Pilotenladecontroller;
+        $pilotenLadeController = new Pilotenladecontroller();
         
         return $pilotenLadeController->ladePilotDetails($pilotID);
     }
     
     protected function speicherPilotenDaten($postDaten)
     {
-        $pilotenSpeicherController = new pilotenSpeicherController;
+        $pilotenSpeicherController = new Pilotenspeichercontroller();
         
         return $pilotenSpeicherController->speicherPilotenDaten($postDaten);
     }

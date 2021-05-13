@@ -14,7 +14,9 @@ class pilotenDetailsModel extends Model
     protected $DBGroup          = 'pilotenDB';
     protected $table            = 'piloten_details';
     protected $primaryKey       = 'id';
-    protected $createdField     = 'erstelltAm';
+    
+    protected $useAutoIncrement = true;
+    
     protected $validationRules 	= 'pilotDetails';
 
     protected $allowedFields 	= ['pilotID', 'datum', 'stundenNachSchein', 'geflogeneKm', 'typenAnzahl', 'gewicht'];
@@ -23,14 +25,14 @@ class pilotenDetailsModel extends Model
     {
         $datum = $datum === "" ? date('Y-m-d') : $datum;
         
-        return $this->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum")->findAll();
+        return $this->where(['pilotID' => $pilotID, 'datum <' => $datum])->orderBy('datum')->findAll();
     }
     
     public function getPilotenGewichtNachPilotIDUndDatum($pilotID, $datum = "")
     {
         $datum = $datum === "" ? date('Y-m-d') : $datum;
         
-        return $this->select("gewicht")->where(["pilotID" => $pilotID, "datum <" => $datum])->orderBy("datum")->first();
+        return $this->select('gewicht')->where(['pilotID' => $pilotID, 'datum <' => $datum])->orderBy('datum')->first();
     }
     
     public function getPilotDetailsNachPilotID($pilotID)

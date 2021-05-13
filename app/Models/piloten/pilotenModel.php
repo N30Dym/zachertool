@@ -19,6 +19,7 @@ class pilotenModel extends Model
     
     protected $useTimestamps            = true;
     protected $createdField             = 'erstelltAm';
+    protected $updatedField             = 'geaendertAm';
     
     protected $validationRules          = 'pilot';
     
@@ -26,12 +27,12 @@ class pilotenModel extends Model
 
     public function getSichtbarePiloten()
     {
-        return $this->where("sichtbar", 1)->findAll();
+        return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
     }
 	
     public function getPilotNachID($id)
     {
-        return $this->where("id", $id)->first();
+        return $this->where('id', $id)->first();
     }
     
     public function getAllePiloten()
@@ -46,6 +47,17 @@ class pilotenModel extends Model
     
     public function getPilotNachVornameUndSpitzname($vorname, $spitzname) 
     {
-        return $this->where(["vorname" => $vorname, "spitzname" => $spitzname])->first();
+        return $this->where(['vorname' => $vorname, 'spitzname' => $spitzname])->first();
+    }
+    
+    public function updateGeaendertAmNachID($id)
+    {
+        $query = "UPDATE `piloten` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `piloten`.`id` = " . $id; 
+        //$this->query($query);
+        
+        if ( ! $this->simpleQuery($query))
+        {
+            $error = $this->error(); // Has keys 'code' and 'message'
+        }
     }
 }

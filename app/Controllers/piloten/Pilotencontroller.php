@@ -23,11 +23,11 @@ class Pilotencontroller extends Controller
         
         $datenInhalt = [];
         
-        if(old("pilot") !== null OR old("pilotDetails") !== null)
+        if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
-                'pilot'         => old("pilot"),
-                'pilotDetail'   => old("pilotDetail")
+                'pilot'         => old('pilot'),
+                'pilotDetail'   => old('pilotDetail')
             ];
         }
         
@@ -132,15 +132,14 @@ class Pilotencontroller extends Controller
     {
         $datenInhalt = [];
         
-        if(old("pilot") !== null OR old("pilotDetail") !== null)
+        if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
                 'pilotID'           => old('pilotID'),
-                'pilot'             => old("pilot"),
-                'pilotDetail'       => old("pilotDetail"),
+                'pilot'             => old('pilot'),
+                'pilotDetail'       => old('pilotDetail'),
                 'pilotDetailsArray' => $this->ladePilotDetails($pilotID)
             ];
-            var_dump(old("pilotDetail"));
         }
         else
         {        

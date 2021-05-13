@@ -49,13 +49,18 @@ class Pilotenspeichercontroller extends Pilotencontroller
             {             
                 $this->meldePilotVorhanden();
             }
-            else if( ! $validation->run($pilotenDaten['pilot'], "pilot"))
+            else if( ! $validation->run($pilotenDaten['pilot'], 'pilot'))
             {
                 return false;
             }
         }
         
-        if( ! $validation->run($pilotenDaten['pilotDetails'], "pilotDetailsOhnePilotID"))
+        if(isset($pilotenDaten['pilotDetails']['datum']))
+        {
+            $pilotenDaten['pilotDetails']['datum'] = date('Y-m-d', strtotime($pilotenDaten['pilotDetails']['datum']));
+        }
+        
+        if( ! $validation->run($pilotenDaten['pilotDetails'], 'pilotDetailsOhnePilotID'))
         {
             return false;
         }
@@ -106,19 +111,19 @@ class Pilotenspeichercontroller extends Pilotencontroller
     
     protected function speicherDaten($zuSpeicherndeDaten)
     {
-        $pilotModel             = new pilotenModel(); 
+        $pilotenModel           = new pilotenModel(); 
         $pilotenDetailsModel    = new pilotenDetailsModel();       
         
         if( ! isset($zuSpeicherndeDaten['pilotID']))
         {
                 // Eintragen des Pilotennamen in die DB. Es wird automatisch die pilotID zurückgegeben
-            $zuSpeicherndeDaten['pilotID'] = $pilotModel->insert($zuSpeicherndeDaten['pilot']);
+            $zuSpeicherndeDaten['pilotID'] = $pilotenModel->insert($zuSpeicherndeDaten['pilot']);
         }
         
         $datenArray             = $zuSpeicherndeDaten['pilotDetails'];
         $datenArray['pilotID']  = $zuSpeicherndeDaten['pilotID'];
         
-        $pilotModel->update(['geaendertAm' => date('Y-m-d h:m:s')], ['id' => $zuSpeicherndeDaten['pilotID']]);
+        $pilotenModel->updateGeaendertAmNachID($zuSpeicherndeDaten['pilotID']);
 
         return $pilotenDetailsModel->insert($datenArray);
     }

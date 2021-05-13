@@ -47,12 +47,12 @@
 
                             <div class="col-12">
                                     <label for="baujahr" class="form-label">Baujahr</label>
-                                    <input name="baujahr" type="number" class="form-control" id="baujahr" step="1"  min="1900" max="<?= date("Y") ?>" value="<?= isset($baujahr) ? esc($baujahr) : "" ?>" required>
+                                    <input name="flugzeugDetails[baujahr]" type="number" class="form-control" id="baujahr" step="1"  min="1900" max="<?= date("Y") ?>" value="<?= isset($baujahr) ? esc($baujahr) : "" ?>" required>
                             </div>
 
                             <div class="col-12">
                                     <label for="seriennummer" class="form-label">Seriennummer</label>
-                                    <input name="seriennummer" type="text" class="form-control" id="seriennummer" value="<?= isset($seriennummer) ? esc($seriennummer) : "" ?>" required>
+                                    <input name="flugzeugDetails[seriennummer]" type="text" class="form-control" id="seriennummer" value="<?= isset($seriennummer) ? esc($seriennummer) : "" ?>" required>
                             </div>
 
                             <div class="col-12">

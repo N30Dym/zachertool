@@ -70,7 +70,7 @@ class Pilotencontroller extends Controller
     
     public function pilotSpeichern()
     {
-        $this->zeigeWarteSeite();
+        //$this->zeigeWarteSeite();
         
         if($this->speicherPilotenDaten($this->request->getPost()))
         {

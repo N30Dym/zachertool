@@ -61,7 +61,7 @@
                             <th>Flugzeugmuster</th>
                             <th>Pilot</th>
                             <th>Begleiter</th>
-                            <th></th>
+                            <th>Anzeigen</th>
                         </tr>
                        
                         <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>

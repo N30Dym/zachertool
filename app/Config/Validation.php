@@ -844,4 +844,26 @@ class Validation
             ]
 		]
 	];
+        
+    public $pilot = [
+        'vorname' => [
+            'rules'  => 'required|alpha_space',
+            'errors' => [
+                'required' => 'Das Muster wurde nicht angegeben.',
+                'alpha_space' => 'Das Muster wurde nicht angegeben.'
+            ]
+        ], 
+        'nachname' => [
+            'rules'  => 'required|alpha_numeric',
+            'errors' => [
+                'required' => 'Der Klarname fehlt.',
+                    'alpha_numeric' => 'Etwas ist beim Konvertieren des Klarnames schiefgelaufen.'
+            ]
+        ],
+        'spitzname' => 'permit_empty', 
+        'groesse' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Der Wert für Doppelsitzer ist kein Boolean.'
+        ]
+    ];
 }

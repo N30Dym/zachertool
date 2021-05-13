@@ -279,7 +279,8 @@ class Flugzeugneucontroller extends Controller
 		}
 		else // if(null === old("kennung"))
 		{
-				// Hier werden alle Variablen für den flugzeugAngabenView mit den "alten" Daten bestückt
+                    
+// Hier werden alle Variablen für den flugzeugAngabenView mit den "alten" Daten bestückt
 			$datenInhalt = [
 				"title"						=> old("title"),
 				"musterSchreibweise" 		=> old("musterSchreibweise"),
@@ -363,8 +364,9 @@ class Flugzeugneucontroller extends Controller
 	}
 	
 	public function flugzeugSpeichern()
-	{
-		if ($this->request->getMethod() === 'post' && $this->request->getPost())
+	{	
+            
+            if ($this->request->getMethod() === 'post' && $this->request->getPost())
 		{	
 			
 			helper("text");

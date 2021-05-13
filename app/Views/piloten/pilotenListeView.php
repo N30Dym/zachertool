@@ -21,13 +21,15 @@
 
             <div class="col-12">
                 <table id="pilotAuswahl" class="table table-light table-striped table-hover border rounded">
-                    <tr class="text-center">
-                        <th>Vorname</th>
-                        <th>Spitzname</th>
-                        <th>Nachname</th>
-                        <th>Anzeigen</th>
-                        <th>Bearbeiten</th>                   
-                    </tr>
+                    <thead>
+                        <tr class="text-center">
+                            <th>Vorname</th>
+                            <th>Spitzname</th>
+                            <th>Nachname</th>
+                            <th>Anzeigen</th>
+                            <th>Bearbeiten</th>                   
+                        </tr>
+                    </thead>
 
                     <?php foreach($pilotenArray as $pilot) : ?>
                         <tr class="text-center pilot">

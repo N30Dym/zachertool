@@ -24,7 +24,7 @@ do
                 <?php endforeach ?>   
             </ul>
             <?php foreach($flugzeuge as $jahrFlugzeuge=> $flugzeugeProJahr) : ?>
-                <div id="<?= $jahrFlugzeuge?>" class="table-responsive-md tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>" style="overflow:auto; max-height:500px;">
+                <div id="<?= $jahrFlugzeuge?>" class="table-responsive-lg tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>" style="overflow:auto; max-height:500px;">
                     <?php if($flugzeugeProJahr == null): ?>
                             <div class="text-center m-3">
                                     In diesem Jahr sind<?= date("Y") == $jahrFlugzeuge? " noch " : " " ?>keine Flugzeuge gezachert worden
@@ -75,7 +75,7 @@ do
                 <?php endforeach ?>   
             </ul>
             <?php foreach($zacherkoenig as $jahrZacherkoenig => $zacherPilotenProJahr) : ?>
-                <div id="<?= $jahrZacherkoenig?>" class="table-responsive-md tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>" style="overflow:auto; max-height:500px;">
+                <div id="<?= $jahrZacherkoenig?>" class="table-responsive-lg tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>" style="overflow:auto; max-height:500px;">
                     <?php if($zacherPilotenProJahr == null): ?>
                         <div class="text-center m-3">
                             In diesem Jahr sind<?= date("Y") == $jahrZacherkoenig? " noch " : " " ?>keine Flugzeuge gezachert worden

@@ -270,7 +270,6 @@ class Protokolllayoutcontroller extends Protokollcontroller
                     if(isset($_SESSION['pilotID']))
                     {
                         $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['pilotID']);
-                        var_dump($inhaltZusatz['pilotGewicht']);
                     }
                     if(isset($_SESSION['copilotID']))
                     {

@@ -27,11 +27,16 @@ class musterModel extends Model
         */
     public function getMusterNachID($id)
     {			
-        return($this->where("id", $id)->first());
+        return $this->where("id", $id)->first();
     }
 
     public function getMusterAlle()
     {
-        return($this->findAll());
+        return $this->findAll();
+    }
+    
+    public function getSichtbareMuster()
+    {
+        return $this->where('sichtbar', "1")->findAll();
     }
 }

@@ -31,14 +31,12 @@
                     Flugzeuge
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Flugzeugliste</a>
-                    <a class="dropdown-item" href="/zachern-dev/flugzeuge/flugzeugNeu">Flugzeug hinzufügen</a>
+                    <a class="dropdown-item" href="/zachern-dev/flugzeuge/liste"">Flugzeugliste</a>
+                    <a class="dropdown-item" href="/zachern-dev/muster/liste">Flugzeug hinzufügen</a>
 
                     <?php if (isset($_SESSION["admin"]) && $SESSION["admin"] == TRUE) :?>
                         <a class="dropdown-item" href="#">Flugzeug bearbeiten</a>
                     <?php endif ?>
-
-                    <a class="dropdown-item" href="#">Waegebericht aktualisieren</a>
 
                     <?php if (isset($_SESSION["admin"]) && $SESSION["admin"] == TRUE) :?>
                         <a class="dropdown-item" href="#">Muster bearbeiten</a>

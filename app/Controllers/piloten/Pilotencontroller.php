@@ -3,7 +3,7 @@
 namespace App\Controllers\piloten;
 
 use CodeIgniter\Controller;
-use App\Controllers\piloten\{Pilotenladecontroller, Pilotenspeichercontroller, Pilotenadmincontroller, Pilotenanzeigecontroller};
+use App\Controllers\piloten\{Pilotendatenladecontroller, Pilotenspeichercontroller, Pilotenadmincontroller, Pilotenanzeigecontroller};
 
 class Pilotencontroller extends Controller 
 {
@@ -109,21 +109,21 @@ class Pilotencontroller extends Controller
     
     protected function ladePilotenDaten()
     {
-        $pilotenLadeController = new Pilotenladecontroller();
+        $pilotenLadeController = new Pilotendatenladecontroller();
         
         return $pilotenLadeController->ladeSichtbarePilotenDaten();
     }
     
     protected function ladePilotDaten($pilotID) 
     {
-        $pilotenLadeController = new Pilotenladecontroller();
+        $pilotenLadeController = new Pilotendatenladecontroller();
         
         return $pilotenLadeController->ladePilotDaten($pilotID);
     }
     
     protected function ladePilotDetails($pilotID) 
     {
-        $pilotenLadeController = new Pilotenladecontroller();
+        $pilotenLadeController = new Pilotendatenladecontroller();
         
         return $pilotenLadeController->ladePilotDetails($pilotID);
     }
@@ -169,7 +169,7 @@ class Pilotencontroller extends Controller
     
     protected function ladePilotZachernachweis($pilotID)
     {
-        $pilotenLadeController = new Pilotenladecontroller();
+        $pilotenLadeController = new Pilotendatenladecontroller();
         
         return $pilotenLadeController->ladePilotZachernachweis($pilotID);
     }

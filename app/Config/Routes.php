@@ -47,11 +47,11 @@ $routes->match(['get', 'post'], 'piloten/speichern', 'piloten\Pilotencontroller:
 $routes->get('piloten/speichern', 'piloten\Pilotencontroller::pilotSpeichern');
 
     // Flugzeuge
-$routes->get('flugzeuge/flugzeugNeu', 'flugzeuge\Flugzeugneucontroller::index');
-$routes->get('flugzeuge/flugzeugNeu/(:num)', 'flugzeuge\Flugzeugneucontroller::flugzeugAnlegen/$1');
-$routes->get('flugzeuge/flugzeugNeu/neu', 'flugzeuge\Flugzeugneucontroller::flugzeugAnlegen/');
-$routes->match(['get', 'post'], 'flugzeuge/flugzeugNeu/flugzeugSpeichern', 'flugzeuge\Flugzeugneucontroller::flugzeugSpeichern');
-$routes->get('flugzeuge/flugzeugNeu/test', 'flugzeuge\Flugzeugneucontroller::test');
+$routes->get('flugzeuge/', 'flugzeuge\Flugzeugneucontroller::index');
+$routes->get('flugzeuge/neu/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugNeu/$1');
+$routes->get('flugzeuge/neu', 'flugzeuge\Flugzeugcontroller::flugzeugNeu');
+$routes->get('muster/liste', 'flugzeuge\Flugzeugcontroller::musterListe');
+$routes->match(['get', 'post'], 'flugzeuge/speichern', 'flugzeuge\Flugzeugcontroller::flugzeugSpeichern');
 
     // Nachrichten
 $routes->get('nachricht', 'Nachrichtencontroller::nachricht');

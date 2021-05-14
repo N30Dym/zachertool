@@ -6,7 +6,7 @@ use App\Controllers\piloten\Pilotencontroller;
 use App\Models\piloten\pilotenModel;
 use App\Models\piloten\pilotenDetailsModel;
 
-class Pilotenladecontroller extends Pilotencontroller 
+class Pilotendatenladecontroller extends Pilotencontroller 
 {
     protected function ladeSichtbarePilotenDaten()
     {

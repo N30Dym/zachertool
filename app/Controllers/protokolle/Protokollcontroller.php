@@ -3,19 +3,13 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-
-use App\Controllers\protokolle\Protokolleingabecontroller;
-use App\Controllers\protokolle\Protokollanzeigecontroller;
-//use App\Controllers\protokolle\Protokollspeichercontroller;
-use App\Controllers\protokolle\Protokolldatenladecontroller;
-use App\Controllers\protokolle\Protokolllayoutcontroller;
+use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller };
 
 use App\Models\protokolllayout\protokollTypenModel;
 
 if(session_status() == PHP_SESSION_NONE){
     $session = session();
 }
-
 
 helper(['form', 'url', 'array']);
 

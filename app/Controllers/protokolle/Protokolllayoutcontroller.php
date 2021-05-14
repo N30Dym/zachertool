@@ -222,7 +222,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
     {
         $pilotenDetailsModel = new pilotenDetailsModel();
         
-        return $pilotenDetailsModel->getPilotenGewichtNachPilotIDUndDatum($pilotID);
+        return $pilotenDetailsModel->getPilotenGewichtNachPilotIDUndDatum($pilotID, $_SESSION['protokollInformationen']['datum'])[0]['gewicht'];
     }
     
     protected function erhalteEingebebeneDatenBeiProtokollWechsel($datenArray, $protokollInputID)
@@ -270,6 +270,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
                     if(isset($_SESSION['pilotID']))
                     {
                         $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['pilotID']);
+                        var_dump($inhaltZusatz['pilotGewicht']);
                     }
                     if(isset($_SESSION['copilotID']))
                     {

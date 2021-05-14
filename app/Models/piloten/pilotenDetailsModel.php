@@ -21,18 +21,16 @@ class pilotenDetailsModel extends Model
 
     protected $allowedFields 	= ['pilotID', 'datum', 'stundenNachSchein', 'geflogeneKm', 'typenAnzahl', 'gewicht'];
 	
-    public function getPilotenDetailsNachPilotIDUndDatum($pilotID, $datum = "")
+    public function getPilotenDetailsNachPilotIDUndDatum($pilotID, $datum)
     {
-        $datum = $datum === "" ? date('Y-m-d') : $datum;
-        
-        return $this->where(['pilotID' => $pilotID, 'datum <' => $datum])->orderBy('datum')->findAll();
+        $query = "SELECT * FROM piloten_details WHERE pilotID = ". $pilotID ." ORDER BY ABS( DATEDIFF('". date('Y-m-d', strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";   
+        return $this->query($query)->getResultArray();
     }
     
-    public function getPilotenGewichtNachPilotIDUndDatum($pilotID, $datum = "")
+    public function getPilotenGewichtNachPilotIDUndDatum($pilotID, $datum)
     {
-        $datum = $datum === "" ? date('Y-m-d') : $datum;
-        
-        return $this->select('gewicht')->where(['pilotID' => $pilotID, 'datum <' => $datum])->orderBy('datum')->first();
+        $query = "SELECT gewicht FROM piloten_details WHERE pilotID = ". $pilotID ." ORDER BY ABS( DATEDIFF('". date('Y-m-d', strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";
+        return $this->query($query)->getResultArray();
     }
     
     public function getPilotDetailsNachPilotID($pilotID)

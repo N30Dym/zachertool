@@ -49,19 +49,19 @@ td {
                     <label for="akaflieg" class="form-label ms-2"><b>Akaflieg</b></label>
                     <div class="input-group">
                         <select class="form-select" name="pilot[akaflieg]" <?= isset($pilotID) ? "disabled" : "" ?>>
-                            <option><option>
-                            <option value="Aachen" <?= $pilot['akaflieg'] == "Aachen" ? "selected" : "" ?>>Aachen</option>
-                            <option value="Berlin" <?= $pilot['akaflieg'] == "Berlin" ? "selected" : "" ?>>Berlin</option>
-                            <option value="Braunschweig" <?= $pilot['akaflieg'] == "Braunschweig" ? "selected" : "" ?>>Braunschweig</option>
-                            <option value="Darmstadt" <?= $pilot['akaflieg'] == "Darmstadt" ? "selected" : "" ?>>Darmstadt</option>
-                            <option value="Dresden" <?= $pilot['akaflieg'] == "Dresden" ? "selected" : "" ?>>Dresden</option>
-                            <option value="Esslingen" <?= $pilot['akaflieg'] == "Esslingen" ? "selected" : "" ?>>Esslingen</option>
-                            <option value="Hannover" <?= $pilot['akaflieg'] == "Hannover" ? "selected" : "" ?>>Hannover</option>
-                            <option value="Karlsruhe" <?= $pilot['akaflieg'] == "Karlsruhe" ? "selected" : "" ?>>Karlsruhe</option>
-                            <option value="München" <?= $pilot['akaflieg'] == "München" ? "selected" : "" ?>>München</option>
-                            <option value="Stuttgart" <?= $pilot['akaflieg'] == "Stuttgart" ? "selected" : "" ?>>Stuttgart</option>
-                            <option value="Madrid" <?= $pilot['akaflieg'] == "Madrid" ? "selected" : "" ?>>Madrid</option>
-                            <option value="Delft" <?= $pilot['akaflieg'] == "Delft" ? "selected" : "" ?>>Delft</option>
+                            <option></option>
+                            <option value="Aachen" <?= isset($pilot) && $pilot['akaflieg'] == "Aachen" ? "selected" : "" ?>>Aachen</option>
+                            <option value="Berlin" <?= isset($pilot) && $pilot['akaflieg'] == "Berlin" ? "selected" : "" ?>>Berlin</option>
+                            <option value="Braunschweig" <?= isset($pilot) && $pilot['akaflieg'] == "Braunschweig" ? "selected" : "" ?>>Braunschweig</option>
+                            <option value="Darmstadt" <?= isset($pilot) && $pilot['akaflieg'] == "Darmstadt" ? "selected" : "" ?>>Darmstadt</option>
+                            <option value="Dresden" <?= isset($pilot) && $pilot['akaflieg'] == "Dresden" ? "selected" : "" ?>>Dresden</option>
+                            <option value="Esslingen" <?= isset($pilot) && $pilot['akaflieg'] == "Esslingen" ? "selected" : "" ?>>Esslingen</option>
+                            <option value="Hannover" <?= isset($pilot) && $pilot['akaflieg'] == "Hannover" ? "selected" : "" ?>>Hannover</option>
+                            <option value="Karlsruhe" <?= isset($pilot) && $pilot['akaflieg'] == "Karlsruhe" ? "selected" : "" ?>>Karlsruhe</option>
+                            <option value="München" <?= isset($pilot) && $pilot['akaflieg'] == "München" ? "selected" : "" ?>>München</option>
+                            <option value="Stuttgart" <?= isset($pilot) && $pilot['akaflieg'] == "Stuttgart" ? "selected" : "" ?>>Stuttgart</option>
+                            <option value="Madrid" <?= isset($pilot) && $pilot['akaflieg'] == "Madrid" ? "selected" : "" ?>>Madrid</option>
+                            <option value="Delft" <?= isset($pilot) && $pilot['akaflieg'] == "Delft" ? "selected" : "" ?>>Delft</option>
                         </select>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ class flugzeugeModel extends Model
 
     public function getAlleSichtbarenFlugzeuge()
     {			
-        return $this->where("sichtbar", 1)->findAll(); 
+        return $this->where("sichtbar", 1)->orderBy('geaendertAm', 'DESC')->findAll(); 
     }
 
     public function getMusterIDNachID($id)

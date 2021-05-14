@@ -26,8 +26,7 @@
                             <th>Vorname</th>
                             <th>Spitzname</th>
                             <th>Nachname</th>
-                            <th>Anzeigen</th>
-                            <th>Bearbeiten</th>                   
+                            <th></th>                 
                         </tr>
                     </thead>
 
@@ -38,12 +37,7 @@
                             <td><?= esc($pilot['nachname']) ?></td>
                             <td>
                                 <a href="/zachern-dev/piloten/anzeigen/<?= esc($pilot["id"]) ?>">
-                                    <button class="btn btn-sm btn-secondary">&raquo;</button>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="/zachern-dev/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
-                                    <button class="btn btn-sm btn-success">&raquo;</button>
+                                    <button class="btn btn-sm btn-secondary">Anzeigen</button>
                                 </a>
                             </td>
                         </tr>

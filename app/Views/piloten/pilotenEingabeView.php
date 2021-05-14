@@ -24,24 +24,45 @@ td {
                 </div>
                 <div class="col-sm-4">
                     <label for="vorname" class="form-label ms-2"><b>Vorname</b></label>
-                    <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
                 </div>
 
                 <div class="col-sm-4">
                     <label for="spitzname" class="form-label ms-2"><b>Spitzname</b></label>
-                    <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "disabled" : "" ?>>
                 </div>
 
                 <div class="col-sm-4">
                     <label for="nachname" class="form-label ms-2"><b>Nachname</b></label>
-                    <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                    <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
                 </div>
 
-                <div class="col-12">
+                <div class="col-6">
                     <label for="groesse" class="form-label ms-2"><b>Größe</b></label>
                     <div class="input-group">
-                        <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "readonly" : "" ?>>
+                        <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
                         <span class="input-group-text">cm</span>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <label for="akaflieg" class="form-label ms-2"><b>Akaflieg</b></label>
+                    <div class="input-group">
+                        <select class="form-select" name="pilot[akaflieg]" <?= isset($pilotID) ? "disabled" : "" ?>>
+                            <option><option>
+                            <option value="Aachen" <?= $pilot['akaflieg'] == "Aachen" ? "selected" : "" ?>>Aachen</option>
+                            <option value="Berlin" <?= $pilot['akaflieg'] == "Berlin" ? "selected" : "" ?>>Berlin</option>
+                            <option value="Braunschweig" <?= $pilot['akaflieg'] == "Braunschweig" ? "selected" : "" ?>>Braunschweig</option>
+                            <option value="Darmstadt" <?= $pilot['akaflieg'] == "Darmstadt" ? "selected" : "" ?>>Darmstadt</option>
+                            <option value="Dresden" <?= $pilot['akaflieg'] == "Dresden" ? "selected" : "" ?>>Dresden</option>
+                            <option value="Esslingen" <?= $pilot['akaflieg'] == "Esslingen" ? "selected" : "" ?>>Esslingen</option>
+                            <option value="Hannover" <?= $pilot['akaflieg'] == "Hannover" ? "selected" : "" ?>>Hannover</option>
+                            <option value="Karlsruhe" <?= $pilot['akaflieg'] == "Karlsruhe" ? "selected" : "" ?>>Karlsruhe</option>
+                            <option value="München" <?= $pilot['akaflieg'] == "München" ? "selected" : "" ?>>München</option>
+                            <option value="Stuttgart" <?= $pilot['akaflieg'] == "Stuttgart" ? "selected" : "" ?>>Stuttgart</option>
+                            <option value="Madrid" <?= $pilot['akaflieg'] == "Madrid" ? "selected" : "" ?>>Madrid</option>
+                            <option value="Delft" <?= $pilot['akaflieg'] == "Delft" ? "selected" : "" ?>>Delft</option>
+                        </select>
                     </div>
                 </div>
                 

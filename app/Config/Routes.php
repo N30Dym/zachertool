@@ -41,6 +41,7 @@ $routes->get('startseite', 'Startseitecontroller::index');
 $routes->get('piloten/neu', 'piloten\Pilotencontroller::pilotAnlegen');
 $routes->get('piloten/liste', 'piloten\Pilotencontroller::pilotenListe');
 $routes->get('piloten/bearbeiten/(:num)', 'piloten\Pilotencontroller::pilotBearbeiten/$1');
+$routes->get('piloten/anzeigen/(:num)', 'piloten\Pilotencontroller::pilotAnzeigen/$1');
 $routes->match(['get', 'post'], 'piloten/speichern', 'piloten\Pilotencontroller::pilotSpeichern');
 $routes->get('piloten/speichern', 'piloten\Pilotencontroller::pilotSpeichern');
 

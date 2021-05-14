@@ -23,7 +23,7 @@ class pilotenModel extends Model
     
     protected $validationRules          = 'pilot';
     
-    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'groesse', 'sichtbar', 'geaendertAm'];
+    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'akaflieg', 'groesse', 'sichtbar', 'geaendertAm'];
 
     public function getSichtbarePiloten()
     {

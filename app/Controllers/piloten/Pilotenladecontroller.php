@@ -29,4 +29,11 @@ class Pilotenladecontroller extends Pilotencontroller
         return $pilotenDetailsModel->getPilotDetailsNachPilotID($pilotID);
     }
     
+    protected function ladePilotZachernachweis($pilotID)
+    {
+        // Muster eigenständig gezachert
+        // Zachereinweisung /Auffrischung erfolgt
+        // 
+    }
+    
 }

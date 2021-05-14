@@ -8,7 +8,7 @@ use CodeIgniter\Model;
 /**
  * flugzeuge_mit_muster ist keine eigene Datenbanktabelle,
  * sondern ein "View". Es werden also immer die aktuellen Daten aus den Tabellen
- * flugzeuge und muster verwendet
+ * flugzeuge und muster verwendet. Es kann dort auch nichts gespeichert werden.
  *
  * @author Lars
  */

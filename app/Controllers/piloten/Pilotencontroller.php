@@ -53,27 +53,41 @@ class Pilotencontroller extends Controller
     public function pilotBearbeiten($pilotID)
     {
         $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
-        $titel                      = "Neuen Piloten anlegen";
+        $titel                      = "Pilotendaten aktualisieren";
         
         $datenHeader = [
             'titel' => $titel
         ];
         
-        $datenInhalt = $this->setzeDatenInhaltPilotBearbeiten($pilotID);
+        $datenInhalt = $this->setzeDatenInhaltFuerPilotBearbeiten($pilotID);
         
         $pilotenAnzeigeController->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
     
     public function pilotAnzeigen($pilotID)
     {
-        // Lade PilotAnzeigeView (alles eine Tabelle ohne veränderbare Werte)
+        $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
+        $titel                      = "Pilotendaten aktualisieren";
+        
+        $datenHeader = [
+            'titel' => $titel
+        ];
+        
+        $datenInhalt = [
+            'pilotID'               => $pilotID,
+            'pilot'                 => $this->ladePilotDaten($pilotID),
+            'pilotDetailsArray'     => $this->ladePilotDetails($pilotID),
+            'pilotZachernachweis'   => $this->ladePilotZachernachweis($pilotID)
+        ]; 
+        
+        $pilotenAnzeigeController->zeigePilotenAnzeigeView($datenHeader, $datenInhalt);
     }
     
     public function pilotSpeichern()
     {
         if($this->request->getPost() != null)
         {
-            //$this->zeigeWarteSeite();
+            $this->zeigeWarteSeite();
 
             if($this->speicherPilotenDaten($this->request->getPost()))
             {
@@ -128,7 +142,7 @@ class Pilotencontroller extends Controller
         $pilotenAnzeigeController->zeigeWarteSeite();
     }
     
-    protected function setzeDatenInhaltPilotBearbeiten($pilotID)
+    protected function setzeDatenInhaltFuerPilotBearbeiten($pilotID)
     {
         $datenInhalt = [];
         
@@ -151,5 +165,12 @@ class Pilotencontroller extends Controller
         }
         
         return $datenInhalt;
+    }
+    
+    protected function ladePilotZachernachweis($pilotID)
+    {
+        $pilotenLadeController = new Pilotenladecontroller();
+        
+        return $pilotenLadeController->ladePilotZachernachweis($pilotID);
     }
 }

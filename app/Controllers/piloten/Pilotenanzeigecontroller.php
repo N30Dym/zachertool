@@ -24,6 +24,14 @@ class Pilotenanzeigecontroller extends Pilotencontroller
         echo view('templates/footerView');
     }
     
+    protected function zeigePilotenAnzeigeView($datenHeader, $datenInhalt)
+    {
+        echo view('templates/headerView', $datenHeader);
+        echo view('templates/navbarView');
+        echo view('piloten/pilotenAnzeigeView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
     protected function zeigeWarteSeite()
     {
         echo view('templates/headerView');

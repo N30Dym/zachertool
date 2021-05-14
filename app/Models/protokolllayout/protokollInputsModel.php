@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class protokollInputsModel extends Model
 {
-	/*
+	/**
 	 * Verbindungsvariablen für den Zugriff zur
 	 * Datenbank zachern_protokolllayout auf die 
 	 * Tabelle protokoll_inputs

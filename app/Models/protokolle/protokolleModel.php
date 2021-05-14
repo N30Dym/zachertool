@@ -4,7 +4,6 @@ namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
 
-
 class protokolleModel extends Model
 {
         /*

@@ -11,20 +11,20 @@ class musterModel extends Model
 	 * Datenbank zachern_flugzeuge auf die 
 	 * Tabelle muster
 	 */
-    protected $DBGroup 			= 'flugzeugeDB';
-    protected $table      		= 'muster';
-    protected $primaryKey 		= 'id';
+    protected $DBGroup          = 'flugzeugeDB';
+    protected $table            = 'muster';
+    protected $primaryKey       = 'id';
     protected $validationRules 	= 'muster';
 
     protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'istDoppelsitzer', 'istWoelbklappenFlugzeug'];
 
-    /*
-    * Diese Funktion ruft nur das Muster mit
-    * der jeweiligen ID auf
-    *
-    * @param  mix $id int oder string
-    * @return array
-    */
+        /*
+        * Diese Funktion ruft nur das Muster mit
+        * der jeweiligen ID auf
+        *
+        * @param  mix $id int oder string
+        * @return array
+        */
     public function getMusterNachID($id)
     {			
         return($this->where("id", $id)->first());
@@ -32,6 +32,6 @@ class musterModel extends Model
 
     public function getMusterAlle()
     {
-            return($this->findAll());
+        return($this->findAll());
     }
 }

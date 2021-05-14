@@ -6,23 +6,20 @@ use CodeIgniter\Model;
 
 class protokollLayoutsModel extends Model
 {
-	/*
-	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_protokolllayout auf die 
-	 * Tabelle protokoll_layouts
-	 */
-    protected $DBGroup 			= 'protokolllayoutDB';
-	protected $table     		= 'protokoll_layouts';
-    protected $primaryKey 		= 'id';
-	//protected $validationRules 	= '';
-	
-	//protected $allowedFields 	= ['protokollID ', 'protokollKapitelID ', 'protokollUnterkapitelID ', 'protokollEingabeID ', 'protokollInputID '];
+        /**
+        * Verbindungsvariablen für den Zugriff zur
+        * Datenbank zachern_protokolllayout auf die 
+        * Tabelle protokoll_layouts
+        */
+    protected $DBGroup          = 'protokolllayoutDB';
+    protected $table            = 'protokoll_layouts';
+    protected $primaryKey       = 'id';
+    //protected $validationRules  = '';
 
-	public function getProtokollLayoutNachProtokollID($protokollID)
-	{
-		if(is_int(trim($protokollID)) OR is_numeric(trim($protokollID)))
-		{
-			return $this->where("protokollID", $protokollID)->findAll();
-		}
-	}
+    //protected $allowedFields 	  = ['protokollID ', 'protokollKapitelID ', 'protokollUnterkapitelID ', 'protokollEingabeID ', 'protokollInputID '];
+
+    public function getProtokollLayoutNachProtokollID($protokollID)
+    {
+        return $this->where("protokollID", $protokollID)->findAll();
+    }
 }

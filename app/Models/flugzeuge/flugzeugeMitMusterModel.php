@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models\flugzeuge;
 
 use CodeIgniter\Model;
@@ -13,14 +12,15 @@ use CodeIgniter\Model;
  * @author Lars
  */
 class flugzeugeMitMusterModel extends Model {
-           /*
+        
+        /*
          * Verbindungsvariablen für den Zugriff zur
          * Datenbank zachern_protokolle auf die 
          * Tabelle protokolle
          */
-    protected $DBGroup          = 'flugzeugeDB';
-    protected $table            = 'flugzeuge_mit_muster';
-    protected $primaryKey       = 'flugzeugID';
+    protected $DBGroup      = 'flugzeugeDB';
+    protected $table        = 'flugzeuge_mit_muster';
+    protected $primaryKey   = 'flugzeugID';
     
     public function getFlugzeugMitMusterNachFlugzeugID($flugzeugID) 
     {

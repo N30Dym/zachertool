@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class flugzeugeModel extends Model
 {
-        /*
+        /**
          * Verbindungsvariablen für den Zugriff zur
          * Datenbank zachern_protokolle auf die 
          * Tabelle protokolle
@@ -20,11 +20,11 @@ class flugzeugeModel extends Model
 
     protected $allowedFields	= ['kennung', 'musterID', 'sichtbar'];
 
-        /*
+        /**
         * Diese Funktion ruft nur das Protokoll mit
         * der jeweiligen ID auf
         *
-        * @param  mix $id int oder string
+        * @param  int $id 
         * @return array
         */
     public function getFlugzeugeNachID($id)

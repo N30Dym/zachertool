@@ -149,7 +149,8 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         $datenInhalt["musterID"] = $musterID;
 
     }
-
+    
+        // Langfristig ohne leere Zeilen
     protected function ladeLeereWoelbklappen() 
     {
             // Variablen initiieren, die später benötigt werden
@@ -167,11 +168,12 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         return $woelbklappenArray;
     }
     
+        // Langfristig ohne leere Zeilen
     protected function ladeLeereHebelarme() 
     {   
             // Für jedes Array im Array die Beschreibung in der richtigen Reihenfolge setze
-        $hebelarmArray["beschreibung"][0] = "Pilot";
-        $hebelarmArray["beschreibung"][2] = "Trimmballast";
+        $hebelarmArray[0]["beschreibung"] = "Pilot";
+        $hebelarmArray[2]["beschreibung"] = "Trimmballast";
         
         return $hebelarmArray;
     }
@@ -204,6 +206,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         ];
     }
     
+        // Langfristig ohne leere Zeilen
     protected function ladeLeereDaten()
     {
         return [

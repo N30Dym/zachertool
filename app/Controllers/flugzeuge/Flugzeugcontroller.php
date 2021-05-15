@@ -81,7 +81,7 @@ class Flugzeugcontroller extends Controller
         }
         else
         {
-            $datenInhalt += $this->ladeLeereDaten();
+            //$datenInhalt += $this->ladeLeereDaten();
         }
 
             // Daten für den HeaderView aufbereiten

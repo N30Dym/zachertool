@@ -3,7 +3,8 @@
 namespace App\Controllers\flugzeuge;
 
 use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, musterKlappenModel };
-use App\Models\flugzeuge\{ flugzeugeModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
+use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel,  flugzeugeMitMusterModel};
+use App\Models\protokolle\protokolleModel;
 
 /**
  * Description of Flugzeugdatenladecontroller
@@ -19,6 +20,30 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         return $musterModel->getSichtbareMuster();
     }
     
+    protected function ladeMusterDaten($musterID)
+    {
+        $musterModel = new musterModel();
+        
+        $temporaeresMusterDatenArray = [
+            'musterID'          => $musterID,
+            'flugzeugDetails'   => $this->ladeMusterDetails($musterID),
+            'hebelarm'          => $this->ladeHebelarmDaten($musterID)
+        ];
+        
+        $muster = $musterModel->getMusterNachID($musterID);
+        
+        print_r($muster);
+        
+        if($muster['istWoelbklappenFlugzeug'] == "1")
+        {
+            $temporaeresMusterDatenArray['woelbklappen'] = $this->ladeWoelbklappenDaten($musterID);
+        }
+         
+        $temporaeresMusterDatenArray['flugzeug'] = $muster;
+        
+        return $temporaeresMusterDatenArray;
+    }
+    
     protected function ladeMusterDetails($musterID) 
     {
             // Hebelarme so sortieren, dass immer Pilot und ggf. Copilot zuerst erscheinen			
@@ -27,52 +52,21 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
 
             // Klassen initiieren, die später benötigt werden, um deren Funktionen zu benutzen
         $musterModel = new musterModel();
-        $musterDetailsModel = new musterDetailsModel();
-        $musterHebelarmeModel = new musterHebelarmeModel();
-
-            // Daten aus der jeweiligen Datenbank in ein Array laden, bei denen die einzelnen Werte 
-        $muster = $musterModel->getMusterNachID($musterID);
-        $musterDetails = $musterDetailsModel->getMusterDetailsNachMusterID($musterID);
-        $musterHebelarme = $musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
+        $musterDetailsModel = new musterDetailsModel();      
+        
+        return $musterDetailsModel->getMusterDetailsNachMusterID($musterID);
+        
 
             // Titel für diese Seite. Wird im Browser angezeigt und steht als Überschrift ganz oben
         $title = "Flugzeug des Musters ". $muster["musterSchreibweise"] . $muster["musterZusatz"] ." anlegen";
 
-            // Wenn $muster keinen Wert besitzt, wurde kein Muster mit der ID gefunden, dann abbrechen
-        if(!$muster)
-        {
-            throw new \CodeIgniter\Database\Exceptions\DatabaseException("Kein Muster mit dieser ID verfügbar");
-        }
-
             // Durch alle Hebelarme gehen und $indexPilot bzw. $indexCopilot mit dem Index belegen, wo der jeweilige Wert gespeichert ist
-        foreach($musterHebelarme as $key => $musterhebelarm)			
-        {
-            array_search("Pilot", $musterHebelarme[$key]) ?  $indexPilot = $key : "";
-            array_search("Copilot", $musterHebelarme[$key]) ?  $indexCopilot = $key : "";
-        }
-
-            // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
-        $musterHebelarmeSortiert[0] = $musterHebelarme[$indexPilot];
-        if($indexCopilot)
-        {
-            $musterHebelarmeSortiert[1] = $musterHebelarme[$indexCopilot];
-        }
-
-            // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
-        foreach($musterHebelarme as $key => $musterHebelarm)
-        {
-            if($key != $indexPilot AND $key != $indexCopilot)
-            {
-                array_push($musterHebelarmeSortiert,$musterHebelarm);
-            }
-        }			
+        	
 
             // Prüfen, ob das Muster ein WK-Flugzeug ist. Wenn nicht wird die Klasse nicht geladen und keine Daten aus der DB gezogen
-        if($muster["istWoelbklappenFlugzeug"])
-        {
+       
                         // Wenn doch, alles aus Tabelle zachern_flugzeuge.muster_klappen als Array laden, wo die musterID = $musterID
-            $musterKlappenModel = new musterKlappenModel();
-            $musterKlappen = $musterKlappenModel->getMusterKlappenNachMusterID($musterID);
+          
 
                 /*
                 * Die Wölbklappenstellungen sollen nach Möglichkeit aufsteigend von negativ zu positiv ausgegeben werden.
@@ -83,42 +77,10 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
                 * Wenn nicht bleibt die Reihenfolge, wie sie beim Eingeben und Speichern vorgegeben wurde.
                 *
                 */
-            $pruefeObAlleStellungBezeichnungNumerisch = true;
-            $pruefeObAlleStellungWinkelVorhanden = true;
-
-            foreach($musterKlappen as $musterKlappe) 			
-            {
-                if(!is_numeric($musterKlappe["stellungBezeichnung"]))
-                {
-                    $pruefeObAlleStellungBezeichnungNumerisch = false;
-                }
-                if($musterKlappe["stellungWinkel"] == "")
-                {
-                    $pruefeObAlleStellungWinkelVorhanden = false;
-                }
-            }
-            if($pruefeObAlleStellungBezeichnungNumerisch)
-            {
-                    // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
-                if(!array_sort_by_multiple_keys($musterKlappen, ["stellungBezeichnung" => SORT_ASC]))
-                {
-                                // Fehler beim übergebenen Wert
-                    throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-                }
-            }
-            else if($pruefeObAlleStellungWinkelVorhanden)
-            {
-                    // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
-                if(!array_sort_by_multiple_keys($musterKlappen, ["stellungWinkel" => SORT_ASC]))
-                {
-                                // Fehler beim übergebenen Wert
-                    throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
-                }
-            }
-        }
+           
 
             // $datenInhalt setzen
-        $datenInhalt = $muster;
+
         $datenInhalt += $musterDetails;
         for($i=0; $i<20; $i++)
         {
@@ -150,32 +112,75 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
 
     }
     
-        // Langfristig ohne leere Zeilen
-    protected function ladeLeereWoelbklappen() 
+    protected function ladeWoelbklappenDaten($musterID)
     {
-            // Variablen initiieren, die später benötigt werden
-        $anzahlLeereKlappenZeilen   = 6;				
-        $woelbklappenArray          = [];
-                
-            // Da $musterKlappenLeer nur ein Array enthält muss die Form angepasst werden an Arrays in Array:
-            // $musterKlappenLeer wird dafür $anzahlLeereKlappenZeilen mal in das Array $musterKlappenLeerArray geladen
-        for($i=0; $i < $anzahlLeereKlappenZeilen; $i++)
-        {
-            $woelbklappenArray["stellungBezeichnung"][$i]   = "";
-            $woelbklappenArray["stellungWinkel"][$i]        = "";
-        }
+        $musterKlappenModel     = new musterKlappenModel();
+        $musterKlappen          = $musterKlappenModel->getMusterKlappenNachMusterID($musterID);
         
-        return $woelbklappenArray;
+         $pruefeObAlleStellungBezeichnungNumerisch = true;
+        $pruefeObAlleStellungWinkelVorhanden = true;
+
+        foreach($musterKlappen as $musterKlappe) 			
+        {
+            if(!is_numeric($musterKlappe["stellungBezeichnung"]))
+            {
+                $pruefeObAlleStellungBezeichnungNumerisch = false;
+            }
+            if($musterKlappe["stellungWinkel"] == "")
+            {
+                $pruefeObAlleStellungWinkelVorhanden = false;
+            }
+        }
+        if($pruefeObAlleStellungBezeichnungNumerisch)
+        {
+                // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
+            if(!array_sort_by_multiple_keys($musterKlappen, ["stellungBezeichnung" => SORT_ASC]))
+            {
+                            // Fehler beim übergebenen Wert
+                throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+            }
+        }
+        else if($pruefeObAlleStellungWinkelVorhanden)
+        {
+                // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
+            if(!array_sort_by_multiple_keys($musterKlappen, ["stellungWinkel" => SORT_ASC]))
+            {
+                            // Fehler beim übergebenen Wert
+                throw new BadMethodCallException('Call to undefined method ' . $className . '::' . $name);
+            }
+        }    
     }
     
-        // Langfristig ohne leere Zeilen
-    protected function ladeLeereHebelarme() 
-    {   
-            // Für jedes Array im Array die Beschreibung in der richtigen Reihenfolge setze
-        $hebelarmArray[0]["beschreibung"] = "Pilot";
-        $hebelarmArray[2]["beschreibung"] = "Trimmballast";
+    protected function ladeHebelarmDaten($musterID) 
+    {
+        $musterHebelarmeModel = new musterHebelarmeModel();
         
-        return $hebelarmArray;
+        print_r($musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID));
+        return $musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);
+        
+        
+        
+        /*foreach($musterHebelarme as $index => $musterhebelarm)			
+        {
+            array_search("Pilot", $musterHebelarme[$index]) ?  $indexPilot = $index : "";
+            array_search("Copilot", $musterHebelarme[$index]) ?  $indexCopilot = $index : "";
+        }
+
+            // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
+        $musterHebelarmeSortiert[0] = $musterHebelarme[$indexPilot];
+        if($indexCopilot)
+        {
+            $musterHebelarmeSortiert[1] = $musterHebelarme[$indexCopilot];
+        }
+
+            // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
+        foreach($musterHebelarme as $key => $musterHebelarm)
+        {
+            if($key != $indexPilot AND $key != $indexCopilot)
+            {
+                array_push($musterHebelarmeSortiert,$musterHebelarm);
+            }
+        }	*/	
     }
     
         /**
@@ -194,30 +199,26 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         $datenInhalt["bezugspunktEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
         
         return $datenInhalt;
-    }
-    
-    protected function ladeMusterDaten($musterID)
-    {
-        return [
-            'musterID'          => $musterID,
-            'flugzeugDetails'   => $this->ladeMusterDetails($musterID),
-            'woelbklappen'      => $this->ladeWoelbklappenDaten($musterID),
-            'hebelarm'          => $this->ladeHebelarmDaten($musterID)
-        ];
-    }
-    
-        // Langfristig ohne leere Zeilen
-    protected function ladeLeereDaten()
-    {
-        return [
-            'woelbklappen'      => $this->ladeLeereWoelbklappen(),
-            'hebelarm'          => $this->ladeLeereHebelarme()
-        ];
-    }
+    }   
     
     protected function pruefeMusterVorhanden($musterID)
     {
         $musterModel = new musterModel();
         return $musterModel->getMusterNachID($musterID);
+    }
+    
+    protected function ladeSichtbareFlugzeugeMitProtokollAnzahl()
+    {
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $protokolleModel            = new protokolleModel();
+        $temporaeresFlugzeugArray   = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
+         
+        foreach($temporaeresFlugzeugArray as $index => $flugzeug)
+        {
+            echo $flugzeug['flugzeugID'];
+            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
+        }
+        
+        return $temporaeresFlugzeugArray;       
     }
 }

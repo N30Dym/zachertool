@@ -123,19 +123,27 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();
     }
 
+        // "fertig" muss irgendwann zu "bestaetigt"
     public function getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $flugzeugID)
     {
-        return $this->selectCount("id")->where("fertig", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
     }
-
+    
+        // "fertig" muss irgendwann zu "bestaetigt"
     public function getAnzahlProtokolleNachJahrUndPilotID($jahr, $pilotID)
     {
-        return $this->selectCount("id")->where("fertig", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        return $this->selectCount("id")->where("bestaetigt", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
     }
     
     public function getZehnMeisteZacherer()
     {
         $query = "SELECT pilotID, COUNT(pilotID) as anzahlProtokolle FROM `protokolle` WHERE fertig = 1 GROUP BY 1 ORDER BY 2 DESC LIMIT 10";
         return $this->query($query)->getResultArray();
+    }
+    
+        // "fertig" muss irgendwann zu "bestaetigt"
+    public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
+    {
+        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first();
     }
 }	

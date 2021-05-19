@@ -51,6 +51,7 @@ $routes->get('flugzeuge/', 'flugzeuge\Flugzeugneucontroller::index');
 $routes->get('flugzeuge/neu/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugNeu/$1');
 $routes->get('flugzeuge/neu', 'flugzeuge\Flugzeugcontroller::flugzeugNeu');
 $routes->get('muster/liste', 'flugzeuge\Flugzeugcontroller::musterListe');
+$routes->get('flugzeuge/liste', 'flugzeuge\Flugzeugcontroller::flugzeugListe');
 $routes->match(['get', 'post'], 'flugzeuge/speichern', 'flugzeuge\Flugzeugcontroller::flugzeugSpeichern');
 
     // Nachrichten

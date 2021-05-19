@@ -1,3 +1,7 @@
+<h2 class="text-center m-4"><?= esc($titel) ?></h2>
+
+<form action="/zachern-dev/flugzeuge/speichern" method="post">
+    
 <div class="row">
     <?= csrf_field() ?>
     <?= form_hidden('titel', $titel) ?>
@@ -6,6 +10,7 @@
     
     <div class="col-2"></div>
         <div class="col-8">
+            <?= \Config\Services::validation()->listErrors() ?>
             <h3 class="m-4">Basisinformationen</h3>
             <div class="row g-3">
                 <div class="col-sm-7">
@@ -21,7 +26,7 @@
                 </div>
                 <div class="col-2">
                 </div>
-                <div class="col-12 ms-3 <?= (isset($flugzeug) AND $flugzeug[musterSchreibweise] != "") ? "d-none" : "" ?>">
+                <div class="col-12 ms-3 <?= (isset($flugzeug) AND $flugzeug['musterSchreibweise'] != "") ? "d-none" : "" ?>">
                     <small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
                     <br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
                 </div>
@@ -34,12 +39,12 @@
                 <div class="col-sm-1">
                 </div>
                 <div class="col-sm-4 form-check">
-                    <input name="flugzeug[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($istDoppelsitzer) AND $istDoppelsitzer != "" AND $istDoppelsitzer != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
+                    <input name="flugzeug[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($flugzeug) AND $flugzeug['istDoppelsitzer'] != "" AND $flugzeug['istDoppelsitzer'] != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
                     <label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
                 </div>
 
                 <div class="col-sm-5 form-check">
-                    <input name="flugzeug[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($istWoelbklappenFlugzeug) AND $istWoelbklappenFlugzeug != "" AND $istWoelbklappenFlugzeug != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
+                    <input name="flugzeug[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($flugzeug) AND $flugzeug['istWoelbklappenFlugzeug'] != "" AND $flugzeug['istWoelbklappenFlugzeug'] != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
                     <label class="form-check-label" for="istWoelbklappenFlugzeug">Wölbklappenflugzeug</label>
                 </div>
 
@@ -155,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="table-responsive-xl col-12" id="woelbklappen">
+            <div class="table-responsive-sm" id="woelbklappen">
                 <h3  class="m-4">Wölbklappen</h3>
                 <div class="col-12">
                     <small class="text-muted">Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
@@ -180,7 +185,7 @@
                         
                         <?php else: ?>
                             <?php for($i = 0; $i < 10; $i++) : ?>
-                                <tr valign="middle"">
+                                <tr valign="middle" <?php if($i>6): ?> class="zusatz" <?php endif ?>>
                                     <td class="text-center"><button class="btn btn-close loeschenWoelbklappe"></td>
                                     <td><input type="text" name="woelbklappe[][stellungBezeichnung]" class="form-control"></td>
                                     <td>
@@ -194,7 +199,7 @@
                                             <div class="input-group-text">
                                                 <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $i ?>">
                                             </div>
-                                            <input type="number" name="woelbklappe[][iasVGNeutral]" min="0" step="1" class="form-control" id="iasVGNeutral">
+                                            <input type="number" name="woelbklappe[][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral">
                                             <span class="input-group-text">km/h</span>
                                         </div>
                                     </td>
@@ -203,7 +208,7 @@
                                             <div class="input-group-text">
                                                 <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $i ?>" >
                                             </div>
-                                            <input type="number" name="woelbklappe[][iasVGKreisflug]" min="0" step="1" class="form-control" id="iasVGKreisflug">
+                                            <input type="number" name="woelbklappe[][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug">
                                             <span class="input-group-text">km/h</span>
                                         </div>
                                     </td>
@@ -220,35 +225,12 @@
             
             <div class="row g-3">
                 <div class="col-12" id="woelbklappen">
-                   
-                    <div class="row" id="woelbklappenListe">
-                        <div class="row g-1 mb-2 ">
-                            <div class="col-1 text-center">
-                                <small><br>Löschen</small>
-                            </div>
-                            <div class="col-3 text-center">
-                                <small><br>Bezeichnung</small>
-                            </div>
-                            <div class="col-3 text-center">
-                                <small><br>Ausschlag</small>
-                            </div>
-                            <div class="col-1 text-center">
-                                <small>Neutral- stellung</small>
-                            </div>
-                            <div class="col-1 text-center">
-                                <small>Kreisflug- stellung</small>
-                            </div>
-                            <div class="col-2 text-center">
-                                <small><br>IAS<sub>VG</sub></small>
-                            </div>
-                            <div class="col-1 text-center">
-                            </div>
-                        </div>
+                  
                         <?php if(isset($stellungBezeichnung)): ?>
                             <?php foreach($stellungBezeichnung as $key => $bezeichnung) :?>
                                 <div class="row g-1" id="woelbklappe<?= $key ?>">
                                     <div class="col-1 text-center align-middle">
-                                        <button type="button" id="loesche<?= $key ?>" class="btn-danger btn-close loeschen"></button>
+                                        <button type="button" id="loesche<?= $key ?>" class="btn btn-danger btn-close loeschen"></button>
                                     </div>
                                     <div class="col-3">
                                         <input type="text" name="woelbklappe[stellungBezeichnung][<?= $key ?>]" class="form-control" id="stellungBezeichnung<?= $key ?>" value="<?= esc($stellungBezeichnung[$key]) ?>">
@@ -283,9 +265,9 @@
                         <button id="neueZeile" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
                     </div>
 
-                </div>
 
-                <div class="col-12 <?= (isset($istWoelbklappenFlugzeug) AND ($istWoelbklappenFlugzeug == "1" OR $istWoelbklappenFlugzeug == "on")) ? "d-none" : "" ?>" id="iasVGDiv">
+
+                <div class="col-12 <?= (isset($flugzeug) AND ($flugzeug['istWoelbklappenFlugzeug'] == "1" OR $flugzeug['istWoelbklappenFlugzeug'] == "on")) ? "d-none" : "" ?>" id="iasVGDiv">
                     <h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
                     <div class="col-12">
                     <label class="form-label">IAS<sub>VG</sub></label>
@@ -362,17 +344,17 @@
                         </tr>                        
                     </thead>
                     <tbody>
-                        <?php if(isset($hebelarme)) : ?>
-                            <?php foreach($hebelarme as $hebelarm) : ?>
-                                <tr valign="middle" <?= $hebelarm['bezeichnung'] == "Pilot" ? 'id="pilot"' : "" ?><?= $hebelarm['bezeichnung'] == "Copilot" ? 'id="copilot"' : ""?>>
-                                    <td class="text-center"><?php if(!$hebelarm['bezeichnung'] == "Pilot" AND !$hebelarm['bezeichnung'] == "Copilot"): ?><button class="btn btn-close loescheHebelarm"></button><?php endif ?></td>
-                                    <td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value="<?= $hebelarm['bezeichnung'] ?>" <?= ($hebelarm['bezeichnung'] == "Pilot" OR $hebelarm['bezeichnung'] == "Copilot") ? "readonly" : "" ?>></td>
+                        <?php if(isset($hebelarm)) : ?>
+                            <?php foreach($hebelarm as $hebelarmDetails) : ?>
+                                <tr valign="middle" <?= $hebelarmDetails['beschreibung'] == "Pilot" ? 'id="pilot"' : "" ?><?= $hebelarmDetails['beschreibung'] == "Copilot" ? 'id="copilot"' : ""?>>
+                                    <td class="text-center"><?php if($hebelarmDetails['beschreibung'] != "Pilot" && $hebelarmDetails['beschreibung'] != "Copilot") : ?><button class="btn btn-danger btn-close loescheHebelarm"></button><?php endif ?></td>
+                                    <td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value="<?= $hebelarmDetails['beschreibung'] ?>" <?= ($hebelarmDetails['beschreibung'] == "Pilot" OR $hebelarmDetails['beschreibung'] == "Copilot") ? "readonly" : "" ?>></td>
                                     <td>
                                         <div class="input-group">
-                                            <input type="number" name="hebelarm[][hebelarm]" class="form-control" value="<?= $hebelarm['hebelarm'] ?>" <?= ($hebelarm['bezeichnung'] == "Pilot" OR $hebelarm['bezeichnung'] == "Copilot") ? "required" : "" ?>>
+                                            <input type="number" name="hebelarm[][hebelarm]" class="form-control" value="<?= $hebelarmDetails['hebelarm'] ?>" <?= ($hebelarmDetails['beschreibung'] == "Pilot" OR $hebelarmDetails['beschreibung'] == "Copilot") ? "required" : "" ?>>
                                             <select name="hebelarm[][vorOderHinter]" class="form-select input-group-text">
                                                 <option value="hinter">mm h. BP</option>
-                                                <option value="vor" <?= $hebelarm['vorOderHinter'] == "vor" ? "selected" : "" ?>>mm v. BP</option>                                                
+                                                <option value="vor" <?= isset($hebelarmDetails['vorOderHinter']) && $hebelarmDetails['vorOderHinter'] == "vor" ? "selected" : "" ?>>mm v. BP</option>                                                
                                             </select>
                                         </div>    
                                     </td>
@@ -406,7 +388,7 @@
                                 </td>
                             </tr>
                             <tr valign="middle">
-                                <td class="text-center"><button class="btn btn-close loescheHebelarm"></button></td>
+                                <td class="text-center"><button class="btn btn-close btn-danger loescheHebelarm"></button></td>
                                 <td><input type="text" name="hebelarm[][beschreibung]" class="form-control" placeholder="z.B. Trimmballast"></td>
                                 <td>
                                     <div class="input-group">
@@ -419,8 +401,8 @@
                                 </td>
                             </tr>
                             <?php for($i = 0; $i < 3; $i++) : ?>
-                                <tr valign="middle">
-                                    <td class="text-center"><button class="btn btn-close loescheHebelarm"></button></td>
+                                <tr valign="middle" class="zusatz">
+                                    <td class="text-center"><button class="btn btn-close btn-danger loescheHebelarm"></button></td>
                                     <td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td>
                                     <td>
                                         <div class="input-group">

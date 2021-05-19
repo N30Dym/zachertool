@@ -8,21 +8,33 @@ $(document).ready(function() {
         }
     });
     
+        // Zusatzzeilen die ohne JS nötig sind entfernen
+    $( '.zusatz' ).remove();
+    
     $( 'td.neutral' ).each(function()
     {
+        $( this ).append( '<div class="neutralAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral"></div>' );
         if(!$( this ).children( 'div' ).children( 'div' ).children( 'input[type=radio]' ).is( ':checked' ))
         {
-            $( this ).children( 'div' ).remove();
-            $( this ).append( '<input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral">' );
+            $( this ).children( 'div.input-group' ).addClass( 'd-none' ); 
         }
+        else
+        {
+            $( this ).children( 'div.neutralAuswahl' ).addClass( 'd-none' ); 
+        }
+        
     }); 
     
     $( 'td.kreisflug' ).each(function()
     {
+        $( this ).append( '<div class="kreisflugAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug"></div>' );
         if(!$( this ).children( 'div' ).children( 'div' ).children( 'input[type=radio]' ).is( ':checked' ))
         {
-            $( this ).children( 'div' ).remove();
-            $( this ).append( '<input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug">' );
+            $( this ).children( 'div.input-group' ).addClass( 'd-none' ); 
+        }
+        else
+        {
+            $( this ).children( 'div.kreisflugAuswahl' ).addClass( 'd-none' ); 
         }
     });
 
@@ -65,30 +77,64 @@ $(document).ready(function() {
             // Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
     $( document ).on( 'click', '#neueZeileHebelarme', function()
     {
-        $( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button class="btn btn-close loescheHebelarm"></button></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" value=""><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
+        $( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button class="btn btn-close btn-danger loescheHebelarm"></button></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" value=""><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
     });	
 
         // Wenn man einen anderen Radiobutton bei "Neutral" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Kreisflug-Radiobuttons,
         // löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
     $( document ).on( 'click', '#neutral', function()
-    {
-        var iasVGneutral = "";
-        if($( '#iasVGNeutral' ).val() !== "" && $( '#iasVGNeutral' ).val() != "undefined")
+    {       
+        $( 'td.neutral' ).each( function()
         {
-            iasVGneutral = $( '#iasVGNeutral' ).val();
-            alert(iasVGneutral);
-        }
+           $( this ).children( 'div.input-group' ).addClass( 'd-none' );
+           $( this ).children( 'div.neutralAuswahl' ).removeClass( 'd-none' );
+        });
         
-        $( this ).parent( 'td' ).append( '<div class="input-group"><div class="input-group-text"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" checked></div><input type="number" name="woelbklappe[iasVGNeutral]" min="0" step="1" class="form-control" id="iasVGNeutral" value="' + iasVGneutral + '"><span class="input-group-text">km/h</span></div>' );
-        
-        /*$( 'td.neutral' ).each(function()
+        $( this ).parent( 'div' ).parent( 'td' ).children( 'div.input-group' ).removeClass( 'd-none' );
+        $( this ).parent( 'div' ).parent( 'td' ).children( 'div.input-group' ).children( 'div.input-group-text' ).children( 'input[type=radio]' ).prop( "checked", true );
+        $( this ).parent( 'div.neutralAuswahl' ).addClass( 'd-none' );
+    });
+    
+    $( document ).on( 'click', '#kreisflug', function()
+    {       
+        $( 'td.kreisflug' ).each( function()
         {
-            $( this ).children(  ).remove();
-            $( this ).append( '<input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral">' );
-        }); */
-       
+           $( this ).children( 'div.input-group' ).addClass( 'd-none' );
+           $( this ).children( 'div.kreisflugAuswahl' ).removeClass( 'd-none' );
+        });
+        
+        $( this ).parent( 'div' ).parent( 'td' ).children( 'div.input-group' ).removeClass( 'd-none' );
+        $( this ).parent( 'div' ).parent( 'td' ).children( 'div.input-group' ).children( 'div.input-group-text' ).children( 'input[type=radio]' ).prop( "checked", true );
+        $( this ).parent( 'div.kreisflugAuswahl' ).addClass( 'd-none' );
     });
 
+    $( document ).on('keyup', '.iasVGNeutral', function()
+    {
+        var wert = $( this ).val();
+
+        $( '.iasVGNeutral' ).each( function()
+        {
+            $( this ).val(wert);
+        });  
+    });
+    
+    $( document ).on('keyup', '.iasVGKreisflug', function()
+    {
+        var wert = $( this ).val();
+
+        $( '.iasVGKreisflug' ).each( function()
+        {
+            $( this ).val(wert);
+        });  
+    });
+    
+    function neutralValueReset()
+    {
+        $( '#neutral' ).each(function(index){
+            $(this).val(index);
+            
+        });
+    }
         // Wenn man einen anderen Radiobutton bei "Kreisflug" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Neutral-Radiobuttons,
         // löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
    /* $( document ).on( 'click', '#kreisflug', function()

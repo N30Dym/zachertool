@@ -4,16 +4,6 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 
-/*use App\Models\muster\musterModel;
-use App\Models\muster\musterDetailsModel;
-use App\Models\muster\musterHebelarmeModel;
-use App\Models\muster\musterKlappenModel;
-use App\Models\flugzeuge\flugzeugeModel;
-use App\Models\flugzeuge\flugzeugDetailsModel;
-use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\flugzeuge\flugzeugKlappenModel;
-use App\Models\flugzeuge\flugzeugWaegungModel;*/
-
 use App\Controllers\flugzeuge\{ Flugzeugadmincontroller, Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
 helper(["array","form","text"]);
@@ -62,14 +52,17 @@ class Flugzeugcontroller extends Controller
     {
         if($musterID != null)
         {
-            if($this->musterIDVorhanden($musterID))
+            if(!$this->musterIDVorhanden($musterID))
             {
-                return redirect()->back();
+                //return redirect()->back();
+                return redirect()->to('/zachern-dev/');
             }
         }
         
         $titel          = "Neues Flugzeug anlegen";
-        $datenInhalt    = [];
+        $datenInhalt    = [
+            'titel' => $titel
+        ];
         
         if(old("flugzeug") !== null)
         {
@@ -77,16 +70,12 @@ class Flugzeugcontroller extends Controller
         }
         else if($musterID != null)
         {
-            // Musterdaten in datenInhalt laden 
-        }
-        else
-        {
-            //$datenInhalt += $this->ladeLeereDaten();
+            $datenInhalt += $this->ladeMusterDaten($musterID); 
         }
 
             // Daten für den HeaderView aufbereiten
         $datenHeader = [
-            "titel" => $titel,
+            "titel" => $titel
         ];	
         
         $datenInhalt += $this->ladeEingabeListen();
@@ -107,6 +96,21 @@ class Flugzeugcontroller extends Controller
     public function flugzeugAnzeigen($flugzeugID)
     {
         
+    }
+    
+    public function flugzeugListe()
+    {
+        $titel = "Flugzeug zum Anzeigen auswählen";
+        
+        $datenHeader = [
+            'titel' => $titel
+        ];
+        
+        $datenInhalt = [
+            'flugzeugeArray' => $this->ladeSichtbareFlugzeuge()
+        ];
+        
+        $this->zeigeFlugzeugListe($datenHeader, $datenInhalt);
     }
 
     protected function ladeSichtbareMuster()
@@ -156,6 +160,12 @@ class Flugzeugcontroller extends Controller
         ];
     }
     
+    protected function ladeMusterDaten($musterID)
+    {
+        $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
+        return $flugzeugDatenLadeController->ladeMusterDaten($musterID);
+    }
+    
     protected function musterIDVorhanden($musterID) 
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
@@ -168,9 +178,9 @@ class Flugzeugcontroller extends Controller
         return $flugzeugDatenLadeController->ladeMusterDaten($musterID); 
     }
     
-    protected function ladeLeereDaten()
+    protected function ladeSichtbareFlugzeuge()
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();       
-        return $flugzeugDatenLadeController->ladeLeereDaten();
+        return $flugzeugDatenLadeController->ladeSichtbareFlugzeugeMitProtokollAnzahl();
     }
 }

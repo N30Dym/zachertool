@@ -59,10 +59,9 @@ class Flugzeugcontroller extends Controller
             }
         }
         
-        $titel          = "Neues Flugzeug anlegen";
-        $datenInhalt    = [
-            'titel' => $titel
-        ];
+        $datenInhalt = [];
+        
+        $titel = "Neues Flugzeug anlegen";      
         
         if(old("flugzeug") !== null)
         {
@@ -71,7 +70,12 @@ class Flugzeugcontroller extends Controller
         else if($musterID != null)
         {
             $datenInhalt += $this->ladeMusterDaten($musterID); 
+            $titel = "Neues Flugzeug vom Muster " . $datenInhalt['muster']['musterSchreibweise'] . " anlegen";
         }
+        
+        print_r($datenInhalt['woelbklappe'] ?? "");
+        
+        $datenInhalt['titel'] = $titel;
 
             // Daten für den HeaderView aufbereiten
         $datenHeader = [
@@ -83,9 +87,9 @@ class Flugzeugcontroller extends Controller
         $this->zeigeFlugzeugEingabe($datenHeader, $datenInhalt);
     }
     
-    public function flugzeugSpeichern()
+    public function flugzeugSpeichern($musterID = null)
     {
-        
+        return redirect()->back()->withInput();
     }
     
     public function flugzeugBearbeiten($flugzeugID)
@@ -151,11 +155,13 @@ class Flugzeugcontroller extends Controller
     protected function ladeAlteDaten()
     {
         return [
+            'titel'             => old('titel'),
             'musterID'          => old('musterID') ?? "",
+            'muster'            => old('muster'),
             'flugzeug'          => old('flugzeug'),
             'flugzeugDetails'   => old('flugzeugDetails'),
             'waegung'           => old('waegung'),
-            'woelbklappen'      => old('woelbklappen'),
+            'woelbklappe'      => old('woelbklappe'),
             'hebelarm'          => old('hebelarm')
         ];
     }

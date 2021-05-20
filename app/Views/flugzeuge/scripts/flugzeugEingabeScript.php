@@ -8,8 +8,10 @@ $(document).ready(function() {
         }
     });
     
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
+    
         // Zusatzzeilen die ohne JS nötig sind entfernen
-    $( '.zusatz' ).remove();
+    $( '.JSloeschen' ).remove();
     
     $( 'td.neutral' ).each(function()
     {
@@ -20,7 +22,7 @@ $(document).ready(function() {
         }
         else
         {
-            $( this ).children( 'div.neutralAuswahl' ).addClass( 'd-none' ); 
+            $( this ).children( 'div.neutralAuswahl' ).addClass( 'd-none' );         
         }
         
     }); 
@@ -40,12 +42,17 @@ $(document).ready(function() {
 
 
         // Beim Laden der Seite überprüfen, ob "istWoelbklappenFlugzeug" gesetzt ist und wenn nicht, dann das Wölbklappen Kapitel unsichtbar machen
-    /*if(!$( '#istWoelbklappenFlugzeug' ).is( ':checked' ))
+    if($( '#istWoelbklappenFlugzeug' ).is( ':checked' ))
+    {
+        $( '#iasVGDiv' ).addClass( 'd-none' );
+        $( '#neutral' ).attr( 'required', true );
+        $( '#kreisflug' ).attr( 'required', true );
+    }
+    else 
     {
         $( '#woelbklappen' ).addClass( 'd-none' );
-        $( '#iasVGDiv' ).removeClass( 'd-none' );
         $( '#iasVG' ).attr( 'required', true );
-    }*/
+    }
     
     if(!$( '#istDoppelsitzer' ).is( ':checked' ))
     {
@@ -77,7 +84,13 @@ $(document).ready(function() {
             // Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
     $( document ).on( 'click', '#neueZeileHebelarme', function()
     {
-        $( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button class="btn btn-close btn-danger loescheHebelarm"></button></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" value=""><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
+        //$( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" value=""><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
+        $( '#hebelarmTabelle tr' ).last().clone().appendTo('#hebelarmTabelle');
+        $( '#hebelarmTabelle tr' ).last().find('input').each(function(){
+            $(this).val('');
+            $(this).removeAttr('readonly', true);
+        });
+        $( '#hebelarmTabelle tr' ).last().find('select').val('hinter');
     });	
 
         // Wenn man einen anderen Radiobutton bei "Neutral" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Kreisflug-Radiobuttons,
@@ -135,44 +148,6 @@ $(document).ready(function() {
             
         });
     }
-        // Wenn man einen anderen Radiobutton bei "Kreisflug" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Neutral-Radiobuttons,
-        // löscht das Inputfeld, generiert ein neues in der Zeile, in der nun der aktive Radiobutton ist und fügt den Wert dort ein
-   /* $( document ).on( 'click', '#kreisflug', function()
-    {
-            // Prüfen ob "iasVGKreisflug" schon existiert, wenn ja den Wert nehmen, wenn nicht dann "" setzen
-        if($( '#iasVGKreisflug' )[0]){
-            var aktuellerIasVGKreisflugWert = $( '#iasVGKreisflug' ).val();
-        }
-        else
-        {
-            var aktuellerIasVGKreisflugWert = "";
-        }		
-        $( '#iasVGKreisflug').remove();
-
-        var neueKreisflugWoelbklappe = $( '#kreisflug:checked' ).val();
-        $( '#woelbklappenListe' ).children( '#woelbklappe' + neueKreisflugWoelbklappe ).children( '.iasVG' ).append( '<input type="number" step="1" class="form-control" id="iasVGKreisflug" name="iasVGKreisflug" value="'+ aktuellerIasVGKreisflugWert +'">');
-
-        $( 'input[type=radio][id=neutral]' ).removeAttr( 'disabled' );
-        $( 'input[type=radio][id=neutral][value=' + neueKreisflugWoelbklappe + ']' ).attr( 'disabled', true );
-    });*/
-
-        // Diese Funktion ändert die Sichtbarkeit des <div>s "woelklappen", je nachdem ob die "istWoelklappe"-Checkbox aktiv ist oder nicht.
-        // Sie entfernt die Klasse "d-none" oder fügt sie hinzu
-    /*$( document ).on( 'click', '#istWoelbklappenFlugzeug', function()
-    {
-        if ($( this ).is( ':checked' ))
-        {
-            $( '#woelbklappen' ).removeClass( 'd-none' );
-            $( '#iasVGDiv' ).addClass( 'd-none' );
-            $( '#iasVG' ).removeAttr( 'required' );
-        }
-        else 
-        {
-            $( '#woelbklappen' ).addClass( 'd-none' );
-            $( '#iasVGDiv' ).removeClass( 'd-none' );
-            $( '#iasVG' ).attr( 'required', true );
-        }
-    });*/
 
             // Diese Funktion ändert die Sichtbarkeit des divs "woelklappen", je nachdem ob die "istWoelklappe"-Checkbox aktiv ist oder nicht.
             // Sie entfernt die Klasse "d-none" oder fügt sie hinzu
@@ -180,23 +155,36 @@ $(document).ready(function() {
     {
         if ($( this ).is( ':checked' ))
         {
-            $( '#pilot' ).after( '<tr valign="middle" id="copilot"><td></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value="Copilot" readonly></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" required="required"><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
+            $( '#pilot' ).after( '<tr valign="middle" id="copilot"><td></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value="Copilot" readonly></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" required="required"><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );           
         }
         else 
         {
             $( '#copilot' ).remove();
         }
     });
-
-        // Diese Funktion sorgt dafür, dass die "Löschen"-Buttons bei den Wölbklappen funktionieren
-    /*$( document ).on( 'click', '.loeschen', function()
+    
+    $( document ).on( 'click', '#istWoelbklappenFlugzeug', function()
     {
-        var loeschenID = $( this ).attr( 'id' ).slice( 7 )
-        $( "#woelbklappenListe" ).children( '#woelbklappe' + loeschenID ).remove();
-    });*/
+        if ($( this ).is( ':checked' ))
+        {
+            $( '#woelbklappen' ).removeClass( 'd-none' );
+            $( '#iasVGDiv' ).addClass( 'd-none' );
+            $( '#iasVG' ).removeAttr( 'required', true );
+            $( '#neutral' ).attr( 'required', true );
+            $( '#kreisflug' ).attr( 'required', true );
+        }
+        else 
+        {
+            $( '#woelbklappen' ).addClass( 'd-none' );
+            $( '#iasVGDiv' ).removeClass( 'd-none' );
+            $( '#iasVG' ).attr( 'required', true );
+            $( '#neutral' ).removeAttr( 'required', true );
+            $( '#kreisflug' ).removeAttr( 'required', true );
+        }
+    });
 
         // Diese Funktion sorgt dafür, dass die "Löschen"-Buttons bei den Hebelarmen funktionieren
-    $( document ).on( 'click', '.loescheHebelarm', function()
+    $( document ).on( 'click', '.loeschen', function()
     {
         $( this ).parent( 'td' ).parent( 'tr' ).remove();
     });

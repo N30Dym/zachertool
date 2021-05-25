@@ -27,12 +27,12 @@ class Flugzeugcontroller extends Controller
         $title = 'Musterauswahl';		
 
         $datenHeader = [
-            'title' => $title,
+            'title'     => $title,
         ];
 
         $datenInhalt = [
-            'title' => $title,
-            'muster' => $this->ladeSichtbareMuster()
+            'title'     => $title,
+            'muster'    => $this->ladeSichtbareMuster()
         ];
         
         $this->zeigeMusterListe($datenHeader, $datenInhalt);
@@ -54,12 +54,11 @@ class Flugzeugcontroller extends Controller
         {
             if(!$this->musterIDVorhanden($musterID))
             {
-                //return redirect()->back();
-                return redirect()->to('/zachern-dev/');
+                return redirect()->to(base_url());
             }
         }
         
-        $datenInhalt = [];
+        $datenInhalt = $this->ladeEingabeListen();
         
         $titel = "Neues Flugzeug anlegen";      
         
@@ -78,9 +77,7 @@ class Flugzeugcontroller extends Controller
             // Daten für den HeaderView aufbereiten
         $datenHeader = [
             "titel" => $titel
-        ];	
-        
-        $datenInhalt += $this->ladeEingabeListen();
+        ];	  
         
         $this->zeigeFlugzeugEingabe($datenHeader, $datenInhalt);
     }
@@ -95,8 +92,8 @@ class Flugzeugcontroller extends Controller
             {
                 $session = session();
                 $session->setFlashdata('nachricht', "Flugzeugdaten erfolgreich gespeichert");
-                $session->setFlashdata('link', '/zachern-dev/');
-                return redirect()->to('/zachern-dev/nachricht');
+                $session->setFlashdata('link', base_url());
+                return redirect()->to(base_url() . '/nachricht');
             }
             else 
             {
@@ -105,7 +102,7 @@ class Flugzeugcontroller extends Controller
         }
         else
         {
-            return redirect()->to('/zachern-dev/');
+            return redirect()->to(base_url());
         }
     }
     

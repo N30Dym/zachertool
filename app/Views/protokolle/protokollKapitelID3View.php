@@ -17,7 +17,7 @@
 
     <?php else: ?>
         <div class="table-responsive-lg">
-            <table class="table table-striped table-hover">
+            <table class="table">
     <!-- Überschriften -->
                 <thead>
                     <tr class="text-center">

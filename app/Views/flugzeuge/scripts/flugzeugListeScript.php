@@ -1,8 +1,13 @@
-<?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+<script type="text/javascript">
+$(document).ready(function(){
+    
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
+    
+    $( '#flugzeugSuche' ).on( 'keyup', function() {
+        var value = $( this ).val().toLowerCase();
+        $( '#flugzeugAuswahl tr' ).filter( function() {
+            $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+</script> 

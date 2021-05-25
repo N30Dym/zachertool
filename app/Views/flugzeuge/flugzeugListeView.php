@@ -4,7 +4,7 @@
         <div class="sticky-top row">
             <span class="col-3" style="height: 3rem !important"></span>
             <span class=" ">
-                <small>Wenn es das noch nicht gibt, kannst du <a href="/zachern-dev/flugzeuge/neu">hier</a> das Flugzeug anlegen.</small>
+                <small>Wenn es das Flugzeug noch nicht gibt, kannst du <a href="<?= base_url() ?>/flugzeuge/neu">hier</a> das Flugzeug anlegen.</small>
             </span>
         </div>
     </div>
@@ -15,7 +15,7 @@
             </div>
         <?php else: ?>
             <div class="col-12">
-                <input class="form-control" id="pilotSuche" type="text" placeholder="Suche nach Flugzeug...">
+                <input class="form-control JSsichtbar d-none" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
                 <br>
             </div>
 

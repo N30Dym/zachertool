@@ -4,7 +4,7 @@
         <div class="sticky-top row">
             <span class="col-3" style="height: 3rem !important"></span>
             <span class=" ">
-                Wenn es das Muster noch nicht gibt, kannst du <a href="/zachern-dev/flugzeuge/neu">hier</a> das Flugzeug mit Muster anlegen.
+                Wenn es das Muster noch nicht gibt, kannst du <a href="<?= base_url() ?>/flugzeuge/neu">hier</a> das Flugzeug mit Muster anlegen.
             </span>
         </div>
     </div>
@@ -15,7 +15,7 @@
                     </div>
             <?php else: ?>
             <div class="col-12">
-                    <input class="form-control" id="musterSuche" type="text" placeholder="Suche nach Muster...">
+                    <input class="form-control JSsichtbar d-none" id="musterSuche" type="text" placeholder="Suche nach Muster...">
                     <br>
             </div>
 
@@ -25,7 +25,7 @@
                     <?php foreach($muster as $muster_item) : ?>
                         <tr class="text-center">
                             <td>
-                                <a href="/zachern-dev/flugzeuge/neu/<?= esc($muster_item["id"]) ?>">
+                                <a href="<?= base_url() ?>/flugzeuge/neu/<?= esc($muster_item["id"]) ?>">
                                     <?= esc($muster_item["musterSchreibweise"]) ?><?= esc($muster_item["musterZusatz"]) ?>
                                 </a>
                             </td>

@@ -39,4 +39,9 @@ class musterModel extends Model
     {
         return $this->where('sichtbar', "1")->findAll();
     }
+    
+    public function getMusterIDNachKlarnameUndZusatz($musterKlarname, $musterZusatz)
+    {
+        return $this->select('id')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();
+    }
 }

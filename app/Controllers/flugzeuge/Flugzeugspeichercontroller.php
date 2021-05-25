@@ -3,7 +3,7 @@
 namespace App\Controllers\flugzeuge;
 
 use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, musterKlappenModel };
-use App\Models\flugzeuge\{ flugzeugeModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 
 /**
  * Description of Flugzeugspeichercontroller
@@ -14,7 +14,21 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
 {
     protected function speicherFlugzeugDaten($postDaten) 
     {
-        // checken ob Flugzeug schon vorhanden
+        $musterID = $postDaten['musterID'] ?? null;
+        
+            // checken ob Flugzeug schon vorhanden
+        /*if(!isset($postDaten['musterID']) && isset($this->musterVorhanden($postDaten['muster'])[0]))
+        {        ['flugzeug' => $postDaten['flugzeug'], 'muster' => $postDaten['muster']]
+            
+            $musterID = $this->musterVorhanden($postDaten['muster'])[0];
+            
+            if($this->flugzeugVorhanden($postDaten['flugzeug']))
+            {
+                return false;
+            }
+        }*/
+        
+        
 
         // Daten aufbereiten
         
@@ -26,7 +40,25 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
     }
     
+    /*protected function flugzeugVorhanden($flugzeugDaten)
+    {
+        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+        
+        $musterKlarname = $this->setzeMusterKlarname($musterDaten['musterSchreibweise']);
+        
+        return $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($flugzeugDaten['kennung'], $musterKlarname);
+    }*/
     
+    protected function setzeMusterKlarname($musterSchreibweise)
+    {
+        $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($musterSchreibweise)));
+        $musterKlarnameOhneAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
+        $musterKlarnameOhneOE                           = str_replace("ö", "oe", $musterKlarnameOhneAE);
+        $musterKlarnameOhneUE                           = str_replace("ü", "ue", $musterKlarnameOhneOE);
+        $musterKlarnameOhneSZ                           = str_replace("ß", "ss", $musterKlarnameOhneUE);
+        
+        return $musterKlarnameOhneSZ;
+    }
     
     public function flugzeugSpeichern()
 	{	
@@ -63,10 +95,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
 			$datenArray['datum'] = $datenArray['datumWaegung'];
 			
 				// Der Klarname ist zum Vergleichen der Muster notwendig, da die Schreibweisen variieren. Es werden alle Sonderzeichen entfernt/geändert und alle Groß- zu Kleinbuchstaben 
-			$datenArray['musterKlarname'] = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($datenArray['musterSchreibweise'])));
-			$datenArray['musterKlarname'] = str_replace("ä", "ae", $datenArray['musterKlarname']);
-			$datenArray['musterKlarname'] = str_replace("ö", "oe", $datenArray['musterKlarname']);
-			$datenArray['musterKlarname'] = str_replace("ü", "ue", $datenArray['musterKlarname']);
+			
 
 				// Da im Array der Checkbutton Wert "on" ist, muss bei selektiertem Checkbutton der Wert zu 1 geändert werden
 			(isset($datenArray['istDoppelsitzer']) AND $datenArray['istDoppelsitzer'] == "on") ? $datenArray['istDoppelsitzer'] = 1 : null;

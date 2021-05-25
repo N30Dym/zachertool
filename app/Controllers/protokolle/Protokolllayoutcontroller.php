@@ -3,17 +3,9 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\protokolllayout\{ auswahllistenModel, protokollEingabenModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, protokollInputsMitInputTypModel };
-/*use App\Models\protokolllayout\inputTypenModel;
-use App\Models\protokolllayout\protokollEingabenModel;
-//use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
-use App\Models\protokolllayout\protokollInputsModel;
-use App\Models\protokolllayout\protokollKapitelModel;
-use App\Models\protokolllayout\protokollLayoutsModel;
-use App\Models\protokolllayout\protokollUnterkapitelModel;*/
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel };
-//use App\Models\flugzeuge\flugzeugHebelarmeModel;
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
-//use App\Models\piloten\pilotenDetailsModel;
+
 
 class Protokolllayoutcontroller extends Protokollcontroller
 {
@@ -161,7 +153,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
     protected function getFlugzeugeFuerAuswahl()
     {
         $flugzeugeMitMusterModel        = new flugzeugeMitMusterModel();
-        $sichtbareFlugzeugeMitMuster    = $flugzeugeMitMusterModel->getAlleSichtbarenFlugzeugeMitMuster();
+        $sichtbareFlugzeugeMitMuster    = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
               
         array_sort_by_multiple_keys($sichtbareFlugzeugeMitMuster, ["musterKlarname" => SORT_ASC]);
         

@@ -111,15 +111,18 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         */
     protected function ladeEingabeListen()
     {
-        $flugzeugDetailsModel = new flugzeugDetailsModel();
+        $flugzeugDetailsModel   = new flugzeugDetailsModel();
+        $musterModel            = new musterModel();
         
-        $datenInhalt["variometerEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben();
-        $datenInhalt["tekEingaben"] 		= $flugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben();
-        $datenInhalt["pitotPositionEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben();
-        $datenInhalt["bremsklappenEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben();
-        $datenInhalt["bezugspunktEingaben"] 	= $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben();
-        
-        return $datenInhalt;
+        return [
+            "musterEingaben"            => $musterModel->getSichtbareMuster(),
+            "variometerEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben(),
+            "tekEingaben" 		=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben(),
+            "pitotPositionEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben(),
+            "bremsklappenEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben(),
+            "bezugspunktEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben(),            
+        ];
+    
     }   
     
     protected function pruefeMusterVorhanden($musterID)
@@ -136,7 +139,6 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
          
         foreach($temporaeresFlugzeugArray as $index => $flugzeug)
         {
-            echo $flugzeug['flugzeugID'];
             $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
         }
         

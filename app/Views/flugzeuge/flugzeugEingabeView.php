@@ -22,8 +22,15 @@
             <div class="row g-3">
                 <div class="col-sm-7">
                     <label for="musterSchreibweise" class="form-label">Muster</label>
-                    <input type="text" class="form-control" name="muster[musterSchreibweise]" id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster['musterSchreibweise'] ?? null) ?>" required <?= isset($musterID) ? "readonly" : "" ?>>
+                    <input type="text" class="form-control" name="muster[musterSchreibweise]" <?= isset($musterID) ? "" : 'list="musterListe"' ?> id="musterSchreibweise" placeholder="DG-1000, ASK 21, Discus 2, ..." value="<?= esc($muster['musterSchreibweise'] ?? null) ?>" required <?= isset($musterID) ? "readonly" : "" ?>>
                 </div>
+                <?php if(!isset($musterID)) : ?>
+                    <datalist id="musterListe">
+                        <?php foreach ($musterEingaben as $muster) : ?>
+                            <option value="<?= esc($muster['musterSchreibweise']) ?>">
+                        <?php endforeach ?>
+                    </datalist>
+                <?php endif ?>
 
 
                 <div class="col-sm-3">

@@ -12,6 +12,22 @@ use App\Models\flugzeuge\{ flugzeugeModel, flugzeugDetailsModel, flugzeugHebelar
  */
 class Flugzeugspeichercontroller extends Flugzeugcontroller 
 {
+    protected function speicherFlugzeugDaten($postDaten) 
+    {
+        // checken ob Flugzeug schon vorhanden
+
+        // Daten aufbereiten
+        
+        // Daten validieren in If-Schleife mit return back->withINput
+        
+        // Wenn !musterID dann erst Muster anlegen und musterID setzen
+        
+        // Flugzeug mit musterID speichern
+        
+    }
+    
+    
+    
     public function flugzeugSpeichern()
 	{	
             

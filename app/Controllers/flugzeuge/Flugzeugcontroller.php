@@ -6,7 +6,7 @@ use CodeIgniter\Controller;
 
 use App\Controllers\flugzeuge\{ Flugzeugadmincontroller, Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
-helper(["array","form","text"]);
+helper(["array","form","text","url"]);
 
 class Flugzeugcontroller extends Controller
 {
@@ -87,7 +87,26 @@ class Flugzeugcontroller extends Controller
     
     public function flugzeugSpeichern($musterID = null)
     {
-        return redirect()->back()->withInput();
+        if($this->request->getPost() != null)
+        {
+            //$this->zeigeWarteSeite();
+
+            if($this->speicherFlugzeugDaten($this->request->getPost()))
+            {
+                $session = session();
+                $session->setFlashdata('nachricht', "Flugzeugdaten erfolgreich gespeichert");
+                $session->setFlashdata('link', '/zachern-dev/');
+                return redirect()->to('/zachern-dev/nachricht');
+            }
+            else 
+            {
+                return redirect()->back()->withInput();
+            }
+        }
+        else
+        {
+            return redirect()->to('/zachern-dev/');
+        }
     }
     
     public function flugzeugBearbeiten($flugzeugID)
@@ -117,8 +136,7 @@ class Flugzeugcontroller extends Controller
 
     protected function ladeSichtbareMuster()
     {
-        $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
-        
+        $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();       
         $musterArray = $flugzeugDatenLadeController->getSichtbareMuster();
 
         array_sort_by_multiple_keys($musterArray, ["musterKlarname" => SORT_ASC]);
@@ -144,6 +162,12 @@ class Flugzeugcontroller extends Controller
         $flugzeugAnzeigeController->zeigeFlugzeugEingabeView($datenHeader, $datenInhalt);
     }
     
+    protected function zeigeWarteSeite()
+    {
+        $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
+        $flugzeugAnzeigeController->zeigeWarteView();
+    }
+    
     protected function ladeEingabeListen()
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
@@ -159,7 +183,7 @@ class Flugzeugcontroller extends Controller
             'flugzeug'          => old('flugzeug'),
             'flugzeugDetails'   => old('flugzeugDetails'),
             'waegung'           => old('waegung'),
-            'woelbklappe'      => old('woelbklappe'),
+            'woelbklappe'       => old('woelbklappe'),
             'hebelarm'          => old('hebelarm')
         ];
     }
@@ -186,5 +210,11 @@ class Flugzeugcontroller extends Controller
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();       
         return $flugzeugDatenLadeController->ladeSichtbareFlugzeugeMitProtokollAnzahl();
+    }
+    
+    protected function speicherFlugzeugDaten($postDaten)
+    {            
+        $flugzeugSpeicherController = new Flugzeugspeichercontroller();
+        return $flugzeugSpeicherController->speicherFlugzeugDaten($postDaten);
     }
 }

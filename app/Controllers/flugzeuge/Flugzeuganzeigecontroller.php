@@ -9,7 +9,7 @@ namespace App\Controllers\flugzeuge;
  */
 class Flugzeuganzeigecontroller extends Flugzeugcontroller {
     
-    public function zeigeMusterListe($datenHeader, $datenInhalt)
+    protected function zeigeMusterListe($datenHeader, $datenInhalt)
     {
         echo view('templates/headerView', $datenHeader);
         echo view('flugzeuge/scripts/musterListeScript');
@@ -18,7 +18,7 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller {
         echo view('templates/footerView');
     }
     
-    public function zeigeFlugzeugListe($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugListe($datenHeader, $datenInhalt)
     {
         echo view('templates/headerView', $datenHeader);
         echo view('flugzeuge/scripts/flugzeugListeScript');
@@ -27,7 +27,7 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller {
         echo view('templates/footerView');
     }
     
-    public function zeigeFlugzeugEingabeView($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugEingabeView($datenHeader, $datenInhalt)
     {
         echo view('templates/headerView',  $datenHeader);
         echo view('flugzeuge/scripts/flugzeugEingabeScript');
@@ -36,8 +36,15 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller {
         echo view('templates/footerView');
     }
     
-    public function zeigeFlugzeugAnzeigeView($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugAnzeigeView($datenHeader, $datenInhalt)
     {
         
+    }
+    
+    protected function zeigeWarteView()
+    {
+        echo view('templates/headerView');
+        echo view('templates/wartenView');
+        echo view('templates/footerView');
     }
 }

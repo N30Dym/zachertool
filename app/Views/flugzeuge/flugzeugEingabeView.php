@@ -174,7 +174,6 @@
 <!-------------------------------->
 <!--        Wölbklappen         -->
 <!-------------------------------->
-            <?= $muster['istWoelbklappenFlugzeug'] ?>
             <div class="table-responsive-sm <?= (!isset($muster) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
                 <h3  class="m-4">Wölbklappen</h3>
                 <div class="col-12">
@@ -194,8 +193,7 @@
                         <?php if(isset($woelbklappe)) : ?>
                             <?php foreach($woelbklappe as $i => $woelbklappeDetails) : ?>
                                 <?php if(is_numeric($i)) : ?>
-                                    <?= $i ?>
-                                    <tr valign="middle">
+                                    <tr valign="middle" id="<?= $i ?>">
                                         <td class="text-center JSsichtbar d-none" ><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
                                         <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control" value="<?= $woelbklappeDetails['stellungBezeichnung'] ?>"></td>
                                         <td>
@@ -354,7 +352,7 @@
                     <tbody>
                         <?php if(isset($hebelarm)) : ?>
                             <?php foreach($hebelarm as $i => $hebelarmDetails) : ?>
-                                <tr valign="middle" <?= $hebelarmDetails['beschreibung'] == "Pilot" ? 'id="pilot"' : "" ?><?= $hebelarmDetails['beschreibung'] == "Copilot" ? 'id="copilot"' : ""?>>
+                                <tr valign="middle" id="<?= $hebelarmDetails['beschreibung'] == "Pilot" ? 'pilot' : ($hebelarmDetails['beschreibung'] == "Copilot" ? 'copilot' : $i ) ?>">
                                     <td class="text-center JSsichtbar d-none"><?php if($hebelarmDetails['beschreibung'] != "Pilot" && $hebelarmDetails['beschreibung'] != "Copilot") : ?><button type="button" class="btn btn-danger btn-close loeschen"></button><?php endif ?></td>
                                     <td><input type="text" name="hebelarm[<?= $i ?>][beschreibung]" class="form-control" value="<?= $hebelarmDetails['beschreibung'] ?>" <?= ($hebelarmDetails['beschreibung'] == "Pilot" OR $hebelarmDetails['beschreibung'] == "Copilot") ? "readonly" : "" ?>></td>
                                     <td>
@@ -397,7 +395,7 @@
                                 </td>
                             </tr>
                             <?php endif ?>
-                            <tr valign="middle">
+                            <tr valign="middle" id="2">
                                 <td class="text-center JSsichtbar d-none"><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
                                 <td><input type="text" name="hebelarm[2][beschreibung]" class="form-control" placeholder="z.B. Trimmballast"></td>
                                 <td>

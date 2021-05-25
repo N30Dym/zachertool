@@ -64,33 +64,28 @@ $(document).ready(function() {
     //$( 'input[type=radio][id=kreisflug][value=' + $( '#neutral:checked' ).val() + ']' ).attr( 'disabled', true);
 
         // Funktion um neue Zeilen beim Wölbklappenmenü hinzuzufügen
-    /*$( document ).on( 'click', '#neueZeile', function()
+    $( document ).on( 'click', '#neueZeileWoelbklappe', function()
     {
-        if(typeof($( '#woelbklappenListe' ).children( 'div:last' ).attr( 'id' )) === 'undefined')
-        {
-            var zaehler = 0;
-        }
-        else
-        {
-            var zaehler = $( '#woelbklappenListe' ).children( 'div:last' ).attr( 'id' ).slice( 11 );
-        }
-        zaehler++;
-        if ( zaehler < 20 )
-        {
-            $( "#woelbklappenListe" ).append( '<div class="row col-12 g-1" id="woelbklappe'+ zaehler +'"><div class="col-1 text-center align-middle"><button type="button" id="loesche'+ zaehler +'" class="btn-danger btn-close loeschen"></button></div><div class="col-3"><input type="text" class="form-control" name ="stellungBezeichnung['+ zaehler +']" id="stellungBezeichnung'+ zaehler +'"></div><div class="col-3"><div class="input-group"><input type="number" step="0.1" class="form-control" name="stellungWinkel['+ zaehler +']" id="stellungWinkel'+ zaehler +'"><span class="input-group-text">°</span></div></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="neutral" id="neutral" value="'+ zaehler +'" required></div><div class="col-1 text-center align-middle"><input class="form-check-input" type="radio" name="kreisflug" id="kreisflug" value="'+ zaehler +'" required></div><div class="col-2 iasVG"></div><div class="col-1"></div></div>'); 
-        }
-    });*/
+        var letzteZeile = $( '#woelbklappenTabelle tbody tr:last-child' ).attr( 'id' );
+        letzteZeile++;
+        var wertNeutral = $( '#woelbklappenTabelle tbody tr:last-child' ).find( 'input.iasVGNeutral').val();
+        var wertKreisflug = $( '#woelbklappenTabelle tbody tr:last-child' ).find( 'input.iasVGKreisflug').val();
+        
+        $( '#woelbklappenTabelle' ).append( '<tr valign="middle" id="' + letzteZeile + '"><td class="text-center JSsichtbar"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="woelbklappe[' + letzteZeile + '][stellungBezeichnung]" class="form-control"></td><td><div class="input-group"><input type="number" name="woelbklappe[' + letzteZeile + '][stellungWinkel]" step="0.1" class="form-control"><span class="input-group-text">°</span></div></td><td class="text-center neutral"><div class="input-group d-none"><div class="input-group-text"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="' + letzteZeile + '"></div><input type="number" name="woelbklappe[' + letzteZeile + '][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="' + wertNeutral + '"><span class="input-group-text">km/h</span></div><div class="neutralAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral"></div></td><td class="text-center kreisflug"><div class="input-group d-none"><div class="input-group-text"><input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="' + letzteZeile + '"></div><input type="number" name="woelbklappe[' + letzteZeile + '][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="' + wertKreisflug + '"><span class="input-group-text">km/h</span></div><div class="kreisflugAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug"></div></td></tr>' );
+    });
 
-            // Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
+        // Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
     $( document ).on( 'click', '#neueZeileHebelarme', function()
     {
-        //$( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" value=""><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
-        $( '#hebelarmTabelle tr' ).last().clone().appendTo('#hebelarmTabelle');
-        $( '#hebelarmTabelle tr' ).last().find('input').each(function(){
-            $(this).val('');
-            $(this).removeAttr('readonly', true);
+        var maxID = 0;
+        
+        $( '#hebelarmTabelle tbody tr').each(function(){
+            if( $.isNumeric( $( this ).attr( 'id' ) ) ){
+                maxID = $( this ).attr( 'id' );
+                maxID++;
+            }
         });
-        $( '#hebelarmTabelle tr' ).last().find('select').val('hinter');
+        $( '#hebelarmTabelle' ).append( '<tr valign="middle" id="' + maxID + '"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[' + maxID + '][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[' + maxID + '][hebelarm]" class="form-control" value=""><select name="hebelarm[' + maxID + '][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
     });	
 
         // Wenn man einen anderen Radiobutton bei "Neutral" auswählt, speichert diese Funktion den aktuellen Wert, enabled alle Kreisflug-Radiobuttons,

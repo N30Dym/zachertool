@@ -41,7 +41,7 @@ class Flugzeugcontroller extends Controller
 
         /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /flugzeuge/flugzeugNeu/(:num) bzw. -> /flugzeuge/flugzeugNeu/neu
+        * -> /flugzeuge/flugzeugNeu/<zahl> bzw. -> /flugzeuge/neu
         *
         * Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
         * bzw. ein neues Flugzeug sammt neuem Muster zu erstellen.
@@ -72,8 +72,6 @@ class Flugzeugcontroller extends Controller
             $datenInhalt += $this->ladeMusterDaten($musterID); 
             $titel = "Neues Flugzeug vom Muster " . $datenInhalt['muster']['musterSchreibweise'] . " anlegen";
         }
-        
-        print_r($datenInhalt['woelbklappe'] ?? "");
         
         $datenInhalt['titel'] = $titel;
 

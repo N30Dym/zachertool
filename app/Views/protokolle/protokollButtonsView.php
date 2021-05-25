@@ -9,12 +9,12 @@
     <div class="col-sm-6">
     </div>
     <div class="col-lg-2 ">
-        <a href="<?= site_url('/protokolle/abbrechen') ?>">
+        <a href="<?= base_url() ?>/protokolle/abbrechen">
             <input type="button" class="btn btn-danger col-12" formaction="" value="Abbrechen"></button>
         </a>
     </div>
     <div class="col-lg-3">
-        <a href="<?= site_url('/protokolle/speichern') ?>">
+        <a href="<?= base_url() ?>/protokolle/speichern">
             <input type="button" class="btn btn-success col-12" formaction="" value="Speichern und Zurück"></button>
         </a>
     </div>

@@ -9,7 +9,7 @@
 			<span class="text-muted"><em>&copy; <?= date('Y') ?></em></span>
 		  </div>
 		  <div class="col-6 d-flex justify-content-end text-end">
-			<span class="text-muted">Designed mit Bootstrap</em></span>
+                      <span class="text-muted">Designed mit <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></em></span>
 		  </div>
 		</div>
 	</div>

@@ -4,7 +4,7 @@
         <div class="sticky-top row">
             <span class="col-3" style="height: 3rem !important"></span>
             <span class=" ">
-                <small>Wenn es den Piloten noch nicht gibt, kannst du <a href="/zachern-dev/piloten/neu">hier</a> den Piloten anlegen.</small>
+                <small>Wenn es den Piloten noch nicht gibt, kannst du <a href="<?= base_url() ?>/piloten/neu">hier</a> den Piloten anlegen.</small>
             </span>
         </div>
     </div>
@@ -15,7 +15,7 @@
             </div>
         <?php else: ?>
             <div class="col-12">
-                <input class="form-control" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
+                <input class="form-control JSsichtbar d-none" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
                 <br>
             </div>
 
@@ -36,7 +36,7 @@
                             <td><?= $pilot['spitzname'] !== "" ? '<b>"'. $pilot['spitzname'] . '"</b>' : "" ?></td>
                             <td><?= esc($pilot['nachname']) ?></td>
                             <td>
-                                <a href="/zachern-dev/piloten/anzeigen/<?= esc($pilot["id"]) ?>">
+                                <a href="<?= base_url() ?>/piloten/anzeigen/<?= esc($pilot["id"]) ?>">
                                     <button class="btn btn-sm btn-secondary">Anzeigen</button>
                                 </a>
                             </td>

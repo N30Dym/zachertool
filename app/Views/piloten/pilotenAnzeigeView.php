@@ -2,10 +2,10 @@
     <div class="col-12 text-end">
     
         <input type="hidden" name="pilotID" value="<?= $pilot['id'] ?>"> 
-        <button type="submit" class="btn btn-sm btn-success" formaction="/zachern-dev/protokolle/index">Protokoll mit diesem Piloten anlegen</button>
-        <button type="" class="btn btn-sm btn-success" formaction="/zachern-dev/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">Daten hinzufügen</button>
-        <button type="submit" class="btn btn-sm btn-secondary" formaction="/zachern-dev/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>
-        <button type="submit" class="btn btn-sm btn-danger d-none" formaction="/zachernn-dev/damin/piloten/<?= $pilot['id'] ?>">Bearbeiten</button>
+        <button type="submit" class="btn btn-sm btn-success" formaction="<?= base_url() ?>/protokolle/index">Protokoll mit diesem Piloten anlegen</button>
+        <button type="" class="btn btn-sm btn-success" formaction="<?= base_url() ?>/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">Daten hinzufügen</button>
+        <button type="submit" class="btn btn-sm btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>
+        <button type="submit" class="btn btn-sm btn-danger d-none" formaction="<?= base_url() ?>/damin/piloten/<?= $pilot['id'] ?>">Bearbeiten</button>
 
 
 </div>

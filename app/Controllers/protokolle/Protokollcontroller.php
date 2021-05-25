@@ -60,7 +60,7 @@ class Protokollcontroller extends Controller
             // Wenn das Protokoll als "fertig" markiert ist, wird direkt zur Eingabe umgeleitet
         if(isset($_SESSION['fertig']))
         {
-            return redirect()->to('/zachern-dev/protokolle/kapitel/2');
+            return redirect()->to(base_url() . '/protokolle/kapitel/2');
         }
             // Wenn das Protokoll noch nicht als "fertig" markiert ist (neues Protokoll, angefangenes Protokoll)
             // kann die Bearbeitung, auch der ersten, Seite fortgesetzt werden
@@ -91,7 +91,7 @@ class Protokollcontroller extends Controller
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
         if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
         {
-            return redirect()->to('/zachern-dev/protokolle/index');
+            return redirect()->to(base_url() . '/protokolle/index');
         }
         
             // Übertragene Werte verarbeiten
@@ -150,7 +150,7 @@ class Protokollcontroller extends Controller
     {
         $this->loescheSessionDaten();
         
-        return redirect()->to('/zachern-dev/');
+        return redirect()->to(base_url());
     }
 	
         /**
@@ -192,7 +192,7 @@ class Protokollcontroller extends Controller
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
-            'title'         => $_SESSION['protokollInformationen']['titel'],
+            'title'             => $_SESSION['protokollInformationen']['titel'],
         ];
 
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen

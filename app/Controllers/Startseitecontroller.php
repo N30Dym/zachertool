@@ -7,7 +7,7 @@ use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeMitMusterModel;
 use App\Models\piloten\pilotenModel;
 
-helper("array");
+helper(["array", "url"]);
 
 class Startseitecontroller extends Controller
 {
@@ -22,12 +22,6 @@ class Startseitecontroller extends Controller
     */
     public function index()
     {
-        if ( ! is_file(APPPATH.'/Views/startseiteView.php'))
-        {
-            // Whoops, we don't have a page for that!
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('startseiteView.php');
-        }
-
         $title          = "Willkommen beim Zachertool";
         $anzahlJahre    = 5;          
 

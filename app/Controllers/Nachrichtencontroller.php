@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 
+helper('url');
+
 class Nachrichtencontroller extends Controller
 {
 	public function nachricht()
@@ -38,6 +40,6 @@ class Nachrichtencontroller extends Controller
                     $_SESSION['copilotID'],
                     $_SESSION['aktuellesKapitel'],
                 );
-		return redirect()->to('/zachern-dev');
+		return redirect()->to(base_url());
 	}
 }

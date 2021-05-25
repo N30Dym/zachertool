@@ -10,7 +10,7 @@ td {
     <div class="col-1"></div>
 
     <div class="col-10 row">
-        <form action="/zachern-dev/piloten/speichern" method="post">
+        <form action="<?= base_url() ?>/piloten/speichern" method="post">
             
             <input type="hidden" name="pilotID" value="<?= $pilotID ?? "" ?>">
             
@@ -133,7 +133,7 @@ td {
             </div>
             <div class="row gx-3 mt-5">
                 <div class="col-6">
-                    <a href="/zachern-dev/">
+                    <a href="<?= base_url() ?>">
                         <button type="button" id="Abbrechen" class="btn btn-danger col-12">Abbrechen</button>
                     </a>
                 </div>

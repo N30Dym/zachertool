@@ -74,7 +74,6 @@ class Protokolldatenladecontroller extends Protokollcontroller
         {
             $_SESSION['hStWege'][$hStWeg['protokollKapitelID']] = $hStWeg; 
         }
-        //var_dump($_SESSION['hStWege']);
     }
             
     protected function ladeKommentare($protokollSpeicherID)

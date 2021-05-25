@@ -34,8 +34,8 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
-                                <td><a href="/zachern-dev/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success"><?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success"><?= $protokoll['id'] ?> &raquo;</button></a></td>
                             </tr>
 
                         <?php endforeach ?>  
@@ -75,7 +75,7 @@
                                     <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                 <?php endif ?>
                                 </td>
-                                <td><a href="/zachern-dev/"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
                                 <td></td>
                             </tr>
                             

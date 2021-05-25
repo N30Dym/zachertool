@@ -1,4 +1,4 @@
-<?= view('templates/headerView') ?>
+
 </head>
 <body class="bg-light">
 <main>
@@ -10,4 +10,3 @@
 		</a>
 	</div>
 	
-<?= view('templates/footerView') ?>

@@ -5,6 +5,8 @@ namespace App\Controllers\piloten;
 use CodeIgniter\Controller;
 use App\Controllers\piloten\{Pilotendatenladecontroller, Pilotenspeichercontroller, Pilotenadmincontroller, Pilotenanzeigecontroller};
 
+helper('url');
+
 class Pilotencontroller extends Controller 
 {
     public function index()
@@ -93,8 +95,8 @@ class Pilotencontroller extends Controller
             {
                 $session = session();
                 $session->setFlashdata('nachricht', "Pilotendaten erfolgreich gespeichert");
-                $session->setFlashdata('link', '/zachern-dev/');
-                return redirect()->to('/zachern-dev/nachricht');
+                $session->setFlashdata('link', base_url());
+                return redirect()->to(base_url() . '/nachricht');
             }
             else 
             {
@@ -103,7 +105,7 @@ class Pilotencontroller extends Controller
         }
         else
         {
-            return redirect()->to('/zachern-dev/');
+            return redirect()->to(base_url());
         }
     }
     

@@ -1,6 +1,6 @@
 <h2 class="text-center m-4"><?= esc($titel) ?></h2>
 
-<form action="/zachern-dev/flugzeuge/speichern" method="post">
+<form action="<?= base_url() ?>/flugzeuge/speichern" method="post">
     
 <div class="row">
     <?= csrf_field() ?>
@@ -481,7 +481,7 @@
             
             <div class="row gx-3 mt-5">
                 <div class="col-6">
-                    <a href="/zachern-dev">
+                    <a href="<?= base_url() ?>">
                         <button type="button" id="Abbrechen" class="btn btn-danger col-12">Abbrechen</button>
                     </a>
                 </div>

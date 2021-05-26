@@ -24,7 +24,7 @@
                     <thead>
                         <tr class="text-center">
                             <th>Kennzeichen</th>
-                            <th>Muster</th>
+                            <th>Flugzeugmuster</th>
                             <th>Anazhl Protokolle</th>
                             <th></th>                 
                         </tr>

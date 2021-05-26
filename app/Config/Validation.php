@@ -9,855 +9,855 @@ use CodeIgniter\Validation\Rules;
 
 class Validation
 {
-	//--------------------------------------------------------------------
-	// Setup
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Setup
+    //--------------------------------------------------------------------
 
-	/**
-	 * Stores the classes that contain the
-	 * rules that are available.
-	 *
-	 * @var string[]
-	 */
-	public $ruleSets = [
-		Rules::class,
-		FormatRules::class,
-		FileRules::class,
-		CreditCardRules::class,
-	];
+    /**
+     * Stores the classes that contain the
+     * rules that are available.
+     *
+     * @var string[]
+     */
+    public $ruleSets = [
+        Rules::class,
+        FormatRules::class,
+        FileRules::class,
+        CreditCardRules::class,
+    ];
 
-	/**
-	 * Specifies the views that are used to display the
-	 * errors.
-	 *
-	 * @var array<string, string>
-	 */
-	public $templates = [
-		'list'   => 'CodeIgniter\Validation\Views\list',
-		'single' => 'CodeIgniter\Validation\Views\single',
-	];
+    /**
+     * Specifies the views that are used to display the
+     * errors.
+     *
+     * @var array<string, string>
+     */
+    public $templates = [
+        'list'   => 'CodeIgniter\Validation\Views\list',
+        'single' => 'CodeIgniter\Validation\Views\single',
+    ];
 
-	//--------------------------------------------------------------------
-	// Rules
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Rules
+    //--------------------------------------------------------------------
 	
-	public $muster = [
-		'musterSchreibweise' => [
+    public $muster = [
+        'musterSchreibweise' => [
             'rules'  => 'required',
             'errors' => [
                 'required' => 'Das Muster wurde nicht angegeben.'
             ]
-		], 
-		'musterKlarname' => [
+        ], 
+        'musterKlarname' => [
             'rules'  => 'required|alpha_numeric',
             'errors' => [
                 'required' => 'Der Klarname fehlt.',
-				'alpha_numeric' => 'Etwas ist beim Konvertieren des Klarnames schiefgelaufen.'
+                'alpha_numeric' => 'Etwas ist beim Konvertieren des Klarnames schiefgelaufen.'
             ]
-		],
-		'musterZusatz' => 'permit_empty', 
-		'istDoppelsitzer' => [
+        ],
+        'musterZusatz' => 'permit_empty', 
+        'istDoppelsitzer' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Der Wert für Doppelsitzer ist kein Boolean.'
-		], 
-		'istWoelbklappenFlugzeug' => [
+        ], 
+        'istWoelbklappenFlugzeug' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Der Wert für Wölbklappe ist kein Boolean.'
-		]
-	];
+        ]
+    ];
 	
-	public $musterDetails = [ 
-		'musterID' => [
+    public $musterDetails = [ 
+        'musterID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die musterID wurde nicht angegeben.',
-				'numeric' 	=> 'Die musterID ist keine Zahl.'
+                'required'  => 'Die musterID wurde nicht angegeben.',
+                'numeric'   => 'Die musterID ist keine Zahl.'
             ]
-		],
-		'kupplung' => [
+        ],
+        'kupplung' => [
             'rules'  	=> 'required|in_list[Bug,Schwerpunkt]',
             'errors' 	=> [
-                'required' 	=> 'Der Kupplungstyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Kupplungstyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'diffQR' => [
+        ],
+        'diffQR' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Querruderdifferenzierung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Querruderdifferenzierung wurde nicht angegeben.',
+                'in_list'   => 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radgroesse' => [
-            'rules' 	=> 'required|string',
-            'errors'	=> 'Die Radgröße wurde nicht angegeben.'
-		],
-		'radbremse' => [
+        ],
+        'radgroesse' => [
+            'rules'     => 'required|string',
+            'errors'    => 'Die Radgröße wurde nicht angegeben.'
+        ],
+        'radbremse' => [
             'rules'  	=> 'required|in_list[Scheibe,Trommel]',
             'errors' 	=> [
-                'required' 	=> 'Der Radbremsetyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Radbremsetyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radfederung' => [
+        ],
+        'radfederung' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Radfederung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Radfederung wurde nicht angegeben.',
+                'in_list'   => 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'fluegelflaeche' => [
+        ],
+        'fluegelflaeche' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Flügelfläche wurde nicht angegeben.',
-				'numeric'	=> 'Die Flügelfläche wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Flügelfläche wurde nicht angegeben.',
+                'numeric'   => 'Die Flügelfläche wurde nicht als Zahl angegeben.'
             ]
-		],
-		'spannweite' => [
+        ],
+        'spannweite' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Spannweite wurde nicht angegeben.',
-				'numeric'	=> 'Die Spannweite wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Spannweite wurde nicht angegeben.',
+                'numeric'   => 'Die Spannweite wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bremsklappen' => [
+        ],
+        'bremsklappen' => [
             'rules'  => 'required|string',
             'errors' => 'Die Bremsklappenart wurde nicht angegeben.'
-		],
-		'iasVG' => [
+        ],
+        'iasVG' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Für die IAS<sub>VG</sub> wurde keine Zahl angegeben.'
             ]
-		],
-		'mtow' => [
+        ],
+        'mtow' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Das MTOW wurde nicht angegeben.',
-				'numeric'	=> 'Das MTOW wurde nicht als Zahl angegeben.'
+                'required'  => 'Das MTOW wurde nicht angegeben.',
+                'numeric'   => 'Das MTOW wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMin' => [
+        ],
+        'leermasseSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMax' => [
+        ],
+        'leermasseSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => ['Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMin' => [
+        ],
+        'flugSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMax' => [
+        ],
+        'flugSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bezugspunkt' => [
+        ],
+        'bezugspunkt' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
-				'string' => 'Falsches Format für den Flugschwerpunktsbereich.'
+                'required'  => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
+                'string'    => 'Falsches Format für den Flugschwerpunktsbereich.'
             ]
-		],
-		'anstellwinkel' => [
+        ],
+        'anstellwinkel' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Längsneigung wurde nicht angegeben.',
-				'string' => 'Falsches Format für die Längsneigung.'
+                'required'  => 'Die Längsneigung wurde nicht angegeben.',
+                'string'    => 'Falsches Format für die Längsneigung.'
             ]
-		],
-	];
+        ],
+    ];
 
 	
-	public $musterDetailsOhneMusterID = [
-		'kupplung' => [
+    public $musterDetailsOhneMusterID = [
+        'kupplung' => [
             'rules'  	=> 'required|in_list[Bug,Schwerpunkt]',
             'errors' 	=> [
-                'required' 	=> 'Der Kupplungstyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Kupplungstyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'diffQR' => [
+        ],
+        'diffQR' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Querruderdifferenzierung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Querruderdifferenzierung wurde nicht angegeben.',
+                'in_list'   => 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radgroesse' => [
+        ],
+        'radgroesse' => [
             'rules' 	=> 'required|string',
             'errors'	=> 'Die Radgröße wurde nicht angegeben.'
 		],
 		'radbremse' => [
             'rules'  	=> 'required|in_list[Scheibe,Trommel]',
             'errors' 	=> [
-                'required' 	=> 'Der Radbremsetyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Radbremsetyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radfederung' => [
+        ],
+        'radfederung' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Radfederung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Radfederung wurde nicht angegeben.',
+                'in_list'   => 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'fluegelflaeche' => [
+        ],
+        'fluegelflaeche' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Flügelfläche wurde nicht angegeben.',
-				'numeric'	=> 'Die Flügelfläche wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Flügelfläche wurde nicht angegeben.',
+                'numeric'   => 'Die Flügelfläche wurde nicht als Zahl angegeben.'
             ]
-		],
-		'spannweite' => [
+        ],
+        'spannweite' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Spannweite wurde nicht angegeben.',
-				'numeric'	=> 'Die Spannweite wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Spannweite wurde nicht angegeben.',
+                'numeric'   => 'Die Spannweite wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bremsklappen' => [
+        ],
+        'bremsklappen' => [
             'rules'  => 'required|string',
             'errors' => 'Die Bremsklappenart wurde nicht angegeben.'
-		],
-		'iasVG' => [
+        ],
+        'iasVG' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Für die IAS<sub>VG</sub> wurde keine Zahl angegeben.'
             ]
-		],
-		'mtow' => [
+        ],
+        'mtow' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Das MTOW wurde nicht angegeben.',
-				'numeric'	=> 'Das MTOW wurde nicht als Zahl angegeben.'
+                'required'  => 'Das MTOW wurde nicht angegeben.',
+                'numeric'   => 'Das MTOW wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMin' => [
+        ],
+        'leermasseSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMax' => [
+        ],
+        'leermasseSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => ['Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMin' => [
+        ],
+        'flugSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMax' => [
+        ],
+        'flugSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bezugspunkt' => [
+        ],
+        'bezugspunkt' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
-				'string' => 'Falsches Format für den Flugschwerpunktsbereich.'
+                'required'  => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
+                'string'    => 'Falsches Format für den Flugschwerpunktsbereich.'
             ]
-		],
-		'anstellwinkel' => [
+        ],
+        'anstellwinkel' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Längsneigung wurde nicht angegeben.',
-				'string' => 'Falsches Format für die Längsneigung.'
+                'required'  => 'Die Längsneigung wurde nicht angegeben.',
+                'string'    => 'Falsches Format für die Längsneigung.'
             ]
-		]
-	];
+        ]
+    ];
 	
-	public $flugzeuge = [
-		'kennung' => [
+    public $flugzeuge = [
+        'kennung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Kennung wurde nicht angeben.',
-				'alpha_numeric_punct' => 'Die Kennung enthält nicht zulässige Zeichen.'
-			]
+                'required'              => 'Die Kennung wurde nicht angeben.',
+                'alpha_numeric_punct'   => 'Die Kennung enthält nicht zulässige Zeichen.'
+            ]
         ], 
-		'musterID' => [
+        'musterID' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die musterID wurde angeben.',
-				'numeric' => 'Die musterID ist keine Zahl.'
+                'required'  => 'Die musterID wurde angeben.',
+                'numeric'   => 'Die musterID ist keine Zahl.'
             ]
-		],
-		'sichtbar' => [
+        ],
+        'sichtbar' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' =>  'Die Sichtbarkeit ist kein Boolean.'
-		]
+            ]
 	];
 	
-	public $flugzeugeOhneMusterID = [
-		'kennung' => [
+    public $flugzeugeOhneMusterID = [
+        'kennung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Kennung wurde nicht angeben.',
-				'alpha_numeric_punct' => 'Die Kennung enthält nicht zulässige Zeichen.'
-			]
+                'required'              => 'Die Kennung wurde nicht angeben.',
+                'alpha_numeric_punct'   => 'Die Kennung enthält nicht zulässige Zeichen.'
+            ]
         ], 
-		'sichtbar' => [
+        'sichtbar' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' =>  'Die Sichtbarkeit ist kein Boolean.'
-		]
+            ]
 	];
 	
-	public $flugzeugDetails = [
-		'flugzeugID' => [
+    public $flugzeugDetails = [
+        'flugzeugID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die flugzeugID wurde nicht angegeben.',
-				'numeric' 	=> 'Die flugzeugID ist keine Zahl.'
+                'required'  => 'Die flugzeugID wurde nicht angegeben.',
+                'numeric'   => 'Die flugzeugID ist keine Zahl.'
             ]
-		],
-		'baujahr'=> [
+        ],
+        'baujahr'=> [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Das Baujahr wurde nicht angegeben.',
-				'numeric' 	=> 'Das Baujahr ist keine Zahl.'
+                'required'  => 'Das Baujahr wurde nicht angegeben.',
+                'numeric'   => 'Das Baujahr ist keine Zahl.'
             ]
-		],
-		'seriennummer'=> [
+        ],
+        'seriennummer'=> [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required'	=> 'Die Seriennummer wurde nicht angegeben.',
+                'required'  => 'Die Seriennummer wurde nicht angegeben.',
             ]
-		],
-		'kupplung' => [
+        ],
+        'kupplung' => [
             'rules'  	=> 'required|in_list[Bug,Schwerpunkt]',
             'errors' 	=> [
-                'required' 	=> 'Der Kupplungstyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Kupplungstyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'diffQR' => [
+        ],
+        'diffQR' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
-            'errors' 	=> [
-                'required' 	=> 'Die Querruderdifferenzierung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
+            'errors'    => [
+                'required'  => 'Die Querruderdifferenzierung wurde nicht angegeben.',
+                'in_list'   => 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radgroesse' => [
+        ],
+        'radgroesse' => [
             'rules' 	=> 'required|string',
             'errors'	=> 'Die Radgröße wurde nicht angegeben.'
-		],
-		'radbremse' => [
+        ],
+        'radbremse' => [
             'rules'  	=> 'required|in_list[Scheibe,Trommel]',
             'errors' 	=> [
-                'required' 	=> 'Der Radbremsetyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Radbremsetyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radfederung' => [
+        ],
+        'radfederung' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Radfederung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Radfederung wurde nicht angegeben.',
+                'in_list'   => 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'fluegelflaeche' => [
+        ],
+        'fluegelflaeche' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Flügelfläche wurde nicht angegeben.',
-				'numeric'	=> 'Die Flügelfläche wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Flügelfläche wurde nicht angegeben.',
+                'numeric'   => 'Die Flügelfläche wurde nicht als Zahl angegeben.'
             ]
-		],
-		'spannweite' => [
+        ],
+        'spannweite' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Spannweite wurde nicht angegeben.',
-				'numeric'	=> 'Die Spannweite wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Spannweite wurde nicht angegeben.',
+                'numeric'   => 'Die Spannweite wurde nicht als Zahl angegeben.'
             ]
-		],
-		'variometer' => [
+        ],
+        'variometer' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Das Variometer wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Das Variometer wurde nicht angegeben.',
+                'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'tek' => [
+        ],
+        'tek' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Die TEK wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die TEK wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'pitotPosition' => [
+        ],
+        'pitotPosition' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe der Lage der Gesamtdruckabnahme enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Lage der Gesamtdruckabnahme enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'bremsklappen' => [
+        ],
+        'bremsklappen' => [
             'rules'  => 'required|string',
             'errors' => 'Die Bremsklappenart wurde nicht angegeben.'
-		],
-		'iasVG' => [
+        ],
+        'iasVG' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Für die IAS<sub>VG</sub> wurde keine Zahl angegeben.'
             ]
-		],
-		'mtow' => [
+        ],
+        'mtow' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Das MTOW wurde nicht angegeben.',
-				'numeric'	=> 'Das MTOW wurde nicht als Zahl angegeben.'
+                'required'  => 'Das MTOW wurde nicht angegeben.',
+                'numeric'   => 'Das MTOW wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMin' => [
+        ],
+        'leermasseSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMax' => [
+        ],
+        'leermasseSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => ['Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMin' => [
+        ],
+        'flugSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMax' => [
+        ],
+        'flugSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bezugspunkt' => [
+        ],
+        'bezugspunkt' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
-				'string' => 'Falsches Format für den Flugschwerpunktsbereich.'
+                'required'  => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
+                'string'    => 'Falsches Format für den Flugschwerpunktsbereich.'
             ]
-		],
-		'anstellwinkel' => [
+        ],
+        'anstellwinkel' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Längsneigung wurde nicht angegeben.',
-				'string' => 'Falsches Format für die Längsneigung.'
+                'required'  => 'Die Längsneigung wurde nicht angegeben.',
+                'string'    => 'Falsches Format für die Längsneigung.'
             ]
-		],
-	];
+        ],
+    ];
 	
-	public $flugzeugDetailsOhneFlugzeugID =[
-		'baujahr'=> [
+    public $flugzeugDetailsOhneFlugzeugID =[
+        'baujahr'=> [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Das Baujahr wurde nicht angegeben.',
-				'numeric' 	=> 'Das Baujahr ist keine Zahl.'
+                'required'  => 'Das Baujahr wurde nicht angegeben.',
+                'numeric'   => 'Das Baujahr ist keine Zahl.'
             ]
-		],
-		'seriennummer'=> [
-            'rules'  	=> 'required|string',
-            'errors' 	=> [
-                'required'	=> 'Die Seriennummer wurde nicht angegeben.',
+        ],
+        'seriennummer'=> [
+            'rules'     => 'required|string',
+            'errors'    => [
+                'required'  => 'Die Seriennummer wurde nicht angegeben.',
             ]
-		],
-		'kupplung' => [
+        ],
+        'kupplung' => [
             'rules'  	=> 'required|in_list[Bug,Schwerpunkt]',
             'errors' 	=> [
-                'required' 	=> 'Der Kupplungstyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Kupplungstyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Kupplungstyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'diffQR' => [
+        ],
+        'diffQR' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Querruderdifferenzierung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Querruderdifferenzierung wurde nicht angegeben.',
+                'in_list'   => 'Für die Querruderdifferenzierung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radgroesse' => [
+        ],
+        'radgroesse' => [
             'rules' 	=> 'required|string',
             'errors'	=> 'Die Radgröße wurde nicht angegeben.'
-		],
-		'radbremse' => [
+        ],
+        'radbremse' => [
             'rules'  	=> 'required|in_list[Scheibe,Trommel]',
             'errors' 	=> [
-                'required' 	=> 'Der Radbremsetyp wurde nicht angegeben.',
-				'in_list' 	=> 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Der Radbremsetyp wurde nicht angegeben.',
+                'in_list'   => 'Für den Radbremsetyp wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'radfederung' => [
+        ],
+        'radfederung' => [
             'rules'  	=> 'required|in_list[Ja,Nein]',
             'errors' 	=> [
-                'required' 	=> 'Die Radfederung wurde nicht angegeben.',
-				'in_list' 	=> 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
+                'required'  => 'Die Radfederung wurde nicht angegeben.',
+                'in_list'   => 'Für die Radfederung wurde eine nicht vorhandene Option gewählt.'
             ]
-		],
-		'fluegelflaeche' => [
+        ],
+        'fluegelflaeche' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Flügelfläche wurde nicht angegeben.',
-				'numeric'	=> 'Die Flügelfläche wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Flügelfläche wurde nicht angegeben.',
+                'numeric'   => 'Die Flügelfläche wurde nicht als Zahl angegeben.'
             ]
-		],
-		'spannweite' => [
+        ],
+        'spannweite' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required' 	=> 'Die Spannweite wurde nicht angegeben.',
-				'numeric'	=> 'Die Spannweite wurde nicht als Zahl angegeben.'
+                'required'  => 'Die Spannweite wurde nicht angegeben.',
+                'numeric'   => 'Die Spannweite wurde nicht als Zahl angegeben.'
             ]
-		],
-		'variometer' => [
+        ],
+        'variometer' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Das Variometer wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Das Variometer wurde nicht angegeben.',
+                'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'tek' => [
+        ],
+        'tek' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Die TEK wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die TEK wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'pitotPosition' => [
+        ],
+        'pitotPosition' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required' 	=> 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
-				'string'	=> 'Die Eingabe der Lage der Gesamtdruckabnahme enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Lage der Gesamtdruckabnahme enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		],
-		'bremsklappen' => [
+        ],
+        'bremsklappen' => [
             'rules'  => 'required|string',
             'errors' => 'Die Bremsklappenart wurde nicht angegeben.'
-		],
-		'iasVG' => [
+        ],
+        'iasVG' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Für die IAS<sub>VG</sub> wurde keine Zahl angegeben.'
             ]
-		],
-		'mtow' => [
+        ],
+        'mtow' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Das MTOW wurde nicht angegeben.',
-				'numeric'	=> 'Das MTOW wurde nicht als Zahl angegeben.'
+                'required'  => 'Das MTOW wurde nicht angegeben.',
+                'numeric'   => 'Das MTOW wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMin' => [
+        ],
+        'leermasseSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'leermasseSPMax' => [
+        ],
+        'leermasseSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => ['Der Leermasseschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMin' => [
+        ],
+        'flugSPMin' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'flugSPMax' => [
+        ],
+        'flugSPMax' => [
             'rules'  => 'permit_empty|numeric',
             'errors' => [
                 'numeric' => 'Der Flugschwerpunktsbereich wurde nicht als Zahl angegeben.'
             ]
-		],
-		'bezugspunkt' => [
+        ],
+        'bezugspunkt' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
-				'string' => 'Falsches Format für den Flugschwerpunktsbereich.'
+                'required'  => 'Der Flugschwerpunktsbereich wurde nicht angegeben.',
+                'string'    => 'Falsches Format für den Flugschwerpunktsbereich.'
             ]
-		],
-		'anstellwinkel' => [
+        ],
+        'anstellwinkel' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Längsneigung wurde nicht angegeben.',
-				'string' => 'Falsches Format für die Längsneigung.'
+                'required'  => 'Die Längsneigung wurde nicht angegeben.',
+                'string'    => 'Falsches Format für die Längsneigung.'
             ]
-		]
-	];
+        ]
+    ];
 	
-	public $musterHebelarm = [
-		'musterID' => [
+    public $musterHebelarm = [
+        'musterID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die musterID wurde nicht angegeben.',
-				'numeric' 	=> 'Die musterID ist keine Zahl.'
+                'required'  => 'Die musterID wurde nicht angegeben.',
+                'numeric'   => 'Die musterID ist keine Zahl.'
             ]
-		], 
-		'beschreibung' => [
+        ], 
+        'beschreibung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' 	=> 'Die Hebelarmbeschreibung wurde nicht angegeben.',
-				'string' 	=> 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Hebelarmbeschreibung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'hebelarm' => [
+        ], 
+        'hebelarm' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Hebelarmlänge wurde nicht angegeben.',
-				'numeric' 	=> 'Der Hebelarmlänge ist keine Zahl.'
+                'required'  => 'Die Hebelarmlänge wurde nicht angegeben.',
+                'numeric'   => 'Der Hebelarmlänge ist keine Zahl.'
             ]
-		]
-	];
-	
-	public $flugzeugHebelarm = [
-		'flugzeugID' => [
+        ]
+    ];
+
+    public $flugzeugHebelarm = [
+        'flugzeugID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die flugzeugID wurde nicht angegeben.',
-				'numeric' 	=> 'Die flugzeugID ist keine Zahl.'
+                'required'  => 'Die flugzeugID wurde nicht angegeben.',
+                'numeric'   => 'Die flugzeugID ist keine Zahl.'
             ]
-		], 
-		'beschreibung' => [
+        ], 
+        'beschreibung' => [
             'rules'  => 'required|string',
             'errors' => [
-                 'required' 	=> 'Die Hebelarmbeschreibung wurde nicht angegeben.',
-				'string' 	=> 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
+                 'required' => 'Die Hebelarmbeschreibung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'hebelarm' => [
+        ], 
+        'hebelarm' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Hebelarmlänge wurde nicht angegeben.',
-				'numeric' 	=> 'Der Hebelarmlänge ist keine Zahl.'
+                'required'  => 'Die Hebelarmlänge wurde nicht angegeben.',
+                'numeric'   => 'Der Hebelarmlänge ist keine Zahl.'
             ]
-		]
-	];
-	
-	public $hebelarmOhneMusterOderFlugzeugID = [
-		'beschreibung' => [
+        ]
+    ];
+
+    public $flugzeugHebelarmeOhneFlugzeugID = [
+        'beschreibung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' 	=> 'Die Hebelarmbeschreibung wurde nicht angegeben.',
-				'string' 	=> 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Hebelarmbeschreibung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Hebelarmbeschreibung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'hebelarm' => [
+        ], 
+        'hebelarm' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Hebelarmlänge wurde nicht angegeben.',
-				'numeric' 	=> 'Der Hebelarmlänge ist keine Zahl.'
+                'required'  => 'Die Hebelarmlänge wurde nicht angegeben.',
+                'numeric'   => 'Der Hebelarmlänge ist keine Zahl.'
             ]
-		]
-	];
-	
-	public $musterKlappe = [
-		'musterID' => [
+        ]
+    ];
+
+    public $musterKlappe = [
+        'musterID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die musterID wurde nicht angegeben.',
-				'numeric' 	=> 'Die musterID ist keine Zahl.'
+                'required'  => 'Die musterID wurde nicht angegeben.',
+                'numeric'   => 'Die musterID ist keine Zahl.'
             ]
-		], 
-		'stellungBezeichnung' => [
+        ], 
+        'stellungBezeichnung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
-				'string' => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'stellungWinkel' => [
+        ], 
+        'stellungWinkel' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
-				'numeric' 	=> 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
+                'required'  => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
+                'numeric'   => 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
             ]
-		], 
-		'neutral' => [
+        ], 
+        'neutral' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Neutralstellung ist kein Boolean.'
-		], 
-		'kreisflug' => [
+        ], 
+        'kreisflug' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Kreisflugstellung ist kein Boolean.'
-		], 
-		'iasVG' => [
+        ], 
+        'iasVG' => [
             'rules'  => 'numeric|permit_empty',
             'errors' => 'IAS<sub>VG</sub> ist keine Zahl.'
-		]
-	];
-	
-	public $flugzeugKlappe = [
-		'flugzeugID' => [
+        ]
+    ];
+
+    public $flugzeugKlappe = [
+        'flugzeugID' => [
             'rules'  	=> 'required|numeric',
             'errors' 	=> [
-                'required'	=> 'Die flugzeugID wurde nicht angegeben.',
-				'numeric' 	=> 'Die flugzeugID ist keine Zahl.'
+                'required'  => 'Die flugzeugID wurde nicht angegeben.',
+                'numeric'   => 'Die flugzeugID ist keine Zahl.'
             ]
-		], 
-		'stellungBezeichnung' => [
+        ], 
+        'stellungBezeichnung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
-				'string' => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'stellungWinkel' => [
+        ], 
+        'stellungWinkel' => [
             'rules'  => 'required|numeric',
             'errors' => [
-               'required' => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
-				'numeric' 	=> 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
+               'required'   => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
+                'numeric'   => 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
             ]
-		], 
-		'neutral' => [
+        ], 
+        'neutral' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Neutralstellung ist kein Boolean.'
-		], 
-		'kreisflug' => [
+        ], 
+        'kreisflug' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Kreisflugstellung ist kein Boolean.'
-		], 
-		'iasVG' => [
+        ], 
+        'iasVG' => [
             'rules'  => 'numeric|permit_empty',
             'errors' => 'IAS<sub>VG</sub> ist keine Zahl.'
-		]
-	];
+        ]
+    ];
 	
-	public $woelbklappeOhneMusterOderFlugzeugID = [
-		'stellungBezeichnung' => [
+    public $flugzeugKlappenOhneFlugzeugID = [
+        'stellungBezeichnung' => [
             'rules'  => 'required|string',
             'errors' => [
-                'required' => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
-				'string' => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
+                'required'  => 'Die Beschreibung der Wölbklappenstellung wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der Beschreibung der Wölbklappenstellung enthält Zeichen, die nicht gespeichert werden können.'
             ]
-		], 
-		'stellungWinkel' => [
+        ], 
+        'stellungWinkel' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
-				'numeric' 	=> 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
+                'required'  => 'Die Winkel der Wölbklappenstellung wurde nicht angegeben.',
+                'numeric'   => 'Der Winkel der Wölbklappenstellung ist keine Zahl.'
             ]
-		], 
-		'neutral' => [
+        ], 
+        'neutral' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Neutralstellung ist kein Boolean.'
-		], 
-		'kreisflug' => [
+        ], 
+        'kreisflug' => [
             'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
             'errors' => 'Kreisflugstellung ist kein Boolean.'
-		], 
-		'iasVG' => [
+        ], 
+        'iasVG' => [
             'rules'  => 'numeric|permit_empty',
             'errors' => 'IAS<sub>VG</sub> ist keine Zahl.'
-		]
-	];
-	
-	public $flugzeugWaegung = [
-		'flugzeugID' => [
+        ]
+    ];
+
+    public $flugzeugWaegung = [
+        'flugzeugID' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required'	=> 'Die flugzeugID wurde nicht angegeben.',
-				'numeric' 	=> 'Die flugzeugID ist keine Zahl.'
+                'required'  => 'Die flugzeugID wurde nicht angegeben.',
+                'numeric'   => 'Die flugzeugID ist keine Zahl.'
             ]
-		], 
-		'leermasse'=> [
+        ], 
+        'leermasse'=> [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Leermasse wurde nicht angegeben.',
-				'numeric' 	=> 'Der Leermasse ist keine Zahl.'
+                'required'  => 'Die Leermasse wurde nicht angegeben.',
+                'numeric'   => 'Der Leermasse ist keine Zahl.'
             ]
-		], 
-		'schwerpunkt' => [
+        ], 
+        'schwerpunkt' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Der Schwerpunkt wurde nicht angegeben.',
-				'numeric' 	=> 'Der Schwerpunkt ist keine Zahl.'
+                'required'  => 'Der Schwerpunkt wurde nicht angegeben.',
+                'numeric'   => 'Der Schwerpunkt ist keine Zahl.'
             ]
-		], 
-		'zuladungMin' => [
+        ], 
+        'zuladungMin' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Mindestzuladung wurde nicht angegeben.',
-				'numeric' 	=> 'Die Mindestzuladung ist keine Zahl.'
+                'required'  => 'Die Mindestzuladung wurde nicht angegeben.',
+                'numeric'   => 'Die Mindestzuladung ist keine Zahl.'
             ]
-		], 
-		'zuladungMax' => [
+        ], 
+        'zuladungMax' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Maximalzuladung wurde nicht angegeben.',
-				'numeric' 	=> 'Die Maximalzuladung ist keine Zahl.'
+                'required'  => 'Die Maximalzuladung wurde nicht angegeben.',
+                'numeric'   => 'Die Maximalzuladung ist keine Zahl.'
             ]
-		], 
-		'datum' => [
+        ], 
+        'datum' => [
             'rules'  => 'required|valid_date',
             'errors' => [
-                'required' 		=> 'Das Datum der letzten Wägung wurde nicht angegeben.',
-				'valid_date' 	=> 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
+                'required'      => 'Das Datum der letzten Wägung wurde nicht angegeben.',
+                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
             ]
-		]
-	];
-	
-	public $flugzeugWaegungOhneFlugzeugID = [
-		'leermasse'=> [
+        ]
+    ];
+
+    public $flugzeugWaegungOhneFlugzeugID = [
+        'leermasse'=> [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Leermasse wurde nicht angegeben.',
-				'numeric' 	=> 'Der Leermasse ist keine Zahl.'
+                'required'  => 'Die Leermasse wurde nicht angegeben.',
+                'numeric'   => 'Der Leermasse ist keine Zahl.'
             ]
-		], 
-		'schwerpunkt' => [
+        ], 
+        'schwerpunkt' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Der Schwerpunkt wurde nicht angegeben.',
-				'numeric' 	=> 'Der Schwerpunkt ist keine Zahl.'
+                'required'  => 'Der Schwerpunkt wurde nicht angegeben.',
+                'numeric'   => 'Der Schwerpunkt ist keine Zahl.'
             ]
-		], 
-		'zuladungMin' => [
+        ], 
+        'zuladungMin' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Mindestzuladung wurde nicht angegeben.',
-				'numeric' 	=> 'Die Mindestzuladung ist keine Zahl.'
+                'required'  => 'Die Mindestzuladung wurde nicht angegeben.',
+                'numeric'   => 'Die Mindestzuladung ist keine Zahl.'
             ]
-		], 
-		'zuladungMax' => [
+        ], 
+        'zuladungMax' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' 	=> 'Die Maximalzuladung wurde nicht angegeben.',
-				'numeric' 	=> 'Die Maximalzuladung ist keine Zahl.'
+                'required'  => 'Die Maximalzuladung wurde nicht angegeben.',
+                'numeric'   => 'Die Maximalzuladung ist keine Zahl.'
             ]
-		], 
-		'datum' => [
+        ], 
+        'datum' => [
             'rules'  => 'required|valid_date',
             'errors' => [
-                'required' 		=> 'Das Datum der letzten Wägung wurde nicht angegeben.',
-				'valid_date' 	=> 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
+                'required'      => 'Das Datum der letzten Wägung wurde nicht angegeben.',
+                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
             ]
-		]
-	];
-        
+        ]
+    ];
+
     public $pilot = [
         'vorname' => [
             'rules'  => 'required|alpha_space',
             'errors' => [
-                'required' => 'Der Vorname wurde nicht angegeben.',
-                'alpha_space' => 'Der Vorname enthält ungültige Zeichen.'
+                'required'      => 'Der Vorname wurde nicht angegeben.',
+                'alpha_space'   => 'Der Vorname enthält ungültige Zeichen.'
             ]
         ], 
         'nachname' => [
             'rules'  => 'required|alpha_space',
             'errors' => [
-                'required' => 'Der Nachname wurde nicht angegeben.',
-                'alpha_space' => 'Der Nachname enthält ungültige Zeichen.'
+                'required'      => 'Der Nachname wurde nicht angegeben.',
+                'alpha_space'   => 'Der Nachname enthält ungültige Zeichen.'
             ]
         ], 
         'spitzname' => [
@@ -869,8 +869,8 @@ class Validation
         'groesse' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Größe wurde nicht angegeben.',
-                'numeric' => 'Die Größe enthält ungültige Zeichen.'
+                'required'  => 'Die Größe wurde nicht angegeben.',
+                'numeric'   => 'Die Größe enthält ungültige Zeichen.'
             ]
         ]
     ];
@@ -879,29 +879,29 @@ class Validation
         'stundenNachSchein' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Stunden nach Schein wurden nicht angegeben.',
-                'numeric' => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
+                'required'  => 'Die Stunden nach Schein wurden nicht angegeben.',
+                'numeric'   => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
             ]
         ], 
         'geflogeneKm' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die geflogenen Kilometer wurden nicht angegeben.',
-                'numeric' => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
+                'required'  => 'Die geflogenen Kilometer wurden nicht angegeben.',
+                'numeric'   => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
             ]
         ], 
         'typenAnzahl' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
-                'numeric' => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
+                'required'  => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
+                'numeric'   => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
             ]
         ],
         'gewicht' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Das Pilotengewicht wurde nicht angegeben.',
-                'numeric' => 'Das Pilotengewicht enthält ungültige Zeichen.'
+                'required'  => 'Das Pilotengewicht wurde nicht angegeben.',
+                'numeric'   => 'Das Pilotengewicht enthält ungültige Zeichen.'
             ]
         ],
         'datum' => [
@@ -916,36 +916,36 @@ class Validation
         'pilotID' => [
             'rules'  => 'required|is_natural',
             'errors' => [
-                'required' => 'Die pilotID fehlt.',
-                'is_natural' => 'Die pilotId ist ungültig'
+                'required'      => 'Die pilotID fehlt.',
+                'is_natural'    => 'Die pilotId ist ungültig'
             ]
         ],
         'stundenNachSchein' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Stunden nach Schein wurden nicht angegeben.',
-                'numeric' => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
+                'required'  => 'Die Stunden nach Schein wurden nicht angegeben.',
+                'numeric'   => 'Die Stunden nach Schein enthalten ungültige Zeichen.'
             ]
         ], 
         'geflogeneKm' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die geflogenen Kilometer wurden nicht angegeben.',
-                'numeric' => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
+                'required'  => 'Die geflogenen Kilometer wurden nicht angegeben.',
+                'numeric'   => 'Die geflogenen Kilometer enthalten ungültige Zeichen.'
             ]
         ], 
         'typenAnzahl' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
-                'numeric' => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
+                'required'  => 'Die Anzahl der geflogenen Typen wurde nicht angegeben.',
+                'numeric'   => 'Die Anzahl der geflogenen Typen enthält ungültige Zeichen.'
             ]
         ],
         'gewicht' => [
             'rules'  => 'required|numeric',
             'errors' => [
-                'required' => 'Das Pilotengewicht wurde nicht angegeben.',
-                'numeric' => 'Das Pilotengewicht enthält ungültige Zeichen.'
+                'required'  => 'Das Pilotengewicht wurde nicht angegeben.',
+                'numeric'   => 'Das Pilotengewicht enthält ungültige Zeichen.'
             ]
         ],
         'datum' => [

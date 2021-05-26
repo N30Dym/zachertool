@@ -74,19 +74,17 @@ class Flugzeugcontroller extends Controller
         
         $datenInhalt['titel'] = $titel;
 
-            // Daten für den HeaderView aufbereiten
-        $datenHeader = [
-            "titel" => $titel
-        ];	  
+        $datenHeader['titel'] = $titel;	 
+
         
         $this->zeigeFlugzeugEingabe($datenHeader, $datenInhalt);
     }
     
-    public function flugzeugSpeichern($musterID = null)
+    public function flugzeugSpeichern()
     {
         if($this->request->getPost() != null)
         {
-            //$this->zeigeWarteSeite();
+            $this->zeigeWarteSeite();
 
             if($this->speicherFlugzeugDaten($this->request->getPost()))
             {
@@ -97,6 +95,7 @@ class Flugzeugcontroller extends Controller
             }
             else 
             {
+                echo "Jetzt wärst du zurückgeleitet worden";
                 return redirect()->back()->withInput();
             }
         }
@@ -113,7 +112,15 @@ class Flugzeugcontroller extends Controller
     
     public function flugzeugAnzeigen($flugzeugID)
     {
+        $datenInhalt = $this->ladeFlugzeugDaten($flugzeugID); 
         
+        $titel = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
+        
+        $datenInhalt['titel'] = $titel;
+                
+        $datenHeader['titel'] = $titel;
+        
+        $this->zeigeFlugzeugAnzeige($datenHeader, $datenInhalt);
     }
     
     public function flugzeugListe()
@@ -153,6 +160,12 @@ class Flugzeugcontroller extends Controller
         $flugzeugAnzeigeController->zeigeFlugzeugListe($datenHeader, $datenInhalt);
     }
     
+    protected function zeigeFlugzeugAnzeige($datenHeader, $datenInhalt)
+    {
+        $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
+        $flugzeugAnzeigeController->zeigeFlugzeugAnzeigeView($datenHeader, $datenInhalt);
+    }
+    
     protected function zeigeFlugzeugEingabe($datenHeader, $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
@@ -173,22 +186,37 @@ class Flugzeugcontroller extends Controller
     
     protected function ladeAlteDaten()
     {
-        return [
+        $alteDaten = [
             'titel'             => old('titel'),
-            'musterID'          => old('musterID') ?? "",
             'muster'            => old('muster'),
             'flugzeug'          => old('flugzeug'),
             'flugzeugDetails'   => old('flugzeugDetails'),
             'waegung'           => old('waegung'),
-            'woelbklappe'       => old('woelbklappe'),
             'hebelarm'          => old('hebelarm')
         ];
+        
+        if(old('musterID') != "" AND old('musterID') != null)
+        {
+            $alteDaten['musterID'] = old('musterID');
+        }
+        
+        if(isset(old('muster')['istWoelbklappenFlugzeug']))
+        {
+            $alteDaten['woelbklappe'] = old('woelbklappe');
+        }           
+
+        return $alteDaten;
     }
     
     protected function ladeMusterDaten($musterID)
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->ladeMusterDaten($musterID);
+    }
+    
+    protected function ladeFlugzeugDaten($flugzeugID){
+        $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
+        return $flugzeugDatenLadeController->ladeFlugzeugDaten($flugzeugID);
     }
     
     protected function musterIDVorhanden($musterID) 

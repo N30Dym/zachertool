@@ -17,7 +17,12 @@ td {
             <div class="row g-3">
                 <h3 class="m-3 text-center">Informationen zum Piloten</h3>
                 
-                <?= \Config\Services::validation()->listErrors() ?>
+                <?php $validation = \Config\Services::validation();
+                if($validation->getErrors() != null) : ?>
+                    <div class="alert alert-danger " role="alert">
+                        <?= $validation->listErrors() ?>
+                    </div>
+                <?php endif ?>
             
                 <div class="col-12 <?= isset($pilotID) ? "" : "d-none" ?>">
                      <small class="text-muted ms-5">Der Name und die Größe können nur von einem Admin geändert werden</small>

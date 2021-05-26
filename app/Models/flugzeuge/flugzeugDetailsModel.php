@@ -37,7 +37,7 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getFlugzeugDetailsDistinctVariometerEingaben()
+    public function getDistinctVariometerEingaben()
     {
         return $this->distinct()->findColumn("variometer");
     }
@@ -49,7 +49,7 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getFlugzeugDetailsDistinctTekEingaben()
+    public function getDistinctTekEingaben()
     {
         return $this->distinct()->findColumn("tek");
     }
@@ -60,7 +60,7 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getFlugzeugDetailsDistinctPitotPositionEingaben()
+    public function getDistinctPitotPositionEingaben()
     {
         return $this->distinct()->findColumn("pitotPosition");
     }
@@ -71,7 +71,7 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getFlugzeugDetailsDistinctBremsklappenEingaben()
+    public function getDistinctBremsklappenEingaben()
     {
         return $this->distinct()->findColumn("bremsklappen");
     }
@@ -82,7 +82,7 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getFlugzeugDetailsDistinctBezugspunktEingaben()
+    public function getDistinctBezugspunktEingaben()
     {
         return $this->distinct()->findColumn("bezugspunkt");
     }

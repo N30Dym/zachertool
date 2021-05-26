@@ -1,14 +1,14 @@
+<div class="col-12 text-end">
+    <a href="<?= base_url() ?>/muster/liste">
+        <button type="button" class="btn btn-success">Neues Flugzeug anlegen</button>
+    </a>
+</div>
+
 <h2 class="text-center m-3"><?= esc($titel) ?></h2>	
 <div class="row">
-    <div class="col-3">
-        <div class="sticky-top row">
-            <span class="col-3" style="height: 3rem !important"></span>
-            <span class=" ">
-                <small>Wenn es das Flugzeug noch nicht gibt, kannst du <a href="<?= base_url() ?>/flugzeuge/neu">hier</a> das Flugzeug anlegen.</small>
-            </span>
-        </div>
+    <div class="col-2">
     </div>
-    <div class="row col-6 d-flex justify-content-center">	
+    <div class="row col-8 d-flex justify-content-center">	
         <?php if($flugzeugeArray == null): ?>
             <div class="text-center">
                 Die Verbindung ist fehlgeschlagen
@@ -46,5 +46,7 @@
             </div>
         <?php endif ?>
         
+    </div>
+    <div class="col-2">
     </div>
 </div>

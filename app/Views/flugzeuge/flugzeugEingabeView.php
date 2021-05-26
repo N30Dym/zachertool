@@ -5,14 +5,20 @@
 <div class="row">
     <?= csrf_field() ?>
 
-    <?= isset($musterID) ? form_hidden('musterID', $musterID) : "" ?>   
+    <?= (isset($musterID) AND $musterID != null ) ? form_hidden('musterID', $musterID) : "" ?>   
     <?= form_hidden('titel', $titel) ?>
 
     
     <div class="col-2"></div>
         <div class="col-8">
             
-            <?= \Config\Services::validation()->listErrors() ?>
+            <?php $validation = \Config\Services::validation();
+            if($validation->getErrors() != null) : ?>
+                <div class="alert alert-danger " role="alert">
+                    <?= $validation->listErrors() ?>
+                </div>
+            <?php endif ?>
+            
             
 <!-------------------------------->
 <!-- Flugzeug- und Musterinfos  -->
@@ -26,8 +32,8 @@
                 </div>
                 <?php if(!isset($musterID)) : ?>
                     <datalist id="musterListe">
-                        <?php foreach ($musterEingaben as $muster) : ?>
-                            <option value="<?= esc($muster['musterSchreibweise']) ?>">
+                        <?php foreach ($musterEingaben as $musterDetails) : ?>
+                            <option value="<?= esc($musterDetails) ?>">
                         <?php endforeach ?>
                     </datalist>
                 <?php endif ?>
@@ -53,13 +59,13 @@
                 <div class="col-sm-1">
                 </div>
                 <div class="col-sm-4 form-check">
-                    <input name="muster[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($muster) AND $muster['istDoppelsitzer'] != "" AND $muster['istDoppelsitzer'] != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
-                    <label class="form-check-label" for="istDoppelsitzer">Doppelsitzer</label>
+                    <input name="muster[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($muster['istDoppelsitzer']) AND ($muster['istDoppelsitzer'] == "1" OR $muster['istDoppelsitzer'] == "on")) ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
+                    <label class="form-check-label">Doppelsitzer</label>
                 </div>
 
                 <div class="col-sm-5 form-check">
-                    <input name="muster[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($muster) AND $muster['istWoelbklappenFlugzeug'] != "" AND $muster['istWoelbklappenFlugzeug'] != "0") ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
-                    <label class="form-check-label" for="istWoelbklappenFlugzeug">Wölbklappenflugzeug</label>
+                    <input name="muster[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($muster['istWoelbklappenFlugzeug']) AND ($muster['istWoelbklappenFlugzeug'] == "1" OR $muster['istWoelbklappenFlugzeug'] == "on")) ? "checked" : "" ?> <?= isset($musterID) ? "onclick='return false;'" : "" ?>>
+                    <label class="form-check-label">Wölbklappenflugzeug</label>
                 </div>
 
             </div>
@@ -72,7 +78,7 @@
 
                 <div class="col-12">
                     <label class="form-label">Baujahr</label>
-                    <input name="flugzeugDetails[baujahr]" type="number" class="form-control" id="baujahr" step="1"  min="1900" max="<?= date("Y") ?>" value="<?= esc($flugzeugDetails['baujahr'] ?? "") ?>" required>
+                    <input name="flugzeugDetails[baujahr]" type="number" class="form-control" id="baujahr" step="1"  min="1900" max="<?= date('Y') ?>" value="<?= esc($flugzeugDetails['baujahr'] ?? "") ?>" required>
                 </div>
 
                 <div class="col-12">
@@ -181,7 +187,7 @@
 <!-------------------------------->
 <!--        Wölbklappen         -->
 <!-------------------------------->
-            <div class="table-responsive-sm <?= (!isset($muster) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
+            <div class="table-responsive-sm <?= (!isset($muster['istWoelbklappenFlugzeug']) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
                 <h3  class="m-4">Wölbklappen</h3>
                 <div class="col-12">
                     <small class="text-muted">Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
@@ -197,7 +203,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if(isset($woelbklappe)) : ?>
+                        <?php if(isset($woelbklappe) AND $woelbklappe != null) : ?>
                             <?php foreach($woelbklappe as $i => $woelbklappeDetails) : ?>
                                 <?php if(is_numeric($i)) : ?>
                                     <tr valign="middle" id="<?= $i ?>">
@@ -233,7 +239,7 @@
                         
                         <?php else: ?>
                             <?php for($i = 0; $i < 10; $i++) : ?>
-                                <tr valign="middle" <?php if($i>5): ?> class="JSloeschen" <?php endif ?>>
+                                <tr valign="middle" id="<?= $i ?>" <?php if($i>5): ?> class="JSloeschen" <?php endif ?>>
                                     <td class="text-center JSsichtbar d-none"><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
                                     <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control"></td>
                                     <td>
@@ -273,7 +279,7 @@
                 
             </div>
             
-            <div class="row g-3<?= (!isset($muster) OR ($muster['istWoelbklappenFlugzeug'] != "1" AND $muster['istWoelbklappenFlugzeug'] != "on")) ? "" : "d-none" ?>" id="iasVGDiv">
+            <div class="row g-3<?= (!isset($muster['istWoelbklappenFlugzeug']) OR ($muster['istWoelbklappenFlugzeug'] != "1" AND $muster['istWoelbklappenFlugzeug'] != "on")) ? "" : "d-none" ?>" id="iasVGDiv">
                 <div class="col-12 ">
                     <h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
                     <div class="col-12">
@@ -387,7 +393,7 @@
                                     </div>    
                                 </td>
                             </tr>
-                            <?php if(!(isset($muster) AND ($muster['istDoppelsitzer'] != "1" OR $muster['istDoppelsitzer'] != "on"))) : ?>
+                            <?php if(!(isset($muster['istDoppelsitzer']) AND ($muster['istDoppelsitzer'] != "1" OR $muster['istDoppelsitzer'] != "on"))) : ?>
                             <tr valign="middle" id="copilot">
                                 <td class="JSsichtbar d-none"></td>
                                 <td><input type="text" name="hebelarm[1][beschreibung]" class="form-control" value="Copilot" readonly></td>
@@ -450,7 +456,7 @@
 
                 <div class="col-12">
                     <label class="form-label">Datum der letzten Wägung</label>
-                    <input type="date" class="form-control" name="waegung[datum]" id="datumWaegung" value="<?= esc($waegung['datum'] ?? "")  ?>" required>
+                    <input type="date" class="form-control" name="waegung[datum]" max="<?= date('Y-m-d') ?>" id="datumWaegung" value="<?= esc($waegung['datum'] ?? "")  ?>" required>
                 </div>
 
                 <div class="col-12">					

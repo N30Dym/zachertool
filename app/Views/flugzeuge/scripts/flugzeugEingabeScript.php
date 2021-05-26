@@ -84,6 +84,10 @@ $(document).ready(function() {
                 maxID = $( this ).attr( 'id' );
                 maxID++;
             }
+            while(maxID <= 1)
+            {
+                maxID++;
+            }
         });
         $( '#hebelarmTabelle' ).append( '<tr valign="middle" id="' + maxID + '"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[' + maxID + '][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[' + maxID + '][hebelarm]" class="form-control" value=""><select name="hebelarm[' + maxID + '][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );
     });	
@@ -136,21 +140,13 @@ $(document).ready(function() {
         });  
     });
     
-    function neutralValueReset()
-    {
-        $( '#neutral' ).each(function(index){
-            $(this).val(index);
-            
-        });
-    }
-
             // Diese Funktion ändert die Sichtbarkeit des divs "woelklappen", je nachdem ob die "istWoelklappe"-Checkbox aktiv ist oder nicht.
             // Sie entfernt die Klasse "d-none" oder fügt sie hinzu
     $( document ).on( 'click', '#istDoppelsitzer', function()
     {
         if ($( this ).is( ':checked' ))
         {
-            $( '#pilot' ).after( '<tr valign="middle" id="copilot"><td></td><td><input type="text" name="hebelarm[][beschreibung]" class="form-control" value="Copilot" readonly></td><td><div class="input-group"><input type="number" name="hebelarm[][hebelarm]" class="form-control" required="required"><select name="hebelarm[][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );           
+            $( '#pilot' ).after( '<tr valign="middle" id="copilot"><td></td><td><input type="text" name="hebelarm[1][beschreibung]" class="form-control" value="Copilot" readonly></td><td><div class="input-group"><input type="number" name="hebelarm[1][hebelarm]" class="form-control" required="required"><select name="hebelarm[1][vorOderHinter]" class="form-select input-group-text"><option value="hinter">mm h. BP</option><option value="vor">mm v. BP</option></select></div></td></tr>' );           
         }
         else 
         {

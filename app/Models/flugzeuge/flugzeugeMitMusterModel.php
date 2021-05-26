@@ -31,4 +31,24 @@ class flugzeugeMitMusterModel extends Model {
     {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
     }
+    
+    public function getFlugzeugIDNachKennungKlarnameUndZusatz($kennung, $musterKlarname, $musterZusatz)
+    {
+        return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();
+    }
+    
+    public function getMusterIDNachKlarnameUndZusatz($musterKlarname, $musterZusatz)
+    {
+        return $this->select('musterID')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();
+    }
+    
+    public function getMusterIDNachMusterIDUndZusatz($musterID, $musterZusatz)
+    {
+        return $this->where(['musterID' => $musterID, 'musterZusatz' => $musterZusatz])->first();
+    }
+    
+    public function getMusterNachFlugzeugID($flugzeugID)
+    {
+        return $this->where('flugzeugID', $flugzeugID)->first();
+    }
 }

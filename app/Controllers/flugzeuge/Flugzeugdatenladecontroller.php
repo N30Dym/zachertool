@@ -6,6 +6,7 @@ use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, m
 use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel,  flugzeugeMitMusterModel};
 use App\Models\protokolle\protokolleModel;
 
+
 /**
  * Description of Flugzeugdatenladecontroller
  *
@@ -22,12 +23,14 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     
     protected function ladeMusterDaten($musterID)
     {
-        $musterModel = new musterModel();
+        $musterModel            = new musterModel();
+        $musterDetailsModel     = new musterDetailsModel();
+        $musterHebelarmeModel   = new musterHebelarmeModel();      
         
         $temporaeresMusterDatenArray = [
             'musterID'          => $musterID,
-            'flugzeugDetails'   => $this->ladeMusterDetails($musterID),
-            'hebelarm'          => $this->ladeHebelarmDaten($musterID)
+            'flugzeugDetails'   => $musterDetailsModel->getMusterDetailsNachMusterID($musterID),
+            'hebelarm'          => $musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID)
         ];
         
         $muster = $musterModel->getMusterNachID($musterID);
@@ -36,19 +39,57 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         if($muster['istWoelbklappenFlugzeug'] == 1)
         {
-            $temporaeresMusterDatenArray['woelbklappe'] = $this->ladeWoelbklappenDaten($musterID);
+            $temporaeresMusterDatenArray['woelbklappe'] = $this->ladeMusterWoelbklappenDaten($musterID);
         }
  
         return $temporaeresMusterDatenArray;
     }
     
-    protected function ladeMusterDetails($musterID) 
-    {
-        $musterDetailsModel = new musterDetailsModel();             
-        return $musterDetailsModel->getMusterDetailsNachMusterID($musterID);
+    protected function ladeFlugzeugDaten($flugzeugID)
+    {      
+        $flugzeugDetailsModel       = new flugzeugDetailsModel();
+        $flugzeugHebelarmeModel     = new flugzeugHebelarmeModel(); 
+        $flugzeugWaegungModel       = new flugzeugWaegungModel();
+        
+        $temporaeresFlugzeugDatenArray = [
+            'flugzeugID'        => $flugzeugID,
+            'flugzeugDetails'   => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
+            'hebelarm'          => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
+            'waegung'           => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID)
+        ];
+
+        $temporaeresFlugzeugDatenArray += $this->ladeFlugzeugUndMuster($flugzeugID);
+        
+        if($temporaeresFlugzeugDatenArray['muster']['istWoelbklappenFlugzeug'] == 1)
+        {
+            $temporaeresFlugzeugDatenArray['woelbklappe'] = $this->ladeFlugzeugWoelbklappenDaten($flugzeugID);
+        }
+ 
+        return $temporaeresFlugzeugDatenArray;
     }
     
-    protected function ladeWoelbklappenDaten($musterID)
+    protected function ladeFlugzeugUndMuster($flugzeugID)
+    {
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();      
+        $flugzeugMitMuster          = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
+        
+        $rueckgabeArray             = [];
+        
+        $rueckgabeArray['muster']['musterID']                   = $flugzeugMitMuster['musterID'];
+        $rueckgabeArray['muster']['musterSchreibweise']         = $flugzeugMitMuster['musterSchreibweise'];
+        $rueckgabeArray['muster']['musterZusatz']               = $flugzeugMitMuster['musterZusatz'];
+        $rueckgabeArray['muster']['musterKlarname']             = $flugzeugMitMuster['musterKlarname'];
+        $rueckgabeArray['muster']['istDoppelsitzer']            = $flugzeugMitMuster['istDoppelsitzer'];
+        $rueckgabeArray['muster']['istWoelbklappenFlugzeug']    = $flugzeugMitMuster['istWoelbklappenFlugzeug'];
+        
+        $rueckgabeArray['flugzeug']['kennung']                  = $flugzeugMitMuster['kennung'];
+        $rueckgabeArray['flugzeug']['geaendertAm']              = $flugzeugMitMuster['geaendertAm'];
+        $rueckgabeArray['flugzeug']['musterID']                 = $flugzeugMitMuster['musterID'];
+        
+        return $rueckgabeArray;
+    }
+    
+    protected function ladeMusterWoelbklappenDaten($musterID)
     {
         $musterKlappenModel     = new musterKlappenModel();
         $musterKlappen          = $musterKlappenModel->getMusterKlappenNachMusterID($musterID);
@@ -98,10 +139,60 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         return $musterKlappen;
     }
     
-    protected function ladeHebelarmDaten($musterID) 
+    protected function ladeFlugzeugWoelbklappenDaten($flugzeugID)
     {
-        $musterHebelarmeModel = new musterHebelarmeModel();      
-        return $musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID);	
+        $flugzeugKlappenModel   = new flugzeugKlappenModel();
+        $flugzeugKlappen        = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
+               
+        $pruefeObAlleStellungBezeichnungNumerisch   = true;
+        $pruefeObAlleStellungWinkelVorhanden        = true;
+
+        foreach($flugzeugKlappen as $flugzeugKlappe) 			
+        {
+            if(!is_numeric($flugzeugKlappe['stellungBezeichnung']))
+            {
+                $pruefeObAlleStellungBezeichnungNumerisch = false;
+            }
+            
+            if($flugzeugKlappe['stellungWinkel'] == "")
+            {
+                $pruefeObAlleStellungWinkelVorhanden = false;
+            }           
+        }
+        
+        if($pruefeObAlleStellungBezeichnungNumerisch)
+        {
+                // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
+            array_sort_by_multiple_keys($flugzeugKlappen, ['stellungBezeichnung' => SORT_ASC]);
+        }
+        
+        else if($pruefeObAlleStellungWinkelVorhanden)
+        {
+                // Rückgabewert von array_sort_by_multiple_keys ist "true", wenn es geklappt hat und "false", wenn nicht
+            array_sort_by_multiple_keys($flugzeugKlappen, ['stellungWinkel' => SORT_ASC]);
+        }
+        
+        $rueckgabeArray = [];
+        
+        foreach($flugzeugKlappen as $flugzeugKlappe) 			
+        {
+            $rueckgabeArray[$flugzeugKlappe['id']]['stellungBezeichnung']   = $flugzeugKlappe['stellungBezeichnung'];
+            $rueckgabeArray[$flugzeugKlappe['id']]['stellungWinkel']        = $flugzeugKlappe['stellungWinkel'];
+            if($flugzeugKlappe['neutral'] == "1")
+            {
+                $rueckgabeArray['neutral']                              = $flugzeugKlappe['id'];
+                $rueckgabeArray[$flugzeugKlappe['id']]['iasVGNeutral']  = $flugzeugKlappe['iasVG'];
+            }
+            
+            if($flugzeugKlappe['kreisflug'] == "1")
+            {
+                $rueckgabeArray['kreisflug']                                = $flugzeugKlappe['id'];
+                $rueckgabeArray[$flugzeugKlappe['id']]['iasVGKreisflug']    = $flugzeugKlappe['iasVG'];
+            }
+            
+        }
+        
+        return $rueckgabeArray;
     }
     
         /**
@@ -115,12 +206,12 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         $musterModel            = new musterModel();
         
         return [
-            "musterEingaben"            => $musterModel->getSichtbareMuster(),
-            "variometerEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctVariometerEingaben(),
-            "tekEingaben" 		=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctTekEingaben(),
-            "pitotPositionEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctPitotPositionEingaben(),
-            "bremsklappenEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctBremsklappenEingaben(),
-            "bezugspunktEingaben" 	=> $flugzeugDetailsModel->getFlugzeugDetailsDistinctBezugspunktEingaben(),            
+            "musterEingaben"        => $musterModel->getDistinctSichtbareMusterSchreibweisen(),
+            "variometerEingaben"    => $flugzeugDetailsModel->getDistinctVariometerEingaben(),
+            "tekEingaben"           => $flugzeugDetailsModel->getDistinctTekEingaben(),
+            "pitotPositionEingaben" => $flugzeugDetailsModel->getDistinctPitotPositionEingaben(),
+            "bremsklappenEingaben"  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben(),
+            "bezugspunktEingaben"   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben(),            
         ];
     
     }   

@@ -28,7 +28,19 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugWaegungNachFlugzeugID($flugzeugID)
     {			
-        return($this->where("flugzeugID", $flugzeugID)->first());
+        return($this->where('flugzeugID', $flugzeugID)->first());
+    }
+    
+        /**
+        * Diese Funktion ruft nur die Flugzeugdetails mit
+        * der jeweiligen flugzeugID auf
+        *
+        * @param  mix $id int oder string
+        * @return array
+        */
+    public function getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID)
+    {			
+        return($this->where('flugzeugID', $flugzeugID)->findAll());
     }
 
         /**
@@ -39,7 +51,7 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugDetailsDistinctVariometerEingaben()
     {
-        return $this->distinct()->findColumn("variometer");
+        return $this->distinct()->findColumn('variometer');
     }
 
 
@@ -51,7 +63,7 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugDetailsDistinctTekEingaben()
     {
-        return $this->distinct()->findColumn("tek");
+        return $this->distinct()->findColumn('tek');
     }
 
         /**
@@ -62,7 +74,7 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugDetailsDistinctPitotPositionEingaben()
     {
-        return $this->distinct()->findColumn("pitotPosition");
+        return $this->distinct()->findColumn('pitotPosition');
     }
 
         /**
@@ -73,7 +85,7 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugDetailsDistinctBremsklappenEingaben()
     {
-        return $this->distinct()->findColumn("bremsklappen");
+        return $this->distinct()->findColumn('bremsklappen');
     }
 
         /**
@@ -84,6 +96,6 @@ class flugzeugWaegungModel extends Model
         */
     public function getFlugzeugDetailsDistinctBezugspunktEingaben()
     {
-        return $this->distinct()->findColumn("bezugspunkt");
+        return $this->distinct()->findColumn('bezugspunkt');
     }
 }

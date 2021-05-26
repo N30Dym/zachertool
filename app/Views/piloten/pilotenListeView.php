@@ -1,14 +1,15 @@
+<div class="col-12 text-end">
+    <a href="<?= base_url() ?>/piloten/neu">
+        <button type="button" class="btn btn-success">Neuen Piloten anlegen</button>
+    </a>
+</div>
+
 <h2 class="text-center m-3"><?= esc($titel) ?></h2>	
 <div class="row">
-    <div class="col-3">
-        <div class="sticky-top row">
-            <span class="col-3" style="height: 3rem !important"></span>
-            <span class=" ">
-                <small>Wenn es den Piloten noch nicht gibt, kannst du <a href="<?= base_url() ?>/piloten/neu">hier</a> den Piloten anlegen.</small>
-            </span>
-        </div>
+    <div class="col-2">
+      
     </div>
-    <div class="row col-6 d-flex justify-content-center">	
+    <div class="row col-8 d-flex justify-content-center">	
         <?php if($pilotenArray == null): ?>
             <div class="text-center">
                 Die Verbindung ist fehlgeschlagen
@@ -26,6 +27,7 @@
                             <th>Vorname</th>
                             <th>Spitzname</th>
                             <th>Nachname</th>
+                            <th>Akaflieg</th>
                             <th></th>                 
                         </tr>
                     </thead>
@@ -35,6 +37,7 @@
                             <td><?= esc($pilot['vorname']) ?></td>
                             <td><?= $pilot['spitzname'] !== "" ? '<b>"'. $pilot['spitzname'] . '"</b>' : "" ?></td>
                             <td><?= esc($pilot['nachname']) ?></td>
+                            <td><?= esc($pilot['akaflieg']) ?></td>
                             <td>
                                 <a href="<?= base_url() ?>/piloten/anzeigen/<?= esc($pilot["id"]) ?>">
                                     <button class="btn btn-sm btn-secondary">Anzeigen</button>
@@ -46,5 +49,8 @@
             </div>
         <?php endif ?>
         
+    </div>
+    <div class="col-23">
+      
     </div>
 </div>

@@ -17,4 +17,9 @@ class flugzeugKlappenModel extends Model
     protected $validationRules 	= 'flugzeugKlappe';
 
     protected $allowedFields 	= ['flugzeugID', 'stellungBezeichnung', 'stellungWinkel', 'neutral', 'kreisflug', 'iasVG'];
+    
+    public function getKlappenNachFlugzeugID($flugzeugID)
+    {
+        return $this->where('flugzeugID', $flugzeugID)->findAll();
+    }
 }

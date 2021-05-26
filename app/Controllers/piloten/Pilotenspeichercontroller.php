@@ -142,8 +142,8 @@ class Pilotenspeichercontroller extends Pilotencontroller
             // Pilot bereits vorhanden
         $session = session();
         $session->setFlashdata('nachricht', 'Pilot schon vorhanden');
-        $session->setFlashdata('link', '/zachern-dev/');
-        header('Location: /zachern-dev/nachricht');
+        $session->setFlashdata('link', base_url());
+        header('Location: '. base_url() .'/nachricht');
         exit;
     }        
 }

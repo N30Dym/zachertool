@@ -35,7 +35,7 @@
                     <?php foreach($pilotenArray as $pilot) : ?>
                         <tr class="text-center pilot">
                             <td><?= esc($pilot['vorname']) ?></td>
-                            <td><?= $pilot['spitzname'] !== "" ? '<b>"'. $pilot['spitzname'] . '"</b>' : "" ?></td>
+                            <td><b><?= $pilot['spitzname'] !== "" ? '"'. $pilot['spitzname'] . '"' : "" ?></b></td>
                             <td><?= esc($pilot['nachname']) ?></td>
                             <td><?= esc($pilot['akaflieg']) ?></td>
                             <td>

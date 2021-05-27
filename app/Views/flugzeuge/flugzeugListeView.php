@@ -1,10 +1,10 @@
-<div class="col-12 text-end">
+<div class="col-12 text-end mt-3">
     <a href="<?= base_url() ?>/muster/liste">
         <button type="button" class="btn btn-success">Neues Flugzeug anlegen</button>
     </a>
 </div>
 
-<h2 class="text-center m-3"><?= esc($titel) ?></h2>	
+<h2 class="text-center m-4"><?= esc($titel) ?></h2>	
 <div class="row">
     <div class="col-lg-2">
     </div>

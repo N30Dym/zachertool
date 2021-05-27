@@ -5,42 +5,44 @@
 <div class="row">
     <div class="col-sm-1">
     </div>
-    <div class="col-lg-10 mt-3 border rounded shadow p-4">
+    <div class="col-lg-10 mt-3">
         <?php if (isset($protokolleArray[0])) : ?>
             
                 <?php if($protokolleArray == null) : ?>
                     Keine Protokolle gefunden
                 <?php else : ?>
+                    
+                    <div class="table-responsive-lg">
+                        <table class="table table-light table-striped table-hover border rounded">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Datum</th>
+                                    <th>Flugzeugmuster</th>
+                                    <th>Pilot</th>
+                                    <th>Begleiter</th>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <?php foreach($protokolleArray as $protokoll) : ?>
 
-                    <table class="table table-striped table-hover text-center">
-                        
-                        <tr>
-                            <th>Datum</th>
-                            <th>Flugzeugmuster</th>
-                            <th>Pilot</th>
-                            <th>Begleiter</th>
-                            <th>Anzeigen</th>
-                            <th>Bearbeiten</th>
-                        </tr>
+                                <tr class="text-center">
+                                    <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
+                                    <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
+                                    <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
+                                    <td>
+                                    <?php if($protokoll['copilotID'] != "") : ?>
+                                        <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
+                                    <?php endif ?>
+                                    </td>
+                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                    <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten <?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                </tr>
 
-                        <?php foreach($protokolleArray as $protokoll) : ?>
+                            <?php endforeach ?>  
 
-                            <tr>
-                                <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
-                                <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
-                                <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
-                                <td>
-                                <?php if($protokoll['copilotID'] != "") : ?>
-                                    <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
-                                <?php endif ?>
-                                </td>
-                                <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
-                                <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success"><?= $protokoll['id'] ?> &raquo;</button></a></td>
-                            </tr>
-
-                        <?php endforeach ?>  
-                            
-                    </table>
+                        </table>
+                    </div>
                     
                 <?php endif ?>
                     
@@ -52,37 +54,39 @@
                     
                 <?php foreach($protokolleArray as $jahr => $protokolleProJahr) : ?>
                     
-                    <h3 class="m-3">Protokolle aus dem Jahr <?= $jahr ?></h3>
+                    <h2 class="m-3 ms-5 mt-5">Protokolle aus dem Jahr <?= $jahr ?></h2>
                     
-                    <table class="table table-striped table-hover text-center">
-                       
-                        <tr>
-                            <th>Datum</th>
-                            <th>Flugzeugmuster</th>
-                            <th>Pilot</th>
-                            <th>Begleiter</th>
-                            <th>Anzeigen</th>
-                        </tr>
-                       
-                        <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
-                        
-                            <tr>
-                                <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
-                                <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
-                                <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
-                                <td>
-                                <?php if($protokoll['copilotID'] != "") : ?>
-                                    <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
-                                <?php endif ?>
-                                </td>
-                                <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary"><?= $protokoll['id'] ?> &raquo;</button></a></td>
-                                <td></td>
-                            </tr>
-                            
-                        <?php endforeach ?>  
-                            
-                    </table>
-                
+                    <div class="table-responsive-lg">
+                        <table class="table table-light table-striped table-hover border rounded">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Datum</th>
+                                    <th>Flugzeugmuster</th>
+                                    <th>Pilot</th>
+                                    <th>Begleiter</th>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
+
+                                <tr class="text-center">
+                                    <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
+                                    <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
+                                    <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
+                                    <td>
+                                    <?php if($protokoll['copilotID'] != "") : ?>
+                                        <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
+                                    <?php endif ?>
+                                    </td>
+                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                    <td></td>
+                                </tr>
+
+                            <?php endforeach ?>  
+
+                        </table>
+                    </div>
+                    
                 <?php endforeach ?>   
             <?php endif ?> 
         <?php endif?>

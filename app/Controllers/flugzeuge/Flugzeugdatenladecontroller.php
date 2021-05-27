@@ -3,7 +3,7 @@
 namespace App\Controllers\flugzeuge;
 
 use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, musterKlappenModel };
-use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel,  flugzeugeMitMusterModel};
+use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel,  flugzeugeMitMusterModel, flugzeugeModel };
 use App\Models\protokolle\protokolleModel;
 
 
@@ -220,6 +220,12 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     {
         $musterModel = new musterModel();
         return $musterModel->getMusterNachID($musterID);
+    }
+    
+    protected function pruefeFlugzeugVorhanden($flugzeugID)
+    {
+        $flugzeugeModel = new flugzeugeModel();
+        return $flugzeugeModel->getFlugzeugeNachID($flugzeugID);
     }
     
     protected function ladeSichtbareFlugzeugeMitProtokollAnzahl()

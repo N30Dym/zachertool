@@ -26,7 +26,7 @@
                             <th>Kennzeichen</th>
                             <th>Flugzeugmuster</th>
                             <th>Anazhl Protokolle</th>
-                            <th></th>                 
+                            <td></td>                 
                         </tr>
                     </thead>
 

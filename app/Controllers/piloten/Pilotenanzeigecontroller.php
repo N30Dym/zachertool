@@ -18,7 +18,7 @@ class Pilotenanzeigecontroller extends Pilotencontroller
     protected function zeigePilotenEingabeView($datenHeader, $datenInhalt)
     {
         echo view('templates/headerView', $datenHeader);
-        echo view('piloten/scripts/pilotenListeScript');
+        echo view('piloten/scripts/pilotenEingabeScript');
         echo view('templates/navbarView');
         echo view('piloten/pilotenEingabeView', $datenInhalt);
         echo view('templates/footerView');

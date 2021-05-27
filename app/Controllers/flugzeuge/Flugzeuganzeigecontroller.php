@@ -44,6 +44,15 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller {
         echo view('templates/footerView');
     }
     
+    protected function zeigeFlugzeugBearbeitenView($datenHeader, $datenInhalt)
+    {
+        echo view('templates/headerView',  $datenHeader);
+        echo view('flugzeuge/scripts/flugzeugEingabeScript');
+        echo view('templates/navbarView');
+        echo view('flugzeuge/flugzeugEingabeView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
     protected function zeigeWarteView()
     {
         echo view('templates/headerView');

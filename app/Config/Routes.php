@@ -50,6 +50,7 @@ $routes->get('piloten/speichern', 'piloten\Pilotencontroller::pilotSpeichern');
 $routes->get('flugzeuge/', 'flugzeuge\Flugzeugcontroller::index');
 $routes->get('flugzeuge/neu/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugNeu/$1');
 $routes->get('flugzeuge/neu', 'flugzeuge\Flugzeugcontroller::flugzeugNeu');
+$routes->get('flugzeuge/bearbeiten/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugBearbeiten/$1');
 $routes->get('muster/liste', 'flugzeuge\Flugzeugcontroller::musterListe');
 $routes->get('flugzeuge/liste', 'flugzeuge\Flugzeugcontroller::flugzeugListe');
 $routes->match(['get', 'post'], 'flugzeuge/speichern', 'flugzeuge\Flugzeugcontroller::flugzeugSpeichern');

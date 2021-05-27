@@ -183,7 +183,7 @@ $(document).ready(function() {
 </script>
 
 
-<script type="text/css">
+<style type="text/css">
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -199,4 +199,4 @@ input[type=number] {
 label {
 	margin-left: 0.5rem;
 }
-</script>
+</style>

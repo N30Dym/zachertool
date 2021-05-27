@@ -9,7 +9,9 @@
 
         <input type="hidden" name="flugzeugID" value="<?= $flugzeugID ?>"> 
         <button type="submit" class="btn btn btn-success" formaction="<?= base_url() ?>/protokolle/index">Protokoll mit diesem Flugzeug anlegen</button>
-        <button type="button" class="btn btn btn-success" formaction="<?= base_url() ?>/flugzeuge/bearbeiten/<?= esc($flugzeugID) ?>">Daten hinzufügen</button>
+        <a href="<?= base_url() ?>/flugzeuge/bearbeiten/<?= esc($flugzeugID) ?>">
+            <button type="button" class="btn btn btn-success">Waegung hinzufügen</button>
+        </a>
         <button type="submit" class="btn btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>
         <button type="submit" class="btn btn btn-danger d-none" formaction="<?= base_url() ?>/damin/flugzeuge/<?= $flugzeugID ?>">Bearbeiten</button>
     </div>
@@ -114,7 +116,7 @@
             <div class="table-responsive">           
                 <table class="table">
                     <tr>
-                        <td><?= $flugzeugDetails['iasVG'] ?></td>
+                        <td><?= $flugzeugDetails['iasVG'] ?> km/h</td>
                     </tr>
                 </table>
             </div>
@@ -189,7 +191,7 @@
 
                 <?php foreach($waegung as $waegungDetails) : ?>
                     <tr class="text-center"> 
-                        <td><b><?= $waegungDetails['datum'] ?></b></td>
+                        <td><b><?= date('d.m.Y', strtotime($waegungDetails['datum'])) ?></b></td>
                         <td><?= $waegungDetails['leermasse'] ?> kg</td>
                         <td><?= $waegungDetails['schwerpunkt'] ?> mm h. BP</td>
                         <td><?= $waegungDetails['zuladungMin'] ?> kg</td>

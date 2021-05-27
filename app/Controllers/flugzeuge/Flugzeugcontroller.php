@@ -107,11 +107,29 @@ class Flugzeugcontroller extends Controller
     
     public function flugzeugBearbeiten($flugzeugID)
     {
+        if(!$this->flugzeugIDVorhanden($flugzeugID))
+        {
+            return redirect()->to(base_url());
+        }
         
+        $datenInhalt = $this->ladeFlugzeugDaten($flugzeugID); 
+        
+        $titel = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
+        
+        $datenInhalt['titel'] = $titel;
+                
+        $datenHeader['titel'] = $titel;
+        
+        $this->zeigeFlugzeugBearbeiten($datenHeader, $datenInhalt);
     }
     
     public function flugzeugAnzeigen($flugzeugID)
     {
+        if(!$this->flugzeugIDVorhanden($flugzeugID))
+        {
+            return redirect()->to(base_url());
+        }
+        
         $datenInhalt = $this->ladeFlugzeugDaten($flugzeugID); 
         
         $titel = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
@@ -172,6 +190,12 @@ class Flugzeugcontroller extends Controller
         $flugzeugAnzeigeController->zeigeFlugzeugEingabeView($datenHeader, $datenInhalt);
     }
     
+    protected function zeigeFlugzeugBearbeiten($datenHeader, $datenInhalt)
+    {
+        $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
+        $flugzeugAnzeigeController->zeigeFlugzeugBearbeitenView($datenHeader, $datenInhalt);
+    }
+    
     protected function zeigeWarteSeite()
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
@@ -223,6 +247,12 @@ class Flugzeugcontroller extends Controller
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->pruefeMusterVorhanden($musterID);
+    }
+    
+    protected function flugzeugIDVorhanden($flugzeugID)
+    {
+        $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
+        return $flugzeugDatenLadeController->pruefeFlugzeugVorhanden($flugzeugID);
     }
     
     protected function ladeMusterDetails($musterID) 

@@ -12,9 +12,9 @@ class flugzeugWaegungModel extends Model
          * Datenbank zachern_flugzeuge auf die 
          * Tabelle flugzeug_waegung
          */
-    protected $DBGroup 			= 'flugzeugeDB';
-    protected $table      		= 'flugzeug_waegung';
-    protected $primaryKey 		= 'id';
+    protected $DBGroup          = 'flugzeugeDB';
+    protected $table            = 'flugzeug_waegung';
+    protected $primaryKey       = 'id';
     protected $validationRules 	= 'flugzeugWaegung';
 
     protected $allowedFields 	= ['flugzeugID', 'leermasse', 'schwerpunkt', 'zuladungMin', 'zuladungMax', 'datum'];
@@ -40,7 +40,7 @@ class flugzeugWaegungModel extends Model
         */
     public function getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID)
     {			
-        return($this->where('flugzeugID', $flugzeugID)->findAll());
+        return($this->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll());
     }
 
         /**

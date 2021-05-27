@@ -14,6 +14,11 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
 {
     protected function speicherFlugzeugDaten($postDaten) 
     {
+        if(isset($postDaten['flugzeugID']))
+        {
+            return $this->speicherWaegungDaten($postDaten);
+        }
+        
         $musterID = $postDaten['musterID'] ?? null;
         
             // checken ob Flugzeug oder Muster schon vorhanden       
@@ -47,6 +52,20 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
             // Flugzeug mit musterID speichern
         return $this->speicherFlugzeug($zuSpeicherndeDaten, $musterID);  
+    }
+    
+    protected function speicherWaegungDaten($postDaten)
+    {
+        $zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'] = $postDaten['waegung'];
+        
+        if(!$this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
+        {
+            return false;
+        }
+        
+        $flugzeugWaegungOhneFlugzeugID = $zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'];
+        
+        return $this->speicherFlugzeugWaegung($flugzeugWaegungOhneFlugzeugID, $postDaten['flugzeugID']);
     }
     
     protected function flugzeugVorhanden($postDaten)
@@ -284,7 +303,16 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
         return true;
     }
-
+    
+    protected function speicherFlugzeugWaegung($flugzeugWaegungOhneFlugzeugID, $flugzeugID)
+    {
+        $flugzeugWaegungModel                       = new flugzeugWaegungModel();  
+        
+        $flugzeugWaegungMitFlugzeugID               = $flugzeugWaegungOhneFlugzeugID; 
+        $flugzeugWaegungMitFlugzeugID['flugzeugID'] = $flugzeugID;
+        
+        return $flugzeugWaegungModel->insert($flugzeugWaegungMitFlugzeugID);
+    }
 
     protected function meldeFlugzeugVorhanden()
     {

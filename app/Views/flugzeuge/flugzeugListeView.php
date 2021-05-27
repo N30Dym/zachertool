@@ -6,9 +6,9 @@
 
 <h2 class="text-center m-3"><?= esc($titel) ?></h2>	
 <div class="row">
-    <div class="col-2">
+    <div class="col-lg-2">
     </div>
-    <div class="row col-8 d-flex justify-content-center">	
+    <div class="row col-lg-8 d-flex justify-content-center">	
         <?php if($flugzeugeArray == null): ?>
             <div class="text-center">
                 Die Verbindung ist fehlgeschlagen
@@ -19,7 +19,7 @@
                 <br>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 table-responsive-md">
                 <table id="flugzeugAuswahl" class="table table-light table-striped table-hover border rounded">
                     <thead>
                         <tr class="text-center">
@@ -47,6 +47,6 @@
         <?php endif ?>
         
     </div>
-    <div class="col-2">
+    <div class="col-lg-2">
     </div>
 </div>

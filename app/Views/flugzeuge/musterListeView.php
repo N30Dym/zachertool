@@ -23,13 +23,15 @@
             <table id="musterAuswahl" class="table table-light table-striped table-hover border">
 
                 <?php foreach($muster as $muster_item) : ?>
-                    <tr class="text-center">
+                        
+                    <tr class="text-center" style="cursor:pointer" onclick="window.location='<?= base_url() ?>/flugzeuge/neu/<?= esc($muster_item["id"]) ?>'">
                         <td>
                             <a href="<?= base_url() ?>/flugzeuge/neu/<?= esc($muster_item["id"]) ?>">
                                 <?= esc($muster_item["musterSchreibweise"]) ?><?= esc($muster_item["musterZusatz"]) ?>
                             </a>
                         </td>
                     </tr>
+       
                 <?php endforeach ?>
             <?php endif ?>
         </table>

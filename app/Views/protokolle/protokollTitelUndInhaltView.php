@@ -1,16 +1,23 @@
 
 
 <!---------------------------------------->   
-<!--        Titel und <form>            --> 
+<!--              Titel                 --> 
 <!----------------------------------------> 
     <div class="col-sm-1">
     </div>
     
     <div class="col-lg-10">
-
-        <h3 class="mb-0 mt-3"><?= $_SESSION['aktuellesKapitel'] . ". " . $_SESSION['kapitelBezeichnungen'][$_SESSION['aktuellesKapitel']] ?></h3>
         
-        <form class="needs-validation" method="post" ><!--  novalidate="" nur zum testen!! -->       
+        <?php if(isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['aktuellesKapitel']])) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?php foreach($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['aktuellesKapitel']] as $fehlerMeldung): ?>
+                    <?= $fehlerMeldung ?>
+                <?php endforeach ?>
+            </div>
+        <?php endif ?>
+
+        <h3 class="mb-0 mt-3"><?= $_SESSION['protokoll']['aktuellesKapitel'] . ". " . $_SESSION['protokoll']['kapitelBezeichnungen'][$_SESSION['protokoll']['aktuellesKapitel']] ?></h3>
+              
         
 <!---------------------------------------->   
 <!--            Inhalt                  --> 

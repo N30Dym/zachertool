@@ -3,13 +3,13 @@
            <div class="col-3">
            </div>
            <div class="col-6">
-               <?php if(isset($_SESSION['kapitelNummern'])) : ?>
+               <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>
                    <div class="d-flex row">
                        <div class="input-group mb-3">
                            <select id="kapitelAuswahl" class="form-select">
                                <option value="1" selected>1 - Informationen zum Protokoll</option>
-                               <?php foreach($_SESSION['kapitelNummern'] as $kapitelNummer) : ?>
-                                   <option value="<?= esc($kapitelNummer) ?>"><?= esc($kapitelNummer) . " - " . esc($_SESSION['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
+                               <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
+                                   <option value="<?= esc($kapitelNummer) ?>"><?= esc($kapitelNummer) . " - " . esc($_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
                                <?php endforeach ?>
                            </select>
                            <button type="submit" id="kapitelGo" class="btn btn-success" formaction="">Go!</botton>

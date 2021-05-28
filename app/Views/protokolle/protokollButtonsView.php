@@ -2,23 +2,23 @@
 
 <h2 class="text-center m-4"><?= $title ?></h2>	
 
+<form method="post" class="needs-validation">
+
 <div class="row g-2">
 <!---------------------------------------->   
 <!--    Zurück und Speichern Buttons    --> 
 <!---------------------------------------->   
-    <div class="col-sm-6">
-    </div>
-    <div class="col-lg-2 ">
-        <a href="<?= base_url() ?>/protokolle/abbrechen">
-            <input type="button" class="btn btn-danger col-12" formaction="" value="Abbrechen"></button>
+
+    <div class="col-lg-12 p-2 text-end">
+        <a href="<?= base_url() ?>">
+            <input type="button" class="btn btn-danger" value="Abbrechen"></button>
         </a>
-    </div>
-    <div class="col-lg-3">
-        <a href="<?= base_url() ?>/protokolle/speichern">
-            <input type="button" class="btn btn-success col-12" formaction="" value="Speichern und Zurück"></button>
-        </a>
-    </div>
-    <div class="col-sm-1">
+
+        <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>
+
+            <input type="submit" class="btn btn-success" formaction="<?= base_url() ?>/protokolle/speichern" value="Speichern und Zurück"></button>
+       
+        <?php endif ?>
     </div>
 	
 <!-- Hier folgt der Inhalt der Seite -->

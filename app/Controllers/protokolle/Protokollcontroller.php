@@ -3,11 +3,11 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller };
+use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller };
 
 use App\Models\protokolllayout\protokollTypenModel;
 
-if(session_status() == PHP_SESSION_NONE){
+if(session_status() !== PHP_SESSION_ACTIVE){
     $session = session();
 }
 
@@ -31,16 +31,14 @@ class Protokollcontroller extends Controller
         */
     public function index($protokollSpeicherID = null) // Leeres Protokoll
     {
-        $_SESSION['aktuellesKapitel']                   = 0;
-        $_SESSION['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        $_SESSION['protokoll']['aktuellesKapitel']                   = 0;
+        $_SESSION['protokoll']['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
         
             // Wenn bereits Werte eingegeben wurden und auf die ersteSeite zurückgekehrt wird, werden die 
             // übergebenen Werte normal zwischengespeichert
         if($this->request->getPost() != null)
-        {
-            $protokollEingabeController = new Protokolleingabecontroller;
-						
-            $protokollEingabeController->uebergebeneWerteVerarbeiten($this->request->getPost());
+        {					
+            $this->neueWerteVerarbeiten($this->request->getPost());
         }
         
             /** 
@@ -49,16 +47,16 @@ class Protokollcontroller extends Controller
             * erste Seite neu geladen werden sollen, passiert dies nur einmal am Anfang.
             * 
             */
-        if($protokollSpeicherID && ! isset($_SESSION['protokollSpeicherID']))
+        if($protokollSpeicherID && ! isset($_SESSION['protokoll']['protokollSpeicherID']))
         {
-            $_SESSION['protokollSpeicherID'] = $protokollSpeicherID;
+            $_SESSION['protokoll']['protokollSpeicherID'] = $protokollSpeicherID;
 
             $this->protokollDatenLaden($protokollSpeicherID);
 	
         }
         
             // Wenn das Protokoll als "fertig" markiert ist, wird direkt zur Eingabe umgeleitet
-        if(isset($_SESSION['fertig']))
+        if(isset($_SESSION['protokoll']['fertig']))
         {
             return redirect()->to(base_url() . '/protokolle/kapitel/2');
         }
@@ -86,41 +84,40 @@ class Protokollcontroller extends Controller
     {
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollAnzeigeController = new Protokollanzeigecontroller;
-        $protokollEingabeController = new Protokolleingabecontroller;
+        
 		
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
-        if((! isset($_SESSION['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
+        if((! isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
         {
             return redirect()->to(base_url() . '/protokolle/index');
         }
         
             // Übertragene Werte verarbeiten
-        $protokollEingabeController->uebergebeneWerteVerarbeiten($this->request->getPost());
+        $this->neueWerteVerarbeiten($this->request->getPost());
         
             // Wenn noch kein protokollLayout gesetzt ist, protokollLayout im Protokolllayoutcontroller laden
-        if( ! isset($_SESSION['protokollLayout']))
+        if( ! isset($_SESSION['protokoll']['protokollLayout']))
         {
             $protokollLayoutController->ladeProtokollLayout();
         }
         
             // Wenn noch keine kapitelNummern gesetzt sind oder die Nummer in der URL nicht zu den kapitelNummern passt, zurückleiten
-        if( ! isset($_SESSION['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['kapitelNummern']))
+        if( ! isset($_SESSION['protokoll']['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['protokoll']['kapitelNummern']))
         {
             return redirect()->back();
         }
         else 
         {      
                 // aktuellesKapitel ist die in der URL angegebene kapitelNummer 
-            $_SESSION['aktuellesKapitel'] = $kapitelNummer;
+            $_SESSION['protokoll']['aktuellesKapitel'] = $kapitelNummer;
         }
 
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
-        echo isset($_SESSION['protokollSpeicherID']) ? $_SESSION['protokollSpeicherID'] : "";
-        isset($_SESSION['kommentare']) ? var_dump($_SESSION['kommentare']) : "";
+        echo isset($_SESSION['protokoll']['protokollSpeicherID']) ? $_SESSION['protokoll']['protokollSpeicherID'] : "";
         
             // datenHeader mit Titel füttern
         $datenHeader = [
-            'title'         => $_SESSION['protokollInformationen']['titel'],
+            'title'         => $_SESSION['protokoll']['protokollInformationen']['titel'],
         ];
 
             // datenInhalt bestücken. kapitelDatenArray und unterkapitelDatenArray werden immer gebraucht
@@ -133,27 +130,44 @@ class Protokollcontroller extends Controller
         $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
         
             // Schließlich wird die Seite geladen (siehe Protokollanzeigecontroller)
-        $protokollAnzeigeController->ladenDesProtokollEingabeView($datenHeader, $datenInhalt);
-    }
- 
-        /**
-        * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/abbrechen*
-         * 
-        * Das geschieht zum Beispiel wenn man auf den "Abbrechen"-Knopf in der Protokolleingabe drückt
-        *
-        * Wenn diese Funktion aufgerufen wird werden ALLE Session-Daten gelöscht und es wird zur Startseite umgeleitet.
-         * 
-         * @return void
-        */
-    public function abbrechen() 
-    {
-        $this->loescheSessionDaten();
-        
-        return redirect()->to(base_url());
+        $protokollAnzeigeController->ladeProtokollEingabeView($datenHeader, $datenInhalt);
     }
 	
-        /**
+    public function speichern()
+    {
+        //$this->zeigeWarteSeite();
+        
+        if($this->request->getPost() != null)
+        {            
+            $this->neueWerteVerarbeiten($this->request->getPost());
+        }
+            
+        $zuSpeicherndeDaten = $this->pruefeZuSpeicherndeDaten();
+        
+        if($zuSpeicherndeDaten !== false)
+        {
+            if($this->speicherProtokollDaten($zuSpeicherndeDaten))
+            {
+                echo "Protokolldaten erfolgreich gespeichert";
+                /*$session = session();
+                $session->setFlashdata('nachricht', "Protokolldaten erfolgreich gespeichert");
+                $session->setFlashdata('link', base_url());
+                return redirect()->to(base_url() . '/nachricht');*/
+            }
+            else 
+            {
+                echo "Jetzt wärst du zurückgeleitet worden";
+                //return redirect()->to(base_url() .'/protokolle/kapitel/'. array_key_first($_SESSION['protokoll']['fehlerArray']);
+            }
+        }
+        /*}
+        else
+        {
+            return redirect()->to(base_url());
+        }*/
+    }
+
+    /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
         * -> /protokolle/speichern*
          * 
@@ -161,9 +175,11 @@ class Protokollcontroller extends Controller
         *
         * @return void
         */
-    public function speichern()
+    public function speichernFertig()
     {
-        echo "Test";
+        $_SESSION['protokoll']['fertig'] = [];
+        
+        $this->speichern();
     }
 
         /**
@@ -192,17 +208,17 @@ class Protokollcontroller extends Controller
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
-            'title'             => $_SESSION['protokollInformationen']['titel'],
+            'title'             => $_SESSION['protokoll']['protokollInformationen']['titel'],
         ];
 
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
-            'title' 		=> $_SESSION['protokollInformationen']['titel'],
+            'title' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
             'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
         ];
 
             // Laden der ersten Seite mit den oben geladenen Daten
-        $protokollAnzeigeController->ladenDesErsteSeiteView($datenHeader, $datenInhalt);
+        $protokollAnzeigeController->ladeErsteSeiteView($datenHeader, $datenInhalt);
     }
     
         /*
@@ -228,8 +244,8 @@ class Protokollcontroller extends Controller
     
     protected function loescheSessionDaten() 
     {
-        session_destroy();
-        unset($_SESSION);       
+        //session_destroy();
+        //unset($_SESSION['protokoll']);       
     }
 
         /*
@@ -242,14 +258,31 @@ class Protokollcontroller extends Controller
     protected function loescheLayoutDaten()
     {
         unset(
-            $_SESSION['gewaehlteProtokollTypen'],
-            $_SESSION['protokollInformationen'],
-            $_SESSION['protokollLayout'],
-            $_SESSION['kapitelNummern'],
-            $_SESSION['kapitelBezeichnungen'],
-            $_SESSION['protokollIDs'],
-            $_SESSION['kapitelIDs']
+            $_SESSION['protokoll']['gewaehlteProtokollTypen'],
+            $_SESSION['protokoll']['protokollInformationen'],
+            $_SESSION['protokoll']['protokollLayout'],
+            $_SESSION['protokoll']['kapitelNummern'],
+            $_SESSION['protokoll']['kapitelBezeichnungen'],
+            $_SESSION['protokoll']['protokollIDs'],
+            $_SESSION['protokoll']['kapitelIDs']
         );
     }
-	
+    
+    protected function neueWerteVerarbeiten($postDaten)
+    {
+        $protokollEingabeController = new Protokolleingabecontroller;
+        $protokollEingabeController->uebergebeneWerteVerarbeiten($postDaten);
+    }
+    
+    protected function pruefeZuSpeicherndeDaten()
+    {
+        $protokollDatenPruefController = new Protokolldatenpruefcontroller();
+        return $protokollDatenPruefController->pruefeDatenZumSpeichern();
+    }
+    
+    protected function speicherProtokollDaten()
+    {
+        $protokollSpeicherController = new Protokollspeichercontroller();
+        return $protokollSpeicherController->speicherProtokollDaten();
+    }
 }

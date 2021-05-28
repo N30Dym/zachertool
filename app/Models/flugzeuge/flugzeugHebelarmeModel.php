@@ -22,4 +22,9 @@ class flugzeugHebelarmeModel extends Model
     {
         return $this->where('flugzeugID', $flugzeugID)->findAll();
     }
+    
+    public function getHebelarmNachID($id)
+    {
+        return $this->where('id', $id)->first();
+    }
 }

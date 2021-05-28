@@ -65,9 +65,10 @@ $routes->get('protokolle/kapitel', 'protokolle\Protokollcontroller::index/');
 $routes->get('protokolle/abbrechen', 'protokolle\Protokollcontroller::abbrechen/');
 $routes->match(['get', 'post'], 'protokolle/index', 'protokolle\Protokollcontroller::index');
 $routes->match(['get', 'post'], 'protokolle/index/(:num)', 'protokolle\Protokollcontroller::index/$1');
-$routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokollcontroller::index/');
+//$routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokollcontroller::index/');
 $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protokollcontroller::kapitel/$1');
 $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcontroller::speichern/');
+$routes->match(['get', 'post'], 'protokolle/speichernFertig', 'protokolle\Protokollcontroller::speichernFertig/');
 
 $routes->get('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
 $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencontroller::fertigeProtokolle');

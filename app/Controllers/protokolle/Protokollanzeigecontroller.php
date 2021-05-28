@@ -4,7 +4,7 @@ namespace App\Controllers\protokolle;
 
 class Protokollanzeigecontroller extends Protokollcontroller
 {
-    protected function ladenDesErsteSeiteView($datenHeader, $datenInhalt)
+    protected function ladeErsteSeiteView($datenHeader, $datenInhalt)
     {
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollErsteSeiteScript');
@@ -14,7 +14,7 @@ class Protokollanzeigecontroller extends Protokollcontroller
         echo view('templates/footerView');
     }
     
-    protected function ladenDesProtokollEingabeView($datenHeader, $datenInhalt)
+    protected function ladeProtokollEingabeView($datenHeader, $datenInhalt)
     {             
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollEingabeScript');
@@ -22,28 +22,33 @@ class Protokollanzeigecontroller extends Protokollcontroller
         echo view('protokolle/protokollButtonsView', $datenHeader);
         echo view('protokolle/protokollTitelUndInhaltView');
         
-        switch($_SESSION['kapitelIDs'][$_SESSION['aktuellesKapitel']])
+        $this->ladeWeitereViews($datenInhalt);      
+        
+        echo view('protokolle/protokollSeitennavigationView', $datenInhalt);
+        echo view('templates/footerView');  
+    }
+    
+    protected function ladeWeitereViews($datenInhalt)
+    {
+        switch($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']])
         {
             case 1:
                 echo view('protokolle/protokollKapitelID1View', $datenInhalt);
-                unset($_SESSION['doppelsitzer']);
-                unset($_SESSION['WoelbklappenFlugzeug']);
-                unset($_SESSION['flugzeugID']);
+                unset($_SESSION['protokoll']['doppelsitzer']);
+                unset($_SESSION['protokoll']['WoelbklappenFlugzeug']);
+                unset($_SESSION['protokoll']['flugzeugID']);
             break;
             case 2:    
                 echo view('protokolle/protokollKapitelID2View', $datenInhalt);
-                unset($_SESSION['pilotID']);
-                unset($_SESSION['copilotID']);
+                unset($_SESSION['protokoll']['pilotID']);
+                unset($_SESSION['protokoll']['copilotID']);
             break;
             case 3:
                 echo view('protokolle/protokollKapitelID3View', $datenInhalt);
-                unset($_SESSION['beladungszustand']);
+                unset($_SESSION['protokoll']['beladungszustand']);
             break;
             default:
                 echo view('protokolle/protokollKapitelView', $datenInhalt);
         }
-        
-        echo view('protokolle/protokollSeitennavigationView', $datenInhalt);
-        echo view('templates/footerView');  
     }
 }

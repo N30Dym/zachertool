@@ -2,15 +2,15 @@
 <!--          Pilotenauswahl            --> 
 <!----------------------------------------> 
 
-<?php if( ! isset($_SESSION['flugzeugID'])) : ?>
+<?php if( ! isset($_SESSION['protokoll']['flugzeugID'])) : ?>
     <span class="text-danger m-3">Es wurde kein Flugzeug ausgewählt</span>
     <?php 
-        unset($_SESSION['pilotID']);
-        unset($_SESSION['copilotID']);
+        unset($_SESSION['protokoll']['pilotID']);
+        unset($_SESSION['protokoll']['copilotID']);
     ?>    
 
 <?php else: ?>
-    <?php if (isset($_SESSION['doppelsitzer'])) : ?>
+    <?php if (isset($_SESSION['protokoll']['doppelsitzer'])) : ?>
         <div class="col-12 text-center">
             <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
         </div>
@@ -36,15 +36,15 @@
             <div class="col-12">
                 <?php //var_dump($pilotenDatenArray) ?>
                 <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
-                    <?php if(isset($_SESSION['fertig'])) : ?>
-                        <option value="<?= esc($_SESSION['pilotID']) ?>" selected>
-                            <?= esc($pilotenDatenArray[$_SESSION['pilotID']]["vorname"]) ?>
-                            <?= $pilotenDatenArray[$_SESSION['pilotID']]["spitzname"] != "" ? " \"" . $pilotenDatenArray[$_SESSION['pilotID']]["spitzname"] . "\" " : "" ?>
-                            <?= esc($pilotenDatenArray[$_SESSION['pilotID']]["nachname"]) ?>
+                    <?php if(isset($_SESSION['protokoll']['fertig'])) : ?>
+                        <option value="<?= esc($_SESSION['protokoll']['pilotID']) ?>" selected>
+                            <?= esc($pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["vorname"]) ?>
+                            <?= $pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["spitzname"] != "" ? " \"" . $pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["spitzname"] . "\" " : "" ?>
+                            <?= esc($pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["nachname"]) ?>
                         </option>
                     <?php else: ?>    
                         <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['pilotID']) && $_SESSION['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['protokoll']['pilotID']) && $_SESSION['protokoll']['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
                                 <?= esc($pilot["vorname"]) ?>
                                 <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
                                 <?= esc($pilot["nachname"]) ?>
@@ -54,7 +54,7 @@
                 </select>
             </div>
 
-    <?php if(isset($_SESSION['doppelsitzer'])) : ?>    
+    <?php if(isset($_SESSION['protokoll']['doppelsitzer'])) : ?>    
 
         </div>
 
@@ -74,7 +74,7 @@
                 <select id="copilotAuswahl" name="copilotID" class="form-select form-select-lg" size="10">
                     <option></option>
                     <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['copilotID']) && $_SESSION['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['protokoll']['copilotID']) && $_SESSION['protokoll']['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
                             <?= esc($pilot["vorname"]) ?>
                             <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
                             <?= esc($pilot["nachname"]) ?>

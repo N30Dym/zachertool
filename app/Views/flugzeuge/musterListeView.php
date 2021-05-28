@@ -1,10 +1,10 @@
-<div class="col-12 text-end">
+<div class="col-12 text-end mb-3">
     <a href="<?= base_url() ?>/flugzeuge/neu">
         <button type="button" class="btn btn-success">Neues Muster und Flugzeug anlegen</button>
     </a>
 </div>
 
-<h2 class="text-center"><?= esc($title) ?></h2>	
+<h2 class="text-center m-4"><?= esc($title) ?></h2>	
 <div class="row">
     <div class="col-2">
     </div>
@@ -22,12 +22,12 @@
         <div class="col-12">
             <table id="musterAuswahl" class="table table-light table-striped table-hover border">
 
-                <?php foreach($muster as $muster_item) : ?>
+                <?php foreach($muster as $musterDetails) : ?>
                         
-                    <tr class="text-center" style="cursor:pointer" onclick="window.location='<?= base_url() ?>/flugzeuge/neu/<?= esc($muster_item["id"]) ?>'">
+                    <tr class="text-center" style="cursor:pointer" onclick="window.location='<?= base_url() ?>/flugzeuge/neu/<?= esc($musterDetails["id"]) ?>'">
                         <td>
-                            <a href="<?= base_url() ?>/flugzeuge/neu/<?= esc($muster_item["id"]) ?>">
-                                <?= esc($muster_item["musterSchreibweise"]) ?><?= esc($muster_item["musterZusatz"]) ?>
+                            <a href="<?= base_url() ?>/flugzeuge/neu/<?= esc($musterDetails["id"]) ?>">
+                                <?= esc($musterDetails["musterSchreibweise"]) ?><?= esc($musterDetails["musterZusatz"]) ?>
                             </a>
                         </td>
                     </tr>

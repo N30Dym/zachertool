@@ -32,7 +32,7 @@ class flugzeugeModel extends Model
         return $this->where("id", $id)->first();	
     }
 
-    public function getAlleSichtbarenFlugzeuge()
+    public function getSichtbareFlugzeuge()
     {			
         return $this->where("sichtbar", 1)->orderBy('geaendertAm', 'DESC')->findAll(); 
     }
@@ -40,5 +40,13 @@ class flugzeugeModel extends Model
     public function getMusterIDNachID($id)
     {
         return $this->select('musterID')->where("id", $id)->first();
+    }
+    
+    public function updateGeaendertAmNachID($id)
+    {
+        $query = "UPDATE `flugzeuge` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `flugzeuge`.`id` = " . $id; 
+        //$this->query($query);
+        
+        return $this->simpleQuery($query) ? true : false;
     }
 }

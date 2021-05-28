@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h2 class="m-3 mt-5 text-center"><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?> - <?= $flugzeug['kennung'] ?></h2>
+<h2 class="m-5 text-center"><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h2>
 <div class="row">
    
     
@@ -25,6 +25,14 @@
 
 <div class="col-2"></div>
     <div class="col-8">
+        <div class="table-responsive-lg">
+            <table class="table">
+                <tr>
+                    <td>Anzahl Protokolle</td>
+                    <td><?= $anzahlProtokolle ?></td>
+                </tr>
+            </table>
+        </div>
         <h3 class="m-3 mt-5">Angaben zum Flugzeug</h3>
         <div class="table-responsive-lg">
             <table class="table">

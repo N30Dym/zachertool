@@ -307,11 +307,19 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     protected function speicherFlugzeugWaegung($flugzeugWaegungOhneFlugzeugID, $flugzeugID)
     {
         $flugzeugWaegungModel                       = new flugzeugWaegungModel();  
+        $flugzeugeModel                             = new flugzeugeModel();
         
         $flugzeugWaegungMitFlugzeugID               = $flugzeugWaegungOhneFlugzeugID; 
         $flugzeugWaegungMitFlugzeugID['flugzeugID'] = $flugzeugID;
         
-        return $flugzeugWaegungModel->insert($flugzeugWaegungMitFlugzeugID);
+        $erfolg = false;
+        
+        if($flugzeugWaegungModel->insert($flugzeugWaegungMitFlugzeugID))
+        {
+            $erfolg = $flugzeugeModel->updateGeaendertAmNachID($flugzeugID);
+        }
+        
+        return $erfolg;
     }
 
     protected function meldeFlugzeugVorhanden()

@@ -100,8 +100,6 @@ class Protokollcontroller extends Controller
             $this->ladeProtokollLayout();
         }
         
-        print_r($_SESSION['protokoll']['hStWege'] ?? "");
-        
             // Wenn noch keine kapitelNummern gesetzt sind oder die Nummer in der URL nicht zu den kapitelNummern passt, zurückleiten
         if( ! isset($_SESSION['protokoll']['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['protokoll']['kapitelNummern']))
         {

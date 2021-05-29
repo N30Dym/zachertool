@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\protokolllayout\{ protokollEingabenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel };
+use App\Models\protokolllayout\{ protokollEingabenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
 helper('array');
 class Protokolldatenpruefcontroller extends Protokollcontroller
@@ -13,6 +13,8 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         if(isset($_SESSION['protokoll']['eingegebeneWerte']) AND $this->zuSpeicherndeWerteVorhanden())
         {           
             $_SESSION['protokoll']['fehlerArray'] = [];
+            
+            $this->pruefeAlleProtokollDetailsVorhanden();
             
             $zuSpeicherndeDatenSortiert = $this->zuSpeicherndeDatenSortieren();
             
@@ -37,16 +39,24 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function zuSpeicherndeWerteVorhanden()
     {
-        //var_dump($_SESSION['protokoll']['eingegebeneWerte']);
-        foreach($_SESSION['protokoll']['eingegebeneWerte'] as $wert)
+        $protokollInputsMitInputTypModel = new protokollInputsMitInputTypModel();
+
+            //var_dump($_SESSION['protokoll']['eingegebeneWerte']);
+        foreach($_SESSION['protokoll']['eingegebeneWerte'] as $protokollInputID => $wert)
         {
-            // Bei Note ist 0 -> nicht gesetzt. Das muss geprüft werden
-            // getProotkollInputTyp = Note:
-            // wert = [$this->pruefeNoteGesetzt];
-            
             if(!empty($wert))
             {
-                return true;
+                if(is_numeric($protokollInputID) AND $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'] == "Note")
+                {
+                    if($this->pruefeNoteGesetzt($protokollInputID))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return true;     
+                }
             }
         }
         
@@ -55,21 +65,14 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function zuSpeicherndeDatenSortieren()
     {
-        if($this->pruefeAlleProtokollDetailsVorhanden())
-        {
-            return [
-                'protokoll'         => $this->setzeProtokollDetails(),
-                'eingegebeneWerte'  => $this->setzeEingegebeneWerte(),
-                'kommentare'        => $this->setzeKommentare(),
-                'hStWege'           => $this->setzeHStWege(),
-                'beladung'          => $this->setzeBeladung()                
-            ];
-        }
-        else
-        {
-            header('Location: '. base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
-            exit;
-        }      
+        return [
+            'protokoll'         => $this->setzeProtokollDetails(),
+            'eingegebeneWerte'  => $this->setzeEingegebeneWerte(),
+            'kommentare'        => $this->setzeKommentare(),
+            'hStWege'           => $this->setzeHStWege(),
+            'beladung'          => $this->setzeBeladung()                
+        ];
+
     }
     
     protected function pruefeAlleProtokollDetailsVorhanden()
@@ -103,6 +106,24 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         }
         
         return $protokollDetailsVorhanden;
+    }
+    
+    protected function pruefeNoteGesetzt($protokollInputID)
+    {
+        foreach($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID] as $woelbklappenStellung => $werteRichtungMulitpelNr)
+        {
+            foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
+            {
+                foreach($werteMultipelNr as $multipelNr => $wert)
+                {
+                    if($wert != 0)
+                    {
+                        return true;
+                    } 
+                }
+            }         
+        }
+        return false;
     }
     
     protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)

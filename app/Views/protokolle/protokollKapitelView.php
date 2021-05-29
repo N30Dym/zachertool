@@ -317,7 +317,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer voll gedrückt:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gedruecktHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gedruecktHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && array_values($_SESSION['protokoll']['hStWege'])[0] != null) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'] : "") ?>">
+                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gedruecktHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gedruecktHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>
@@ -325,7 +325,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer neutral:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][neutralHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['neutralHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && array_values($_SESSION['protokoll']['hStWege'])[0] != null) ? array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'] : "") ?>">
+                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][neutralHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['neutralHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>
@@ -333,7 +333,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer voll gezogen:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gezogenHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gezogenHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && array_values($_SESSION['protokoll']['hStWege'])[0] != null) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'] : "") ?>">
+                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gezogenHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gezogenHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>

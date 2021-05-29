@@ -1,6 +1,6 @@
 <!-- Bei Protokollen zum Speichern nach navbarView.php einfügen -->
 
-<h2 class="text-center m-4"><?= $title ?></h2>	
+<h2 class="text-center m-4"><?= $titel ?></h2>	
 
 <form method="post" class="needs-validation">
 

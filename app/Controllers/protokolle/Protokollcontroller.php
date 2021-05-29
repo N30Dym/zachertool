@@ -31,7 +31,7 @@ class Protokollcontroller extends Controller
         */
     public function index($protokollSpeicherID = null) // Leeres Protokoll
     {
-        $_SESSION['protokoll']['aktuellesKapitel']                   = 0;
+        $_SESSION['protokoll']['aktuellesKapitel']                   = 1;
         $_SESSION['protokoll']['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
         
             // Wenn bereits Werte eingegeben wurden und auf die ersteSeite zurückgekehrt wird, werden die 
@@ -81,15 +81,14 @@ class Protokollcontroller extends Controller
         * @return void
         */
     public function kapitel($kapitelNummer = 0)
-    {
-        $protokollLayoutController  = new Protokolllayoutcontroller;
+    {       
         $protokollAnzeigeController = new Protokollanzeigecontroller;
-        
 		
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
         if((! isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && !isset($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
         {
-            return redirect()->to(base_url() . '/protokolle/index');
+            $this->index();
+            exit;
         }
         
             // Übertragene Werte verarbeiten
@@ -98,8 +97,10 @@ class Protokollcontroller extends Controller
             // Wenn noch kein protokollLayout gesetzt ist, protokollLayout im Protokolllayoutcontroller laden
         if( ! isset($_SESSION['protokoll']['protokollLayout']))
         {
-            $protokollLayoutController->ladeProtokollLayout();
+            $this->ladeProtokollLayout();
         }
+        
+        print_r($_SESSION['protokoll']['hStWege'] ?? "");
         
             // Wenn noch keine kapitelNummern gesetzt sind oder die Nummer in der URL nicht zu den kapitelNummern passt, zurückleiten
         if( ! isset($_SESSION['protokoll']['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['protokoll']['kapitelNummern']))
@@ -116,18 +117,10 @@ class Protokollcontroller extends Controller
         echo isset($_SESSION['protokoll']['protokollSpeicherID']) ? $_SESSION['protokoll']['protokollSpeicherID'] : "";
         
             // datenHeader mit Titel füttern
-        $datenHeader = [
-            'title'         => $_SESSION['protokoll']['protokollInformationen']['titel'],
-        ];
+        $datenHeader['titel'] = $_SESSION['protokoll']['protokollInformationen']['titel'];
 
             // datenInhalt bestücken. kapitelDatenArray und unterkapitelDatenArray werden immer gebraucht
-        $datenInhalt = [
-            'kapitelDatenArray'         => $protokollLayoutController->getKapitelNachKapitelID(),
-            'unterkapitelDatenArray'    => $protokollLayoutController->getUnterkapitel(),                  
-        ];
-        
-            // Weitere Daten werden nach Bedarf zum datenInhalt hinzugefügt (siehe Protokolllayoutcontroller)
-        $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
+        $datenInhalt = $this->ladeDatenInhalt();        
         
             // Schließlich wird die Seite geladen (siehe Protokollanzeigecontroller)
         $protokollAnzeigeController->ladeProtokollEingabeView($datenHeader, $datenInhalt);
@@ -157,29 +150,14 @@ class Protokollcontroller extends Controller
             else 
             {
                 echo "Jetzt wärst du zurückgeleitet worden";
+                echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
                 //return redirect()->to(base_url() .'/protokolle/kapitel/'. array_key_first($_SESSION['protokoll']['fehlerArray']);
             }
         }
-        /*}
         else
         {
-            return redirect()->to(base_url());
-        }*/
-    }
-
-    /**
-        * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/speichern*
-         * 
-        * Das geschieht zum Beispiel wenn man auf den "Speichern und Zurück"-Knopf in der Protokolleingabe drückt
-        *
-        * @return void
-        */
-    public function speichernFertig()
-    {
-        $_SESSION['protokoll']['fertig'] = [];
-        
-        $this->speichern();
+            return redirect()->to(base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
+        }
     }
 
         /**
@@ -192,7 +170,8 @@ class Protokollcontroller extends Controller
         */
     public function absenden()
     {
-       
+        $_SESSION['protokoll']['fertig'] = [];       
+        $this->speichern();
     }
     
         /*
@@ -208,12 +187,12 @@ class Protokollcontroller extends Controller
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
-            'title'             => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'titel'             => $_SESSION['protokoll']['protokollInformationen']['titel'],
         ];
 
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
-            'title' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'titel' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
             'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
         ];
 
@@ -284,5 +263,27 @@ class Protokollcontroller extends Controller
     {
         $protokollSpeicherController = new Protokollspeichercontroller();
         return $protokollSpeicherController->speicherProtokollDaten();
+    }
+    
+    protected function ladeDatenInhalt()
+    {
+        $protokollLayoutController  = new Protokolllayoutcontroller;
+        
+        $datenInhalt = [
+            'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'kapitelDatenArray'         => $protokollLayoutController->getKapitelNachKapitelID(),
+            'unterkapitelDatenArray'    => $protokollLayoutController->getUnterkapitel(),                  
+        ];
+        
+            // Weitere Daten werden nach Bedarf zum datenInhalt hinzugefügt (siehe Protokolllayoutcontroller)
+        $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
+        
+        return $datenInhalt;
+    }
+    
+    protected function ladeProtokollLayout() 
+    {
+        $protokollLayoutController  = new Protokolllayoutcontroller;
+        $protokollLayoutController->ladeProtokollLayout();
     }
 }

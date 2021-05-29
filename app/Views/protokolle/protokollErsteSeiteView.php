@@ -2,7 +2,7 @@
     </div>    
     <div class="col-lg-10">
         <h3 class="m-3">1. Informationen zum Protokoll</h3>
-        <?php if(isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['aktuellesKapitel']])) : ?>
+        <?php if(isset($_SESSION['protokoll']['kapitelIDs']) AND isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]])) : ?>
             <div class="alert alert-danger" role="alert">
                 <?php foreach($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['aktuellesKapitel']] as $fehlerMeldung): ?>
                     <?= $fehlerMeldung ?>
@@ -73,9 +73,9 @@
                     <div class="d-flex row d-none" id="springeZu">
                         <div class="input-group mb-3">
                             <select id="kapitelAuswahl" class="form-select">
-                                <option value="1" selected>1 - Informationen zum Protokoll</option>
+                                <!--<option value="1" selected>1 - Informationen zum Protokoll</option>-->
                                 <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
-                                    <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$kapitelNummer])) ? 'style="background-color: #f8d7da"' : "" ?>><?= esc($kapitelNummer) . " " . esc($_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
+                                    <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$kapitelNummer]])) ? 'style="background-color: #f8d7da"' : "" ?>><?= esc($kapitelNummer) . ". " . esc($_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
                                 <?php endforeach ?>
                             </select>
                             <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>

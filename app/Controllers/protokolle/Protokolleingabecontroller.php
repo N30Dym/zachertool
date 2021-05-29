@@ -327,34 +327,14 @@ class Protokolleingabecontroller extends Protokollcontroller
          */
     protected function setzeHStWege($hStWege)
     {
-        $_SESSION['protokoll']['hStWege'][key($hStWege)] = $hStWege[key($hStWege)];
-    }
-    
-    /*
-    protected function zeigeEingegebeneWerte()
-    {
-        foreach($_SESSION['protokoll']['eingegebeneWerte'] as $kapitelInputID => $inputs)
-        {            
-            foreach($inputs as $woelbklappenStellung => $richtungUndWert)
+        foreach($hStWege[key($hStWege)] as $hStStellung => $wert)
+        {
+            if(!empty($wert))
             {
-                foreach($richtungUndWert as $richtung => $wert)
-                {
-                    echo "<br>";
-                    echo " ".$kapitelInputID.": ";
-                    echo " ".$woelbklappenStellung.": ";
-                    echo " ".$richtung.": ";
-                    echo " ".$wert[0];
-                }
+                 $_SESSION['protokoll']['hStWege'][key($hStWege)][$hStStellung] = $wert;
             }
         }
-    }*/
-
-    /*protected function getMusterIDNachFlugzeugID($flugzeugID)
-    {
-        $flugzeugeModel = new flugzeugeModel();
-        $flugzeug       = $flugzeugeModel->getFlugzeugeNachID($flugzeugID);
-      
-        return $flugzeug['musterID'];
-    }*/
+        //$_SESSION['protokoll']['hStWege'][key($hStWege)] = $hStWege[key($hStWege)];
+    }
  }
 

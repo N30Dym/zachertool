@@ -361,6 +361,12 @@
         {
             $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID['id']] = [];
         }
+        unset($_SESSION['protokoll']['kommentare'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]);
+        unset($_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]);
+        if(empty($_SESSION['protokoll']['hStWege']))
+        {
+            unset($_SESSION['protokoll']['hStWege']);
+        }
     ?>
 
 <!-- Hiernach muss der protokollSeitennavigationView.php geladen werden -->

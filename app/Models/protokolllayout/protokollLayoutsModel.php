@@ -22,4 +22,14 @@ class protokollLayoutsModel extends Model
     {
         return $this->where("protokollID", $protokollID)->findAll();
     }
+    
+    public function getProtokollInputIDNachProtokollEingabeID($protokollEingabeID)
+    {
+        return $this->select('protokollInputID')->where('protokollEingabeID', $protokollEingabeID)->findAll();
+    }
+    
+    public function getProtokollKapitelIDNachProtokollInputID($protokollInputID)
+    {
+        return $this->select('protokollKapitelID')->where('protokollInputID', $protokollInputID)->first();
+    }
 }

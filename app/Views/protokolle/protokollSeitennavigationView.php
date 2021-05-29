@@ -15,9 +15,9 @@
             <div class="col-sm-6 d-flex">
                 <div class="input-group d-none" id="springeZu">
                     <select id="kapitelAuswahl" class="form-select">
-                        <option value="1">1 - Informationen zum Protokoll</option>
+                        <!--<option value="1">1. Informationen zum Protokoll</option>-->
                         <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
-                            <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$kapitelNummer])) ? 'style="background-color: #f8d7da"' : "" ?> <?= $_SESSION['protokoll']['aktuellesKapitel'] == $kapitelNummer ? "selected" : "" ?>>
+                            <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$kapitelNummer]])) ? 'style="background-color: #f8d7da"' : "" ?> <?= $_SESSION['protokoll']['aktuellesKapitel'] == $kapitelNummer ? "selected" : "" ?>>
                                 <?= esc($kapitelNummer) . ". " . $_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer] ?>
                             </option>
                         <?php endforeach ?>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-md-3">
-                <button type="submit" class="btn <?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? "btn-danger" : "btn-secondary" ?> col-12" formaction="<?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? base_url() . '/protokolle/speichernFertig' : base_url() . '/protokolle/kapitel/' . $_SESSION['protokoll']['kapitelNummern'][array_search($_SESSION['protokoll']['aktuellesKapitel'], $_SESSION['protokoll']['kapitelNummern']) + 1] ?>"><?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? "Absenden" : "Weiter >" ?></button>
+                <button type="submit" class="btn <?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? "btn-danger" : "btn-secondary" ?> col-12" formaction="<?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? base_url() . '/protokolle/absenden' : base_url() . '/protokolle/kapitel/' . $_SESSION['protokoll']['kapitelNummern'][array_search($_SESSION['protokoll']['aktuellesKapitel'], $_SESSION['protokoll']['kapitelNummern']) + 1] ?>"><?= end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] ? "Absenden" : "Weiter >" ?></button>
             </div>
 
         </form>

@@ -77,3 +77,15 @@ defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*
+ * Beim Erstellen des Protokolllayouts gibt nehmen die Kapitel "Angaben zum Flugzeug", "Angaben zum Piloten / zu den Piloten" und "Angaben zum Beladungszustand"
+ * eine besondere Rolle ein. Diese können bei allen ProtokollTypen aufgerufen werden und sind fest programmierte Seiten.
+ * Um diese drei Seiten aufrufen zu können werden ihre IDs in Konstanten gespeichert, die dann von überall aufgerufen werden können.
+ * So kommt es zu keinen Verwechslungen
+ * 
+ */
+defined('PROTOKOLL_AUSWAHL')    || define('PROTOKOLL_AUSWAHL', 0); // "Angaben zum Piloten / zu den Piloten"
+defined('FLUGZEUG_EINGABE')     || define('FLUGZEUG_EINGABE', 1); // "Angaben zum Flugzeug"
+defined('PILOT_EINGABE')        || define('PILOT_EINGABE', 2); // "Angaben zum Piloten / zu den Piloten"
+defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // "Angaben zum Piloten / zu den Piloten"

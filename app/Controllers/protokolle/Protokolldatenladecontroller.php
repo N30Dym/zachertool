@@ -56,7 +56,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($protokollDaten as $datenSatz)
         {
-            $woelbklappenStellung   = $datenSatz['wölbklappenstellung'] == "" ? 0 : $datenSatz['wölbklappenstellung'];
+            $woelbklappenStellung   = $datenSatz['woelbklappenstellung'] == "" ? 0 : $datenSatz['woelbklappenstellung'];
             $linksUndRechts         = $datenSatz['linksUndRechts'] == "" ? 0 : $datenSatz['linksUndRechts'];
             $multipelNr             = $datenSatz['multipelNr'] == "" ? 0 : $datenSatz['multipelNr'];
                

@@ -41,7 +41,7 @@
             <?php endif ?>
 
             <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
-                <?php $eingabenDatenArray[$protokollEingabeID]['wegHSt'] == 1 ? $hStWegFeldBenoetigt = true : "" ?>
+                
 
 
                     <div class="g-3 mt-3">
@@ -50,7 +50,9 @@
                             <label class="form-label ms-3"><b><?= $eingabenDatenArray[$protokollEingabeID]['bezeichnung'] ?></b></label>
                         <?php endif ?>
                         <?php foreach($eingabe as $protokollInputID => $input) : ?>
+                            <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : "" ?>
                             <?php if($eingabenDatenArray[$protokollEingabeID]['multipel'] == 0 OR $eingabenDatenArray[$protokollEingabeID]['multipel'] == "") : ?>
+                            
 <!---------------------------------------->   
 <!--            Inputfelder             --> 
 <!---------------------------------------->                                                                           

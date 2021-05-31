@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\protokolllayout\{ protokollEingabenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
+use App\Models\protokolllayout\{ protokollInputsModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
 helper('array');
 class Protokolldatenpruefcontroller extends Protokollcontroller
@@ -260,22 +260,14 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         // Das wird hier geprüft
     protected function pruefeHStWegeErforderlich()
     {
-        $protokollEingabenModel = new protokollEingabenModel();
-        $protokolleLayoutProtokolleModel = new protokolleLayoutProtokolleModel();
-        $protokollLayoutsModel = new protokollLayoutsModel();
-        $eingabenMitHStWegen = [];
-        $hStWegErforderlich = false;
+        $protokollInputsModel               = new protokollInputsModel();
+        $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
+        $protokollLayoutsModel              = new protokollLayoutsModel();
+        $eingabenMitHStWegen                = [];
+        $hStWegErforderlich                 = false;
         
-        foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
-        {
-            $protokollTypID = $protokolleLayoutProtokolleModel->getProtokollTypIDNachID($protokollID)['protokollTypID'];
-            foreach($protokollEingabenModel->getProtokollEingabenMitHStWegNachProtokollTypID($protokollTypID) as $eingabeMitHStWeg)
-            {
-                $eingabenMitHStWegen[$eingabeMitHStWeg['id']] = null;
-            }
-        }
         
-        foreach($eingabenMitHStWegen as $eingabeID => $foo)
+        foreach($protokollInputsModel->get as $eingabeID => $foo)
         {
             foreach($protokollLayoutsModel->getProtokollInputIDNachProtokollEingabeID($eingabeID) as $protokollInputID)
             {

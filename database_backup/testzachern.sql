@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 10. Mai 2021 um 13:24
+-- Erstellungszeit: 31. Mai 2021 um 11:06
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -36,8 +36,8 @@ CREATE TABLE `flugzeuge` (
   `kennung` text NOT NULL,
   `musterID` int(11) NOT NULL,
   `sichtbar` tinyint(1) DEFAULT 1,
-  `erstelltAm` datetime NOT NULL,
-  `geaendertAm` datetime NOT NULL
+  `erstelltAm` datetime NOT NULL DEFAULT current_timestamp(),
+  `geaendertAm` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -71,7 +71,34 @@ INSERT INTO `flugzeuge` (`id`, `kennung`, `musterID`, `sichtbar`, `erstelltAm`, 
 (30, 'D-KARM', 70, 0, '2020-09-03 19:41:27', '2020-09-03 19:41:27'),
 (31, 'D-KWRL', 71, 1, '2020-11-17 12:58:52', '2020-11-17 12:58:52'),
 (32, 'D-7543', 72, 1, '2020-12-01 14:13:25', '2020-12-01 14:13:25'),
-(37, 'D-8481', 78, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(37, 'D-8481', 78, 1, '2021-04-01 16:45:25', '2021-04-01 16:45:40'),
+(38, 'D-1234', 78, 1, '2021-05-26 16:45:50', '2021-05-26 16:45:59'),
+(41, 'D-1234', 79, 1, '2021-05-26 17:12:35', '2021-05-26 17:12:35'),
+(42, '1', 15, 1, '2021-05-26 17:26:44', '2021-05-26 17:26:44'),
+(43, '1', 7, 1, '2021-05-26 17:52:17', '2021-05-28 11:28:35'),
+(44, 'D-TEST', 81, 1, '2021-05-26 17:59:30', '2021-05-26 17:59:30'),
+(45, 'D-4321', 82, 1, '2021-05-26 18:07:49', '2021-05-26 18:07:49'),
+(46, '1', 15, 1, '2021-05-26 18:12:18', '2021-05-28 11:25:51');
+
+-- --------------------------------------------------------
+
+--
+-- Stellvertreter-Struktur des Views `flugzeuge_mit_muster`
+-- (Siehe unten für die tatsächliche Ansicht)
+--
+DROP VIEW IF EXISTS `flugzeuge_mit_muster`;
+CREATE TABLE `flugzeuge_mit_muster` (
+`flugzeugID` int(11)
+,`kennung` text
+,`musterSchreibweise` text
+,`musterZusatz` varchar(11)
+,`musterKlarname` varchar(20)
+,`istDoppelsitzer` tinyint(1)
+,`istWoelbklappenFlugzeug` tinyint(1)
+,`sichtbar` tinyint(1)
+,`musterID` int(11)
+,`geaendertAm` datetime
+);
 
 -- --------------------------------------------------------
 
@@ -137,7 +164,14 @@ INSERT INTO `flugzeug_details` (`id`, `flugzeugID`, `baujahr`, `seriennummer`, `
 (29, 30, 1900, '10-110T34', 'Bug', 'Ja', '380 x 150  6 PR', 'Scheibe', 'Ja', '17.53', '20.00', 'Winter 5 STVM 5', 'Düse SLW', 'Nase', 'Schempp-Hirth doppelstöckig', 110, 750, '0.00', '0.00', '655.00', '710.00', 'Flügelvorderkante an der Wurzelrippe', '1000:33 auf dem Rumpfrücken'),
 (30, 31, 2005, '28745/29-001', 'Bug', 'Ja', '5.00-5, 6PR TT', 'Scheibe', 'Ja', '11.88', '18.00', 'Winter 5 STVM 5', 'Multisonde vor SLW', 'vorn in der Nasenspitze', 'Schempp-Hirth', 110, 575, '0.00', '999.00', '233.00', '406.00', 'Flügelvorderkante an der Wurzelrippe', '1000:49 auf Rumpfrücken, 2500mm hinter B.E.'),
 (31, 32, 2014, '43', 'Bug', 'Ja', '5/6 Zoll', 'Scheibe', 'Ja', '15.93', '18.00', 'Stauscheibe', 'Seitenleitwerk', 'Seitenleitwerk', 'Schempp-Hirth', NULL, 700, '0.00', '999.00', '170.00', '405.00', 'Flügelvorderkante an der Wurzelrippe', '-'),
-(34, 37, 2015, '19', 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', 'bis 5m/s Winter-Stauscheibe, S7', 'ESA-Multisonde mit doppeltem TE-Kopf, Seitenleitwerk', 'Seitenleitwerk unter TEK-Düse', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite');
+(34, 37, 2015, '19', 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', 'bis 5m/s Winter-Stauscheibe, S7', 'ESA-Multisonde mit doppeltem TE-Kopf, Seitenleitwerk', 'Seitenleitwerk unter TEK-Düse', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite'),
+(35, 38, 1901, '123', 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', 'Stauscheibe', 'Im Seitenleitwerk Bauart BR', 'Vor dem SLW', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite'),
+(38, 41, 1902, '1', 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', '1', '1', '1', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite'),
+(39, 42, 1901, '1', 'Schwerpunkt', 'Ja', '4\"', 'Scheibe', 'Ja', '10.27', '15.00', '1', '1', '1', 'Schempp-Hirth', 90, 367, '0.00', '999.00', '250.00', '335.00', 'Flügelvorderkante an der Wurzelrippe', '1000:23'),
+(40, 43, 1905, '1', 'Bug', 'Ja', '5\"', 'Scheibe', 'Ja', '9.75', '15.00', '1', '1', '1', 'Schempp-Hirth', 100, 450, '0.00', '999.00', '280.00', '450.00', 'Flügelnase an der Wurzelrippe', '1000:22,8 am Rumpfrücken'),
+(41, 44, 2021, '123456789', 'Bug', 'Ja', '6\"', 'Scheibe', 'Nein', '123.00', '321.00', 'Alle', 'Überall', 'Hier und da', 'Hydraulik', 0, 123123123, '12.00', '12.00', '12.00', '12.00', 'Nase', 'Bauchlage'),
+(42, 45, 1902, '12345567', 'Bug', 'Ja', '6\"', 'Scheibe', 'Nein', '123.00', '321.00', '123', '123', '123', 'Hydraulik', 0, 123123123, '12.00', '12.00', '12.00', '12.00', 'Nase', 'Bauchlage'),
+(43, 46, 1900, '1', 'Schwerpunkt', 'Ja', '4\"', 'Scheibe', 'Ja', '10.27', '15.00', '1231', '1', '1', 'Schempp-Hirth', 90, 367, '0.00', '999.00', '250.00', '335.00', 'Flügelvorderkante an der Wurzelrippe', '1000:23');
 
 -- --------------------------------------------------------
 
@@ -209,7 +243,40 @@ INSERT INTO `flugzeug_hebelarme` (`id`, `flugzeugID`, `beschreibung`, `hebelarm`
 (56, 32, 'Copilot', '-730.00'),
 (63, 37, 'Pilot', '-1468.00'),
 (64, 37, 'Copilot', '-308.00'),
-(65, 37, 'Trimmballast', '-2153.00');
+(65, 37, 'Trimmballast', '-2153.00'),
+(66, 38, 'Pilot', '-1468.00'),
+(67, 38, 'Copilot', '-308.00'),
+(68, 38, 'Trimmballast', '-2153.00'),
+(75, 41, 'Pilot', '-1468.00'),
+(76, 41, 'Copilot', '-308.00'),
+(77, 41, 'Trimmballast', '-2153.00'),
+(78, 42, 'Pilot', '-525.00'),
+(79, 43, 'Pilot', '-630.00'),
+(80, 43, 'Trimmballast', '-1240.00'),
+(81, 44, 'Pilot', '1.00'),
+(82, 44, 'Copilot', '2.00'),
+(83, 44, '1', '1.00'),
+(84, 44, '2', '2.00'),
+(85, 44, '3', '3.00'),
+(86, 44, '4', '4.00'),
+(87, 44, '5', '5.00'),
+(88, 44, '6', '-6.00'),
+(89, 44, '7', '7.00'),
+(90, 44, '8', '8.00'),
+(91, 44, '9', '9.00'),
+(92, 44, '10', '10.00'),
+(93, 45, 'Pilot', '1.00'),
+(94, 45, 'Copilot', '2.00'),
+(95, 45, '1', '1.00'),
+(96, 45, '2', '-2.00'),
+(97, 45, '3', '3.00'),
+(98, 45, '4', '4.00'),
+(99, 45, '6', '6.00'),
+(100, 45, '7', '7.00'),
+(101, 45, '8', '8.00'),
+(102, 45, '9', '9.00'),
+(103, 45, '10', '10.00'),
+(104, 46, 'Pilot', '-525.00');
 
 -- --------------------------------------------------------
 
@@ -241,10 +308,10 @@ INSERT INTO `flugzeug_klappen` (`id`, `flugzeugID`, `stellungBezeichnung`, `stel
 (18, 5, '-4', '-4.00', NULL, NULL, 0),
 (26, 7, '1', '-2.50', NULL, NULL, 0),
 (27, 7, '2', '0.00', NULL, NULL, 0),
-(28, 7, '3', '5.00', 1, NULL, 0),
-(29, 7, '4', '12.00', NULL, NULL, 100),
-(30, 7, '5', '20.00', NULL, 1, 0),
-(31, 7, '6', '24.00', NULL, NULL, 100),
+(28, 7, '3', '5.00', NULL, NULL, 0),
+(29, 7, '4', '12.00', 1, NULL, 100),
+(30, 7, '5', '20.00', NULL, NULL, 0),
+(31, 7, '6', '24.00', NULL, 1, 100),
 (32, 7, 'L', '47.00', NULL, NULL, 0),
 (33, 8, '-2', '-5.00', NULL, NULL, 0),
 (34, 8, '-1', '-2.00', NULL, NULL, 0),
@@ -257,9 +324,9 @@ INSERT INTO `flugzeug_klappen` (`id`, `flugzeugID`, `stellungBezeichnung`, `stel
 (41, 11, '0', '0.00', 1, NULL, 105),
 (42, 11, '1', NULL, NULL, NULL, 0),
 (43, 11, '2', '6.70', NULL, 1, 95),
-(45, 17, '-2', '-8.00', 0, 0, 0),
-(46, 17, '-1', NULL, 1, 0, 0),
-(47, 17, '+1', NULL, 0, 0, 100),
+(45, 17, '-2', '-8.00', NULL, NULL, 0),
+(46, 17, '-1', NULL, NULL, 0, 0),
+(47, 17, '+1', NULL, 0, 1, 100),
 (48, 17, '+2', '12.00', 0, 0, 0),
 (49, 20, '1', '-2.50', 0, 0, 0),
 (50, 20, '2', '0.00', 1, 0, 0),
@@ -278,7 +345,35 @@ INSERT INTO `flugzeug_klappen` (`id`, `flugzeugID`, `stellungBezeichnung`, `stel
 (70, 37, '0', '0.00', 1, 0, 115),
 (71, 37, '+1', '3.50', 0, 0, 0),
 (72, 37, '+2', '7.50', 0, 1, 112),
-(73, 37, 'L', '15.00', 0, 0, 0);
+(73, 37, 'L', '15.00', 0, 0, 0),
+(74, 38, 'S', '-12.00', NULL, NULL, NULL),
+(75, 38, '-2', '-7.50', NULL, NULL, NULL),
+(76, 38, '-1', '-5.00', NULL, NULL, NULL),
+(77, 38, '0', '0.00', 1, NULL, 115),
+(78, 38, '+1', '3.50', NULL, NULL, NULL),
+(79, 38, '+2', '7.50', NULL, 1, 112),
+(80, 38, 'L', '15.00', NULL, NULL, NULL),
+(95, 41, 'S', '-12.00', NULL, NULL, NULL),
+(96, 41, '-2', '-7.50', NULL, NULL, NULL),
+(97, 41, '-1', '-5.00', NULL, NULL, NULL),
+(98, 41, '0', '0.00', 1, NULL, 115),
+(99, 41, '+1', '3.50', NULL, NULL, NULL),
+(100, 41, '+2', '7.50', NULL, 1, 112),
+(101, 41, 'L', '15.00', NULL, NULL, NULL),
+(102, 44, '1', '1.00', NULL, NULL, NULL),
+(103, 44, '2', '2.00', NULL, NULL, NULL),
+(104, 44, '3', '3.00', NULL, NULL, NULL),
+(105, 44, '4', '4.00', NULL, NULL, NULL),
+(106, 45, '1', '1.00', NULL, NULL, NULL),
+(107, 45, '2', '2.00', 1, NULL, 123),
+(108, 45, '3', '3.00', NULL, NULL, NULL),
+(109, 45, '4', '4.00', NULL, NULL, NULL),
+(110, 45, '5', '5.00', NULL, NULL, NULL),
+(111, 45, '6', '6.00', NULL, NULL, NULL),
+(112, 45, '8', '8.00', NULL, NULL, NULL),
+(113, 45, '9', '9.00', NULL, NULL, NULL),
+(114, 45, '10', '10.00', NULL, NULL, NULL),
+(115, 17, '0', NULL, 1, 0, 100);
 
 -- --------------------------------------------------------
 
@@ -329,7 +424,19 @@ INSERT INTO `flugzeug_waegung` (`id`, `flugzeugID`, `leermasse`, `schwerpunkt`, 
 (30, 30, '486.80', '701.00', '0.00', '0.00', '2020-08-13'),
 (31, 31, '316.60', '0.00', '80.00', '115.00', '2020-08-03'),
 (32, 32, '484.90', '568.15', '70.00', '215.00', '2019-03-27'),
-(35, 37, '466.60', '553.72', '73.00', '212.60', '2015-07-06');
+(35, 37, '466.60', '553.72', '73.00', '212.60', '2015-07-06'),
+(36, 38, '430.00', '1234.00', '0.00', '999.00', '2021-05-05'),
+(39, 41, '1.00', '1.00', '1.00', '1.00', '2021-05-07'),
+(40, 42, '1.00', '1.00', '1.00', '1.00', '2021-05-05'),
+(41, 43, '1.00', '1.00', '1.00', '1.00', '2021-05-05'),
+(42, 44, '1.00', '1.00', '1.00', '1.00', '2021-05-20'),
+(43, 45, '1.00', '1.00', '1.00', '1.00', '2021-04-28'),
+(44, 46, '1.00', '1.00', '1.00', '1.00', '2021-05-05'),
+(45, 38, '1.00', '1.00', '1.00', '1.00', '2021-05-04'),
+(46, 46, '2.00', '2.00', '2.00', '2.00', '2021-05-14'),
+(47, 46, '2.00', '2.00', '2.00', '2.00', '2021-05-14'),
+(48, 46, '3.00', '3.00', '3.00', '3.00', '2021-05-15'),
+(49, 43, '2.00', '2.00', '2.00', '2.00', '2021-05-09');
 
 -- --------------------------------------------------------
 
@@ -343,6 +450,7 @@ CREATE TABLE `muster` (
   `musterSchreibweise` text NOT NULL,
   `musterKlarname` varchar(20) NOT NULL,
   `musterZusatz` varchar(11) DEFAULT NULL,
+  `sichtbar` tinyint(1) DEFAULT 1,
   `istDoppelsitzer` tinyint(1) DEFAULT NULL,
   `istWoelbklappenFlugzeug` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -351,36 +459,39 @@ CREATE TABLE `muster` (
 -- Daten für Tabelle `muster`
 --
 
-INSERT INTO `muster` (`id`, `musterSchreibweise`, `musterKlarname`, `musterZusatz`, `istDoppelsitzer`, `istWoelbklappenFlugzeug`) VALUES
-(1, 'DG-1000', 'dg1000', 'S', 1, 0),
-(2, 'ASG 32', 'asg32', NULL, 1, 1),
-(5, 'SB 14', 'sb14', NULL, 0, 1),
-(6, 'ASG 29', 'asg29', NULL, 0, 1),
-(7, 'AK-8', 'ak8', 'b', 0, 0),
-(8, 'B-12', 'b12', NULL, 1, 1),
-(9, 'AK-8', 'ak8', NULL, 0, 0),
-(10, 'LS 4', 'ls4', 'b', 0, 0),
-(11, 'SB 10', 'sb10', NULL, 1, 1),
-(12, 'LS 4', 'ls4', 'b neo', 0, 0),
-(13, 'ASW 24', 'asw24', 'b', 0, 0),
-(15, 'AFH 24', 'afh24', NULL, 0, 0),
-(38, 'Glasflügel 304', 'glasfluegel304', ' WL', 0, 1),
-(57, 'Mü28', 'mue28', NULL, 0, 0),
-(58, 'Cirrus', 'cirrus', NULL, 0, 0),
-(60, 'D-40', 'd40', NULL, 0, 1),
-(61, 'Elfe S4D', 'elfes4d', NULL, 0, 0),
-(62, 'Discus 2', 'discus2', 'c', 0, 0),
-(63, 'fs33', 'fs33', NULL, 1, 1),
-(64, 'fs25', 'fs25', NULL, 0, 0),
-(65, 'Duo Discus', 'duodiscus', ' XL', 1, 0),
-(66, 'ASK 21', 'ask21', NULL, 1, 0),
-(67, 'Discus', 'discus', ' CS', 0, 0),
-(68, 'ASW 28', 'asw28', ' 18m', 0, 0),
-(69, 'Mü 22', 'mue22', NULL, 0, 0),
-(70, 'DG-1000', 'dg1000', 'T', 1, 0),
-(71, 'ASW 28 / FVA 29', 'asw28fva29', NULL, 0, 0),
-(72, 'D-43', 'd43', NULL, 1, 0),
-(78, 'Arcus', 'arcus', '', 1, 1);
+INSERT INTO `muster` (`id`, `musterSchreibweise`, `musterKlarname`, `musterZusatz`, `sichtbar`, `istDoppelsitzer`, `istWoelbklappenFlugzeug`) VALUES
+(1, 'DG-1000', 'dg1000', 'S', 1, 1, 0),
+(2, 'ASG 32', 'asg32', NULL, 1, 1, 1),
+(5, 'SB 14', 'sb14', NULL, 1, 0, 1),
+(6, 'ASG 29', 'asg29', NULL, 1, 0, 1),
+(7, 'AK-8', 'ak8', 'b', 1, 0, 0),
+(8, 'B-12', 'b12', NULL, 1, 1, 1),
+(9, 'AK-8', 'ak8', NULL, 1, 0, 0),
+(10, 'LS 4', 'ls4', 'b', 1, 0, 0),
+(11, 'SB 10', 'sb10', NULL, 1, 1, 1),
+(12, 'LS 4', 'ls4', 'b neo', 1, 0, 0),
+(13, 'ASW 24', 'asw24', 'b', 1, 0, 0),
+(15, 'AFH 24', 'afh24', NULL, 1, 0, 0),
+(38, 'Glasflügel 304', 'glasfluegel304', ' WL', 1, 0, 1),
+(57, 'Mü28', 'mue28', NULL, 1, 0, 0),
+(58, 'Cirrus', 'cirrus', NULL, 1, 0, 0),
+(60, 'D-40', 'd40', NULL, 1, 0, 1),
+(61, 'Elfe', 'elfe', ' S4D', 1, 0, 0),
+(62, 'Discus 2', 'discus2', 'c', 1, 0, 0),
+(63, 'fs33', 'fs33', NULL, 1, 1, 1),
+(64, 'fs25', 'fs25', NULL, 1, 0, 0),
+(65, 'Duo Discus', 'duodiscus', ' XL', 1, 1, 0),
+(66, 'ASK 21', 'ask21', NULL, 1, 1, 0),
+(67, 'Discus', 'discus', ' CS', 1, 0, 0),
+(68, 'ASW 28', 'asw28', ' 18m', 1, 0, 0),
+(69, 'Mü 22', 'mue22', NULL, 1, 0, 0),
+(70, 'DG-1000', 'dg1000', 'T', 1, 1, 0),
+(71, 'ASW 28 / FVA 29', 'asw28fva29', NULL, 1, 0, 0),
+(72, 'D-43', 'd43', NULL, 1, 1, 0),
+(78, 'Arcus', 'arcus', '', 1, 1, 1),
+(79, 'Arcus', 'arcus', ' 18m', 1, 1, 1),
+(81, 'Flugzeug', 'flugzeug', ' Test', 1, 1, 1),
+(82, 'Flugzeug', 'flugzeug', ' Test', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -446,7 +557,10 @@ INSERT INTO `muster_details` (`id`, `musterID`, `kupplung`, `diffQR`, `radgroess
 (69, 70, 'Bug', 'Ja', '380 x 150  6 PR', 'Scheibe', 'Ja', '17.53', '20.00', 'Schempp-Hirth doppelstöckig', 110, 750, '0.00', '0.00', '655.00', '710.00', '0.00', '0.00', 'Flügelvorderkante an der Wurzelrippe', '1000:33 auf dem Rumpfrücken', '2020-09-03 19:38:22'),
 (70, 71, 'Bug', 'Ja', '5.00-5, 6PR TT', 'Scheibe', 'Ja', '11.88', '18.00', 'Schempp-Hirth', 110, 575, '0.00', '999.00', '233.00', '406.00', '80.00', '115.00', 'Flügelvorderkante an der Wurzelrippe', '1000:49 auf Rumpfrücken, 2500mm hinter B.E.', '2020-11-17 12:55:59'),
 (71, 72, 'Bug', 'Ja', '5/6 Zoll', 'Scheibe', 'Ja', '15.93', '18.00', 'Schempp-Hirth', NULL, 700, '0.00', '999.00', '170.00', '405.00', '70.00', '215.00', 'Flügelvorderkante an der Wurzelrippe', '-', '2020-12-01 14:11:58'),
-(76, 78, 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', '73.00', '212.60', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite', '0000-00-00 00:00:00');
+(76, 78, 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '15.59', '20.00', 'Schempp-Hirth dreistöckig', 0, 750, '527.00', '566.00', '50.00', '290.00', '73.00', '212.60', 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite', '0000-00-00 00:00:00'),
+(77, 79, 'Bug', 'Ja', '6\"', 'Scheibe', 'Ja', '14.12', '18.00', 'Schempp-Hirth dreistöckig', 0, 700, '527.00', '566.00', '50.00', '290.00', NULL, NULL, 'Flügelvorderkante an der Wurzelrippe', '100:4,5 auf Rumpfoderseite', '0000-00-00 00:00:00'),
+(79, 81, 'Bug', 'Ja', '6\"', 'Scheibe', 'Nein', '123.00', '321.00', 'Hydraulik', 0, 123123123, '12.00', '12.00', '12.00', '12.00', NULL, NULL, 'Nase', 'Bauchlage', '0000-00-00 00:00:00'),
+(80, 82, 'Bug', 'Ja', '6\"', 'Scheibe', 'Nein', '123.00', '321.00', 'Hydraulik', 0, 123123123, '12.00', '12.00', '12.00', '12.00', NULL, NULL, 'Nase', 'Bauchlage', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -519,7 +633,33 @@ INSERT INTO `muster_hebelarme` (`id`, `musterID`, `beschreibung`, `hebelarm`) VA
 (52, 72, 'Copilot', '-730.00'),
 (65, 78, 'Pilot', '-1468.00'),
 (66, 78, 'Copilot', '-308.00'),
-(67, 78, 'Trimmballast', '-2153.00');
+(67, 78, 'Trimmballast', '-2153.00'),
+(68, 79, 'Pilot', '-1468.00'),
+(69, 79, 'Copilot', '-308.00'),
+(70, 79, 'Trimmballast', '-2153.00'),
+(72, 81, 'Pilot', '1.00'),
+(73, 81, 'Copilot', '2.00'),
+(74, 81, '1', '1.00'),
+(75, 81, '2', '2.00'),
+(76, 81, '3', '3.00'),
+(77, 81, '4', '4.00'),
+(78, 81, '5', '5.00'),
+(79, 81, '6', '-6.00'),
+(80, 81, '7', '7.00'),
+(81, 81, '8', '8.00'),
+(82, 81, '9', '9.00'),
+(83, 81, '10', '10.00'),
+(84, 82, 'Pilot', '1.00'),
+(85, 82, 'Copilot', '2.00'),
+(86, 82, '1', '1.00'),
+(87, 82, '2', '-2.00'),
+(88, 82, '3', '3.00'),
+(89, 82, '4', '4.00'),
+(90, 82, '6', '6.00'),
+(91, 82, '7', '7.00'),
+(92, 82, '8', '8.00'),
+(93, 82, '9', '9.00'),
+(94, 82, '10', '10.00');
 
 -- --------------------------------------------------------
 
@@ -594,7 +734,37 @@ INSERT INTO `muster_klappen` (`id`, `musterID`, `stellungBezeichnung`, `stellung
 (71, 78, '0', '0.00', 1, 0, 115),
 (72, 78, '+1', '3.50', 0, 0, 0),
 (73, 78, '+2', '7.50', 0, 1, 112),
-(74, 78, 'L', '15.00', 0, 0, 0);
+(74, 78, 'L', '15.00', 0, 0, 0),
+(75, 79, 'S', '-12.00', NULL, NULL, NULL),
+(76, 79, '-2', '-7.50', NULL, NULL, NULL),
+(77, 79, '-1', '-5.00', NULL, NULL, NULL),
+(78, 79, '0', '0.00', 1, NULL, 115),
+(79, 79, '+1', '3.50', NULL, NULL, NULL),
+(80, 79, '+2', '7.50', NULL, 1, 112),
+(81, 79, 'L', '15.00', NULL, NULL, NULL),
+(82, 81, '1', '1.00', NULL, NULL, NULL),
+(83, 81, '2', '2.00', 1, NULL, 123),
+(84, 81, '3', '3.00', NULL, 1, 321),
+(85, 81, '4', '4.00', NULL, NULL, NULL),
+(86, 82, '1', '1.00', NULL, NULL, NULL),
+(87, 82, '2', '2.00', 1, NULL, 123),
+(88, 82, '3', '3.00', NULL, NULL, NULL),
+(89, 82, '4', '4.00', NULL, NULL, NULL),
+(90, 82, '5', '5.00', NULL, NULL, NULL),
+(91, 82, '6', '6.00', NULL, NULL, NULL),
+(92, 82, '8', '8.00', NULL, NULL, NULL),
+(93, 82, '9', '9.00', NULL, NULL, NULL),
+(94, 82, '10', '10.00', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `flugzeuge_mit_muster`
+--
+DROP TABLE IF EXISTS `flugzeuge_mit_muster`;
+
+DROP VIEW IF EXISTS `flugzeuge_mit_muster`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `flugzeuge_mit_muster`  AS SELECT `flugzeuge`.`id` AS `flugzeugID`, `flugzeuge`.`kennung` AS `kennung`, `muster`.`musterSchreibweise` AS `musterSchreibweise`, `muster`.`musterZusatz` AS `musterZusatz`, `muster`.`musterKlarname` AS `musterKlarname`, `muster`.`istDoppelsitzer` AS `istDoppelsitzer`, `muster`.`istWoelbklappenFlugzeug` AS `istWoelbklappenFlugzeug`, `flugzeuge`.`sichtbar` AS `sichtbar`, `flugzeuge`.`musterID` AS `musterID`, `flugzeuge`.`geaendertAm` AS `geaendertAm` FROM (`flugzeuge` join `muster` on(`flugzeuge`.`musterID` = `muster`.`id`)) ;
 
 --
 -- Indizes der exportierten Tabellen
@@ -668,55 +838,55 @@ ALTER TABLE `muster_klappen`
 -- AUTO_INCREMENT für Tabelle `flugzeuge`
 --
 ALTER TABLE `flugzeuge`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT für Tabelle `flugzeug_details`
 --
 ALTER TABLE `flugzeug_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT für Tabelle `flugzeug_hebelarme`
 --
 ALTER TABLE `flugzeug_hebelarme`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT für Tabelle `flugzeug_klappen`
 --
 ALTER TABLE `flugzeug_klappen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT für Tabelle `flugzeug_waegung`
 --
 ALTER TABLE `flugzeug_waegung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT für Tabelle `muster`
 --
 ALTER TABLE `muster`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT für Tabelle `muster_details`
 --
 ALTER TABLE `muster_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT für Tabelle `muster_hebelarme`
 --
 ALTER TABLE `muster_hebelarme`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT für Tabelle `muster_klappen`
 --
 ALTER TABLE `muster_klappen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- Constraints der exportierten Tabellen
@@ -776,60 +946,65 @@ CREATE TABLE `piloten` (
   `vorname` varchar(255) DEFAULT NULL,
   `spitzname` varchar(255) DEFAULT NULL,
   `nachname` varchar(255) DEFAULT NULL,
+  `akaflieg` text DEFAULT NULL,
   `groesse` int(11) DEFAULT NULL,
   `sichtbar` tinyint(1) DEFAULT 1,
-  `erstelltAm` datetime NOT NULL,
-  `geaendertAm` datetime NOT NULL
+  `zachereinweiser` tinyint(1) DEFAULT NULL,
+  `erstelltAm` datetime NOT NULL DEFAULT current_timestamp(),
+  `geaendertAm` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `piloten`
 --
 
-INSERT INTO `piloten` (`id`, `vorname`, `spitzname`, `nachname`, `groesse`, `sichtbar`, `erstelltAm`, `geaendertAm`) VALUES
-(1, 'Roberto', 'Chilli', 'Fillbrandt', 179, 1, '2019-07-11 11:47:29', '2019-07-11 11:47:29'),
-(3, 'Stefan', 'Zischi', 'Zistler', 176, 1, '2019-07-16 15:32:51', '2020-08-27 14:33:20'),
-(4, 'Philipp', '', 'Döring', 193, NULL, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
-(5, 'Matthias', 'Teilnehmer', 'Molitor', 178, 1, '2019-07-30 15:58:25', '2019-08-22 21:43:54'),
-(6, 'Thomas', '', 'Stolte', 167, 1, '2019-08-20 18:45:44', '2019-12-20 22:11:17'),
-(8, 'Lukas', 'Kerby', 'Nickel', 186, 1, '2019-08-27 14:16:42', '2019-11-05 11:50:25'),
-(9, 'Renate', '', 'Litzelmann', 160, 1, '2019-08-27 15:26:54', '2020-08-27 14:01:58'),
-(10, 'Nico', 'Breitbart', 'Große', 185, 1, '2018-08-01 00:00:00', '2020-03-31 15:19:36'),
-(11, 'Thiemo', 'Sose', 'Hofmacher', 180, 1, '2018-08-01 00:00:00', '2019-11-05 11:55:45'),
-(12, 'Kai', 'KiKa', 'Weber', 180, 1, '2018-08-01 00:00:00', '2020-08-27 14:22:55'),
-(13, 'Sandra', 'Mörtel', 'Müller', 172, 1, '2018-08-01 00:00:00', '2019-11-05 12:14:41'),
-(14, 'Kristian', 'Kerstin', 'Fettig', 183, 1, '2018-08-01 00:00:00', '2020-04-01 14:58:51'),
-(15, 'Andreas', 'Dingsda', 'Weskamp', 182, 1, '2018-08-01 00:00:00', '2019-11-05 12:18:17'),
-(16, 'Nils', 'Locke', 'Mackensen', 179, 1, '2018-08-01 00:00:00', '2019-11-05 12:20:38'),
-(17, 'Ines', 'Angela', 'Weber', 170, 1, '2018-08-01 00:00:00', '2019-11-05 12:24:31'),
-(18, 'K', '', 'Köhler', 185, NULL, '2018-07-01 00:00:00', '2019-12-20 12:29:47'),
-(19, '?', '', 'Neveling', 184, NULL, '2018-08-14 00:00:00', '2019-12-20 17:20:56'),
-(20, 'unbekannt', '', 'Neveling', 184, NULL, '2018-08-14 00:00:00', '2019-12-20 17:23:19'),
-(21, 'Leichter', '', 'Begleiter', 175, NULL, '2018-08-20 00:00:00', '2019-12-20 17:50:00'),
-(22, 'Wiebke', 'Frosty', 'Mügge', 170, 1, '2018-08-22 00:00:00', '2019-12-20 18:12:53'),
-(23, 'Simeon', '', 'Gubernator', 183, 1, '2018-08-22 00:00:00', '2019-12-20 22:12:03'),
-(24, 'Jonas', 'Bunny', 'Schmidt', 180, 1, '2018-08-06 00:00:00', '2020-04-15 14:57:12'),
-(25, 'Christoh', 'Poolboy', 'Rothkamm', 182, 1, '2018-08-08 00:00:00', '2019-12-20 23:36:21'),
-(26, 'Christian', 'Kai-Uwe', 'Weidemann', 183, 1, '2019-08-20 00:00:00', '2020-04-01 14:20:20'),
-(27, 'Robert', 'Sofa', 'Berrios Hinz', 180, 1, '2019-08-01 00:00:00', '2020-09-02 22:14:52'),
-(28, 'Kathrin', 'Chimala', 'Deck', 165, 1, '2019-08-01 00:00:00', '2020-04-28 14:25:10'),
-(29, 'Richardt', 'Chewy', 'Czuberny', 198, 1, '2019-08-01 00:00:00', '2020-04-28 14:52:31'),
-(30, 'Bastian', 'Baschtl', 'Schick', 186, 1, '2019-08-01 00:00:00', '2020-04-28 15:06:28'),
-(31, 'Janette', '', 'Kryppa', 170, 1, '2018-08-01 00:00:00', '2020-04-29 14:59:03'),
-(32, 'Katharina', 'Katjuscha', 'Diehm', 175, 1, '2019-08-01 00:00:00', '2020-08-27 14:35:10'),
-(33, '70kg', '', 'Begleiter', 175, NULL, '2018-08-01 00:00:00', '2020-05-19 10:32:32'),
-(34, 'Christoph', 'Sackbart', 'Barczak', 186, 1, '2019-08-01 00:00:00', '2020-05-19 15:44:02'),
-(35, 'Sebastian', 'Nitro', 'Neveling', 185, 1, '2020-08-01 00:00:00', '2020-08-21 09:22:09'),
-(36, '90 kg', '', 'Begleiter', 175, NULL, '2020-08-01 00:00:00', '2020-08-21 09:52:07'),
-(37, 'Tim', 'Twinkie', 'Rommelaere', 187, 1, '2020-08-01 00:00:00', '2020-08-21 18:37:23'),
-(38, 'Simon', 'Azubi', 'Grafenhorst', 178, 1, '2020-08-01 00:00:00', '2020-08-24 15:18:07'),
-(39, 'Robert', 'Kobo', 'May', 185, 1, '2020-08-01 00:00:00', '2020-09-04 01:54:07'),
-(40, 'Michael', 'Claas', 'Brüggemann', 168, 1, '2020-08-01 00:00:00', '2020-08-27 14:41:32'),
-(41, 'Felix', 'Kleinlich', 'Reinisch', 176, 1, '2020-08-01 00:00:00', '2020-09-03 19:47:46'),
-(42, 'Erik', 'Holle Honig', 'Braun', 175, 1, '2020-08-01 00:00:00', '2020-09-03 21:24:21'),
-(43, 'Philipp', '', 'Schmidt', 192, 1, '2020-01-01 00:00:00', '2020-11-17 13:06:47'),
-(44, 'Davide', 'Beschichter', 'Schulte', 186, 1, '2020-08-01 00:00:00', '2020-11-17 13:46:19'),
-(45, 'Marie', 'Tim', 'Steidele', 165, 1, '2020-08-01 00:00:00', '2020-11-17 14:10:09');
+INSERT INTO `piloten` (`id`, `vorname`, `spitzname`, `nachname`, `akaflieg`, `groesse`, `sichtbar`, `zachereinweiser`, `erstelltAm`, `geaendertAm`) VALUES
+(1, 'Roberto', 'Chilli', 'Fillbrandt', 'München', 179, 1, NULL, '2019-07-11 11:47:29', '2019-07-11 11:47:29'),
+(3, 'Stefan', 'Zischi', 'Zistler', 'Esslingen', 176, 1, 1, '2019-07-16 15:32:51', '2020-08-27 14:33:20'),
+(4, 'Philipp', '', 'Döring', 'Berlin', 193, NULL, NULL, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
+(5, 'Matthias', 'Teilnehmer', 'Molitor', 'Darmstadt', 178, 1, NULL, '2019-07-30 15:58:25', '2019-08-22 21:43:54'),
+(6, 'Thomas', '', 'Stolte', NULL, 167, 1, NULL, '2019-08-20 18:45:44', '2019-12-20 22:11:17'),
+(8, 'Lukas', 'Kerby', 'Nickel', NULL, 186, 1, NULL, '2019-08-27 14:16:42', '2019-11-05 11:50:25'),
+(9, 'Renate', '', 'Litzelmann', NULL, 160, 1, NULL, '2019-08-27 15:26:54', '2020-08-27 14:01:58'),
+(10, 'Nico', 'Breitbart', 'Große', NULL, 185, 1, NULL, '2018-08-01 00:00:00', '2020-03-31 15:19:36'),
+(11, 'Thiemo', 'Sose', 'Hofmacher', 'Braunschweig', 180, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 11:55:45'),
+(12, 'Kai', 'KiKa', 'Weber', NULL, 180, 1, NULL, '2018-08-01 00:00:00', '2020-08-27 14:22:55'),
+(13, 'Sandra', 'Mörtel', 'Müller', 'München', 172, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:14:41'),
+(14, 'Kristian', 'Kerstin', 'Fettig', 'Braunschweig', 183, 1, NULL, '2018-08-01 00:00:00', '2020-04-01 14:58:51'),
+(15, 'Andreas', 'Dingsda', 'Weskamp', NULL, 182, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:18:17'),
+(16, 'Nils', 'Locke', 'Mackensen', 'Braunschweig', 179, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:20:38'),
+(17, 'Ines', 'Angela', 'Weber', NULL, 170, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:24:31'),
+(18, 'K', '', 'Köhler', NULL, 185, NULL, NULL, '2018-07-01 00:00:00', '2019-12-20 12:29:47'),
+(19, '?', '', 'Neveling', NULL, 184, NULL, NULL, '2018-08-14 00:00:00', '2019-12-20 17:20:56'),
+(20, 'unbekannt', '', 'Neveling', NULL, 184, NULL, NULL, '2018-08-14 00:00:00', '2019-12-20 17:23:19'),
+(21, 'Leichter', '', 'Begleiter', NULL, 175, NULL, NULL, '2018-08-20 00:00:00', '2019-12-20 17:50:00'),
+(22, 'Wiebke', 'Frosty', 'Mügge', 'Hannover', 170, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 18:12:53'),
+(23, 'Simeon', '', 'Gubernator', 'Darmstadt', 183, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 22:12:03'),
+(24, 'Jonas', 'Bunny', 'Schmidt', 'Stuttgart', 180, 1, NULL, '2018-08-06 00:00:00', '2020-04-15 14:57:12'),
+(25, 'Christoh', 'Poolboy', 'Rothkamm', 'Aachen', 182, 1, NULL, '2018-08-08 00:00:00', '2019-12-20 23:36:21'),
+(26, 'Christian', 'Kai-Uwe', 'Weidemann', NULL, 183, NULL, NULL, '2019-08-20 00:00:00', '2020-04-01 14:20:20'),
+(27, 'Robert', 'Sofa', 'Berrios Hinz', 'Braunschweig', 180, 1, NULL, '2019-08-01 00:00:00', '2020-09-02 22:14:52'),
+(28, 'Kathrin', 'Chimala', 'Deck', 'Karlsruhe', 165, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:25:10'),
+(29, 'Richardt', 'Chewy', 'Czuberny', 'Braunschweig', 198, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:52:31'),
+(30, 'Bastian', 'Baschtl', 'Schick', 'Esslingen', 186, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 15:06:28'),
+(31, 'Janette', '', 'Kryppa', NULL, 170, 1, NULL, '2018-08-01 00:00:00', '2020-04-29 14:59:03'),
+(32, 'Katharina', 'Katjuscha', 'Diehn', 'Berlin', 175, 1, NULL, '2019-08-01 00:00:00', '2020-08-27 14:35:10'),
+(33, '70kg', '', 'Begleiter', NULL, 175, NULL, NULL, '2018-08-01 00:00:00', '2020-05-19 10:32:32'),
+(34, 'Christoph', 'Sackbart', 'Barczak', 'Braunschweig', 186, 1, NULL, '2019-08-01 00:00:00', '2020-05-19 15:44:02'),
+(35, 'Sebastian', 'Nitro', 'Neveling', NULL, 185, 1, NULL, '2020-08-01 00:00:00', '2020-08-21 09:22:09'),
+(36, '90 kg', '', 'Begleiter', NULL, 175, NULL, NULL, '2020-08-01 00:00:00', '2020-08-21 09:52:07'),
+(37, 'Tim', 'Twinkie', 'Rommelaere', NULL, 187, 1, NULL, '2020-08-01 00:00:00', '2020-08-21 18:37:23'),
+(38, 'Simon', 'Azubi', 'Grafenhorst', NULL, 178, 1, NULL, '2020-08-01 00:00:00', '2020-08-24 15:18:07'),
+(39, 'Robert', 'Kobo', 'May', 'Berlin', 185, 1, NULL, '2020-08-01 00:00:00', '2020-09-04 01:54:07'),
+(40, 'Michael', 'Claas', 'Brüggemann', 'Braunschweig', 168, 1, NULL, '2020-08-01 00:00:00', '2020-08-27 14:41:32'),
+(41, 'Felix', 'Kleinlich', 'Reinisch', 'München', 176, NULL, NULL, '2020-08-01 00:00:00', '2020-09-03 19:47:46'),
+(42, 'Erik', 'Holle Honig', 'Braun', 'Karlsruhe', 175, 1, NULL, '2020-08-01 00:00:00', '2020-09-03 21:24:21'),
+(43, 'Philipp', '', 'Schmidt', NULL, 192, 1, NULL, '2020-01-01 00:00:00', '2020-11-17 13:06:47'),
+(44, 'Davide', 'Beschichter', 'Schulte', NULL, 186, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 13:46:19'),
+(45, 'Marie', 'Tim', 'Steidele', NULL, 165, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 14:10:09'),
+(46, 'Lars', 'Eisbär', 'Kastner', 'Braunschweig', 174, 1, 1, '2021-05-13 00:00:00', '2021-05-14 00:03:03'),
+(51, 'Ein', 'Test', 'Pilot', NULL, 2147483647, 1, NULL, '2021-05-13 22:05:48', '2021-05-14 00:06:06'),
+(52, 'asd', '', 'asd', 'Aachen', 3, 1, NULL, '2021-05-13 22:07:19', '2021-05-14 00:07:19');
 
 -- --------------------------------------------------------
 
@@ -841,7 +1016,7 @@ DROP TABLE IF EXISTS `piloten_details`;
 CREATE TABLE `piloten_details` (
   `id` int(20) NOT NULL,
   `pilotID` int(11) DEFAULT NULL,
-  `datum` date DEFAULT NULL,
+  `datum` date NOT NULL DEFAULT current_timestamp(),
   `stundenNachSchein` int(11) DEFAULT NULL,
   `geflogeneKm` int(11) DEFAULT NULL,
   `typenAnzahl` int(11) DEFAULT NULL,
@@ -904,7 +1079,13 @@ INSERT INTO `piloten_details` (`id`, `pilotID`, `datum`, `stundenNachSchein`, `g
 (51, 39, '2020-08-01', 180, 0, 26, 82),
 (52, 43, '2020-01-01', 50, 1000, 16, 100),
 (53, 44, '2020-08-01', 70, 3000, 8, 92),
-(54, 45, '2020-08-01', 75, 0, 25, 75);
+(54, 45, '2020-08-01', 75, 0, 25, 75),
+(55, 46, '2021-05-13', 100, 500, 23, 80),
+(73, 46, '2021-05-14', 1, 2, 3, 4),
+(74, 46, '2021-05-14', 1, 2, 3, 75),
+(75, 51, '2021-05-14', 1, 2, 3, 4),
+(76, 51, '2021-05-14', 4, 3, 2, 1),
+(77, 52, '2021-05-14', 3, 412, 3, 3);
 
 --
 -- Indizes der exportierten Tabellen
@@ -931,13 +1112,13 @@ ALTER TABLE `piloten_details`
 -- AUTO_INCREMENT für Tabelle `piloten`
 --
 ALTER TABLE `piloten`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT für Tabelle `piloten_details`
 --
 ALTER TABLE `piloten_details`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 --
 -- Datenbank: `testzachern_protokolle`
 --
@@ -1189,7 +1370,7 @@ CREATE TABLE `daten` (
   `protokollSpeicherID` int(11) NOT NULL,
   `protokollInputID` int(11) NOT NULL,
   `wert` text NOT NULL,
-  `wölbklappenstellung` varchar(255) DEFAULT NULL,
+  `woelbklappenstellung` varchar(255) DEFAULT NULL,
   `linksUndRechts` varchar(10) DEFAULT NULL,
   `multipelNr` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1198,7 +1379,7 @@ CREATE TABLE `daten` (
 -- Daten für Tabelle `daten`
 --
 
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (67, 138, 1, 'gut steuer- und kontrollierbar, ausgefahrene beim Anrollen unterstützen Quersteuerwirkung ', NULL, NULL, NULL),
 (68, 138, 2, '85', NULL, NULL, NULL),
 (69, 138, 5, 'on', NULL, NULL, NULL),
@@ -2223,8 +2404,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (1166, 180, 21, '0', NULL, 'Links', NULL),
 (1167, 180, 22, 'Vibrationen, Fahrtmesseranzeige -> 0', NULL, 'Rechts', NULL),
 (1168, 180, 23, '80', NULL, 'Links', NULL),
-(1169, 180, 24, '65', NULL, 'Links', NULL);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(1169, 180, 24, '65', NULL, 'Links', NULL),
 (1170, 180, 25, 'Vibrationen, Taumeln, Weichwerden der Ruder, Pumpen', NULL, 'Rechts', NULL),
 (1171, 180, 26, '2.0', NULL, 'Links', NULL),
 (1172, 180, 27, '20', NULL, 'Links', NULL),
@@ -3321,8 +3501,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (2263, 195, 77, '182', NULL, NULL, 5),
 (2264, 195, 77, '178', NULL, NULL, 6),
 (2265, 195, 77, '176', NULL, NULL, 7),
-(2266, 195, 78, '80', NULL, NULL, 1);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(2266, 195, 78, '80', NULL, NULL, 1),
 (2267, 195, 78, '90', NULL, NULL, 2),
 (2268, 195, 78, '100', NULL, NULL, 3),
 (2269, 195, 78, '110', NULL, NULL, 4),
@@ -4311,8 +4490,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (3252, 203, 53, '33', NULL, NULL, NULL),
 (3253, 203, 55, '1', NULL, NULL, NULL),
 (3254, 203, 80, 'Lose hintere Haube (Hilfe oft erforderlich)', NULL, NULL, NULL),
-(3255, 203, 56, '3', NULL, NULL, NULL);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(3255, 203, 56, '3', NULL, NULL, NULL),
 (3256, 203, 81, 'Lose Haube, Verriegelung sehr unhandlich. Zum Öffnen muß gedrückt, anstatt wie üblich gezogen werden.', NULL, NULL, NULL),
 (3257, 203, 57, '3', NULL, NULL, NULL),
 (3258, 203, 82, 'große Einstellweite aber unhandlich', NULL, NULL, NULL),
@@ -5373,8 +5551,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (4313, 217, 13, '200', NULL, 'Links', NULL),
 (4314, 217, 14, '0', NULL, 'Links', NULL),
 (4315, 217, 15, '0', NULL, 'Links', NULL),
-(4316, 217, 16, '219', NULL, 'Links', NULL);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(4316, 217, 16, '219', NULL, 'Links', NULL),
 (4317, 217, 17, '68', NULL, NULL, NULL),
 (4318, 217, 18, '65', NULL, NULL, NULL),
 (4319, 217, 19, 'Schütteln am Knüppel, Schütteln, FM-Schwankungen.', NULL, NULL, NULL),
@@ -6427,8 +6604,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (5366, 233, 25, 'weiche Ruder... Schütteln', 'Kreisflug', 'Rechts', NULL),
 (5367, 233, 26, '1.4', 'Neutral', 'Links', NULL),
 (5368, 233, 26, '1.2', 'Neutral', 'Rechts', NULL),
-(5369, 233, 27, '0', 'Neutral', 'Links', NULL);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(5369, 233, 27, '0', 'Neutral', 'Links', NULL),
 (5370, 233, 27, '5', 'Neutral', 'Rechts', NULL),
 (5371, 233, 26, '1.9', 'Kreisflug', 'Links', NULL),
 (5372, 233, 26, '1.6', 'Kreisflug', 'Rechts', NULL),
@@ -7424,8 +7600,7 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (6362, 254, 25, 'Ablösegeräusch -> Taumeln -> Abkippen - Trudelneigung', NULL, 'Rechts', NULL),
 (6363, 254, 26, '1.2', NULL, 'Links', NULL),
 (6364, 254, 27, '20', NULL, 'Links', NULL),
-(6365, 254, 28, '2.3', NULL, 'Rechts', NULL);
-INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `wölbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
+(6365, 254, 28, '2.3', NULL, 'Rechts', NULL),
 (6366, 254, 29, '100', NULL, NULL, NULL),
 (6367, 254, 30, '100', NULL, NULL, NULL),
 (6368, 254, 31, '100', NULL, NULL, NULL),
@@ -8542,92 +8717,93 @@ CREATE TABLE `protokolle` (
   `bestaetigt` tinyint(1) DEFAULT NULL,
   `fertig` tinyint(1) DEFAULT NULL,
   `datum` date DEFAULT NULL,
-  `erstelltAm` timestamp NOT NULL DEFAULT current_timestamp()
+  `erstelltAm` timestamp NOT NULL DEFAULT current_timestamp(),
+  `geaendertAm` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `protokolle`
 --
 
-INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`, `bemerkung`, `bestaetigt`, `fertig`, `datum`, `erstelltAm`) VALUES
-(138, 1, 1, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-07-11 13:26:00'),
-(154, 8, 3, 4, NULL, NULL, NULL, 1, '2018-08-20', '2019-07-18 14:20:20'),
-(155, 9, 1, NULL, NULL, NULL, NULL, 1, '2018-08-22', '2019-07-30 13:36:05'),
-(164, 10, 6, NULL, NULL, NULL, NULL, 1, '2018-08-10', '2019-08-20 16:56:47'),
-(167, 12, 5, NULL, '01:48:00', NULL, NULL, 1, '2019-08-22', '2019-08-22 19:44:26'),
-(174, 9, 8, NULL, '03:23:00', NULL, NULL, 1, '2019-08-24', '2019-08-27 12:19:24'),
-(176, 11, 9, NULL, '03:46:00', NULL, NULL, 1, '2019-08-21', '2019-08-27 13:27:37'),
-(179, 23, 10, NULL, NULL, NULL, NULL, 1, '2018-08-10', '2019-11-05 12:08:47'),
-(180, 23, 8, NULL, NULL, NULL, NULL, 1, '2018-08-09', '2019-11-05 12:23:09'),
-(181, 23, 11, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 12:55:16'),
-(182, 23, 11, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-05 13:33:44'),
-(184, 23, 12, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-05 13:45:50'),
-(186, 23, 13, NULL, NULL, NULL, NULL, 1, '2018-08-14', '2019-11-19 08:51:31'),
-(187, 23, 14, NULL, NULL, NULL, NULL, 1, '2018-08-20', '2019-11-19 09:17:17'),
-(188, 23, 15, NULL, NULL, NULL, NULL, 1, '2018-08-21', '2019-11-19 09:46:57'),
-(189, 23, 16, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2019-11-19 10:47:22'),
-(190, 23, 17, NULL, NULL, NULL, NULL, 1, '2018-08-15', '2019-11-19 12:38:57'),
-(193, 10, 5, NULL, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 11:40:58'),
-(194, 10, 16, NULL, NULL, NULL, NULL, 1, '2018-08-13', '2019-12-20 12:55:46'),
-(195, 10, 18, NULL, NULL, NULL, NULL, 1, '2018-08-17', '2019-12-20 14:07:26'),
-(196, 10, 14, NULL, NULL, NULL, NULL, 1, '2018-08-18', '2019-12-20 14:16:59'),
-(197, 10, 1, NULL, NULL, NULL, NULL, 1, '2018-08-23', '2019-12-20 14:31:11'),
-(198, 20, 5, 20, NULL, NULL, NULL, 1, '2018-08-14', '2019-12-20 16:18:57'),
-(199, 20, 1, 21, NULL, NULL, NULL, 1, '2018-08-20', '2019-12-20 16:47:29'),
-(200, 20, 9, 22, NULL, NULL, NULL, 1, '2018-08-22', '2019-12-20 17:13:46'),
-(201, 20, 6, 23, NULL, NULL, NULL, 1, '2018-08-22', '2019-12-20 21:12:14'),
-(202, 19, 24, NULL, NULL, NULL, NULL, 1, '2018-08-06', '2019-12-20 22:05:51'),
-(203, 19, 25, NULL, NULL, NULL, NULL, 1, '2018-08-08', '2019-12-20 22:36:33'),
-(204, 9, 5, NULL, NULL, NULL, NULL, NULL, '2018-08-16', '2020-03-27 09:41:02'),
-(205, 9, 5, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 09:42:48'),
-(206, 9, 5, NULL, NULL, NULL, NULL, 1, '2018-08-16', '2020-03-27 10:01:55'),
-(207, 13, 10, NULL, '03:10:00', NULL, NULL, 1, '2019-08-23', '2020-03-31 13:20:33'),
-(208, 13, 26, NULL, '05:01:00', NULL, NULL, NULL, '2019-08-20', '2020-04-01 12:20:33'),
-(209, 13, 8, NULL, '02:15:00', NULL, NULL, 1, '2019-08-14', '2020-04-01 12:35:47'),
-(210, 13, 14, NULL, '01:46:00', NULL, NULL, 1, '2019-08-20', '2020-04-01 12:55:38'),
-(211, 13, 24, NULL, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-15 12:57:27'),
-(212, 13, 24, NULL, NULL, NULL, NULL, 1, '2019-08-19', '2020-04-15 13:14:10'),
-(213, 13, 27, NULL, NULL, NULL, NULL, 1, '2019-08-20', '2020-04-24 12:12:17'),
-(214, 13, 27, NULL, '02:35:00', NULL, NULL, 1, '2019-08-21', '2020-04-24 12:33:14'),
-(215, 12, 28, NULL, '03:29:00', NULL, NULL, 1, '2019-08-22', '2020-04-28 12:28:17'),
-(216, 12, 29, NULL, '01:58:00', NULL, NULL, 1, '2019-08-22', '2020-04-28 12:52:41'),
-(217, 12, 30, NULL, '02:30:00', NULL, NULL, 1, '2019-08-28', '2020-04-28 13:06:39'),
-(218, 12, 5, NULL, '01:48:00', NULL, NULL, 1, '2019-08-21', '2020-04-28 13:16:48'),
-(219, 17, 3, NULL, NULL, NULL, NULL, 1, '2018-08-22', '2020-04-29 12:59:15'),
-(220, 26, 32, 8, '04:03:00', NULL, NULL, 1, '2019-08-27', '2020-05-18 13:05:31'),
-(221, 26, 14, 33, NULL, NULL, NULL, 1, '2018-08-22', '2020-05-19 08:32:39'),
-(222, 26, 16, 21, NULL, NULL, NULL, 1, '2018-08-22', '2020-05-19 13:29:31'),
-(223, 11, 34, 12, '02:54:00', NULL, NULL, 1, '2019-08-14', '2020-05-19 13:44:16'),
-(225, 27, 35, 36, '02:20:00', NULL, NULL, 1, '2020-08-18', '2020-08-21 07:50:17'),
-(226, 27, 35, 36, '02:20:00', NULL, NULL, 1, '2020-08-18', '2020-08-21 08:35:49'),
-(227, 21, 38, NULL, '02:17:00', NULL, NULL, 1, '2020-08-19', '2020-08-24 13:18:16'),
-(228, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 11:58:16'),
-(229, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 12:02:04'),
-(230, 21, 12, NULL, '03:37:00', NULL, NULL, NULL, '2020-08-19', '2020-08-27 12:23:03'),
-(231, 21, 12, NULL, '03:37:00', NULL, NULL, 1, '2020-08-19', '2020-08-27 12:43:02'),
-(233, 21, 5, NULL, '05:28:00', NULL, NULL, 1, '2020-08-24', '2020-09-02 08:37:58'),
-(235, 21, 39, NULL, '03:00:00', NULL, NULL, 1, '2020-08-24', '2020-09-02 09:27:13'),
-(237, 28, 27, NULL, '02:24:00', NULL, NULL, 1, '2020-08-31', '2020-09-02 20:15:00'),
-(238, 28, 35, NULL, '04:13:00', NULL, NULL, 1, '2020-08-20', '2020-09-02 20:38:09'),
-(239, 28, 30, NULL, '01:55:00', NULL, NULL, 1, '2020-08-31', '2020-09-03 13:39:28'),
-(242, 29, 32, NULL, '03:59:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 16:18:22'),
-(243, 28, 41, NULL, '02:42:00', NULL, NULL, 1, '2020-08-20', '2020-09-03 17:44:09'),
-(244, 30, 37, 40, '04:12:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 18:40:57'),
-(247, 29, 3, NULL, '03:30:00', NULL, NULL, 1, '2020-08-19', '2020-09-03 21:04:00'),
-(250, 8, 21, 9, '01:00:00', NULL, NULL, NULL, '2020-08-01', '2020-09-03 23:47:28'),
-(251, 20, 9, NULL, '00:01:00', NULL, NULL, NULL, '2020-02-02', '2020-09-03 23:55:11'),
-(253, 28, 29, NULL, NULL, NULL, NULL, 1, '2020-08-31', '2020-10-15 09:07:00'),
-(254, 30, 37, 42, '04:12:00', NULL, NULL, 1, '2020-08-19', '2020-10-15 10:03:30'),
-(256, 31, 43, NULL, '02:14:00', NULL, NULL, 1, '2020-09-03', '2020-11-17 12:00:13'),
-(257, 31, 12, NULL, NULL, NULL, NULL, 1, '2020-08-25', '2020-11-17 12:27:10'),
-(258, 31, 44, NULL, NULL, NULL, NULL, 1, '2020-08-31', '2020-11-17 12:46:29'),
-(259, 31, 45, NULL, '02:00:00', NULL, NULL, 1, '2020-08-19', '2020-11-17 13:10:14'),
-(260, 32, 27, 38, '01:47:00', NULL, NULL, NULL, '2020-09-02', '2020-12-01 13:15:03'),
-(261, 32, 27, 38, '01:47:00', NULL, NULL, 1, '2020-09-02', '2020-12-01 13:22:01'),
-(262, 32, 27, 5, '01:47:00', NULL, NULL, 1, '2020-09-02', '2020-12-01 13:34:30'),
-(263, 32, 43, 38, '01:47:00', NULL, NULL, 1, '2020-09-01', '2020-12-01 13:37:24'),
-(264, 29, 39, NULL, '02:15:00', NULL, NULL, 1, '2020-08-20', '2020-12-01 14:06:10'),
-(265, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-12-01 14:32:21');
+INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`, `bemerkung`, `bestaetigt`, `fertig`, `datum`, `erstelltAm`, `geaendertAm`) VALUES
+(138, 1, 1, NULL, NULL, NULL, 1, 1, '2018-08-15', '2019-07-11 13:26:00', '2019-07-11 15:26:00'),
+(154, 8, 3, 4, NULL, NULL, 1, 1, '2018-08-20', '2019-07-18 14:20:20', '2019-07-18 16:20:20'),
+(155, 9, 1, NULL, NULL, NULL, 1, 1, '2018-08-22', '2019-07-30 13:36:05', '2019-07-30 15:36:05'),
+(164, 10, 6, NULL, NULL, NULL, 1, 1, '2018-08-10', '2019-08-20 16:56:47', '2019-08-20 18:56:47'),
+(167, 12, 5, NULL, '01:48:00', NULL, 1, 1, '2019-08-22', '2019-08-22 19:44:26', '2019-08-22 21:44:26'),
+(174, 9, 8, NULL, '03:23:00', NULL, 1, 1, '2019-08-24', '2019-08-27 12:19:24', '2019-08-27 14:19:24'),
+(176, 11, 9, NULL, '03:46:00', NULL, 1, 1, '2019-08-21', '2019-08-27 13:27:37', '2019-08-27 15:27:37'),
+(179, 23, 10, NULL, NULL, NULL, 1, 1, '2018-08-10', '2019-11-05 12:08:47', '2019-11-05 13:08:47'),
+(180, 23, 8, NULL, NULL, NULL, 1, 1, '2018-08-09', '2019-11-05 12:23:09', '2019-11-05 13:23:09'),
+(181, 23, 11, NULL, NULL, NULL, 1, 1, '2018-08-14', '2019-11-05 12:55:16', '2019-11-05 13:55:16'),
+(182, 23, 11, NULL, NULL, NULL, 1, 1, '2018-08-14', '2019-11-05 13:33:44', '2019-11-05 14:33:44'),
+(184, 23, 12, NULL, NULL, NULL, 1, 1, '2018-08-15', '2019-11-05 13:45:50', '2019-11-05 14:45:50'),
+(186, 23, 13, NULL, NULL, NULL, 1, 1, '2018-08-14', '2019-11-19 08:51:31', '2019-11-19 09:51:31'),
+(187, 23, 14, NULL, NULL, NULL, 1, 1, '2018-08-20', '2019-11-19 09:17:17', '2019-11-19 10:17:17'),
+(188, 23, 15, NULL, NULL, NULL, 1, 1, '2018-08-21', '2019-11-19 09:46:57', '2019-11-19 10:46:57'),
+(189, 23, 16, NULL, NULL, NULL, 1, 1, '2018-08-16', '2019-11-19 10:47:22', '2019-11-19 11:47:22'),
+(190, 23, 17, NULL, NULL, NULL, 1, 1, '2018-08-15', '2019-11-19 12:38:57', '2019-11-19 13:38:57'),
+(193, 10, 5, NULL, NULL, NULL, 1, 1, '2018-08-06', '2019-12-20 11:40:58', '2019-12-20 12:40:58'),
+(194, 10, 16, NULL, NULL, NULL, 1, 1, '2018-08-13', '2019-12-20 12:55:46', '2019-12-20 13:55:46'),
+(195, 10, 18, NULL, NULL, NULL, 1, 1, '2018-08-17', '2019-12-20 14:07:26', '2019-12-20 15:07:26'),
+(196, 10, 14, NULL, NULL, NULL, 1, 1, '2018-08-18', '2019-12-20 14:16:59', '2019-12-20 15:16:59'),
+(197, 10, 1, NULL, NULL, NULL, 1, 1, '2018-08-23', '2019-12-20 14:31:11', '2019-12-20 15:31:11'),
+(198, 20, 5, 20, NULL, NULL, 1, 1, '2018-08-14', '2019-12-20 16:18:57', '2019-12-20 17:18:57'),
+(199, 20, 1, 21, NULL, NULL, 1, 1, '2018-08-20', '2019-12-20 16:47:29', '2019-12-20 17:47:29'),
+(200, 20, 9, 22, NULL, NULL, 1, 1, '2018-08-22', '2019-12-20 17:13:46', '2019-12-20 18:13:46'),
+(201, 20, 6, 23, NULL, NULL, 1, 1, '2018-08-22', '2019-12-20 21:12:14', '2019-12-20 22:12:14'),
+(202, 19, 24, NULL, NULL, NULL, 1, 1, '2018-08-06', '2019-12-20 22:05:51', '2019-12-20 23:05:51'),
+(203, 19, 25, NULL, NULL, NULL, 1, 1, '2018-08-08', '2019-12-20 22:36:33', '2019-12-20 23:36:33'),
+(204, 9, 5, NULL, NULL, NULL, NULL, NULL, '2018-08-16', '2020-03-27 09:41:02', '2020-03-27 10:41:02'),
+(205, 9, 5, NULL, NULL, NULL, 1, 1, '2018-08-16', '2020-03-27 09:42:48', '2020-03-27 10:42:48'),
+(206, 9, 5, NULL, NULL, NULL, 1, 1, '2018-08-16', '2020-03-27 10:01:55', '2020-03-27 11:01:55'),
+(207, 13, 10, NULL, '03:10:00', NULL, 1, 1, '2019-08-23', '2020-03-31 13:20:33', '2020-03-31 15:20:33'),
+(208, 13, 26, NULL, '05:01:00', NULL, NULL, NULL, '2019-08-20', '2020-04-01 12:20:33', '2020-04-01 14:20:33'),
+(209, 13, 8, NULL, '02:15:00', NULL, 1, 1, '2019-08-14', '2020-04-01 12:35:47', '2020-04-01 14:35:47'),
+(210, 13, 14, NULL, '01:46:00', NULL, 1, 1, '2019-08-20', '2020-04-01 12:55:38', '2020-04-01 14:55:38'),
+(211, 13, 24, NULL, NULL, NULL, 1, 1, '2019-08-20', '2020-04-15 12:57:27', '2020-04-15 14:57:27'),
+(212, 13, 24, NULL, NULL, NULL, 1, 1, '2019-08-19', '2020-04-15 13:14:10', '2020-04-15 15:14:10'),
+(213, 13, 27, NULL, NULL, NULL, 1, 1, '2019-08-20', '2020-04-24 12:12:17', '2020-04-24 14:12:17'),
+(214, 13, 27, NULL, '02:35:00', NULL, 1, 1, '2019-08-21', '2020-04-24 12:33:14', '2020-04-24 14:33:14'),
+(215, 12, 28, NULL, '03:29:00', NULL, 1, 1, '2019-08-22', '2020-04-28 12:28:17', '2020-04-28 14:28:17'),
+(216, 12, 29, NULL, '01:58:00', NULL, 1, 1, '2019-08-22', '2020-04-28 12:52:41', '2020-04-28 14:52:41'),
+(217, 12, 30, NULL, '02:30:00', NULL, 1, 1, '2019-08-28', '2020-04-28 13:06:39', '2020-04-28 15:06:39'),
+(218, 12, 5, NULL, '01:48:00', NULL, 1, 1, '2019-08-21', '2020-04-28 13:16:48', '2020-04-28 15:16:48'),
+(219, 17, 3, NULL, NULL, NULL, 1, 1, '2018-08-22', '2020-04-29 12:59:15', '2020-04-29 14:59:15'),
+(220, 26, 32, 8, '04:03:00', NULL, 1, 1, '2019-08-27', '2020-05-18 13:05:31', '2020-05-18 15:05:31'),
+(221, 26, 14, 33, NULL, NULL, 1, 1, '2018-08-22', '2020-05-19 08:32:39', '2020-05-19 10:32:39'),
+(222, 26, 16, 21, NULL, NULL, 1, 1, '2018-08-22', '2020-05-19 13:29:31', '2020-05-19 15:29:31'),
+(223, 11, 34, 12, '02:54:00', NULL, 1, 1, '2019-08-14', '2020-05-19 13:44:16', '2020-05-19 15:44:16'),
+(225, 27, 35, 36, '02:20:00', NULL, 1, 1, '2020-08-18', '2020-08-21 07:50:17', '2020-08-21 09:50:17'),
+(226, 27, 35, 36, '02:20:00', NULL, 1, 1, '2020-08-18', '2020-08-21 08:35:49', '2020-08-21 10:35:49'),
+(227, 21, 38, NULL, '02:17:00', NULL, 1, 1, '2020-08-19', '2020-08-24 13:18:16', '2020-08-24 15:18:16'),
+(228, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 11:58:16', '2020-08-27 13:58:16'),
+(229, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-08-27 12:02:04', '2020-08-27 14:02:04'),
+(230, 21, 12, NULL, '03:37:00', NULL, NULL, NULL, '2020-08-19', '2020-08-27 12:23:03', '2020-08-27 14:23:03'),
+(231, 21, 12, NULL, '03:37:00', NULL, 1, 1, '2020-08-19', '2020-08-27 12:43:02', '2020-08-27 14:43:02'),
+(233, 21, 5, NULL, '05:28:00', NULL, 1, 1, '2020-08-24', '2020-09-02 08:37:58', '2020-09-02 10:37:58'),
+(235, 21, 39, NULL, '03:00:00', NULL, 1, 1, '2020-08-24', '2020-09-02 09:27:13', '2020-09-02 11:27:13'),
+(237, 28, 27, NULL, '02:24:00', NULL, 1, 1, '2020-08-31', '2020-09-02 20:15:00', '2020-09-02 22:15:00'),
+(238, 28, 35, NULL, '04:13:00', NULL, 1, 1, '2020-08-20', '2020-09-02 20:38:09', '2020-09-02 22:38:09'),
+(239, 28, 30, NULL, '01:55:00', NULL, 1, 1, '2020-08-31', '2020-09-03 13:39:28', '2020-09-03 15:39:28'),
+(242, 29, 32, NULL, '03:59:00', NULL, 1, 1, '2020-08-19', '2020-09-03 16:18:22', '2020-09-03 18:18:22'),
+(243, 28, 41, NULL, '02:42:00', NULL, 1, 1, '2020-08-20', '2020-09-03 17:44:09', '2020-09-03 19:44:09'),
+(244, 30, 37, 40, '04:12:00', NULL, 1, 1, '2020-08-19', '2020-09-03 18:40:57', '2020-09-03 20:40:57'),
+(247, 29, 3, NULL, '03:30:00', NULL, 1, 1, '2020-08-19', '2020-09-03 21:04:00', '2020-09-03 23:04:00'),
+(250, 8, 21, 9, '01:00:00', NULL, NULL, NULL, '2020-08-01', '2020-09-03 23:47:28', '2020-09-04 01:47:28'),
+(251, 20, 9, NULL, '00:01:00', NULL, NULL, NULL, '2020-02-02', '2020-09-03 23:55:11', '2020-09-04 01:55:11'),
+(253, 28, 29, NULL, NULL, NULL, 1, 1, '2020-08-31', '2020-10-15 09:07:00', '2020-10-15 11:07:00'),
+(254, 30, 37, 42, '04:12:00', NULL, 1, 1, '2020-08-19', '2020-10-15 10:03:30', '2020-10-15 12:03:30'),
+(256, 31, 43, NULL, '02:14:00', NULL, 1, 1, '2020-09-03', '2020-11-17 12:00:13', '2020-11-17 13:00:13'),
+(257, 31, 12, NULL, NULL, NULL, 1, 1, '2020-08-25', '2020-11-17 12:27:10', '2020-11-17 13:27:10'),
+(258, 31, 44, NULL, NULL, NULL, 1, 1, '2020-08-31', '2020-11-17 12:46:29', '2020-11-17 13:46:29'),
+(259, 31, 45, NULL, '02:00:00', NULL, 1, 1, '2020-08-19', '2020-11-17 13:10:14', '2020-11-17 14:10:14'),
+(260, 32, 27, 38, '01:47:00', NULL, NULL, NULL, '2020-09-02', '2020-12-01 13:15:03', '2020-12-01 14:15:03'),
+(261, 32, 27, 38, '01:47:00', NULL, 1, 1, '2020-09-02', '2020-12-01 13:22:01', '2020-12-01 14:22:01'),
+(262, 32, 27, 5, '01:47:00', NULL, 1, 1, '2020-09-02', '2020-12-01 13:34:30', '2020-12-01 14:34:30'),
+(263, 32, 43, 38, '01:47:00', NULL, 1, 1, '2020-09-01', '2020-12-01 13:37:24', '2020-12-01 14:37:24'),
+(264, 29, 39, NULL, '02:15:00', NULL, 1, 1, '2020-08-20', '2020-12-01 14:06:10', '2020-12-01 15:06:10'),
+(265, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-12-01 14:32:21', '2020-12-01 15:32:21');
 
 -- --------------------------------------------------------
 
@@ -8975,8 +9151,8 @@ INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einhei
 (5, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (6, 3, '', 1, 'km/h', 0.00, 30.00, NULL, NULL, NULL, NULL),
 (7, 3, '', 1, 'km/h', 0.00, 30.00, NULL, NULL, NULL, NULL),
-(8, 4, '', 1, 'daN', 0.00, NULL, NULL, NULL, NULL, NULL),
-(9, 4, '', 1, 'daN', 0.00, NULL, NULL, NULL, NULL, NULL),
+(8, 4, '', 1, 'daN', 0.00, NULL, NULL, 0.01, NULL, NULL),
+(9, 4, '', 1, 'daN', 0.00, NULL, NULL, 0.01, NULL, NULL),
 (10, 3, 'HSt', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
 (11, 3, 'QSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
 (12, 3, 'SSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
@@ -9005,11 +9181,11 @@ INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einhei
 (35, 4, 'Links nach rechts', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
 (36, 4, 'Rechts nach links', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
 (37, 4, 'Links nach rechts', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(38, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
 (39, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
+(41, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
+(42, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
 (43, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (44, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (45, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -9046,7 +9222,7 @@ INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einhei
 (76, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
 (77, 3, '', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
 (78, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(79, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
 (80, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (81, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (82, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -9070,6 +9246,28 @@ INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einhei
 (100, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (101, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (102, 7, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Stellvertreter-Struktur des Views `protokoll_inputs_mit_inputtyp`
+-- (Siehe unten für die tatsächliche Ansicht)
+--
+DROP VIEW IF EXISTS `protokoll_inputs_mit_inputtyp`;
+CREATE TABLE `protokoll_inputs_mit_inputtyp` (
+`id` int(11)
+,`inputID` int(11)
+,`bezeichnung` varchar(255)
+,`aktiv` tinyint(1)
+,`einheit` varchar(255)
+,`bereichVon` double(10,2)
+,`bereichBis` double(10,2)
+,`groesse` int(11)
+,`schrittweite` double(10,2)
+,`multipel` tinyint(4)
+,`benoetigt` tinyint(1)
+,`inputTyp` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -9288,6 +9486,16 @@ INSERT INTO `protokoll_unterkapitel` (`id`, `protokollTypID`, `unterkapitelNumme
 (6, 1, 3, '30° Querneigung', '', 1),
 (7, 2, 1, 'Nach Weg', '', 0),
 (8, 2, 2, 'Nach Kraft', '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `protokoll_inputs_mit_inputtyp`
+--
+DROP TABLE IF EXISTS `protokoll_inputs_mit_inputtyp`;
+
+DROP VIEW IF EXISTS `protokoll_inputs_mit_inputtyp`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_inputs_mit_inputtyp`  AS SELECT `protokoll_inputs`.`id` AS `id`, `protokoll_inputs`.`inputID` AS `inputID`, `protokoll_inputs`.`bezeichnung` AS `bezeichnung`, `protokoll_inputs`.`aktiv` AS `aktiv`, `protokoll_inputs`.`einheit` AS `einheit`, `protokoll_inputs`.`bereichVon` AS `bereichVon`, `protokoll_inputs`.`bereichBis` AS `bereichBis`, `protokoll_inputs`.`groesse` AS `groesse`, `protokoll_inputs`.`schrittweite` AS `schrittweite`, `protokoll_inputs`.`multipel` AS `multipel`, `protokoll_inputs`.`benoetigt` AS `benoetigt`, `input_typen`.`inputTyp` AS `inputTyp` FROM (`protokoll_inputs` join `input_typen` on(`protokoll_inputs`.`inputID` = `input_typen`.`id`)) ;
 
 --
 -- Indizes der exportierten Tabellen

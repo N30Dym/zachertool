@@ -14,4 +14,10 @@ input[type=number] {
 label {
 	margin-left: 0.5rem;
 }
+    
+td {
+  padding-top: 15px;
+  padding:5px;
+} 
+    
 </style>

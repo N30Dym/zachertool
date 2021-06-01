@@ -2,24 +2,23 @@
 
 namespace App\Controllers\piloten;
 
-use App\Controllers\piloten\Pilotencontroller;
-use App\Models\piloten\pilotenModel;
-use App\Models\piloten\pilotenDetailsModel;
+//use App\Controllers\piloten\Pilotencontroller;
+use App\Models\piloten\{ pilotenDetailsModel, pilotenMitAkafliegsModel, pilotenAkafliegsModel };
 
 class Pilotendatenladecontroller extends Pilotencontroller 
 {
     protected function ladeSichtbarePilotenDaten()
     {
-        $pilotenModel = new pilotenModel();
+        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
         
-        return $pilotenModel->getSichtbarePiloten();
+        return $pilotenMitAkafliegsModel->getSichtbarePilotenMitAkaflieg();
     }
     
     protected function ladePilotDaten($pilotID)
     {
-        $pilotenModel = new pilotenModel();
+        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
         
-        return $pilotenModel->getPilotNachID($pilotID);
+        return $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($pilotID);
     }
     
     protected function ladePilotDetails($pilotID)
@@ -34,6 +33,12 @@ class Pilotendatenladecontroller extends Pilotencontroller
         // Muster eigenständig gezachert
         // Zachereinweisung /Auffrischung erfolgt
         // 
+    }
+    
+    protected function ladeSichtbareAkafliegs()
+    {
+        $pilotenAkafliegsModel = new pilotenAkafliegsModel();
+        return $pilotenAkafliegsModel->getSichtbareAkafliegs();
     }
     
 }

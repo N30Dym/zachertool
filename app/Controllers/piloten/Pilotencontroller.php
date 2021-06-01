@@ -23,13 +23,16 @@ class Pilotencontroller extends Controller
             'titel' => $titel
         ];
         
-        $datenInhalt = [];
+        $datenInhalt = [
+            'akafliegDatenArray' => $this->ladeSichtbareAkafliegs()
+        ];
         
         if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
-                'pilot'         => old('pilot'),
-                'pilotDetail'   => old('pilotDetail')
+                'pilot'                 => old('pilot'),
+                'pilotDetail'           => old('pilotDetail'),
+                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
             ];
         }
         
@@ -111,37 +114,38 @@ class Pilotencontroller extends Controller
     
     protected function ladePilotenDaten()
     {
-        $pilotenLadeController = new Pilotendatenladecontroller();
-        
+        $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladeSichtbarePilotenDaten();
     }
     
     protected function ladePilotDaten($pilotID) 
     {
-        $pilotenLadeController = new Pilotendatenladecontroller();
-        
+        $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotDaten($pilotID);
     }
     
     protected function ladePilotDetails($pilotID) 
     {
-        $pilotenLadeController = new Pilotendatenladecontroller();
-        
+        $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotDetails($pilotID);
     }
     
     protected function speicherPilotenDaten($postDaten)
     {
-        $pilotenSpeicherController = new Pilotenspeichercontroller();
-        
+        $pilotenSpeicherController = new Pilotenspeichercontroller();       
         return $pilotenSpeicherController->speicherPilotenDaten($postDaten);
     }
     
     protected function zeigeWarteSeite()
     {
-        $pilotenAnzeigeController = new Pilotenanzeigecontroller();
-        
+        $pilotenAnzeigeController = new Pilotenanzeigecontroller();       
         $pilotenAnzeigeController->zeigeWarteSeite();
+    }
+    
+    protected function ladeSichtbareAkafliegs() 
+    {
+        $pilotenDatenLadeController = new Pilotendatenladecontroller();
+        return $pilotenDatenLadeController->ladeSichtbareAkafliegs();       
     }
     
     protected function setzeDatenInhaltFuerPilotBearbeiten($pilotID)

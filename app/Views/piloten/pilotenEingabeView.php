@@ -1,11 +1,4 @@
-<style type="text/css">
-    
-td {
-  padding-top: 15px;
-  padding:5px;
-} 
-    
-</style>
+
 <div class="row">
     <div class="col-1"></div>
 
@@ -55,18 +48,9 @@ td {
                     <div class="input-group">
                         <select class="form-select" name="pilot[akaflieg]" <?= isset($pilotID) ? "disabled" : "" ?>>
                             <option></option>
-                            <option value="Aachen" <?= isset($pilot) && $pilot['akaflieg'] == "Aachen" ? "selected" : "" ?>>Aachen</option>
-                            <option value="Berlin" <?= isset($pilot) && $pilot['akaflieg'] == "Berlin" ? "selected" : "" ?>>Berlin</option>
-                            <option value="Braunschweig" <?= isset($pilot) && $pilot['akaflieg'] == "Braunschweig" ? "selected" : "" ?>>Braunschweig</option>
-                            <option value="Darmstadt" <?= isset($pilot) && $pilot['akaflieg'] == "Darmstadt" ? "selected" : "" ?>>Darmstadt</option>
-                            <option value="Dresden" <?= isset($pilot) && $pilot['akaflieg'] == "Dresden" ? "selected" : "" ?>>Dresden</option>
-                            <option value="Esslingen" <?= isset($pilot) && $pilot['akaflieg'] == "Esslingen" ? "selected" : "" ?>>Esslingen</option>
-                            <option value="Hannover" <?= isset($pilot) && $pilot['akaflieg'] == "Hannover" ? "selected" : "" ?>>Hannover</option>
-                            <option value="Karlsruhe" <?= isset($pilot) && $pilot['akaflieg'] == "Karlsruhe" ? "selected" : "" ?>>Karlsruhe</option>
-                            <option value="München" <?= isset($pilot) && $pilot['akaflieg'] == "München" ? "selected" : "" ?>>München</option>
-                            <option value="Stuttgart" <?= isset($pilot) && $pilot['akaflieg'] == "Stuttgart" ? "selected" : "" ?>>Stuttgart</option>
-                            <option value="Madrid" <?= isset($pilot) && $pilot['akaflieg'] == "Madrid" ? "selected" : "" ?>>Madrid</option>
-                            <option value="Delft" <?= isset($pilot) && $pilot['akaflieg'] == "Delft" ? "selected" : "" ?>>Delft</option>
+                            <?php foreach($akafliegDatenArray as $akaflieg) : ?>
+                                <option value="<?= $akaflieg['id'] ?>" <?= isset($pilot) && $pilot['akafliegID'] == $akaflieg['id'] ? "selected" : "" ?>><?= $akaflieg['akaflieg'] ?></option>
+                            <?php endforeach ?>
                         </select>
                     </div>
                 </div>

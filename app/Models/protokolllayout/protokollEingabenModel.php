@@ -22,9 +22,4 @@ class protokollEingabenModel extends Model
     {
         return($this->where("id", $id)->first());
     }
-    
-    public function getProtokollEingabenMitHStWegNachProtokollTypID($protokollTypID)
-    {
-        return $this->where('wegHSt', 1)->where('protokollTypID', $protokollTypID)->findAll();
-    }
 }

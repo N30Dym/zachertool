@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\protokolllayout\{ protokollInputsModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
+use App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
 helper('array');
 class Protokolldatenpruefcontroller extends Protokollcontroller
@@ -228,7 +228,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         {
             $zuSpeicherndeHStWege = [];
 
-            foreach($hStWegErforderlich as $protokollKapitelID => $foo)
+            foreach($hStWegErforderlich as $protokollKapitelID)
             {                
                 if(isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt']) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt']) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt']))
                 {
@@ -244,7 +244,6 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                     $this->setzeFehlerCode($protokollKapitelID, "Du hast einen Wert eingegeben für den der Höhensteuerweg benötigt werden, diesen hast du aber nicht angegeben. Gib entweder den Höhensteuerweg in diesem Kapitel an oder lösche die Eingaben, die einen Höhensteuerweg erfordern.");
                 }
             }
-            
             return $zuSpeicherndeHStWege;
         }
 
@@ -261,24 +260,37 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     protected function pruefeHStWegeErforderlich()
     {
         $protokollInputsModel               = new protokollInputsModel();
-        $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
         $protokollLayoutsModel              = new protokollLayoutsModel();
-        $eingabenMitHStWegen                = [];
+        $kapitelIDsMitInputIDsMitHStWegen   = [];
         $hStWegErforderlich                 = false;
         
-        
-        foreach($protokollInputsModel->get as $eingabeID => $foo)
-        {
-            foreach($protokollLayoutsModel->getProtokollInputIDNachProtokollEingabeID($eingabeID) as $protokollInputID)
+       foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
+       {
+            foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $protokollLayoutZeile)
             {
-                if(isset($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID["protokollInputID"]]) && !empty($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID["protokollInputID"]]))
+                $hStWegBenoetigt = $protokollInputsModel->getHStWegNachProtokollInputID($protokollLayoutZeile['protokollInputID']);
+
+                if(isset($hStWegBenoetigt) && $hStWegBenoetigt['hStWeg'] == 1)
                 {
-                    $hStWegErforderlich[$protokollLayoutsModel->getProtokollKapitelIDNachProtokollInputID($protokollInputID["protokollInputID"])['protokollKapitelID']] = null;
+                    isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? null : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = [];
+                    array_push($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']], $protokollLayoutZeile['protokollInputID']);
                 }
             }
         }
+
+        foreach($kapitelIDsMitInputIDsMitHStWegen as $protokollKapitelID => $protokollInputIDsMitHStWegen)
+        {
+            foreach($protokollInputIDsMitHStWegen as $protokollInputIDMitHStWeg)    
+            {
+                if(isset($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]) && !empty($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]))
+                {
+                    $hStWegErforderlich === false ? $hStWegErforderlich = [] : null;
+                    array_push($hStWegErforderlich, $protokollKapitelID);
+                }       
+            }
+        }
         
-        return $hStWegErforderlich;
+        return array_unique($hStWegErforderlich);
     }   
     
     protected function meldeKeineWerteEingegeben()

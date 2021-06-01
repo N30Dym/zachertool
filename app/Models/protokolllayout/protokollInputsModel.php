@@ -22,4 +22,9 @@ class protokollInputsModel extends Model
     {
         return $this->where("id", $id)->first();
     }
+    
+    public function getHStWegNachProtokollInputID($id)
+    {
+        return $this->select('hStWeg')->where('id', $id)->first();
+    }
 }

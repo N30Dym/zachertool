@@ -290,7 +290,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             }
         }
         
-        return array_unique($hStWegErforderlich);
+        return $hStWegErforderlich === false ? false : array_unique($hStWegErforderlich);
     }   
     
     protected function meldeKeineWerteEingegeben()

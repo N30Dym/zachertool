@@ -3,19 +3,21 @@
     
     $( document ).on( 'click', '.nav-link.flugzeuge', function() {
        var jahr = $( this ).attr( 'id' );
-       $( this ).parent('li').parent('ul').children('li').children('button.nav-link.flugzeuge').removeClass('active');
-       $( this ).addClass('active');
-       $( this ).parent('li').parent('ul').parent('div').children('div.tabInhalt.flugzeuge').addClass('d-none');
-       $( this ).parent('li').parent('ul').parent('div').children('div.tabInhalt.flugzeuge[id=' + jahr + ']').removeClass('d-none');
+       $( this ).parent( 'li' ).parent( 'ul' ).children( 'li' ).children( 'button.nav-link.flugzeuge' ).removeClass( 'active' );
+       $( this ).addClass( 'active' );
+       $( this ).parent( 'li' ).parent( 'ul' ).parent( 'div' ).children( 'div.tabInhalt.flugzeuge' ).addClass( 'd-none' );
+       $( this ).parent( 'li' ).parent( 'ul' ).parent( 'div' ).children( 'div.tabInhalt.flugzeuge[id=' + jahr + ']' ).removeClass( 'd-none' );
     });
     
     $( document ).on( 'click', '.nav-link.zacherkoenig', function() {
        var jahr = $( this ).attr( 'id' );
-       $( this ).parent('li').parent('ul').children('li').children('button.nav-link.zacherkoenig').removeClass('active');
-       $( this ).addClass('active');
-       $( this ).parent('li').parent('ul').parent('div').children('div.tabInhalt.zacherkoenig').addClass('d-none');
-       $( this ).parent('li').parent('ul').parent('div').children('div.tabInhalt.zacherkoenig[id=' + jahr + ']').removeClass('d-none');
+       $( this ).parent( 'li' ).parent( 'ul' ).children( 'li' ).children( 'button.nav-link.zacherkoenig' ).removeClass( 'active' );
+       $( this ).addClass( 'active' );
+       $( this ).parent( 'li' ).parent( 'ul' ).parent( 'div' ).children( 'div.tabInhalt.zacherkoenig' ).addClass( 'd-none' );
+       $( this ).parent( 'li' ).parent( 'ul' ).parent( 'div' ).children( 'div.tabInhalt.zacherkoenig[id=' + jahr + ']' ).removeClass( 'd-none' );
     });
+    
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
 });
 </script>
 

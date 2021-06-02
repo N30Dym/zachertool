@@ -19,7 +19,7 @@ do
             <ul class="nav nav-tabs">
                 <?php foreach($flugzeuge as $jahrFlugzeuge => $flugzeugeProJahr) : ?>
                     <li class="nav-item">
-                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "active" : "" ?>" id="<?= $jahrFlugzeuge?>"><b><?= $jahrFlugzeuge?></b></button>
+                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "active" : "d-none JSsichtbar" ?>" id="<?= $jahrFlugzeuge?>"><b><?= $jahrFlugzeuge?></b></button>
                     </li>
                 <?php endforeach ?>   
             </ul>
@@ -27,7 +27,7 @@ do
                 <div id="<?= $jahrFlugzeuge?>" class="table-responsive-lg tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>" style="overflow:auto; max-height:500px;">
                     <?php if($flugzeugeProJahr == null): ?>
                             <div class="text-center m-3">
-                                    In diesem Jahr sind<?= date("Y") == $jahrFlugzeuge? " noch " : " " ?>keine Flugzeuge gezachert worden
+                                   Für dieses Jahr liegen<?= date("Y") == $jahrFlugzeuge ? " noch " : " " ?>keine Protokolle vor
                             </div>
                     <?php else: ?>
                         <?php $gesamtZahlProtokolle = 0 ?>
@@ -70,7 +70,7 @@ do
             <ul class="nav nav-tabs">
                 <?php foreach($zacherkoenig as $jahrZacherkoenig => $zacherPilotenProJahr) : ?>
                     <li class="nav-item zacherkonig">
-                        <button class="nav-link zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "active" : ""?>" id="<?= $jahrZacherkoenig?>"><b><?= $jahrZacherkoenig?></b></button>
+                        <button class="nav-link zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "active" : "d-none JSsichtbar"?>" id="<?= $jahrZacherkoenig?>"><b><?= $jahrZacherkoenig?></b></button>
                     </li>
                 <?php endforeach ?>   
             </ul>
@@ -78,7 +78,7 @@ do
                 <div id="<?= $jahrZacherkoenig?>" class="table-responsive-lg tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>" style="overflow:auto; max-height:500px;">
                     <?php if($zacherPilotenProJahr == null): ?>
                         <div class="text-center m-3">
-                            In diesem Jahr sind<?= date("Y") == $jahrZacherkoenig? " noch " : " " ?>keine Flugzeuge gezachert worden
+                            Für dieses Jahr liegen<?= date("Y") == $jahrZacherkoenig ? " noch " : " " ?>keine Protokolle vor
                         </div>
                     <?php else: ?>
                         <table class="table table-light table-striped table-hover border rounded">

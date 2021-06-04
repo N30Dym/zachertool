@@ -5,7 +5,7 @@ $(document).ready(function(){
     
     $( '#flugzeugSuche' ).on( 'keyup', function() {
         var value = $( this ).val().toLowerCase();
-        $( '#flugzeugAuswahl tr' ).filter( function() {
+        $( '#flugzeugAuswahl tr.flugzeug' ).filter( function() {
             $( this ).toggle( $( this ).text().toLowerCase().indexOf(value) > -1);
         });
     });

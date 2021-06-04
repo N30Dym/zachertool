@@ -31,7 +31,7 @@
                     </thead>
 
                     <?php foreach($flugzeugeArray as $flugzeug) : ?>
-                        <tr class="text-center pilot">
+                        <tr class="text-center flugzeug" valign="middle">
                             <td><?= esc($flugzeug['kennung']) ?></td>
                             <td><?= esc($flugzeug['musterSchreibweise']).esc($flugzeug['musterZusatz']) ?></td>
                             <td><?= esc($flugzeug['protokollAnzahl']) ?></td>

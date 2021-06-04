@@ -24,7 +24,7 @@
 
                 <?php foreach($muster as $musterDetails) : ?>
                         
-                    <tr class="text-center" style="cursor:pointer" onclick="window.location='<?= base_url() ?>/flugzeuge/neu/<?= esc($musterDetails["id"]) ?>'">
+                    <tr class="text-center" valign="middle" style="cursor:pointer" onclick="window.location='<?= base_url() ?>/flugzeuge/neu/<?= esc($musterDetails["id"]) ?>'">
                         <td>
                             <a href="<?= base_url() ?>/flugzeuge/neu/<?= esc($musterDetails["id"]) ?>">
                                 <?= esc($musterDetails["musterSchreibweise"]) ?><?= esc($musterDetails["musterZusatz"]) ?>

@@ -33,7 +33,7 @@
                     </thead>
 
                     <?php foreach($pilotenArray as $pilot) : ?>
-                        <tr class="text-center pilot">
+                        <tr class="text-center pilot" valign="middle">
                             <td><?= esc($pilot['vorname']) ?></td>
                             <td><b><?= $pilot['spitzname'] !== "" ? '"'. $pilot['spitzname'] . '"' : "" ?></b></td>
                             <td><?= esc($pilot['nachname']) ?></td>

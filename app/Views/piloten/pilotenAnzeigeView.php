@@ -71,7 +71,7 @@
                         <th>Flugzeug</th>
                         <th>Kennzeichen</th>
                         <th>Copilot</th>
-                        <th></th>
+                        <td></td>
                     </tr>
                 </thead>
                 <?php if(isset($pilotProtokollArray) AND !empty($pilotProtokollArray)) : ?>

@@ -146,4 +146,9 @@ class protokolleModel extends Model
     {
         return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first();
     }
+    
+    public function getAbgegebeneProtokolleNachPilotID($pilotID)
+    {
+        return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
+    }
 }	

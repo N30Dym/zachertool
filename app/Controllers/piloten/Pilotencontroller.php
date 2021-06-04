@@ -78,12 +78,7 @@ class Pilotencontroller extends Controller
             'titel' => $titel
         ];
         
-        $datenInhalt = [
-            'pilotID'               => $pilotID,
-            'pilot'                 => $this->ladePilotDaten($pilotID),
-            'pilotDetailsArray'     => $this->ladePilotDetails($pilotID),
-            'pilotZachernachweis'   => $this->ladePilotZachernachweis($pilotID)
-        ]; 
+        $datenInhalt = $this->ladePilotenAnzeigeDaten($pilotID);
         
         $pilotenAnzeigeController->zeigePilotenAnzeigeView($datenHeader, $datenInhalt);
     }
@@ -150,6 +145,8 @@ class Pilotencontroller extends Controller
     
     protected function setzeDatenInhaltFuerPilotBearbeiten($pilotID)
     {
+        $pilotenLadeController = new Pilotendatenladecontroller();
+        
         $datenInhalt = [];
         
         if(old('pilot') !== null OR old('pilotDetail') !== null)
@@ -158,15 +155,15 @@ class Pilotencontroller extends Controller
                 'pilotID'           => old('pilotID'),
                 'pilot'             => old('pilot'),
                 'pilotDetail'       => old('pilotDetail'),
-                'pilotDetailsArray' => $this->ladePilotDetails($pilotID)
+                'pilotDetailsArray' => $pilotenLadeController->ladePilotDetails($pilotID)
             ];
         }
         else
         {        
             $datenInhalt = [
                 'pilotID'           => $pilotID,
-                'pilot'             => $this->ladePilotDaten($pilotID),
-                'pilotDetailsArray' => $this->ladePilotDetails($pilotID),
+                'pilot'             => $pilotenLadeController->ladePilotDaten($pilotID),
+                'pilotDetailsArray' => $pilotenLadeController->ladePilotDetails($pilotID),
             ];
         }
         
@@ -175,8 +172,26 @@ class Pilotencontroller extends Controller
     
     protected function ladePilotZachernachweis($pilotID)
     {
+        $pilotenLadeController = new Pilotendatenladecontroller();       
+        return $pilotenLadeController->ladePilotZachernachweis($pilotID);
+    }
+    
+    protected function ladePilotenProtokollDaten($pilotID)
+    {
+        $pilotenLadeController = new Pilotendatenladecontroller();       
+        return $pilotenLadeController->ladePilotZachernachweis($pilotID);
+    }
+    
+    protected function ladePilotenAnzeigeDaten($pilotID)
+    {
         $pilotenLadeController = new Pilotendatenladecontroller();
         
-        return $pilotenLadeController->ladePilotZachernachweis($pilotID);
+        return [
+            'pilotID'               => $pilotID,
+            'pilot'                 => $pilotenLadeController->ladePilotDaten($pilotID),
+            'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
+            'pilotProtokollArray'   => $pilotenLadeController->ladePilotenProtokollDaten($pilotID),
+            'pilotZachernachweis'   => $pilotenLadeController->ladePilotZachernachweis($pilotID)
+        ]; 
     }
 }

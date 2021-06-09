@@ -5,7 +5,7 @@ namespace App\Controllers\protokolle;
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
 use App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
-helper('array');
+//helper('array');
 class Protokolldatenpruefcontroller extends Protokollcontroller
 {	
     protected function pruefeDatenZumSpeichern()
@@ -27,13 +27,12 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 header('Location: '. base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
                 exit;
             }
-            
-            echo "Alle Daten in Ordnung<br>";
         }
         else
         {
             echo "Keine Werte zum speichern vorhanden<br>";
             //$this->meldeKeineWerteEingegeben();
+            exit;
         }
     }
     

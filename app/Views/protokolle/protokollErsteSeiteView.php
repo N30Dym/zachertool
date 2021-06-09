@@ -2,10 +2,10 @@
     </div>    
     <div class="col-lg-10">
         <h3 class="m-3">1. Informationen zum Protokoll</h3>
-        <?php if(isset($_SESSION['protokoll']['kapitelIDs']) AND isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]])) : ?>
+        <?php if(isset($_SESSION['protokoll']['kapitelIDs']) AND isset($_SESSION['protokoll']['fehlerArray'][PROTOKOLL_AUSWAHL])) : ?>
             <div class="alert alert-danger" role="alert">
-                <?php foreach($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['aktuellesKapitel']] as $fehlerMeldung): ?>
-                    <?= $fehlerMeldung ?>
+                <?php foreach($_SESSION['protokoll']['fehlerArray'][PROTOKOLL_AUSWAHL] as $fehlerMeldung): ?>
+                    <?= $fehlerMeldung ?> <br>
                 <?php endforeach ?>
             </div>
         <?php endif ?>

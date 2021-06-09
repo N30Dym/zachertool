@@ -135,7 +135,7 @@ class Protokollcontroller extends Controller
             
         $zuSpeicherndeDaten = $this->pruefeZuSpeicherndeDaten();
         
-        if($zuSpeicherndeDaten !== false)
+        if($zuSpeicherndeDaten !== false && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
             if($this->speicherProtokollDaten($zuSpeicherndeDaten))
             {
@@ -169,7 +169,7 @@ class Protokollcontroller extends Controller
     public function absenden()
     {
         $_SESSION['protokoll']['fertig'] = [];       
-        $this->speichern();
+        return $this->speichern();
     }
     
         /*
@@ -257,10 +257,16 @@ class Protokollcontroller extends Controller
         return $protokollDatenPruefController->pruefeDatenZumSpeichern();
     }
     
-    protected function speicherProtokollDaten()
+    protected function validiereZuSpeicherndeDaten($zuValidierendeDaten)
+    {
+        $protokollDatenValidierController = new Protokolldatenvalidiercontroller();
+        return $protokollDatenValidierController->validiereDatenZumSpeichern($zuValidierendeDaten);
+    }
+    
+    protected function speicherProtokollDaten($zuSpeicherndeDaten)
     {
         $protokollSpeicherController = new Protokollspeichercontroller();
-        return $protokollSpeicherController->speicherProtokollDaten();
+        return $protokollSpeicherController->speicherProtokollDaten($zuSpeicherndeDaten);
     }
     
     protected function ladeDatenInhalt()

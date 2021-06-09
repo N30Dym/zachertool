@@ -955,4 +955,170 @@ class Validation
             ]
         ]
     ];
+    
+    public $protokolle = [
+        'flugzeugID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde keine FlugzeugID gegeben.',
+                'numeric'   => 'Die FlugzeugID ist ungültig.'
+            ]
+        ],
+        'pilotID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine PilotID gegeben.',
+                'is_natural'    => 'Die PilotID ist ungültig.'
+            ]
+        ],
+        'copilotID' => [
+            'rules'  => 'permit_empty|is_natural',
+            'errors' => [
+                'is_natural'    => 'Die CopilotID ist ungültig.'
+            ]
+        ], 
+        'flugzeit' => [
+            'rules'  => 'permit_empty|valid_date[H:i]',
+            'errors' => [
+                'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
+            ]
+        ], 
+        'bemerkung' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'   => 'Die Bemerkung hat ein falsches Format.'
+            ]
+        ],
+        'bestaetigt' => [
+            'rules'  => 'permit_empty|is_natural|less_than_equal_to[1]',
+            'errors' => [
+                'is_natural'            => 'Die Bestätigt-Flag ist kein Integer.',
+                'less_than_equal_to'    => 'Die Bestätigt-Flag ist größer als 1.'
+            ]
+        ],
+        'fertig' => [
+            'rules'  => 'permit_empty|is_natural|less_than_equal_to[1]',
+            'errors' => [
+                'is_natural'            => 'Die Fertig-Flag ist kein Integer.',
+                'less_than_equal_to'    => 'Die Fertig-Flag ist größer als 1.'
+            ]
+        ],
+        'datum' => [
+            'rules'  => 'required|valid_date',
+            'errors' => [
+                'valid_date'    => 'Das Datum hat ein falsches Format: TT.MM.JJJJ',
+                'required'      => 'Das Datum muss angegeben werden.'
+            ]
+        ]
+    ];
+    
+    public $kommentareOhneProtokollSpeicherID =  [       
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'    => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'required|string',
+            'errors' => [
+                'required'  => 'Es wurde kein Kommentar gegeben.',
+                'string'    => 'Der Kommentar enthält ungültige Zeichen.'
+            ]
+        ]
+    ];
+    
+    public $kommentare =  [ 
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'   => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'required|string',
+            'errors' => [
+                'required'  => 'Es wurde kein Kommentar gegeben.',
+                'string'    => 'Der Kommentar enthält ungültige Zeichen.'
+            ]
+        ]
+    ];
+    
+    public $hStWegeOhneProtokollSpeicherID =  [ 
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'   => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'gedruecktHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im gedrückten Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den gedrückten Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'neutralHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'gezogenHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im gezogenen Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den gezogenen Zustand muss eine ganze Zahl sein.'
+            ]
+        ]
+    ];
+    
+    public $hStWege =  [ 
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'   => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'gedruecktHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im gedrückten Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den gedrückten Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'neutralHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'gezogenHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert für das HSt im gezogenen Zustand angegeben.',
+                'string'    => 'Der HSt Weg für den gezogenen Zustand muss eine ganze Zahl sein.'
+            ]
+        ]
+    ];
 }

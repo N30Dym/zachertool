@@ -978,7 +978,7 @@ class Validation
             ]
         ], 
         'flugzeit' => [
-            'rules'  => 'permit_empty|valid_date[H:i]',
+            'rules'  => 'permit_empty|valid_date[H:i:s]',
             'errors' => [
                 'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
             ]

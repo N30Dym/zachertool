@@ -29,7 +29,7 @@
 
             <div class="col-sm-3">
                 <label for="flugzeit" class="form-label">Gesamtflugzeit</label>
-                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= $_SESSION['protokoll']["protokollInformationen"]["flugzeit"] ?? "" ?>"> 
+                <input type="time" class="form-control" name="protokollInformation[flugzeit]" step="1" id="flugzeit" placeholder="--:--" value="<?= $_SESSION['protokoll']["protokollInformationen"]["flugzeit"] ?? "" ?>"> 
             </div>
 
             <div class="col-12 ms-3">

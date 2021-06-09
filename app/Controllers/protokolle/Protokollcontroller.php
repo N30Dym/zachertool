@@ -159,7 +159,7 @@ class Protokollcontroller extends Controller
             echo "Irgendwas ist noch falsch";
             ksort($_SESSION['protokoll']['fehlerArray']);
             print_r($_SESSION['protokoll']['fehlerArray']);           
-            exit;
+            //exit;
             return redirect()->to(base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
         }
     }

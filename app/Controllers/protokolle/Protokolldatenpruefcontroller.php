@@ -69,9 +69,10 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             'eingegebeneWerte'  => $this->setzeEingegebeneWerte(),
             'kommentare'        => $this->setzeKommentare(),
             'hStWege'           => $this->setzeHStWege(),
-            'beladung'          => $this->setzeBeladung()                
+            
+                // Beladung nur setzen, wenn Beladungseingabe vom Protokoll gefordert ist (KapitelID in SESSION['protokoll']['KapitelIDs'])
+            'beladung'          => array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) ? $this->setzeBeladung() : null               
         ];
-
     }
     
     protected function pruefeAlleProtokollDetailsVorhanden()
@@ -159,15 +160,15 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     protected function setzeProtokollDetails()
     {
         $protokollDetails = [
-            'flugzeugID'    => $_SESSION['protokoll']['flugzeugID'],
-            'pilotID'       => $_SESSION['protokoll']['pilotID'],
-            'datum'         => $_SESSION['protokoll']['protokollInformationen']['datum'],      
+            'datum' => $_SESSION['protokoll']['protokollInformationen']['datum'] 
         ];
-        
-        isset($_SESSION['protokoll']['copilotID']) ? $protokollDetails['copilotID']                             = $_SESSION['protokoll']['copilotID'] : null;
-        isset($_SESSION['protokoll']['fertig']) ? $protokollDetails['fertig']                                   = "1" : null;
-        isset($_SESSION['protokoll']['protokollInformationen']['flugzeit']) ? $protokollDetails['flugzeit']     = $_SESSION['protokoll']['protokollInformationen']['flugzeit'] : null;
-        isset($_SESSION['protokoll']['protokollInformationen']['bemerkung']) ? $protokollDetails['bemerkung']   = $_SESSION['protokoll']['protokollInformationen']['bemerkung'] : null;
+                 
+        empty($_SESSION['protokoll']['flugzeugID']) ? null :                            $protokollDetails['flugzeugID'] = $_SESSION['protokoll']['flugzeugID'];
+        empty($_SESSION['protokoll']['pilotID']) ? null :                               $protokollDetails['pilotID']    = $_SESSION['protokoll']['pilotID'];
+        empty($_SESSION['protokoll']['copilotID']) ? null :                             $protokollDetails['copilotID']  = $_SESSION['protokoll']['copilotID'];
+        isset($_SESSION['protokoll']['fertig']) ?                                       $protokollDetails['fertig']     = "1" : null;
+        empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) ? null :    $protokollDetails['flugzeit']   = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
+        empty($_SESSION['protokoll']['protokollInformationen']['bemerkung']) ? null :   $protokollDetails['bemerkung']  = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
         
         return $protokollDetails;
     }

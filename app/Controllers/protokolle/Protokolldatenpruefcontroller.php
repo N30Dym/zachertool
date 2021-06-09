@@ -174,22 +174,25 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function setzeEingegebeneWerte()
     {       
+        $protokollInputsMitInputTypModel = new protokollInputsMitInputTypModel();
         $zuSpeicherndeWerte = [];
         
         foreach($_SESSION['protokoll']['eingegebeneWerte'] as $protokollInputID => $werteWoelbklappenRichtungMultipelNr)
         {
+            $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID);//['inputTyp'];
+
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {
                 foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
                 {
                     foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        if($wert != "")
+                        if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
-                            $temporaeresWertArray['wert'] = $wert;
-                            $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung;
-                            $temporaeresWertArray['linksUndRechts'] = $richtung;
+                            $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
+                            $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
+                            $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
                             $temporaeresWertArray['multipelNr'] = $multipelNr;
                             array_push($zuSpeicherndeWerte, $temporaeresWertArray);
                         } 
@@ -229,7 +232,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
 
             foreach($hStWegErforderlich as $protokollKapitelID)
             {                
-                if(isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]) AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt'] != "" AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt'] != "" AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt'] != "")
+                if(isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]) AND isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt']) AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt'] != "" AND isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt']) AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt'] != "" AND isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt']) AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt'] != "")
                 {
                     $temporaeresHStWegArray['protokollKapitelID']   = $protokollKapitelID;
                     $temporaeresHStWegArray['gedruecktHSt']         = $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt'];
@@ -250,12 +253,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     }
     
     protected function setzeBeladung()
-    {
-        // prüfen, ob Pilotgewicht, ob Pilotfallschirm != "", falls Copilotgewicht >0, prüfen Copilotfallschirm != ""
-        
-        // -> $zuSpeichenderBeladungszustand[X] = Wenn "gewicht" != "" UND > 0 ("flugzeugHebelarmID", "bezeichnung" -> NULL wenn Pilot oder Copilot, 
-        // "hebelarm" -> NULL wenn flugzeugHebelarmID vorhanden, "gewicht")
-        
+    {        
         if($this->pruefeBenoetigteHebelarmeVorhanden())
         {
             $zuSpeichenderBeladungszustand = [];
@@ -266,11 +264,14 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {
                     foreach($hebelarm as $bezeichnung => $gewicht)
                     {
-                        $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
-                        $temporaeresBeladungsArray['bezeichnung']           = $bezeichnung;
-                        $temporaeresBeladungsArray['gewicht']               = $gewicht;
-                        
-                        array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);                        
+                        if($gewicht != "")
+                        {
+                            $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
+                            $temporaeresBeladungsArray['gewicht']               = $gewicht;
+                            empty($bezeichnung) ? null : $temporaeresBeladungsArray['bezeichnung'] = $bezeichnung;
+
+                            array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
+                        }
                     }
                 }
                 elseif($flugzeugHebelarmID == "weiterer")

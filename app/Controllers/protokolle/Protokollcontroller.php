@@ -113,6 +113,7 @@ class Protokollcontroller extends Controller
 
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
         echo isset($_SESSION['protokoll']['protokollSpeicherID']) ? $_SESSION['protokoll']['protokollSpeicherID'] : "";
+        print_r(isset($_SESSION['protokoll']['fehlerArray']) ? $_SESSION['protokoll']['fehlerArray'] : "");
         
             // datenHeader mit Titel füttern
         $datenHeader['titel'] = $_SESSION['protokoll']['protokollInformationen']['titel'];
@@ -137,6 +138,7 @@ class Protokollcontroller extends Controller
         
         if($zuSpeicherndeDaten !== false && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
+
             if($this->speicherProtokollDaten($zuSpeicherndeDaten))
             {
                 echo "Protokolldaten erfolgreich gespeichert";
@@ -154,6 +156,10 @@ class Protokollcontroller extends Controller
         }
         else
         {
+            echo "Irgendwas ist noch falsch";
+            ksort($_SESSION['protokoll']['fehlerArray']);
+            print_r($_SESSION['protokoll']['fehlerArray']);           
+            exit;
             return redirect()->to(base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
         }
     }

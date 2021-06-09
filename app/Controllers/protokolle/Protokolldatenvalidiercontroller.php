@@ -4,6 +4,7 @@ namespace App\Controllers\protokolle;
 
 
 use App\Models\protokolle\{ protokolleModel, beladungModel, datenModel, kommentareModel, hStWegeModel };
+use App\Models\protokolllayout\{ protokollInputsMitInputTypModel, protokollLayoutsModel };
 
 class Protokolldatenvalidiercontroller extends Protokollcontroller
 {
@@ -60,10 +61,29 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     
     protected function validereWerte($zuValidierendeWerte, $validation)
     {
+        $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
+        $protokollLayoutsModel              = new protokollLayoutsModel();
         
-        /*print_r($validation->getErrors());
-        $validation->run($zuValidierendeWerte, 'protokolle');
-        exit;*/
+        foreach($zuValidierendeWerte as $wert)
+        {            
+            $validation->run($wert, 'datenOhneProtokollSpeicherID');
+            
+            $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($wert['protokollInputID'])['inputTyp'];
+            
+            $this->validiereWertNachInputTyp($inputTyp, $wert['wert'], $validation);
+            
+            if(!empty($validation->getErrors()))
+            {
+                $protokollKapitelID = $protokollLayoutsModel->getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs($wert['protokollInputID'], $_SESSION['protokoll']['protokollIDs'])[0]['protokollKapitelID'];
+
+                foreach($validation->getErrors() as $fehlerBeschreibung)
+                {
+                    $this->setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung);
+                }
+            }
+            
+            $validation->reset();
+        }
     }
     
     protected function validereKommentare($zuValidierendeKommentare, $validation)
@@ -86,12 +106,64 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     
     protected function validereHStWege($zuValidierendeHStWege, $validation)
     {
-        
+        foreach($zuValidierendeHStWege as $hStWeg)
+        {
+            $validation->run($hStWeg, 'hStWegeOhneProtokollSpeicherID');
+            
+            if(!empty($validation->getErrors()))
+            {
+                foreach($validation->getErrors() as $fehlerBeschreibung)
+                {
+                    $this->setzeFehlerCode($hStWeg['protokollKapitelID'], $fehlerBeschreibung);
+                }
+            }
+            
+            $validation->reset();
+        }
     }
     
     protected function validereBeladung($zuValidierendeBeladung, $validation)
     {
+        foreach($zuValidierendeBeladung as $beladung)
+        {
+            $validation->run($beladung, 'beladungOhneProtokollSpeicherID');
+            
+            if(!empty($validation->getErrors()))
+            {
+                foreach($validation->getErrors() as $fehlerBeschreibung)
+                {
+                    $this->setzeFehlerCode(BELADUNG_EINGABE, $fehlerBeschreibung);
+                }
+            }
+            
+            $validation->reset();
+        }
+    }
+    
+    protected function validiereWertNachInputTyp($inputTyp, $wert, $validation)
+    {
+        $wertValidierArray['wert'] = $wert;
         
+        switch($inputTyp)
+        {            
+            case 'Auswahloptionen':
+            case 'Ganzzahl':
+                $validation->run($wertValidierArray, 'eingabeGanzzahl');
+                break;
+            case 'Dezimalzahl':
+                $validation->run($wertValidierArray, 'eingabeDezimalzahl');
+                break;
+            case 'Checkbox':
+                $validation->run($wertValidierArray, 'eingabeCheckbox');
+                break;
+            case 'Note':
+                $validation->run($wertValidierArray, 'eingabeNote');
+                break;
+            case 'Textfeld':
+            case 'Textzeile':
+            default:
+                $validation->run($wertValidierArray, 'eingabeText');
+        }
     }
     
     protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)

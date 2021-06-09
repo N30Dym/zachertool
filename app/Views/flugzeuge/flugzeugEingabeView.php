@@ -367,7 +367,8 @@
 <!-------------------------------->            
             <h3 class="m-4">Hebelarme</h3>
             <div class="col-12">
-                <small class="text-muted">Pilotenhebelarm und ggf. Begleiterhebelarm müssen angegeben werden</small>
+                <small class="text-muted">Pilotenhebelarm und ggf. Begleiterhebelarm müssen angegeben werden <br></small>
+                <small class="text-muted">Für Trimmballast mit dem gleichen Hebelarm wie der Pilot (für Bleikissen, etc.) muss kein extra Hebelarm angelegt werden</small>
             </div>
             
             <div class="table-responsive-md col-12">

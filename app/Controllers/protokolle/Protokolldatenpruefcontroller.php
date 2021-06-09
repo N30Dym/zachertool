@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\flugzeuge\flugzeugHebelarmeModel;
-use App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
+use App\Models\protokolllayout\{ protokollInputsModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
 //helper('array');
 class Protokolldatenpruefcontroller extends Protokollcontroller
@@ -184,7 +184,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {
                     foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        if(!empty($wert))
+                        if($wert != "")
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
                             $temporaeresWertArray['wert'] = $wert;
@@ -229,7 +229,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
 
             foreach($hStWegErforderlich as $protokollKapitelID)
             {                
-                if(isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt']) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt']) AND !empty($_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt']))
+                if(isset($_SESSION['protokoll']['hStWege'][$protokollKapitelID]) AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt'] != "" AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['neutralHSt'] != "" AND $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gezogenHSt'] != "")
                 {
                     $temporaeresHStWegArray['protokollKapitelID']   = $protokollKapitelID;
                     $temporaeresHStWegArray['gedruecktHSt']         = $_SESSION['protokoll']['hStWege'][$protokollKapitelID]['gedruecktHSt'];
@@ -251,7 +251,45 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function setzeBeladung()
     {
+        // prüfen, ob Pilotgewicht, ob Pilotfallschirm != "", falls Copilotgewicht >0, prüfen Copilotfallschirm != ""
         
+        // -> $zuSpeichenderBeladungszustand[X] = Wenn "gewicht" != "" UND > 0 ("flugzeugHebelarmID", "bezeichnung" -> NULL wenn Pilot oder Copilot, 
+        // "hebelarm" -> NULL wenn flugzeugHebelarmID vorhanden, "gewicht")
+        
+        if($this->pruefeBenoetigteHebelarmeVorhanden())
+        {
+            $zuSpeichenderBeladungszustand = [];
+            
+            foreach($_SESSION['protokoll']['beladungszustand'] as $flugzeugHebelarmID => $hebelarm)
+            {
+                if(is_numeric($flugzeugHebelarmID))
+                {
+                    foreach($hebelarm as $bezeichnung => $gewicht)
+                    {
+                        $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
+                        $temporaeresBeladungsArray['bezeichnung']           = $bezeichnung;
+                        $temporaeresBeladungsArray['gewicht']               = $gewicht;
+                        
+                        array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);                        
+                    }
+                }
+                elseif($flugzeugHebelarmID == "weiterer")
+                {
+                    if($hebelarm['laenge'] != "" AND !empty($hebelarm['gewicht']))
+                    {
+                        $temporaeresBeladungsArray['hebelarm']      = $hebelarm['laenge'];
+                        $temporaeresBeladungsArray['bezeichnung']   = $hebelarm['bezeichnung'];
+                        $temporaeresBeladungsArray['gewicht']       = $hebelarm['gewicht'];
+                        
+                        array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray); 
+                    }
+                }
+            }
+            
+            return $zuSpeichenderBeladungszustand;
+        }
+        
+        return null;
     }
     
         // Wenn ein Wert eingegeben wurde, für den der HStWeg erforderlich ist, muss der HStWeg für das Kapitel gegeben sein.
@@ -291,6 +329,41 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         
         return $hStWegErforderlich === false ? false : array_unique($hStWegErforderlich);
     }   
+    
+    protected function pruefeBenoetigteHebelarmeVorhanden()
+    {
+        // prüfen, ob Pilotgewicht und Pilotfallschirm != "", falls Copilotgewicht >0, prüfen Copilotfallschirm != ""
+        $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
+        $erforderlicheHebelarmeVorhanden = true;
+        
+        if(isset($_SESSION['protokoll']['doppelsitzer']))
+        {
+            $copilotHebelarmID = $flugzeugHebelarmeModel->getCopilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID'])['id'];
+            if(isset($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND !empty($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND $_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0] > 0)
+            {
+                if($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID]['Fallschirm'] != "")
+                {
+                    $this->setzeFehlerCode(BELADUNG_EINGABE, "Da ein Begleitergewicht angegeben wurde, muss auch das Gewicht für den Fallschirm des Begleiters angegeben werden (0kg ist auch valide)");
+                    $erforderlicheHebelarmeVorhanden = false;
+                }
+            }              
+        }
+        
+        $pilotHebelarmID = $flugzeugHebelarmeModel->getPilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID'])['id'];
+        if(empty($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID][0]) OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID][0] <= 0)
+        {
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Piloten muss angegeben und größer als 0 sein");
+            $erforderlicheHebelarmeVorhanden = false;
+        }
+
+        if($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] == "" OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] < 0)
+        {
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Pilotenfallschirms muss angegeben sein (0kg ist auch valide)");
+            $erforderlicheHebelarmeVorhanden = false;
+        }
+
+        return $erforderlicheHebelarmeVorhanden;
+    }
     
     protected function meldeKeineWerteEingegeben()
     {

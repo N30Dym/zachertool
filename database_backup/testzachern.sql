@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 02. Jun 2021 um 19:34
+-- Erstellungszeit: 09. Jun 2021 um 16:50
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -780,22 +780,19 @@ ALTER TABLE `flugzeuge`
 -- Indizes für die Tabelle `flugzeug_details`
 --
 ALTER TABLE `flugzeug_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_hebelarme`
 --
 ALTER TABLE `flugzeug_hebelarme`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_klappen`
 --
 ALTER TABLE `flugzeug_klappen`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_waegung`
@@ -813,22 +810,19 @@ ALTER TABLE `muster`
 -- Indizes für die Tabelle `muster_details`
 --
 ALTER TABLE `muster_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `muster_hebelarme`
 --
 ALTER TABLE `muster_hebelarme`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `muster_klappen`
 --
 ALTER TABLE `muster_klappen`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -1169,8 +1163,7 @@ ALTER TABLE `piloten_akafliegs`
 -- Indizes für die Tabelle `piloten_details`
 --
 ALTER TABLE `piloten_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `index_pilot_details_on_pilot_id` (`pilotID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -8929,43 +8922,31 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indizes für die Tabelle `beladung`
 --
 ALTER TABLE `beladung`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
-  ADD KEY `PlaneLeverID` (`flugzeugHebelarmID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `daten`
 --
 ALTER TABLE `daten`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollInputID` (`protokollInputID`),
-  ADD KEY `daten_ibfk_6` (`protokollSpeicherID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `hst-wege`
 --
 ALTER TABLE `hst-wege`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `kommentare`
 --
 ALTER TABLE `kommentare`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`),
-  ADD KEY `kommentare_ibfk_3` (`protokollSpeicherID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokolle`
 --
 ALTER TABLE `protokolle`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `CopilotenID` (`copilotID`),
-  ADD KEY `PilotenID` (`pilotID`),
-  ADD KEY `FlugzeugID` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -9639,8 +9620,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indizes für die Tabelle `auswahllisten`
 --
 ALTER TABLE `auswahllisten`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `EingabeId` (`protokollInputID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `input_typen`
@@ -9652,40 +9632,31 @@ ALTER TABLE `input_typen`
 -- Indizes für die Tabelle `protokolle`
 --
 ALTER TABLE `protokolle`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `protokolltypId` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_eingaben`
 --
 ALTER TABLE `protokoll_eingaben`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_inputs`
 --
 ALTER TABLE `protokoll_inputs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `InputID` (`inputID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_kapitel`
 --
 ALTER TABLE `protokoll_kapitel`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_layouts`
 --
 ALTER TABLE `protokoll_layouts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollID` (`protokollID`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`),
-  ADD KEY `ProtokollInputID` (`protokollInputID`),
-  ADD KEY `ProtokollEingabeID` (`protokollEingabeID`),
-  ADD KEY `ProtokollSubsektionID` (`protokollUnterkapitelID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_typen`
@@ -9697,8 +9668,7 @@ ALTER TABLE `protokoll_typen`
 -- Indizes für die Tabelle `protokoll_unterkapitel`
 --
 ALTER TABLE `protokoll_unterkapitel`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen

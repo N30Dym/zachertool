@@ -23,7 +23,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $baseURL = 'http://localhost/zachern-dev/';
+	public $baseURL = 'http://localhost/zachertool/';
 
 	/**
 	 * --------------------------------------------------------------------------
@@ -36,7 +36,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $indexPage = '/';
+	public $indexPage = '/index.php';
 
 	/**
 	 * --------------------------------------------------------------------------

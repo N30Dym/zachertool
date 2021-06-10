@@ -20,7 +20,7 @@ class protokolleModel extends Model
     protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
 
-        /*
+        /**
         * Diese Funktion ruft alle Protokolle auf
         *
         * @return array
@@ -31,7 +31,7 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();	
     }
 
-        /*
+        /**
         * Diese Funktion ruft nur das Protokoll mit
         * der jeweiligen ID auf
         *
@@ -44,7 +44,7 @@ class protokolleModel extends Model
     }
 
 
-        /*
+        /**
         * Diese Funktion ruft nur Protokolle auf die
         * bestätigt wurden (Nach Abgabegespräch)
         *
@@ -64,7 +64,7 @@ class protokolleModel extends Model
     }
 
 
-        /*
+        /**
         * Diese Funktion ruft nur Protokolle auf die
         * fertig sind, aber noch nicht abgegeben wurden 
         * (vor Abgabegespräch, aber abgesendet)
@@ -77,7 +77,7 @@ class protokolleModel extends Model
     }
 
 
-        /*
+        /**
         * Diese Funktion ruft nur Protokolle auf die
         * NICHT fertig sind (Zwischenspeicher ggf. abgebrochen)
         *
@@ -89,7 +89,7 @@ class protokolleModel extends Model
     }
 
 
-        /*
+        /**
         * Diese Funktion ruft nur alle Protokolle auf
         * der im jeweiligen Jahr geflogen wurden. Das
         * Erstelldatum wird NICHT berücksichtigt
@@ -103,7 +103,7 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();
     }
 
-        /*
+        /**
         * Diese Funktion ruft nur alle Protokolle auf
         * der im jeweiligen Jahr geflogen wurden. Das
         * Erstelldatum wird NICHT berücksichtigt
@@ -123,13 +123,11 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();
     }
 
-        // "fertig" muss irgendwann zu "bestaetigt"
     public function getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $flugzeugID)
     {
         return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
     }
     
-        // "fertig" muss irgendwann zu "bestaetigt"
     public function getAnzahlProtokolleNachJahrUndPilotID($jahr, $pilotID)
     {
         return $this->selectCount("id")->where("bestaetigt", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
@@ -141,7 +139,6 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();
     }
     
-        // "fertig" muss irgendwann zu "bestaetigt"
     public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
     {
         return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first();

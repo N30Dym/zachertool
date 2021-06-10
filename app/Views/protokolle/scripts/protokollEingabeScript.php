@@ -170,6 +170,6 @@ input[type=number] {
 }
 
 label {
-	margin-left: 0.5rem;
+    margin-left: 0.5rem;
 }
 </style>

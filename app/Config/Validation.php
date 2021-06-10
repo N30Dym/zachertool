@@ -955,4 +955,356 @@ class Validation
             ]
         ]
     ];
+    
+    public $protokolle = [
+        'flugzeugID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'  => 'Es wurde keine FlugzeugID gegeben.',
+                'numeric'   => 'Die FlugzeugID ist ungültig.'
+            ]
+        ],
+        'pilotID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine PilotID gegeben.',
+                'is_natural'    => 'Die PilotID ist ungültig.'
+            ]
+        ],
+        'copilotID' => [
+            'rules'  => 'permit_empty|is_natural',
+            'errors' => [
+                'is_natural'    => 'Die CopilotID ist ungültig.'
+            ]
+        ], 
+        'flugzeit' => [
+            'rules'  => 'permit_empty|valid_date[H:i:s]',
+            'errors' => [
+                'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
+            ]
+        ], 
+        'bemerkung' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'   => 'Die Bemerkung hat ein falsches Format.'
+            ]
+        ],
+        'bestaetigt' => [
+            'rules'  => 'permit_empty|is_natural|less_than_equal_to[1]',
+            'errors' => [
+                'is_natural'            => 'Die Bestätigt-Flag ist kein Integer.',
+                'less_than_equal_to'    => 'Die Bestätigt-Flag ist größer als 1.'
+            ]
+        ],
+        'fertig' => [
+            'rules'  => 'permit_empty|is_natural|less_than_equal_to[1]',
+            'errors' => [
+                'is_natural'            => 'Die Fertig-Flag ist kein Integer.',
+                'less_than_equal_to'    => 'Die Fertig-Flag ist größer als 1.'
+            ]
+        ],
+        'datum' => [
+            'rules'  => 'required|valid_date',
+            'errors' => [
+                'valid_date'    => 'Das Datum hat ein falsches Format: TT.MM.JJJJ',
+                'required'      => 'Das Datum muss angegeben werden.'
+            ]
+        ]
+    ];
+    
+    public $kommentareOhneProtokollSpeicherID =  [       
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'    => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'required|string',
+            'errors' => [
+                'required'  => 'Es wurde kein Kommentar gegeben.',
+                'string'    => 'Der Kommentar enthält ungültige Zeichen.'
+            ]
+        ]
+    ];
+    
+    public $kommentare =  [ 
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'    => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'required|string',
+            'errors' => [
+                'required'  => 'Es wurde kein Kommentar gegeben.',
+                'string'    => 'Der Kommentar enthält ungültige Zeichen.'
+            ]
+        ]
+    ];
+    
+    public $hStWegeOhneProtokollSpeicherID =  [ 
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'    => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'gedruecktHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im gedrückten Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den gedrückten Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'neutralHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'gezogenHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im gezogenen Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den gezogenen Zustand muss eine ganze Zahl sein.'
+            ]
+        ]
+    ];
+    
+    public $hStWege =  [ 
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'protokollKapitelID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine KapitelID gegeben.',
+                'is_natural'    => 'Die KapitelID ist ungültig.'
+            ]
+        ],
+        'gedruecktHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im gedrückten Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den gedrückten Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'neutralHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'
+            ]
+        ],
+        'gezogenHSt' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde kein Wert für das HSt im gezogenen Zustand angegeben.',
+                'is_natural'    => 'Der HSt Weg für den gezogenen Zustand muss eine ganze Zahl sein.'
+            ]
+        ]
+    ];
+    
+    public $beladungOhneProtokollSpeicherID =  [ 
+        'flugzeugHebelarmID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine FlugzeugHebelarmID gegeben.',
+                'is_natural'    => 'Die FlugzeugHebelarmID ist ungültig.'
+            ]
+        ],
+        'bezeichnung' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Die Hebelarmbezeichnung enthält ungültige Zeichen.'
+            ]
+        ],
+        'hebelarm' => [
+            'rules'  => 'permit_empty|numeric',
+            'errors' => [
+                'numeric'   => 'Der Hebelarm muss eine Zahl sein.'
+            ]
+        ],
+        'gewicht' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required'  => 'Es wurde kein Gewicht für einen der erforderlichen Hebelarme gegeben.',
+                'numeric'   => 'Das Gewicht für die Hebelarme muss eine Zahl sein.'
+            ]
+        ]
+    ];
+    
+    public $beladung =  [ 
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'flugzeugHebelarmID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine FlugzeugHebelarmID gegeben.',
+                'is_natural'    => 'Die FlugzeugHebelarmID ist ungültig.'
+            ]
+        ],
+        'bezeichnung' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Die Hebelarmbezeichnung enthält ungültige Zeichen.'
+            ]
+        ],
+        'hebelarm' => [
+            'rules'  => 'permit_empty|numeric',
+            'errors' => [
+                'numeric'   => 'Der Hebelarm muss eine Zahl sein.'
+            ]
+        ],
+        'gewicht' => [
+            'rules'  => 'required|numeric',
+            'errors' => [
+                'required'  => 'Es wurde kein Gewicht für einen der erforderlichen Hebelarme gegeben.',
+                'numeric'   => 'Das Gewicht für die Hebelarme muss eine Zahl sein.'
+            ]
+        ]
+    ];
+    
+    public $daten = [
+        'protokollSpeicherID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
+                'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
+            ]
+        ],
+        'protokollInputID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollInputID gegeben.',
+                'is_natural'    => 'Die ProtokollInputID ist ungültig.'
+            ]
+        ],
+        'wert' => [
+            'rules'  => 'required',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert gegeben.'
+            ]
+        ],
+        'woelbklappenstellung' => [
+            'rules'  => 'permit_empty|in_list[Neutral,Kreisflug]',
+            'errors' => [
+                'in_list'   => 'Die Wölbklappenstellung entspricht nicht den vorgegebenen Parametern (Neutral, Kreisflug).'
+            ]
+        ],
+        'linksUndRechts' => [
+            'rules'  => 'permit_empty|in_list[Links,Rechts]',
+            'errors' => [
+                'in_list'   => 'Die Richtung entspricht nicht den vorgegebenen Parametern (Links, Rechts).'
+            ]
+        ],
+        'multipelNr' => [
+            'rules'  => 'permit_empty|is_natural',
+            'errors' => [
+                'is_natural'    => 'Bei der Eingabe Multipler Werte ist etwas schief gelaufen.'
+            ]
+        ]
+    ];
+    
+    public $datenOhneProtokollSpeicherID = [
+        'protokollInputID' => [
+            'rules'  => 'required|is_natural',
+            'errors' => [
+                'required'      => 'Es wurde keine ProtokollInputID gegeben.',
+                'is_natural'    => 'Die ProtokollInputID ist ungültig.'
+            ]
+        ],
+        'wert' => [
+            'rules'  => 'required',
+            'errors' => [
+                'required'  => 'Es wurde kein Wert gegeben.'
+            ]
+        ],
+        'woelbklappenstellung' => [
+            'rules'  => 'permit_empty|in_list[Neutral,Kreisflug]',
+            'errors' => [
+                'in_list'   => 'Die Wölbklappenstellung entspricht nicht den vorgegebenen Parametern (Neutral, Kreisflug).'
+            ]
+        ],
+        'linksUndRechts' => [
+            'rules'  => 'permit_empty|in_list[Links,Rechts]',
+            'errors' => [
+                'in_list'   => 'Die Richtung entspricht nicht den vorgegebenen Parametern (Links, Rechts).'
+            ]
+        ],
+        'multipelNr' => [
+            'rules'  => 'permit_empty|is_natural',
+            'errors' => [
+                'is_natural'    => 'Bei der Eingabe Multipler Werte ist etwas schief gelaufen.'
+            ]
+        ]
+    ];
+    
+    public $eingabeText = [
+        'wert' => [
+            'rules'  => 'alpha_numeric_punct',
+            'errors' => [
+                'alpha_numeric_punct'   => 'Ein Textfeld enthält ungültige Zeichen.'
+            ] 
+        ]
+    ];
+    
+    public $eingabeGanzzahl = [
+        'wert' => [
+            'rules'  => 'is_natural',
+            'errors' => [
+                'is_natural'   => 'Eine Zahleneingabe für Ganzzahlen enthält ungültige Zeichen.'
+            ] 
+        ]
+    ];
+    
+    public $eingabeDezimalzahl = [
+        'wert' => [
+            'rules'  => 'numeric',
+            'errors' => [
+                'numeric'   => 'Eine Zahleneingabe für Dezimalzahlen enthält ungültige Zeichen.'
+            ] 
+        ]
+    ];
+    
+    public $eingabeCheckbox = [
+        'wert' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]',
+            'errors' => [
+                'is_natural'    => 'Eine Checkbox enthält ungültige Zeichen.',
+                'less_than_equal_to'     => 'Eine Checkbox enthält einen Wert größer 1.'
+            ] 
+        ]
+    ];
+    
+    public $eingabeNote = [
+        'wert' => [
+            'rules'  => 'in_list[1,2,3,4,5,6]',
+            'errors' => [
+                'in_list'    => 'Eine Note enthält einen ungültigen Wert.'
+            ] 
+        ]
+    ];    
 }

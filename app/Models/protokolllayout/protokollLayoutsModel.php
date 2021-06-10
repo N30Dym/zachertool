@@ -32,4 +32,19 @@ class protokollLayoutsModel extends Model
     {
         return $this->select('protokollKapitelID')->where('protokollInputID', $protokollInputID)->first();
     }
+    
+    public function getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs($protokollInputID, $protokollIDs) 
+    {
+        $query = "SELECT `protokollKapitelID` FROM `protokoll_layouts` WHERE `protokollInputID` = " . $protokollInputID . " AND ( ";
+        
+        foreach($protokollIDs as $protokollID)
+        {
+            $query = $query . "`protokollID` = " . $protokollID . " OR ";
+        }
+        
+        $query = mb_substr($query, 0, -3);
+        $query = $query . ");"; 
+        
+        return $this->query($query)->getResultArray();
+    }
 }

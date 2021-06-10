@@ -27,4 +27,14 @@ class flugzeugHebelarmeModel extends Model
     {
         return $this->where('id', $id)->first();
     }
+    
+    public function getPilotHebelarmIDNachFlugzeugID($flugzeugID)
+    {
+        return $this->select('id')->where('beschreibung', 'Pilot')->where('flugzeugID', $flugzeugID)->first();
+    }
+    
+    public function getCopilotHebelarmIDNachFlugzeugID($flugzeugID)
+    {
+        return $this->select('id')->where('beschreibung', 'Copilot')->where('flugzeugID', $flugzeugID)->first();
+    }
 }

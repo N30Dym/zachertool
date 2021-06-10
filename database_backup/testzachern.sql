@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 31. Mai 2021 um 11:06
+-- Erstellungszeit: 09. Jun 2021 um 16:50
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -780,22 +780,19 @@ ALTER TABLE `flugzeuge`
 -- Indizes für die Tabelle `flugzeug_details`
 --
 ALTER TABLE `flugzeug_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_hebelarme`
 --
 ALTER TABLE `flugzeug_hebelarme`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_klappen`
 --
 ALTER TABLE `flugzeug_klappen`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_id` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `flugzeug_waegung`
@@ -813,22 +810,19 @@ ALTER TABLE `muster`
 -- Indizes für die Tabelle `muster_details`
 --
 ALTER TABLE `muster_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `muster_hebelarme`
 --
 ALTER TABLE `muster_hebelarme`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `muster_klappen`
 --
 ALTER TABLE `muster_klappen`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `plane_type_id` (`musterID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -946,7 +940,7 @@ CREATE TABLE `piloten` (
   `vorname` varchar(255) DEFAULT NULL,
   `spitzname` varchar(255) DEFAULT NULL,
   `nachname` varchar(255) DEFAULT NULL,
-  `akaflieg` text DEFAULT NULL,
+  `akafliegID` text DEFAULT NULL,
   `groesse` int(11) DEFAULT NULL,
   `sichtbar` tinyint(1) DEFAULT 1,
   `zachereinweiser` tinyint(1) DEFAULT NULL,
@@ -958,53 +952,84 @@ CREATE TABLE `piloten` (
 -- Daten für Tabelle `piloten`
 --
 
-INSERT INTO `piloten` (`id`, `vorname`, `spitzname`, `nachname`, `akaflieg`, `groesse`, `sichtbar`, `zachereinweiser`, `erstelltAm`, `geaendertAm`) VALUES
-(1, 'Roberto', 'Chilli', 'Fillbrandt', 'München', 179, 1, NULL, '2019-07-11 11:47:29', '2019-07-11 11:47:29'),
-(3, 'Stefan', 'Zischi', 'Zistler', 'Esslingen', 176, 1, 1, '2019-07-16 15:32:51', '2020-08-27 14:33:20'),
-(4, 'Philipp', '', 'Döring', 'Berlin', 193, NULL, NULL, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
-(5, 'Matthias', 'Teilnehmer', 'Molitor', 'Darmstadt', 178, 1, NULL, '2019-07-30 15:58:25', '2019-08-22 21:43:54'),
+INSERT INTO `piloten` (`id`, `vorname`, `spitzname`, `nachname`, `akafliegID`, `groesse`, `sichtbar`, `zachereinweiser`, `erstelltAm`, `geaendertAm`) VALUES
+(1, 'Roberto', 'Chilli', 'Fillbrandt', '9', 179, 1, NULL, '2019-07-11 11:47:29', '2019-07-11 11:47:29'),
+(3, 'Stefan', 'Zischi', 'Zistler', '6', 176, 1, 1, '2019-07-16 15:32:51', '2020-08-27 14:33:20'),
+(4, 'Philipp', '', 'Döring', '2', 193, NULL, NULL, '2019-07-18 16:21:24', '2019-07-18 16:21:24'),
+(5, 'Matthias', 'Teilnehmer', 'Molitor', '4', 178, 1, NULL, '2019-07-30 15:58:25', '2019-08-22 21:43:54'),
 (6, 'Thomas', '', 'Stolte', NULL, 167, 1, NULL, '2019-08-20 18:45:44', '2019-12-20 22:11:17'),
-(8, 'Lukas', 'Kerby', 'Nickel', NULL, 186, 1, NULL, '2019-08-27 14:16:42', '2019-11-05 11:50:25'),
-(9, 'Renate', '', 'Litzelmann', NULL, 160, 1, NULL, '2019-08-27 15:26:54', '2020-08-27 14:01:58'),
-(10, 'Nico', 'Breitbart', 'Große', NULL, 185, 1, NULL, '2018-08-01 00:00:00', '2020-03-31 15:19:36'),
-(11, 'Thiemo', 'Sose', 'Hofmacher', 'Braunschweig', 180, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 11:55:45'),
-(12, 'Kai', 'KiKa', 'Weber', NULL, 180, 1, NULL, '2018-08-01 00:00:00', '2020-08-27 14:22:55'),
-(13, 'Sandra', 'Mörtel', 'Müller', 'München', 172, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:14:41'),
-(14, 'Kristian', 'Kerstin', 'Fettig', 'Braunschweig', 183, 1, NULL, '2018-08-01 00:00:00', '2020-04-01 14:58:51'),
-(15, 'Andreas', 'Dingsda', 'Weskamp', NULL, 182, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:18:17'),
-(16, 'Nils', 'Locke', 'Mackensen', 'Braunschweig', 179, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:20:38'),
-(17, 'Ines', 'Angela', 'Weber', NULL, 170, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:24:31'),
+(8, 'Lukas', 'Kerby', 'Nickel', '1', 186, 1, NULL, '2019-08-27 14:16:42', '2019-11-05 11:50:25'),
+(9, 'Renate', '', 'Litzelmann', '7', 160, 1, NULL, '2019-08-27 15:26:54', '2020-08-27 14:01:58'),
+(10, 'Nico', 'Breitbart', 'Große', '9', 185, 1, NULL, '2018-08-01 00:00:00', '2020-03-31 15:19:36'),
+(11, 'Thiemo', 'Sose', 'Hofmacher', '3', 180, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 11:55:45'),
+(12, 'Kai', 'KiKa', 'Weber', '8', 180, 1, NULL, '2018-08-01 00:00:00', '2020-08-27 14:22:55'),
+(13, 'Sandra', 'Mörtel', 'Müller', '9', 172, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:14:41'),
+(14, 'Kristian', 'Kerstin', 'Fettig', '3', 183, 1, NULL, '2018-08-01 00:00:00', '2020-04-01 14:58:51'),
+(15, 'Andreas', 'Dingsda', 'Weskamp', '4', 182, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:18:17'),
+(16, 'Nils', 'Locke', 'Mackensen', '8', 179, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:20:38'),
+(17, 'Ines', 'Angela', 'Weber', '9', 170, 1, NULL, '2018-08-01 00:00:00', '2019-11-05 12:24:31'),
 (18, 'K', '', 'Köhler', NULL, 185, NULL, NULL, '2018-07-01 00:00:00', '2019-12-20 12:29:47'),
 (19, '?', '', 'Neveling', NULL, 184, NULL, NULL, '2018-08-14 00:00:00', '2019-12-20 17:20:56'),
 (20, 'unbekannt', '', 'Neveling', NULL, 184, NULL, NULL, '2018-08-14 00:00:00', '2019-12-20 17:23:19'),
 (21, 'Leichter', '', 'Begleiter', NULL, 175, NULL, NULL, '2018-08-20 00:00:00', '2019-12-20 17:50:00'),
-(22, 'Wiebke', 'Frosty', 'Mügge', 'Hannover', 170, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 18:12:53'),
-(23, 'Simeon', '', 'Gubernator', 'Darmstadt', 183, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 22:12:03'),
-(24, 'Jonas', 'Bunny', 'Schmidt', 'Stuttgart', 180, 1, NULL, '2018-08-06 00:00:00', '2020-04-15 14:57:12'),
-(25, 'Christoh', 'Poolboy', 'Rothkamm', 'Aachen', 182, 1, NULL, '2018-08-08 00:00:00', '2019-12-20 23:36:21'),
+(22, 'Wiebke', 'Frosty', 'Mügge', '7', 170, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 18:12:53'),
+(23, 'Simeon', '', 'Gubernator', '4', 183, 1, NULL, '2018-08-22 00:00:00', '2019-12-20 22:12:03'),
+(24, 'Jonas', 'Bunny', 'Schmidt', '10', 180, 1, NULL, '2018-08-06 00:00:00', '2020-04-15 14:57:12'),
+(25, 'Christoh', 'Poolboy', 'Rothkamm', '1', 182, 1, NULL, '2018-08-08 00:00:00', '2019-12-20 23:36:21'),
 (26, 'Christian', 'Kai-Uwe', 'Weidemann', NULL, 183, NULL, NULL, '2019-08-20 00:00:00', '2020-04-01 14:20:20'),
-(27, 'Robert', 'Sofa', 'Berrios Hinz', 'Braunschweig', 180, 1, NULL, '2019-08-01 00:00:00', '2020-09-02 22:14:52'),
-(28, 'Kathrin', 'Chimala', 'Deck', 'Karlsruhe', 165, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:25:10'),
-(29, 'Richardt', 'Chewy', 'Czuberny', 'Braunschweig', 198, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:52:31'),
-(30, 'Bastian', 'Baschtl', 'Schick', 'Esslingen', 186, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 15:06:28'),
+(27, 'Robert', 'Sofa', 'Berrios Hinz', '8', 180, 1, NULL, '2019-08-01 00:00:00', '2020-09-02 22:14:52'),
+(28, 'Kathrin', 'Chimala', 'Deck', '8', 165, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:25:10'),
+(29, 'Richardt', 'Chewy', 'Czuberny', '3', 198, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 14:52:31'),
+(30, 'Bastian', 'Baschtl', 'Schick', '6', 186, 1, NULL, '2019-08-01 00:00:00', '2020-04-28 15:06:28'),
 (31, 'Janette', '', 'Kryppa', NULL, 170, 1, NULL, '2018-08-01 00:00:00', '2020-04-29 14:59:03'),
-(32, 'Katharina', 'Katjuscha', 'Diehn', 'Berlin', 175, 1, NULL, '2019-08-01 00:00:00', '2020-08-27 14:35:10'),
+(32, 'Katharina', 'Katjuscha', 'Diehn', '2', 175, 1, NULL, '2019-08-01 00:00:00', '2020-08-27 14:35:10'),
 (33, '70kg', '', 'Begleiter', NULL, 175, NULL, NULL, '2018-08-01 00:00:00', '2020-05-19 10:32:32'),
-(34, 'Christoph', 'Sackbart', 'Barczak', 'Braunschweig', 186, 1, NULL, '2019-08-01 00:00:00', '2020-05-19 15:44:02'),
-(35, 'Sebastian', 'Nitro', 'Neveling', NULL, 185, 1, NULL, '2020-08-01 00:00:00', '2020-08-21 09:22:09'),
+(34, 'Christoph', 'Sackbart', 'Barczak', '3', 186, 1, NULL, '2019-08-01 00:00:00', '2020-05-19 15:44:02'),
+(35, 'Sebastian', 'Nitro', 'Neveling', '1', 185, 1, NULL, '2020-08-01 00:00:00', '2020-08-21 09:22:09'),
 (36, '90 kg', '', 'Begleiter', NULL, 175, NULL, NULL, '2020-08-01 00:00:00', '2020-08-21 09:52:07'),
 (37, 'Tim', 'Twinkie', 'Rommelaere', NULL, 187, 1, NULL, '2020-08-01 00:00:00', '2020-08-21 18:37:23'),
-(38, 'Simon', 'Azubi', 'Grafenhorst', NULL, 178, 1, NULL, '2020-08-01 00:00:00', '2020-08-24 15:18:07'),
-(39, 'Robert', 'Kobo', 'May', 'Berlin', 185, 1, NULL, '2020-08-01 00:00:00', '2020-09-04 01:54:07'),
-(40, 'Michael', 'Claas', 'Brüggemann', 'Braunschweig', 168, 1, NULL, '2020-08-01 00:00:00', '2020-08-27 14:41:32'),
-(41, 'Felix', 'Kleinlich', 'Reinisch', 'München', 176, NULL, NULL, '2020-08-01 00:00:00', '2020-09-03 19:47:46'),
-(42, 'Erik', 'Holle Honig', 'Braun', 'Karlsruhe', 175, 1, NULL, '2020-08-01 00:00:00', '2020-09-03 21:24:21'),
+(38, 'Simon', 'Azubi', 'Grafenhorst', '8', 178, 1, NULL, '2020-08-01 00:00:00', '2020-08-24 15:18:07'),
+(39, 'Robert', 'Kobo', 'May', '2', 185, 1, NULL, '2020-08-01 00:00:00', '2020-09-04 01:54:07'),
+(40, 'Michael', 'Claas', 'Brüggemann', '3', 168, 1, NULL, '2020-08-01 00:00:00', '2020-08-27 14:41:32'),
+(41, 'Felix', 'Kleinlich', 'Reinisch', '9', 176, NULL, NULL, '2020-08-01 00:00:00', '2020-09-03 19:47:46'),
+(42, 'Erik', 'Holle Honig', 'Braun', '8', 175, 1, NULL, '2020-08-01 00:00:00', '2020-09-03 21:24:21'),
 (43, 'Philipp', '', 'Schmidt', NULL, 192, 1, NULL, '2020-01-01 00:00:00', '2020-11-17 13:06:47'),
-(44, 'Davide', 'Beschichter', 'Schulte', NULL, 186, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 13:46:19'),
-(45, 'Marie', 'Tim', 'Steidele', NULL, 165, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 14:10:09'),
-(46, 'Lars', 'Eisbär', 'Kastner', 'Braunschweig', 174, 1, 1, '2021-05-13 00:00:00', '2021-05-14 00:03:03'),
+(44, 'Davide', 'Beschichter', 'Schulte', '5', 186, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 13:46:19'),
+(45, 'Marie', 'Tim', 'Steidele', '9', 165, 1, NULL, '2020-08-01 00:00:00', '2020-11-17 14:10:09'),
+(46, 'Lars', 'Eisbär', 'Kastner', '3', 174, 1, 1, '2021-05-13 00:00:00', '2021-05-14 00:03:03'),
 (51, 'Ein', 'Test', 'Pilot', NULL, 2147483647, 1, NULL, '2021-05-13 22:05:48', '2021-05-14 00:06:06'),
-(52, 'asd', '', 'asd', 'Aachen', 3, 1, NULL, '2021-05-13 22:07:19', '2021-05-14 00:07:19');
+(52, 'asd', '', 'asd', '1', 3, 1, NULL, '2021-05-13 22:07:19', '2021-05-14 00:07:19');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `piloten_akafliegs`
+--
+
+DROP TABLE IF EXISTS `piloten_akafliegs`;
+CREATE TABLE `piloten_akafliegs` (
+  `id` int(11) NOT NULL,
+  `akaflieg` text NOT NULL,
+  `sichtbar` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `piloten_akafliegs`
+--
+
+INSERT INTO `piloten_akafliegs` (`id`, `akaflieg`, `sichtbar`) VALUES
+(1, 'Aachen', 1),
+(2, 'Berlin', 1),
+(3, 'Braunschweig', 1),
+(4, 'Darmstadt', 1),
+(5, 'Dresden', 1),
+(6, 'Esslingen', 1),
+(7, 'Hannover', 1),
+(8, 'Karlsruhe', 1),
+(9, 'München', 1),
+(10, 'Stuttgart', 1),
+(11, 'Madrid', 1),
+(12, 'Delft', 1);
 
 -- --------------------------------------------------------
 
@@ -1087,6 +1112,37 @@ INSERT INTO `piloten_details` (`id`, `pilotID`, `datum`, `stundenNachSchein`, `g
 (76, 51, '2021-05-14', 4, 3, 2, 1),
 (77, 52, '2021-05-14', 3, 412, 3, 3);
 
+-- --------------------------------------------------------
+
+--
+-- Stellvertreter-Struktur des Views `piloten_mit_akafliegs`
+-- (Siehe unten für die tatsächliche Ansicht)
+--
+DROP VIEW IF EXISTS `piloten_mit_akafliegs`;
+CREATE TABLE `piloten_mit_akafliegs` (
+`id` int(20)
+,`vorname` varchar(255)
+,`spitzname` varchar(255)
+,`nachname` varchar(255)
+,`akafliegID` text
+,`groesse` int(11)
+,`sichtbar` tinyint(1)
+,`zachereinweiser` tinyint(1)
+,`erstelltAm` datetime
+,`geaendertAm` datetime
+,`akaflieg` text
+);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur des Views `piloten_mit_akafliegs`
+--
+DROP TABLE IF EXISTS `piloten_mit_akafliegs`;
+
+DROP VIEW IF EXISTS `piloten_mit_akafliegs`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `piloten_mit_akafliegs`  AS SELECT `piloten`.`id` AS `id`, `piloten`.`vorname` AS `vorname`, `piloten`.`spitzname` AS `spitzname`, `piloten`.`nachname` AS `nachname`, `piloten`.`akafliegID` AS `akafliegID`, `piloten`.`groesse` AS `groesse`, `piloten`.`sichtbar` AS `sichtbar`, `piloten`.`zachereinweiser` AS `zachereinweiser`, `piloten`.`erstelltAm` AS `erstelltAm`, `piloten`.`geaendertAm` AS `geaendertAm`, `piloten_akafliegs`.`akaflieg` AS `akaflieg` FROM (`piloten` join `piloten_akafliegs` on(`piloten`.`akafliegID` = `piloten_akafliegs`.`id`)) ;
+
 --
 -- Indizes der exportierten Tabellen
 --
@@ -1098,11 +1154,16 @@ ALTER TABLE `piloten`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `piloten_akafliegs`
+--
+ALTER TABLE `piloten_akafliegs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indizes für die Tabelle `piloten_details`
 --
 ALTER TABLE `piloten_details`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `index_pilot_details_on_pilot_id` (`pilotID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -1113,6 +1174,12 @@ ALTER TABLE `piloten_details`
 --
 ALTER TABLE `piloten`
   MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT für Tabelle `piloten_akafliegs`
+--
+ALTER TABLE `piloten_akafliegs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT für Tabelle `piloten_details`
@@ -2404,7 +2471,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (1166, 180, 21, '0', NULL, 'Links', NULL),
 (1167, 180, 22, 'Vibrationen, Fahrtmesseranzeige -> 0', NULL, 'Rechts', NULL),
 (1168, 180, 23, '80', NULL, 'Links', NULL),
-(1169, 180, 24, '65', NULL, 'Links', NULL),
+(1169, 180, 24, '65', NULL, 'Links', NULL);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (1170, 180, 25, 'Vibrationen, Taumeln, Weichwerden der Ruder, Pumpen', NULL, 'Rechts', NULL),
 (1171, 180, 26, '2.0', NULL, 'Links', NULL),
 (1172, 180, 27, '20', NULL, 'Links', NULL),
@@ -3501,7 +3569,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (2263, 195, 77, '182', NULL, NULL, 5),
 (2264, 195, 77, '178', NULL, NULL, 6),
 (2265, 195, 77, '176', NULL, NULL, 7),
-(2266, 195, 78, '80', NULL, NULL, 1),
+(2266, 195, 78, '80', NULL, NULL, 1);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (2267, 195, 78, '90', NULL, NULL, 2),
 (2268, 195, 78, '100', NULL, NULL, 3),
 (2269, 195, 78, '110', NULL, NULL, 4),
@@ -4490,7 +4559,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (3252, 203, 53, '33', NULL, NULL, NULL),
 (3253, 203, 55, '1', NULL, NULL, NULL),
 (3254, 203, 80, 'Lose hintere Haube (Hilfe oft erforderlich)', NULL, NULL, NULL),
-(3255, 203, 56, '3', NULL, NULL, NULL),
+(3255, 203, 56, '3', NULL, NULL, NULL);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (3256, 203, 81, 'Lose Haube, Verriegelung sehr unhandlich. Zum Öffnen muß gedrückt, anstatt wie üblich gezogen werden.', NULL, NULL, NULL),
 (3257, 203, 57, '3', NULL, NULL, NULL),
 (3258, 203, 82, 'große Einstellweite aber unhandlich', NULL, NULL, NULL),
@@ -5551,7 +5621,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (4313, 217, 13, '200', NULL, 'Links', NULL),
 (4314, 217, 14, '0', NULL, 'Links', NULL),
 (4315, 217, 15, '0', NULL, 'Links', NULL),
-(4316, 217, 16, '219', NULL, 'Links', NULL),
+(4316, 217, 16, '219', NULL, 'Links', NULL);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (4317, 217, 17, '68', NULL, NULL, NULL),
 (4318, 217, 18, '65', NULL, NULL, NULL),
 (4319, 217, 19, 'Schütteln am Knüppel, Schütteln, FM-Schwankungen.', NULL, NULL, NULL),
@@ -6603,7 +6674,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (5365, 233, 23, '70', 'Kreisflug', 'Links', NULL),
 (5366, 233, 25, 'weiche Ruder... Schütteln', 'Kreisflug', 'Rechts', NULL),
 (5367, 233, 26, '1.4', 'Neutral', 'Links', NULL),
-(5368, 233, 26, '1.2', 'Neutral', 'Rechts', NULL),
+(5368, 233, 26, '1.2', 'Neutral', 'Rechts', NULL);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (5369, 233, 27, '0', 'Neutral', 'Links', NULL),
 (5370, 233, 27, '5', 'Neutral', 'Rechts', NULL),
 (5371, 233, 26, '1.9', 'Kreisflug', 'Links', NULL),
@@ -7599,7 +7671,8 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (6361, 254, 24, '81', NULL, 'Links', NULL),
 (6362, 254, 25, 'Ablösegeräusch -> Taumeln -> Abkippen - Trudelneigung', NULL, 'Rechts', NULL),
 (6363, 254, 26, '1.2', NULL, 'Links', NULL),
-(6364, 254, 27, '20', NULL, 'Links', NULL),
+(6364, 254, 27, '20', NULL, 'Links', NULL);
+INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `woelbklappenstellung`, `linksUndRechts`, `multipelNr`) VALUES
 (6365, 254, 28, '2.3', NULL, 'Rechts', NULL),
 (6366, 254, 29, '100', NULL, NULL, NULL),
 (6367, 254, 30, '100', NULL, NULL, NULL),
@@ -8814,10 +8887,16 @@ INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`
 DROP VIEW IF EXISTS `protokoll_view`;
 CREATE TABLE `protokoll_view` (
 `id` int(11)
-,`datum` date
 ,`flugzeugID` int(11)
 ,`pilotID` int(11)
 ,`copilotID` int(11)
+,`flugzeit` time
+,`bemerkung` text
+,`bestaetigt` tinyint(1)
+,`fertig` tinyint(1)
+,`datum` date
+,`erstelltAm` timestamp
+,`geaendertAm` datetime
 ,`musterSchreibweise` text
 ,`musterZusatz` varchar(11)
 ,`vorname` varchar(255)
@@ -8833,7 +8912,7 @@ CREATE TABLE `protokoll_view` (
 DROP TABLE IF EXISTS `protokoll_view`;
 
 DROP VIEW IF EXISTS `protokoll_view`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_view`  AS SELECT `protokolle`.`id` AS `id`, `protokolle`.`datum` AS `datum`, `protokolle`.`flugzeugID` AS `flugzeugID`, `protokolle`.`pilotID` AS `pilotID`, `protokolle`.`copilotID` AS `copilotID`, `testzachern_flugzeuge`.`muster`.`musterSchreibweise` AS `musterSchreibweise`, `testzachern_flugzeuge`.`muster`.`musterZusatz` AS `musterZusatz`, `testzachern_piloten`.`piloten`.`vorname` AS `vorname`, `testzachern_piloten`.`piloten`.`nachname` AS `nachname`, `testzachern_piloten`.`piloten`.`spitzname` AS `spitzname` FROM (((`protokolle` join `testzachern_flugzeuge`.`flugzeuge` on(`testzachern_flugzeuge`.`flugzeuge`.`id` = `protokolle`.`flugzeugID`)) join `testzachern_flugzeuge`.`muster` on(`testzachern_flugzeuge`.`flugzeuge`.`musterID` = `testzachern_flugzeuge`.`muster`.`id`)) join `testzachern_piloten`.`piloten` on(`protokolle`.`pilotID` = `testzachern_piloten`.`piloten`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_view`  AS SELECT `protokolle`.`id` AS `id`, `protokolle`.`flugzeugID` AS `flugzeugID`, `protokolle`.`pilotID` AS `pilotID`, `protokolle`.`copilotID` AS `copilotID`, `protokolle`.`flugzeit` AS `flugzeit`, `protokolle`.`bemerkung` AS `bemerkung`, `protokolle`.`bestaetigt` AS `bestaetigt`, `protokolle`.`fertig` AS `fertig`, `protokolle`.`datum` AS `datum`, `protokolle`.`erstelltAm` AS `erstelltAm`, `protokolle`.`geaendertAm` AS `geaendertAm`, `testzachern_flugzeuge`.`muster`.`musterSchreibweise` AS `musterSchreibweise`, `testzachern_flugzeuge`.`muster`.`musterZusatz` AS `musterZusatz`, `testzachern_piloten`.`piloten`.`vorname` AS `vorname`, `testzachern_piloten`.`piloten`.`nachname` AS `nachname`, `testzachern_piloten`.`piloten`.`spitzname` AS `spitzname` FROM (((`protokolle` join `testzachern_flugzeuge`.`flugzeuge` on(`testzachern_flugzeuge`.`flugzeuge`.`id` = `protokolle`.`flugzeugID`)) join `testzachern_flugzeuge`.`muster` on(`testzachern_flugzeuge`.`flugzeuge`.`musterID` = `testzachern_flugzeuge`.`muster`.`id`)) join `testzachern_piloten`.`piloten` on(`protokolle`.`pilotID` = `testzachern_piloten`.`piloten`.`id`)) ;
 
 --
 -- Indizes der exportierten Tabellen
@@ -8843,43 +8922,31 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indizes für die Tabelle `beladung`
 --
 ALTER TABLE `beladung`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
-  ADD KEY `PlaneLeverID` (`flugzeugHebelarmID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `daten`
 --
 ALTER TABLE `daten`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollInputID` (`protokollInputID`),
-  ADD KEY `daten_ibfk_6` (`protokollSpeicherID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `hst-wege`
 --
 ALTER TABLE `hst-wege`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollSpeicherID` (`protokollSpeicherID`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `kommentare`
 --
 ALTER TABLE `kommentare`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`),
-  ADD KEY `kommentare_ibfk_3` (`protokollSpeicherID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokolle`
 --
 ALTER TABLE `protokolle`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `CopilotenID` (`copilotID`),
-  ADD KEY `PilotenID` (`pilotID`),
-  ADD KEY `FlugzeugID` (`flugzeugID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -9026,6 +9093,43 @@ INSERT INTO `protokolle` (`id`, `protokollTypID`, `datumVon`, `datumBis`, `erste
 -- --------------------------------------------------------
 
 --
+-- Stellvertreter-Struktur des Views `protokoll_aufbau`
+-- (Siehe unten für die tatsächliche Ansicht)
+--
+DROP VIEW IF EXISTS `protokoll_aufbau`;
+CREATE TABLE `protokoll_aufbau` (
+`id` int(11)
+,`protokollID` int(11)
+,`kapitelNummer` int(11)
+,`protokollTypID` int(11)
+,`kapitel_bezeichnung` varchar(255)
+,`kapitel_zusatztext` text
+,`kapitel_woelbklappen` tinyint(1)
+,`kapitel_kommentar` tinyint(1)
+,`unterkapitelNummer` int(11)
+,`unterkapitel_bezeichnung` varchar(255)
+,`unterkapitel_zusatztext` text
+,`unterkapitel_woelbklappen` tinyint(1)
+,`eingabe_bezeichnung` varchar(255)
+,`eingabe_multipel` tinyint(2) unsigned
+,`eingabe_linksUndRechts` tinyint(1)
+,`eingabe_doppelsitzer` tinyint(1)
+,`input_bezeichnung` varchar(255)
+,`input_aktiv` tinyint(1)
+,`input_einheit` varchar(255)
+,`input_hStWeg` tinyint(1)
+,`input_bereichVon` double(10,2)
+,`input_bereichBis` double(10,2)
+,`input_groesse` int(11)
+,`input_schrittweite` double(10,2)
+,`input_multipel` tinyint(4)
+,`input_benoetigt` tinyint(1)
+,`inputTyp` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `protokoll_eingaben`
 --
 
@@ -9036,87 +9140,86 @@ CREATE TABLE `protokoll_eingaben` (
   `bezeichnung` varchar(255) DEFAULT NULL,
   `multipel` tinyint(2) UNSIGNED DEFAULT 0,
   `linksUndRechts` tinyint(1) DEFAULT NULL,
-  `doppelsitzer` tinyint(1) DEFAULT NULL,
-  `wegHSt` tinyint(1) DEFAULT NULL
+  `doppelsitzer` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `protokoll_eingaben`
 --
 
-INSERT INTO `protokoll_eingaben` (`id`, `protokollTypID`, `bezeichnung`, `multipel`, `linksUndRechts`, `doppelsitzer`, `wegHSt`) VALUES
-(1, 1, 'Beschreiben des Verhaltens im Schlepp', 0, 0, 0, 0),
-(2, 1, 'IAS<sub>min</sub>', 0, 0, 0, 0),
-(3, 1, '&lt;V_S', 0, 0, 0, 0),
-(4, 1, 'IAS<sub>max</sub>', 0, 0, 0, 0),
-(5, 1, '>V_A', 0, 0, 0, 0),
-(6, 1, '&Delta;IAS+', 0, 0, 0, 0),
-(7, 1, '&Delta;IAS-', 0, 0, 0, 0),
-(8, 1, '30° Querneigung', 0, 1, 0, 0),
-(9, 1, '45° Querneigung', 0, 1, 0, 0),
-(10, 1, '0° Querneigung', 0, 0, 0, 1),
-(11, 1, '30° Querneigung', 0, 1, 0, 1),
-(12, 1, '45° Querneigung', 0, 1, 0, 1),
-(13, 1, 'IAS<sub>über</sub>', 0, 0, 0, 0),
-(14, 1, 'IAS<sub>min</sub>', 0, 0, 0, 0),
-(15, 1, 'Warn- und Überziehverhalten', 0, 0, 0, 0),
-(16, 1, 'IAS<sub>über</sub>', 0, 1, 0, 0),
-(17, 1, 'IAS<sub>min</sub>', 0, 1, 0, 0),
-(18, 1, 'Warn- und Überziehverhalten', 0, 0, 0, 0),
-(19, 1, 'IAS<sub>über</sub>', 0, 1, 0, 0),
-(20, 1, 'IAS<sub>min</sub>', 0, 1, 0, 0),
-(21, 1, 'Warn- und Überziehverhalten', 0, 0, 0, 0),
-(22, 1, 'Rollzeit bis 30° Querneigung', 0, 1, 0, 0),
-(23, 1, 'Gierwinkel', 0, 1, 0, 0),
-(24, 1, 'Aufrichtzeit aus Kreisflug mit 30° Querneigung', 0, 1, 0, 0),
-(25, 1, 'SSt-Stellung', 0, 0, 0, 0),
-(26, 1, 'QSt-Stellung', 0, 0, 0, 0),
-(27, 1, 'QSt-Kraft', 0, 0, 0, 0),
-(28, 1, 'QSt- und SSt-Vollausschlag', 0, 0, 0, 0),
-(29, 1, 'schiebefrei', 0, 0, 0, 0),
-(30, 1, 'QSt- und SSt-Vollausschlag', 0, 0, 0, 0),
-(31, 1, 'schiebefrei', 0, 0, 0, 0),
-(32, 1, 'Entriegelungskraft', 0, 0, 0, 0),
-(33, 1, '>10 daN', 0, 0, 0, 0),
-(34, 1, 'Ausfahrkraft', 0, 0, 0, 0),
-(35, 1, 'Einfahrkraft', 0, 0, 0, 0),
-(36, 1, 'Verriegelungskraft', 0, 0, 0, 0),
-(37, 1, '>10 daN', 0, 0, 0, 0),
-(38, 1, 'Ausfahrkraft', 0, 0, 0, 0),
-(39, 1, 'Einfahrkraft', 0, 0, 0, 0),
-(40, 1, 'Bemerkungen', 0, 0, 0, 0),
-(41, 1, 'Steuerbarkeit bei der Landung', 0, 0, 0, 0),
-(42, 1, 'Landung nach Handbuch möglich?', 0, 0, 0, 0),
-(43, 1, 'Wirksamkeit', 0, 0, 0, 0),
-(44, 1, 'Dosierbarkeit', 0, 0, 0, 0),
-(45, 1, 'Begründung', 0, 0, 0, 0),
-(46, 1, 'Radbremswirkung', 0, 0, 0, 0),
-(47, 1, 'Federung', 0, 0, 0, 0),
-(48, 1, 'Begründung', 0, 0, 0, 0),
-(49, 1, 'Ein- und Ausstieg', 0, 0, 0, 0),
-(50, 1, 'Notausstieg', 0, 0, 0, 0),
-(51, 1, 'Sitz', 0, 0, 0, 0),
-(52, 1, 'Copilotensitz', 0, 0, 1, 0),
-(53, 1, 'Sicht', 0, 0, 0, 0),
-(54, 1, 'Lüftung', 0, 0, 0, 0),
-(55, 1, 'Handsteuer', 0, 0, 0, 0),
-(56, 1, 'Fußsteuer', 0, 0, 0, 0),
-(57, 1, 'Bremsklappenhebel', 0, 0, 0, 0),
-(58, 1, 'Wölbklappenhebel', 0, 0, 0, 0),
-(59, 1, 'Trimmhebel', 0, 0, 0, 0),
-(60, 1, 'Fahrwerkshebel', 0, 0, 0, 0),
-(61, 1, 'Ausklinkgriff', 0, 0, 0, 0),
-(62, 1, 'Instrumente', 0, 0, 0, 0),
-(63, 2, 'Festgestellte Unregelmäßigkeiten', 0, 0, 0, 0),
-(64, 2, '1. Schwingung', 0, 0, 0, 0),
-(65, 2, '6. Schwingung', 0, 0, 0, 0),
-(66, 2, 'Schwingungsdauer', 0, 0, 0, 0),
-(67, 2, 'Schwingungsverhalten', 0, 0, 0, 0),
-(68, 2, 'IAS<sub>tatsächlich</sub>', 10, 0, 0, 0),
-(69, 2, 'HSt-Weg', 10, 0, 0, 1),
-(70, 2, 'IAS<sub>tatsächlich</sub>', 10, 0, 0, 0),
-(71, 2, 'HSt-Kraft', 10, 0, 0, 0),
-(72, 1, 'Allgemeiner Eindruck', 0, 0, 0, 0);
+INSERT INTO `protokoll_eingaben` (`id`, `protokollTypID`, `bezeichnung`, `multipel`, `linksUndRechts`, `doppelsitzer`) VALUES
+(1, 1, 'Beschreiben des Verhaltens im Schlepp', 0, 0, 0),
+(2, 1, 'IAS<sub>min</sub>', 0, 0, 0),
+(3, 1, '&lt;V_S', 0, 0, 0),
+(4, 1, 'IAS<sub>max</sub>', 0, 0, 0),
+(5, 1, '>V_A', 0, 0, 0),
+(6, 1, '&Delta;IAS+', 0, 0, 0),
+(7, 1, '&Delta;IAS-', 0, 0, 0),
+(8, 1, '30° Querneigung', 0, 1, 0),
+(9, 1, '45° Querneigung', 0, 1, 0),
+(10, 1, '0° Querneigung', 0, 0, 0),
+(11, 1, '30° Querneigung', 0, 1, 0),
+(12, 1, '45° Querneigung', 0, 1, 0),
+(13, 1, 'IAS<sub>über</sub>', 0, 0, 0),
+(14, 1, 'IAS<sub>min</sub>', 0, 0, 0),
+(15, 1, 'Warn- und Überziehverhalten', 0, 0, 0),
+(16, 1, 'IAS<sub>über</sub>', 0, 1, 0),
+(17, 1, 'IAS<sub>min</sub>', 0, 1, 0),
+(18, 1, 'Warn- und Überziehverhalten', 0, 0, 0),
+(19, 1, 'IAS<sub>über</sub>', 0, 1, 0),
+(20, 1, 'IAS<sub>min</sub>', 0, 1, 0),
+(21, 1, 'Warn- und Überziehverhalten', 0, 0, 0),
+(22, 1, 'Rollzeit bis 30° Querneigung', 0, 1, 0),
+(23, 1, 'Gierwinkel', 0, 1, 0),
+(24, 1, 'Aufrichtzeit aus Kreisflug mit 30° Querneigung', 0, 1, 0),
+(25, 1, 'SSt-Stellung', 0, 0, 0),
+(26, 1, 'QSt-Stellung', 0, 0, 0),
+(27, 1, 'QSt-Kraft', 0, 0, 0),
+(28, 1, 'QSt- und SSt-Vollausschlag', 0, 0, 0),
+(29, 1, 'schiebefrei', 0, 0, 0),
+(30, 1, 'QSt- und SSt-Vollausschlag', 0, 0, 0),
+(31, 1, 'schiebefrei', 0, 0, 0),
+(32, 1, 'Entriegelungskraft', 0, 0, 0),
+(33, 1, '>10 daN', 0, 0, 0),
+(34, 1, 'Ausfahrkraft', 0, 0, 0),
+(35, 1, 'Einfahrkraft', 0, 0, 0),
+(36, 1, 'Verriegelungskraft', 0, 0, 0),
+(37, 1, '>10 daN', 0, 0, 0),
+(38, 1, 'Ausfahrkraft', 0, 0, 0),
+(39, 1, 'Einfahrkraft', 0, 0, 0),
+(40, 1, 'Bemerkungen', 0, 0, 0),
+(41, 1, 'Steuerbarkeit bei der Landung', 0, 0, 0),
+(42, 1, 'Landung nach Handbuch möglich?', 0, 0, 0),
+(43, 1, 'Wirksamkeit', 0, 0, 0),
+(44, 1, 'Dosierbarkeit', 0, 0, 0),
+(45, 1, 'Begründung', 0, 0, 0),
+(46, 1, 'Radbremswirkung', 0, 0, 0),
+(47, 1, 'Federung', 0, 0, 0),
+(48, 1, 'Begründung', 0, 0, 0),
+(49, 1, 'Ein- und Ausstieg', 0, 0, 0),
+(50, 1, 'Notausstieg', 0, 0, 0),
+(51, 1, 'Sitz', 0, 0, 0),
+(52, 1, 'Copilotensitz', 0, 0, 1),
+(53, 1, 'Sicht', 0, 0, 0),
+(54, 1, 'Lüftung', 0, 0, 0),
+(55, 1, 'Handsteuer', 0, 0, 0),
+(56, 1, 'Fußsteuer', 0, 0, 0),
+(57, 1, 'Bremsklappenhebel', 0, 0, 0),
+(58, 1, 'Wölbklappenhebel', 0, 0, 0),
+(59, 1, 'Trimmhebel', 0, 0, 0),
+(60, 1, 'Fahrwerkshebel', 0, 0, 0),
+(61, 1, 'Ausklinkgriff', 0, 0, 0),
+(62, 1, 'Instrumente', 0, 0, 0),
+(63, 2, 'Festgestellte Unregelmäßigkeiten', 0, 0, 0),
+(64, 2, '1. Schwingung', 0, 0, 0),
+(65, 2, '6. Schwingung', 0, 0, 0),
+(66, 2, 'Schwingungsdauer', 0, 0, 0),
+(67, 2, 'Schwingungsverhalten', 0, 0, 0),
+(68, 2, 'IAS<sub>tatsächlich</sub>', 10, 0, 0),
+(69, 2, 'HSt-Weg', 10, 0, 0),
+(70, 2, 'IAS<sub>tatsächlich</sub>', 10, 0, 0),
+(71, 2, 'HSt-Kraft', 10, 0, 0),
+(72, 1, 'Allgemeiner Eindruck', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -9131,6 +9234,7 @@ CREATE TABLE `protokoll_inputs` (
   `bezeichnung` varchar(255) DEFAULT NULL,
   `aktiv` tinyint(1) DEFAULT NULL,
   `einheit` varchar(255) DEFAULT NULL,
+  `hStWeg` tinyint(1) DEFAULT NULL,
   `bereichVon` double(10,2) DEFAULT NULL,
   `bereichBis` double(10,2) DEFAULT NULL,
   `groesse` int(11) DEFAULT NULL,
@@ -9143,109 +9247,109 @@ CREATE TABLE `protokoll_inputs` (
 -- Daten für Tabelle `protokoll_inputs`
 --
 
-INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einheit`, `bereichVon`, `bereichBis`, `groesse`, `schrittweite`, `multipel`, `benoetigt`) VALUES
-(1, 7, '', 1, NULL, NULL, NULL, 3, NULL, NULL, NULL),
-(2, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(3, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 3, '', 1, 'km/h', NULL, NULL, NULL, NULL, NULL, NULL),
-(5, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(6, 3, '', 1, 'km/h', 0.00, 30.00, NULL, NULL, NULL, NULL),
-(7, 3, '', 1, 'km/h', 0.00, 30.00, NULL, NULL, NULL, NULL),
-(8, 4, '', 1, 'daN', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(9, 4, '', 1, 'daN', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(10, 3, 'HSt', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
-(11, 3, 'QSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(12, 3, 'SSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(13, 3, 'HSt', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
-(14, 3, 'QSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(15, 3, 'SSt', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(16, 3, 'HSt', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
-(17, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(18, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(19, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(21, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(22, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(24, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(25, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(26, 4, '', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(27, 3, '', 1, '°', NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 4, '', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(29, 3, 'Anfang', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(30, 3, 'Ende', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(31, 3, 'Anfang', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(32, 3, 'Ende', 1, '%', -100.00, 100.00, NULL, NULL, NULL, NULL),
-(33, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(34, 4, 'Rechts nach links', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(35, 4, 'Links nach rechts', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(36, 4, 'Rechts nach links', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(37, 4, 'Links nach rechts', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(38, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
-(39, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
-(41, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
-(42, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
-(43, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(44, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(45, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(46, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(47, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(48, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(49, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(50, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(51, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(52, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(53, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(54, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(55, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 3, 'IAS<sub>max</sub>', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(71, 3, 'IAS<sub>min</sub>', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(72, 3, 'IAS<sub>max</sub>', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(73, 3, 'IAS<sub>min</sub>', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(74, 4, '', 1, 's', 0.00, NULL, NULL, 0.01, NULL, NULL),
-(75, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(76, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(77, 3, '', 1, 'mm', 0.00, NULL, NULL, NULL, NULL, NULL),
-(78, 3, '', 1, 'km/h', 0.00, NULL, NULL, NULL, NULL, NULL),
-(79, 4, '', 1, 'daN', NULL, NULL, NULL, 0.01, NULL, NULL),
-(80, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(81, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(82, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(83, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(84, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(85, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(86, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(87, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(88, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(89, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(90, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(91, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(92, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(93, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(94, 5, '< V<sub>S</sub>', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(95, 5, '> V<sub>A</sub>', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(96, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(97, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(98, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(99, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(100, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(101, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(102, 7, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einheit`, `hStWeg`, `bereichVon`, `bereichBis`, `groesse`, `schrittweite`, `multipel`, `benoetigt`) VALUES
+(1, 7, '', 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
+(2, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(3, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 3, '', 1, 'km/h', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 3, '', 1, 'km/h', NULL, 0.00, 30.00, NULL, NULL, NULL, NULL),
+(7, 3, '', 1, 'km/h', NULL, 0.00, 30.00, NULL, NULL, NULL, NULL),
+(8, 4, '', 1, 'daN', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(9, 4, '', 1, 'daN', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(10, 3, 'HSt', 1, 'mm', 1, 0.00, NULL, NULL, NULL, NULL, NULL),
+(11, 3, 'QSt', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(12, 3, 'SSt', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(13, 3, 'HSt', 1, 'mm', 1, 0.00, NULL, NULL, NULL, NULL, NULL),
+(14, 3, 'QSt', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(15, 3, 'SSt', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(16, 3, 'HSt', 1, 'mm', 1, 0.00, NULL, NULL, NULL, NULL, NULL),
+(17, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(18, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(19, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(20, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(21, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(22, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(24, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(25, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(26, 4, '', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(27, 3, '', 1, '°', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 4, '', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(29, 3, 'Anfang', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(30, 3, 'Ende', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(31, 3, 'Anfang', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(32, 3, 'Ende', 1, '%', NULL, -100.00, 100.00, NULL, NULL, NULL, NULL),
+(33, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 4, 'Rechts nach links', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(35, 4, 'Links nach rechts', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(36, 4, 'Rechts nach links', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(37, 4, 'Links nach rechts', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(38, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, 0.01, NULL, NULL),
+(39, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, 0.01, NULL, NULL),
+(41, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, 0.01, NULL, NULL),
+(42, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, 0.01, NULL, NULL),
+(43, 5, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(50, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(54, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 7, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 3, 'IAS<sub>max</sub>', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(71, 3, 'IAS<sub>min</sub>', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(72, 3, 'IAS<sub>max</sub>', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(73, 3, 'IAS<sub>min</sub>', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(74, 4, '', 1, 's', NULL, 0.00, NULL, NULL, 0.01, NULL, NULL),
+(75, 2, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(77, 3, '', 1, 'mm', 1, 0.00, NULL, NULL, NULL, NULL, NULL),
+(78, 3, '', 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
+(79, 4, '', 1, 'daN', NULL, NULL, NULL, NULL, 0.01, NULL, NULL),
+(80, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(81, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(82, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(83, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(84, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(85, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(86, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(88, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(89, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(90, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(91, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(92, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(93, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(94, 5, '< V<sub>S</sub>', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(95, 5, '> V<sub>A</sub>', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(96, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(97, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(98, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(99, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(100, 5, 'Außerhalb des Skalenbereichs', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(101, 8, '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(102, 7, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -9260,6 +9364,7 @@ CREATE TABLE `protokoll_inputs_mit_inputtyp` (
 ,`bezeichnung` varchar(255)
 ,`aktiv` tinyint(1)
 ,`einheit` varchar(255)
+,`hStWeg` tinyint(1)
 ,`bereichVon` double(10,2)
 ,`bereichBis` double(10,2)
 ,`groesse` int(11)
@@ -9490,12 +9595,22 @@ INSERT INTO `protokoll_unterkapitel` (`id`, `protokollTypID`, `unterkapitelNumme
 -- --------------------------------------------------------
 
 --
+-- Struktur des Views `protokoll_aufbau`
+--
+DROP TABLE IF EXISTS `protokoll_aufbau`;
+
+DROP VIEW IF EXISTS `protokoll_aufbau`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_aufbau`  AS SELECT `protokoll_layouts`.`id` AS `id`, `protokoll_layouts`.`protokollID` AS `protokollID`, `protokoll_layouts`.`kapitelNummer` AS `kapitelNummer`, `protokoll_kapitel`.`protokollTypID` AS `protokollTypID`, `protokoll_kapitel`.`bezeichnung` AS `kapitel_bezeichnung`, `protokoll_kapitel`.`zusatztext` AS `kapitel_zusatztext`, `protokoll_kapitel`.`woelbklappen` AS `kapitel_woelbklappen`, `protokoll_kapitel`.`kommentar` AS `kapitel_kommentar`, `protokoll_unterkapitel`.`unterkapitelNummer` AS `unterkapitelNummer`, `protokoll_unterkapitel`.`bezeichnung` AS `unterkapitel_bezeichnung`, `protokoll_unterkapitel`.`zusatztext` AS `unterkapitel_zusatztext`, `protokoll_unterkapitel`.`woelbklappen` AS `unterkapitel_woelbklappen`, `protokoll_eingaben`.`bezeichnung` AS `eingabe_bezeichnung`, `protokoll_eingaben`.`multipel` AS `eingabe_multipel`, `protokoll_eingaben`.`linksUndRechts` AS `eingabe_linksUndRechts`, `protokoll_eingaben`.`doppelsitzer` AS `eingabe_doppelsitzer`, `protokoll_inputs`.`bezeichnung` AS `input_bezeichnung`, `protokoll_inputs`.`aktiv` AS `input_aktiv`, `protokoll_inputs`.`einheit` AS `input_einheit`, `protokoll_inputs`.`hStWeg` AS `input_hStWeg`, `protokoll_inputs`.`bereichVon` AS `input_bereichVon`, `protokoll_inputs`.`bereichBis` AS `input_bereichBis`, `protokoll_inputs`.`groesse` AS `input_groesse`, `protokoll_inputs`.`schrittweite` AS `input_schrittweite`, `protokoll_inputs`.`multipel` AS `input_multipel`, `protokoll_inputs`.`benoetigt` AS `input_benoetigt`, `input_typen`.`inputTyp` AS `inputTyp` FROM (((((`protokoll_layouts` join `protokoll_kapitel` on(`protokoll_kapitel`.`id` = `protokoll_layouts`.`protokollKapitelID`)) join `protokoll_unterkapitel` on(`protokoll_unterkapitel`.`id` = `protokoll_layouts`.`protokollUnterkapitelID`)) join `protokoll_eingaben` on(`protokoll_eingaben`.`id` = `protokoll_layouts`.`protokollEingabeID`)) join `protokoll_inputs` on(`protokoll_inputs`.`id` = `protokoll_layouts`.`protokollInputID`)) join `input_typen` on(`input_typen`.`id` = `protokoll_inputs`.`inputID`)) ;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur des Views `protokoll_inputs_mit_inputtyp`
 --
 DROP TABLE IF EXISTS `protokoll_inputs_mit_inputtyp`;
 
 DROP VIEW IF EXISTS `protokoll_inputs_mit_inputtyp`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_inputs_mit_inputtyp`  AS SELECT `protokoll_inputs`.`id` AS `id`, `protokoll_inputs`.`inputID` AS `inputID`, `protokoll_inputs`.`bezeichnung` AS `bezeichnung`, `protokoll_inputs`.`aktiv` AS `aktiv`, `protokoll_inputs`.`einheit` AS `einheit`, `protokoll_inputs`.`bereichVon` AS `bereichVon`, `protokoll_inputs`.`bereichBis` AS `bereichBis`, `protokoll_inputs`.`groesse` AS `groesse`, `protokoll_inputs`.`schrittweite` AS `schrittweite`, `protokoll_inputs`.`multipel` AS `multipel`, `protokoll_inputs`.`benoetigt` AS `benoetigt`, `input_typen`.`inputTyp` AS `inputTyp` FROM (`protokoll_inputs` join `input_typen` on(`protokoll_inputs`.`inputID` = `input_typen`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_inputs_mit_inputtyp`  AS SELECT `protokoll_inputs`.`id` AS `id`, `protokoll_inputs`.`inputID` AS `inputID`, `protokoll_inputs`.`bezeichnung` AS `bezeichnung`, `protokoll_inputs`.`aktiv` AS `aktiv`, `protokoll_inputs`.`einheit` AS `einheit`, `protokoll_inputs`.`hStWeg` AS `hStWeg`, `protokoll_inputs`.`bereichVon` AS `bereichVon`, `protokoll_inputs`.`bereichBis` AS `bereichBis`, `protokoll_inputs`.`groesse` AS `groesse`, `protokoll_inputs`.`schrittweite` AS `schrittweite`, `protokoll_inputs`.`multipel` AS `multipel`, `protokoll_inputs`.`benoetigt` AS `benoetigt`, `input_typen`.`inputTyp` AS `inputTyp` FROM (`protokoll_inputs` join `input_typen` on(`protokoll_inputs`.`inputID` = `input_typen`.`id`)) ;
 
 --
 -- Indizes der exportierten Tabellen
@@ -9505,8 +9620,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indizes für die Tabelle `auswahllisten`
 --
 ALTER TABLE `auswahllisten`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `EingabeId` (`protokollInputID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `input_typen`
@@ -9518,40 +9632,31 @@ ALTER TABLE `input_typen`
 -- Indizes für die Tabelle `protokolle`
 --
 ALTER TABLE `protokolle`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `protokolltypId` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_eingaben`
 --
 ALTER TABLE `protokoll_eingaben`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_inputs`
 --
 ALTER TABLE `protokoll_inputs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `InputID` (`inputID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_kapitel`
 --
 ALTER TABLE `protokoll_kapitel`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_layouts`
 --
 ALTER TABLE `protokoll_layouts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollID` (`protokollID`),
-  ADD KEY `ProtokollSektionID` (`protokollKapitelID`),
-  ADD KEY `ProtokollInputID` (`protokollInputID`),
-  ADD KEY `ProtokollEingabeID` (`protokollEingabeID`),
-  ADD KEY `ProtokollSubsektionID` (`protokollUnterkapitelID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `protokoll_typen`
@@ -9563,8 +9668,7 @@ ALTER TABLE `protokoll_typen`
 -- Indizes für die Tabelle `protokoll_unterkapitel`
 --
 ALTER TABLE `protokoll_unterkapitel`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ProtokollTypID` (`protokollTypID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen

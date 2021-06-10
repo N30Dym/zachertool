@@ -25,11 +25,13 @@ class Database extends Config
 	 */
 	public $defaultGroup = 'default';
 
+	
 	/**
 	 * The default database connection.
 	 *
 	 * @var array
 	 */
+	 
 	public $default = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
@@ -53,8 +55,8 @@ class Database extends Config
 	public $flugzeugeDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'root',
-		'password' => 'root',
+		'username' => 'idaflieg',
+		'password' => 'zachertoolDB',
 		'database' => 'testzachern_flugzeuge',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -73,8 +75,8 @@ class Database extends Config
 	public $pilotenDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'root',
-		'password' => 'root',
+		'username' => 'idaflieg',
+		'password' => 'zachertoolDB',
 		'database' => 'testzachern_piloten',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -93,8 +95,8 @@ class Database extends Config
 	public $protokolleDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'root',
-		'password' => 'root',
+		'username' => 'idaflieg',
+		'password' => 'zachertoolDB',
 		'database' => 'testzachern_protokolle',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -113,8 +115,8 @@ class Database extends Config
 	public $protokolllayoutDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'root',
-		'password' => 'root',
+		'username' => 'idaflieg',
+		'password' => 'zachertoolDB',
 		'database' => 'testzachern_protokolllayout',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',

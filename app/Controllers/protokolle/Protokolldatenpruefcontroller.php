@@ -126,15 +126,6 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         return false;
     }
     
-    protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)
-    {
-        if(!isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
-        {
-            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = [];
-        }
-        
-        array_push($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID], $fehlerBeschreibung);
-    }
     
     protected function pruefeBeladungsZustand()
     {
@@ -186,15 +177,31 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             {
                 foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
                 {
-                    foreach($werteMultipelNr as $multipelNr => $wert)
+                    if(sizeof($werteMultipelNr)>1)
+                    {                    
+                        foreach($werteMultipelNr as $multipelNr => $wert)
+                        {
+                            if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
+                            {
+                                $temporaeresWertArray['protokollInputID'] = $protokollInputID;
+                                $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
+                                $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
+                                $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
+                                $temporaeresWertArray['multipelNr'] = $multipelNr;
+                                array_push($zuSpeicherndeWerte, $temporaeresWertArray);
+                            } 
+                        }
+                    }
+                    else 
                     {
+                        $wert = $werteMultipelNr[0];
                         if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
                             $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
                             $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
                             $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                            $temporaeresWertArray['multipelNr'] = $multipelNr;
+                            $temporaeresWertArray['multipelNr'] = null;
                             array_push($zuSpeicherndeWerte, $temporaeresWertArray);
                         } 
                     }
@@ -268,9 +275,10 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                         if($gewicht != "")
                         {
                             $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
+                            $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? null : $bezeichnung;
+                            $temporaeresBeladungsArray['hebelarm']              = null;
                             $temporaeresBeladungsArray['gewicht']               = $gewicht;
-                            empty($bezeichnung) ? null : $temporaeresBeladungsArray['bezeichnung'] = $bezeichnung;
-
+                            
                             array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
                         }
                     }
@@ -279,15 +287,17 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {
                     if($hebelarm['laenge'] != "" AND !empty($hebelarm['gewicht']))
                     {
-                        $temporaeresBeladungsArray['hebelarm']      = $hebelarm['laenge'];
-                        $temporaeresBeladungsArray['bezeichnung']   = $hebelarm['bezeichnung'];
-                        $temporaeresBeladungsArray['gewicht']       = $hebelarm['gewicht'];
+                        $temporaeresBeladungsArray['flugzeugHebelarmID']    = null;
+                        $temporaeresBeladungsArray['bezeichnung']           = $hebelarm['bezeichnung'];
+                        $temporaeresBeladungsArray['hebelarm']              = $hebelarm['laenge'];
+                        $temporaeresBeladungsArray['gewicht']               = $hebelarm['gewicht'];
                         
                         array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray); 
                     }
                 }
             }
             
+            print_r($zuSpeichenderBeladungszustand);
             return $zuSpeichenderBeladungszustand;
         }
         
@@ -367,10 +377,18 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         return $erforderlicheHebelarmeVorhanden;
     }
     
+    protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)
+    {
+        if(!isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
+        {
+            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = [];
+        }
+        
+        array_push($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID], $fehlerBeschreibung);
+    }
+    
     protected function meldeKeineWerteEingegeben()
     {
-            // Flugzeug bereits vorhanden
-        $session = session();
         $session->setFlashdata('nachricht', "Protokoll konnte nicht gespeichert werden, weil noch kein Protokolldaten eingegeben wurden");
         $session->setFlashdata('link', base_url());
         header('Location: '. base_url() .'/nachricht');

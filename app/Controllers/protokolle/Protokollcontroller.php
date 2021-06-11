@@ -138,7 +138,6 @@ class Protokollcontroller extends Controller
         
         if($zuSpeicherndeDaten !== false && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-
             if($this->speicherProtokollDaten($zuSpeicherndeDaten))
             {
                 echo "Protokolldaten erfolgreich gespeichert";

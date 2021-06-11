@@ -148,4 +148,15 @@ class protokolleModel extends Model
     {
         return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
     }
+    
+    public function updateGeaendertAmNachID($id)
+    {
+        $query = "UPDATE `protokolle` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `protokolle`.`id` = " . $id; 
+        //$this->query($query);
+        
+        if ( ! $this->simpleQuery($query))
+        {
+            $error = $this->error(); // Has keys 'code' and 'message'
+        }
+    }
 }	

@@ -16,7 +16,7 @@ class beladungModel extends Model
     protected $primaryKey       = 'id';
     protected $validationRules 	= 'beladung';
 
-    protected $allowedFields	= ['protokollSpeicherID', 'flugzeugHebelarmID ', 'bezeichnung', 'gewicht'];
+    protected $allowedFields	= ['protokollSpeicherID', 'flugzeugHebelarmID ', 'bezeichnung', 'hebelarm', 'gewicht'];
 
     public function getBeladungenNachProtokollSpeicherID($protokollSpeicherID)
     {

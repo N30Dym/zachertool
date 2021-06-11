@@ -1124,7 +1124,7 @@ class Validation
     
     public $beladungOhneProtokollSpeicherID =  [ 
         'flugzeugHebelarmID' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
                 'required'      => 'Es wurde keine FlugzeugHebelarmID gegeben.',
                 'is_natural'    => 'Die FlugzeugHebelarmID ist ungültig.'
@@ -1153,7 +1153,7 @@ class Validation
     
     public $beladung =  [ 
         'protokollSpeicherID' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
                 'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
                 'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'
@@ -1264,9 +1264,9 @@ class Validation
     
     public $eingabeText = [
         'wert' => [
-            'rules'  => 'alpha_numeric_punct',
+            'rules'  => 'string',
             'errors' => [
-                'alpha_numeric_punct'   => 'Ein Textfeld enthält ungültige Zeichen.'
+                'string'   => 'Ein Textfeld enthält ungültige Zeichen.'
             ] 
         ]
     ];

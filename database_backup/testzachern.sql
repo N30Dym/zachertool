@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 09. Jun 2021 um 16:50
+-- Erstellungszeit: 11. Jun 2021 um 15:31
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -8130,7 +8130,6 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (6819, 259, 79, '2', NULL, NULL, 6),
 (6820, 259, 79, '-0.5', NULL, NULL, 7),
 (6821, 259, 79, '-1', NULL, NULL, 8),
-(6822, 260, 1, 'Bis 50km/h wenig Querruderauthorität -> Bremsklappen ausgefahren.  Ungewöhnliche Position beim Schleppflug durch seitlich versetzte Sitzposition', NULL, NULL, NULL),
 (6823, 261, 1, 'Bis 50km/h wenig Querruderauthorität -> Bremsklappen ausgefahren. Ungewöhnliche Position beim Schleppflug durch seitlich versetzte Sitzposition', NULL, NULL, NULL),
 (6824, 261, 2, '97', NULL, NULL, NULL),
 (6825, 261, 4, '188', NULL, NULL, NULL),
@@ -8415,7 +8414,12 @@ INSERT INTO `daten` (`id`, `protokollSpeicherID`, `protokollInputID`, `wert`, `w
 (7104, 264, 79, '-1.2', NULL, NULL, 8),
 (7105, 264, 79, '-1.5', NULL, NULL, 9),
 (7106, 264, 79, '-2', NULL, NULL, 10),
-(7107, 265, 1, 'Flächen leicht waagerecht zu halten, trotz böigem Wind. Bei 80-100km/h WK bis ca +5° geführt, bis Flugzeug leicht abgehoben hat. Damit Tendenz etwas niedrig zu fliegen, gegenüber Schleppflugzeug. Mit automatischer WK: ohne Probleme leicht steuerbar, bei Böen sehr ungewohnt. Ausklinkkraft höher als sonst, wenig Weg.', NULL, NULL, NULL);
+(7107, 265, 1, 'Flächen leicht waagerecht zu halten, trotz böigem Wind. Bei 80-100km/h WK bis ca +5° geführt, bis Flugzeug leicht abgehoben hat. Damit Tendenz etwas niedrig zu fliegen, gegenüber Schleppflugzeug. Mit automatischer WK: ohne Probleme leicht steuerbar, bei Böen sehr ungewohnt. Ausklinkkraft höher als sonst, wenig Weg.', NULL, NULL, NULL),
+(7109, 260, 4, '2', NULL, NULL, NULL),
+(7110, 260, 7, '3', NULL, NULL, NULL),
+(7111, 260, 6, '4', NULL, NULL, NULL),
+(7112, 260, 94, '1', NULL, NULL, NULL),
+(7113, 267, 1, 'Das ist ein Test, ob das Speichern eines neuen Protokolls funktioniert. Hier ist nur eine Eingabe vorhanden bisher', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8789,7 +8793,7 @@ CREATE TABLE `protokolle` (
   `bemerkung` text DEFAULT NULL,
   `bestaetigt` tinyint(1) DEFAULT NULL,
   `fertig` tinyint(1) DEFAULT NULL,
-  `datum` date DEFAULT NULL,
+  `datum` date NOT NULL DEFAULT current_timestamp(),
   `erstelltAm` timestamp NOT NULL DEFAULT current_timestamp(),
   `geaendertAm` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -8876,7 +8880,8 @@ INSERT INTO `protokolle` (`id`, `flugzeugID`, `pilotID`, `copilotID`, `flugzeit`
 (262, 32, 27, 5, '01:47:00', NULL, 1, 1, '2020-09-02', '2020-12-01 13:34:30', '2020-12-01 14:34:30'),
 (263, 32, 43, 38, '01:47:00', NULL, 1, 1, '2020-09-01', '2020-12-01 13:37:24', '2020-12-01 14:37:24'),
 (264, 29, 39, NULL, '02:15:00', NULL, 1, 1, '2020-08-20', '2020-12-01 14:06:10', '2020-12-01 15:06:10'),
-(265, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-12-01 14:32:21', '2020-12-01 15:32:21');
+(265, 18, 9, NULL, '03:21:00', NULL, NULL, NULL, '2020-08-24', '2020-12-01 14:32:21', '2020-12-01 15:32:21'),
+(267, 12, 6, NULL, NULL, 'Test', NULL, NULL, '2021-06-01', '2021-06-11 13:27:31', '2021-06-11 15:27:31');
 
 -- --------------------------------------------------------
 
@@ -8962,7 +8967,7 @@ ALTER TABLE `beladung`
 -- AUTO_INCREMENT für Tabelle `daten`
 --
 ALTER TABLE `daten`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7108;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7114;
 
 --
 -- AUTO_INCREMENT für Tabelle `hst-wege`
@@ -8980,7 +8985,7 @@ ALTER TABLE `kommentare`
 -- AUTO_INCREMENT für Tabelle `protokolle`
 --
 ALTER TABLE `protokolle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
 --
 -- Datenbank: `testzachern_protokolllayout`
 --

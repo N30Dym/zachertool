@@ -112,8 +112,16 @@ class Protokollcontroller extends Controller
         }
 
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
-        echo isset($_SESSION['protokoll']['protokollSpeicherID']) ? $_SESSION['protokoll']['protokollSpeicherID'] : "";
-        print_r(isset($_SESSION['protokoll']['fehlerArray']) ? $_SESSION['protokoll']['fehlerArray'] : "");
+        echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
+        //print_r($_SESSION['protokoll']['fehlerArray'] ?? "");
+        echo "<br>FlugzeugID: ";
+        print_r($_SESSION['protokoll']['flugzeugID'] ?? "");
+        echo "<br>PilotID: ";
+        print_r($_SESSION['protokoll']['pilotID'] ?? "");
+        echo "<br>CopilotID: ";
+        print_r($_SESSION['protokoll']['copilotID'] ?? "");
+        echo "<br>Beladungszustand: ";
+        print_r($_SESSION['protokoll']['beladungszustand'] ?? "");
         
             // datenHeader mit Titel füttern
         $datenHeader['titel'] = $_SESSION['protokoll']['protokollInformationen']['titel'];

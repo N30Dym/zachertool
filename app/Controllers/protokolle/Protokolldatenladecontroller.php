@@ -2,12 +2,9 @@
 
 namespace App\Controllers\protokolle;
 
-use App\Models\protokolle\beladungModel;
-use App\Models\protokolle\datenModel;
-use App\Models\protokolle\hStWegeModel;
-use App\Models\protokolle\kommentareModel;
-use App\Models\protokolle\protokolleModel;
+use App\Models\protokolle\{ beladungModel, datenModel, hStWegeModel, kommentareModel, protokolleModel };
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
 class Protokolldatenladecontroller extends Protokollcontroller
 {	
@@ -34,7 +31,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($beladungen as $beladung)
         {
-            if($beladung['hebelarm'] !== "")
+            if(!empty($beladung['flugzeugHebelarmID']))
             {
                 $_SESSION['protokoll']['beladungszustand'][$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == "" ? 0 : $beladung['bezeichnung']] = $beladung['gewicht'];
             }
@@ -97,11 +94,12 @@ class Protokolldatenladecontroller extends Protokollcontroller
         if($protokollInformationen != null)
         {
             $_SESSION['protokoll']['protokollInformationen']['datum']        = $protokollInformationen["datum"];
-            $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = $protokollInformationen["flugzeit"];
+            $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = date('H:i', strtotime($protokollInformationen["flugzeit"]));
             $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
             $_SESSION['protokoll']['protokollInformationen']['titel']        = "Vorhandenes Protokoll bearbeiten";
 
-            $_SESSION['protokoll']['flugzeugID']                             = $protokollInformationen["flugzeugID"];
+            
+            $this->ladeFlugzeugDaten($protokollInformationen["flugzeugID"]);
             $_SESSION['protokoll']['pilotID']                                = $protokollInformationen["pilotID"];
             $_SESSION['protokoll']['copilotID']                              = $protokollInformationen["copilotID"];   
 
@@ -134,6 +132,17 @@ class Protokolldatenladecontroller extends Protokollcontroller
             
             array_push($_SESSION['protokoll']['protokollIDs'], $protokollTypIDArray[0]['id']);
         }
+    }
+    
+    protected function ladeFlugzeugDaten($flugzeugID)
+    {
+        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+        $flugzeugDaten = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
+        
+        $_SESSION['protokoll']['flugzeugID']    = $flugzeugID;
+        
+        $flugzeugDaten['istDoppelsitzer'] == 1 ?            $_SESSION['protokoll']['doppelsitzer'] = [] : null;
+        $flugzeugDaten['istWoelbklappenFlugzeug'] == 1 ?    $_SESSION['protokoll']['woelbklappenFlugzeug'] = ["Neutral", "Kreisflug"] : null;
     }
 
 }

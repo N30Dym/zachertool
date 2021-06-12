@@ -27,7 +27,7 @@ class flugzeugeModel extends Model
         * @param  int $id 
         * @return array
         */
-    public function getFlugzeugeNachID($id)
+    public function getFlugzeugNachID($id)
     {			
         return $this->where("id", $id)->first();	
     }

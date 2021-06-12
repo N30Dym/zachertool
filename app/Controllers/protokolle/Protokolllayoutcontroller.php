@@ -6,7 +6,6 @@ use App\Models\protokolllayout\{ auswahllistenModel, protokollEingabenModel, pro
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel };
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
 
-
 class Protokolllayoutcontroller extends Protokollcontroller
 {
     protected function ladeProtokollLayout()
@@ -245,7 +244,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
     }
     
     protected function datenZumDatenInhaltHinzufügen() 
-    {
+    {        
         $inhaltZusatz = [];
         
         switch($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']])
@@ -258,12 +257,12 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 break;
             case BELADUNG_EINGABE:
                 $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
-                if(isset($_SESSION['protokoll']['flugzeugID']) && ! isset($_SESSION['protokoll']['protokollSpeicherID']))
+                if(isset($_SESSION['protokoll']['flugzeugID'])) //&& ! isset($_SESSION['protokoll']['protokollSpeicherID']))
                 {
                     //$inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
                     if(isset($_SESSION['protokoll']['pilotID']))
                     {
-                        $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['protokoll']['pilotID']);
+                        $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['protokoll']['pilotID']);      
                     }
                     if(isset($_SESSION['protokoll']['copilotID']))
                     {

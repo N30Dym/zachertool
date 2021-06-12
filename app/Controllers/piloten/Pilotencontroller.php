@@ -90,7 +90,7 @@ class Pilotencontroller extends Controller
             $this->zeigeWarteSeite();
 
             if($this->speicherPilotenDaten($this->request->getPost()))
-            {
+            {               
                 $session = session();
                 $session->setFlashdata('nachricht', "Pilotendaten erfolgreich gespeichert");
                 $session->setFlashdata('link', base_url());

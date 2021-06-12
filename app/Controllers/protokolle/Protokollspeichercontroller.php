@@ -79,8 +79,8 @@ class Protokollspeichercontroller extends Protokollcontroller
     protected function speicherNeuesProtokoll($zuSpeicherndeProtokollDaten)
     {        
         $protokolleModel = new protokolleModel();
+        $_SESSION['protokoll']['protokollSpeicherID'] = $protokolleModel->speicherNeuesProtokoll($zuSpeicherndeProtokollDaten);
         echo "Das neue Protokoll wurde gespeichert<br>";
-        $_SESSION['protokoll']['protokollSpeicherID'] = $protokolleModel->insert($zuSpeicherndeProtokollDaten);
     }
     
     /**
@@ -116,13 +116,13 @@ class Protokollspeichercontroller extends Protokollcontroller
         {           
             if(isset($zuSpeicherndeProtokollDaten['bestaetigt']) && $zuSpeicherndeProtokollDaten['bestaetigt'] == 1)
             {
-                //$protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->update('bestaetigt', 1);
+                $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set('bestaetigt', 1)->update();
             }
             return self::FERTIG;
         }
         else
         {
-            echo "Jetzt wäre das Protokoll geupdatet worden<br>";
+            
             $loescheEintraege = [
                 'flugzeugID'    => null,
                 'pilotID'       => null,
@@ -130,8 +130,9 @@ class Protokollspeichercontroller extends Protokollcontroller
                 'flugzeit'      => null,
                 'bemerkung'     => null,
             ];
-            $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set($loescheEintraege)->update();
-            $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set($zuSpeicherndeProtokollDaten)->update();
+            $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->ueberschreibeProtokoll($zuSpeicherndeProtokollDaten, $_SESSION['protokoll']['protokollSpeicherID']);
+            echo "Jetzt wäre das Protokoll geupdatet worden<br>";
             return self::ANGEFANGEN;
         }
     }
@@ -145,7 +146,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      */
     protected function speicherZuSpeicherndeDaten($zuSpeicherndeDaten)
     {
-        //$this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
+        $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
         
         //$this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
         
@@ -285,8 +286,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             foreach($zuSpeicherndeBeladung as $beladung)
             {
                 $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                $beladungModel->set($beladung)->insert();
-                echo $beladungModel->builder()->set($beladung)->getCompiledInsert();
+                $beladungModel->speicherNeueBeladung($beladung);
                 echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
             }
         }
@@ -301,8 +301,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 if($beladungVorhanden === false)
                 {
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                    echo $beladungModel->builder()->set($beladung)->getCompiledInsert();
-                    $beladungModel->set($beladung)->insert();
+                    $beladungModel->speicherNeueBeladung($beladung);
                     echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
                 }
                 else
@@ -355,7 +354,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 if($beladung['gewicht'] != $zuVergleichendeBeladung['gewicht'])
                 {
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                    //$beladungModel->where('id', $zuVergleichendeBeladungen['id'])->set('gewicht', $beladung['gewicht'])->update();
+                    $beladungModel->where('id', $zuVergleichendeBeladungen['id'])->set('gewicht', $beladung['gewicht'])->update();
                     echo "Gewicht wurde angepasst<br>";
                 }
                 

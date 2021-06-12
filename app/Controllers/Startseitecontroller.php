@@ -72,6 +72,7 @@ class Startseitecontroller extends Controller
             }
             array_sort_by_multiple_keys($temporaeresProtokollArray[$jahr], ['anzahlProtokolle' => SORT_DESC]);
         }
+        
         return $temporaeresProtokollArray;   
     }
 

@@ -847,17 +847,17 @@ class Validation
 
     public $pilot = [
         'vorname' => [
-            'rules'  => 'required|alpha_space',
+            'rules'  => 'required|string',
             'errors' => [
-                'required'      => 'Der Vorname wurde nicht angegeben.',
-                'alpha_space'   => 'Der Vorname enthält ungültige Zeichen.'
+                'required'  => 'Der Vorname wurde nicht angegeben.',
+                'string'    => 'Der Vorname enthält ungültige Zeichen.'
             ]
         ], 
         'nachname' => [
-            'rules'  => 'required|alpha_space',
+            'rules'  => 'required|string',
             'errors' => [
-                'required'      => 'Der Nachname wurde nicht angegeben.',
-                'alpha_space'   => 'Der Nachname enthält ungültige Zeichen.'
+                'required'  => 'Der Nachname wurde nicht angegeben.',
+                'string'    => 'Der Nachname enthält ungültige Zeichen.'
             ]
         ], 
         'spitzname' => [
@@ -871,6 +871,12 @@ class Validation
             'errors' => [
                 'required'  => 'Die Größe wurde nicht angegeben.',
                 'numeric'   => 'Die Größe enthält ungültige Zeichen.'
+            ]
+        ],
+        'akafliegID' => [
+            'rules'  => 'permit_empty|is_natural',
+            'errors' => [
+                'is_natural'   => 'Die AkafliegID enthält ungültige Zeichen.'
             ]
         ]
     ];
@@ -978,7 +984,7 @@ class Validation
             ]
         ], 
         'flugzeit' => [
-            'rules'  => 'permit_empty|valid_date[H:i:s]',
+            'rules'  => 'permit_empty|valid_date[H:i]',
             'errors' => [
                 'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
             ]

@@ -99,7 +99,7 @@ class protokolleModel extends Model
         */
     public function getDistinctFlugzeugIDNachJahr($jahr)
     {		
-        $query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
+        $query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
     }
 
@@ -113,7 +113,7 @@ class protokolleModel extends Model
         */
     public function getDistinctPilotIDNachJahr($jahr)
     {		
-        $query = "SELECT DISTINCT pilotID FROM protokolle WHERE YEAR(protokolle.datum) = " . trim($jahr);
+        $query = "SELECT DISTINCT pilotID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
     }
 
@@ -158,5 +158,19 @@ class protokolleModel extends Model
         {
             $error = $this->error(); // Has keys 'code' and 'message'
         }
+    }
+    
+    public function speicherNeuesProtokoll($protokollDaten)
+    {
+        $query = $this->builder()->set($protokollDaten)->getCompiledInsert();
+        $this->query($query);
+        
+        return $this->selectMax('id')->where($protokollDaten)->first()['id'];
+    }
+    
+    public function ueberschreibeProtokoll($protokollDaten, $id)
+    {
+        $query = $this->builder()->set($protokollDaten)->where('id', $id)->getCompiledUpdate();
+        $this->query($query);
     }
 }	

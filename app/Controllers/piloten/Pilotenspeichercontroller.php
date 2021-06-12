@@ -120,12 +120,12 @@ class Pilotenspeichercontroller extends Pilotencontroller
             $zuSpeicherndeDaten['pilotID'] = $pilotenModel->insert($zuSpeicherndeDaten['pilot']);
         }
         
-        $datenArray             = $zuSpeicherndeDaten['pilotDetails'];
-        $datenArray['pilotID']  = $zuSpeicherndeDaten['pilotID'];
+        $zuSpeicherndePilotDetails             = $zuSpeicherndeDaten['pilotDetails'];
+        $zuSpeicherndePilotDetails['pilotID']  = $zuSpeicherndeDaten['pilotID'];
         
         $pilotenModel->updateGeaendertAmNachID($zuSpeicherndeDaten['pilotID']);
 
-        return $pilotenDetailsModel->insert($datenArray);
+        return $pilotenDetailsModel->insert($zuSpeicherndePilotDetails);
     }
     
     protected function pruefePilotNochNichtVorhanden($namenArray) 

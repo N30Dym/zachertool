@@ -46,7 +46,7 @@
                 <div class="col-6">
                     <label for="akaflieg" class="form-label ms-2"><b>Akaflieg</b></label>
                     <div class="input-group">
-                        <select class="form-select" name="pilot[akaflieg]" <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <select class="form-select" name="pilot[akafliegID]" <?= isset($pilotID) ? "disabled" : "" ?>>
                             <option></option>
                             <?php foreach($akafliegDatenArray as $akaflieg) : ?>
                                 <option value="<?= $akaflieg['id'] ?>" <?= isset($pilot) && $pilot['akafliegID'] == $akaflieg['id'] ? "selected" : "" ?>><?= $akaflieg['akaflieg'] ?></option>

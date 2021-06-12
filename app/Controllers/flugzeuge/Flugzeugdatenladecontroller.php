@@ -227,7 +227,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     protected function pruefeFlugzeugVorhanden($flugzeugID)
     {
         $flugzeugeModel = new flugzeugeModel();
-        return $flugzeugeModel->getFlugzeugeNachID($flugzeugID);
+        return $flugzeugeModel->getFlugzeugNachID($flugzeugID);
     }
     
     protected function ladeSichtbareFlugzeugeMitProtokollAnzahl()

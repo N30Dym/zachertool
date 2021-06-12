@@ -153,12 +153,12 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         $protokollDetails = [
             'datum' => $_SESSION['protokoll']['protokollInformationen']['datum'] 
         ];
-                 
+
         empty($_SESSION['protokoll']['flugzeugID']) ? null :                            $protokollDetails['flugzeugID'] = $_SESSION['protokoll']['flugzeugID'];
         empty($_SESSION['protokoll']['pilotID']) ? null :                               $protokollDetails['pilotID']    = $_SESSION['protokoll']['pilotID'];
         empty($_SESSION['protokoll']['copilotID']) ? null :                             $protokollDetails['copilotID']  = $_SESSION['protokoll']['copilotID'];
         isset($_SESSION['protokoll']['fertig']) ?                                       $protokollDetails['fertig']     = "1" : null;
-        empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) ? null :    $protokollDetails['flugzeit']   = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
+        (empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) OR $_SESSION['protokoll']['protokollInformationen']['flugzeit'] == '00:00') ? null : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
         empty($_SESSION['protokoll']['protokollInformationen']['bemerkung']) ? null :   $protokollDetails['bemerkung']  = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
         
         return $protokollDetails;
@@ -276,7 +276,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                         {
                             $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
                             $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? null : $bezeichnung;
-                            $temporaeresBeladungsArray['hebelarm']              = null;
+                            $temporaeresBeladungsArray['hebelarm']              = null;                           
                             $temporaeresBeladungsArray['gewicht']               = $gewicht;
                             
                             array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
@@ -297,7 +297,6 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 }
             }
             
-            print_r($zuSpeichenderBeladungszustand);
             return $zuSpeichenderBeladungszustand;
         }
         
@@ -353,7 +352,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $copilotHebelarmID = $flugzeugHebelarmeModel->getCopilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID'])['id'];
             if(isset($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND !empty($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND $_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0] > 0)
             {
-                if($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID]['Fallschirm'] != "")
+                if($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID]['Fallschirm'] == "")
                 {
                     $this->setzeFehlerCode(BELADUNG_EINGABE, "Da ein Begleitergewicht angegeben wurde, muss auch das Gewicht für den Fallschirm des Begleiters angegeben werden (0kg ist auch valide)");
                     $erforderlicheHebelarmeVorhanden = false;

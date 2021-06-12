@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
-use App\Models\flugzeuge\flugzeugeMitMusterModel;
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel };
 
 class Protokolleingabecontroller extends Protokollcontroller
 {	   
@@ -63,7 +63,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         *   ggf.: $_SESSION['protokoll']['gewaehlteProtokollTypen']
         */ 
     protected function setzeProtokollInformationen($protokollInformationen)
-    {                
+    {                        
         $_SESSION['protokoll']['protokollInformationen']['datum']        = $protokollInformationen["datum"];
         $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = $protokollInformationen["flugzeit"];
         $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
@@ -95,10 +95,10 @@ class Protokolleingabecontroller extends Protokollcontroller
         }
     }
     
-        /*
+        /**
          * Diese Funktion bekommt eine flugzeugID aus der Flugzeugauswahl (protokollKapitelID = 1) übermittelt
          * und speichert diese.
-         * Des Weiteren lädt sie das Flugzeugmuster mit der $_SESSION['protokoll']['flugzeugID'] um foglende Variablen zu setzen: 
+         * Des Weiteren lädt sie das Flugzeugmuster mit der $_SESSION['protokoll']['flugzeugID'] um foglende Variablen und Flag zu setzen: 
          *  ggf. $_SESSION['protokoll']['flugzeugID'] 
          *  ggf. $_SESSION['protokoll']['doppelsitzer']
          *  ggf. $_SESSION['protokoll']['woelbklappenFlugzeug']
@@ -109,19 +109,21 @@ class Protokolleingabecontroller extends Protokollcontroller
          * Außerdem wird $_SESSION['protokoll']['beladungszustand'] zurückgesetzt, wenn die $_SESSION['protokoll']['flugzeugID'] nicht mehr mit
          * $_SESSION['protokoll']['beladungszustand']['flugzeugID'] übereinstimmt (ein anderes Flugzeug gewählt wurde)
         */
-    protected function setzeFlugzeugDaten($flugzeugID = null)
+    protected function setzeFlugzeugDaten($flugzeugID)
     {      
-        if($flugzeugID)
+        if(isset($_SESSION['protokoll']['flugzeugID']) && $flugzeugID != $_SESSION['protokoll']['flugzeugID'])
         {
-            $_SESSION['protokoll']['flugzeugID'] = $flugzeugID;
-        }
- 
-        if(isset($_SESSION['protokoll']['flugzeugID']))
+            unset($_SESSION['protokoll']['beladungszustand']);
+        }   
+
+        if(!isset($_SESSION['protokoll']['flugzeugID']) OR $flugzeugID != $_SESSION['protokoll']['flugzeugID'])
         {       
             $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+            
+            $_SESSION['protokoll']['flugzeugID'] = $flugzeugID;
 
             $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($_SESSION['protokoll']['flugzeugID']);
-
+            
             if($flugzeugMitMuster['istDoppelsitzer'] == 1)
             {
                 $_SESSION['protokoll']['doppelsitzer'] = []; 
@@ -129,6 +131,7 @@ class Protokolleingabecontroller extends Protokollcontroller
             else 
             {
                 unset($_SESSION['protokoll']['doppelsitzer']);
+                unset($_SESSION['protokoll']['copilotID']);
             }
 
             if($flugzeugMitMuster['istWoelbklappenFlugzeug'] == 1)
@@ -141,13 +144,13 @@ class Protokolleingabecontroller extends Protokollcontroller
             }
         }
         
-        if(isset($_SESSION['protokoll']['beladungszustand']['flugzeugID']) && $_SESSION['protokoll']['flugzeugID'] != $_SESSION['protokoll']['beladungszustand']['flugzeugID'])
+        if(empty($flugzeugID))
         {
-            unset($_SESSION['protokoll']['beladungszustand']);
+            unset($_SESSION['protokoll']['flugzeugID'], $_SESSION['protokoll']['doppelsitzer'], $_SESSION['protokoll']['woelbklappenFlugzeug'], $_SESSION['protokoll']['beladungszustand']);
         }
     }
     
-        /*
+        /**
          * Diese Funktion bekommt eine pilotID aus der Piloten- und Begleiterauswahl (protokollKapitelID = 2) übermittelt.
          * Damit wird dann foglende Variable gesetzt
          *      $_SESSION['protokoll']['pilotID'] 
@@ -157,15 +160,34 @@ class Protokolleingabecontroller extends Protokollcontroller
          */
     protected function setzePilotID($pilotID)
     {
-        $_SESSION['protokoll']['pilotID'] = $pilotID;
-        
-        if(isset($_SESSION['protokoll']['beladungszustand']['pilotID']) && $_SESSION['protokoll']['pilotID'] != $_SESSION['protokoll']['beladungszustand']['pilotID'])
+        if(isset($_SESSION['protokoll']['pilotID']) && $pilotID != $_SESSION['protokoll']['pilotID'])
         {
-            unset($_SESSION['protokoll']['beladungszustand']);
+            if(isset($_SESSION['protokoll']['beladungszustand']))
+            {
+                $flugzeugHebelarmModel = new flugzeugHebelarmeModel();
+                foreach($_SESSION['protokoll']['beladungszustand'] as $hebelarmID => $hebelarmDetails)
+                {
+                    if(is_numeric($hebelarmID) && $flugzeugHebelarmModel->getHebelarmNachID($hebelarmID)['beschreibung'] == 'Pilot')
+                    {
+                        unset($_SESSION['protokoll']['beladungszustand'][$hebelarmID]);
+                    }                   
+                }
+            }
+            
+        }        
+
+        if(!isset($_SESSION['protokoll']['pilotID']) OR $pilotID != $_SESSION['protokoll']['pilotID'])
+        { 
+            $_SESSION['protokoll']['pilotID'] = $pilotID;           
+        }
+        
+        if(empty($pilotID))
+        {
+            unset($_SESSION['protokoll']['pilotID']);
         }
     }
     
-        /*
+        /**
          * Diese Funktion bekommt eine pilotID aus der Piloten- und Begleiterauswahl (protokollKapitelID = 2) übermittelt.
          * Wenn die pilotID ungleich der copilotID ist, wird foglende Variable gesetzt
          *      $_SESSION['protokoll']['copilotID'] 
@@ -175,14 +197,29 @@ class Protokolleingabecontroller extends Protokollcontroller
          */
     protected function setzeCopilotID($copilotID)
     {
-        if(isset($_SESSION['protokoll']['pilotID']) && $_SESSION['protokoll']['pilotID'] != $copilotID)
+        if(isset($_SESSION['protokoll']['copilotID']) && $copilotID != $_SESSION['protokoll']['copilotID'])
         {
-            $_SESSION['protokoll']['copilotID'] = $copilotID;
+            if(isset($_SESSION['protokoll']['beladungszustand']))
+            {
+                $flugzeugHebelarmModel = new flugzeugHebelarmeModel();
+                foreach($_SESSION['protokoll']['beladungszustand'] as $hebelarmID => $hebelarmDetails)
+                {
+                    if(is_numeric($hebelarmID) && $flugzeugHebelarmModel->getHebelarmNachID($hebelarmID)['beschreibung'] == 'Copilot')
+                    {
+                        unset($_SESSION['protokoll']['beladungszustand'][$hebelarmID]);
+                    }                   
+                }
+            }
+        }        
+
+        if(!isset($_SESSION['protokoll']['copilotID']) OR $copilotID != $_SESSION['protokoll']['copilotID'])
+        { 
+            $_SESSION['protokoll']['copilotID'] = $copilotID;           
         }
         
-        if(isset($_SESSION['protokoll']['beladungszustand']['copilotID']) && $_SESSION['protokoll']['copilotID'] != $_SESSION['protokoll']['beladungszustand']['copilotID'])
+        if(empty($copilotID))
         {
-            unset($_SESSION['protokoll']['beladungszustand']);
+            unset($_SESSION['protokoll']['copilotID']);
         }
     }
     
@@ -202,13 +239,13 @@ class Protokolleingabecontroller extends Protokollcontroller
     protected function setzeBeladungszustand($hebelarme) 
     {
         $_SESSION['protokoll']['beladungszustand']                   = $hebelarme;
-        $_SESSION['protokoll']['beladungszustand']['flugzeugID']     = $_SESSION['protokoll']['flugzeugID'];
-        $_SESSION['protokoll']['beladungszustand']['pilotID']        = $_SESSION['protokoll']['pilotID'];
+        //$_SESSION['protokoll']['beladungszustand']['flugzeugID']     = $_SESSION['protokoll']['flugzeugID'];
+        //$_SESSION['protokoll']['beladungszustand']['pilotID']        = $_SESSION['protokoll']['pilotID'];
         
-        if(isset($_SESSION['protokoll']['copilotID']))
+        /*if(isset($_SESSION['protokoll']['copilotID']))
         {
             $_SESSION['protokoll']['beladungszustand']['copilotID']  = $_SESSION['protokoll']['copilotID'];
-        }
+        }*/
     }
     
     /**

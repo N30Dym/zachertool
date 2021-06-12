@@ -15,12 +15,22 @@
     </div>
 
     <div class="col-12">
-        <?php //var_dump($flugzeugeDatenArray) ?>
         <select id="flugzeugAuswahl" name="flugzeugID" class="form-select form-select-lg" size="10" required>
             <?php if(isset($_SESSION['protokoll']['fertig'])) : ?>
+                <?php 
+                    $indexMitAktuellerFlugzeugID = null;
+                    foreach($flugzeugeDatenArray as $index => $flugzeug)
+                    {
+                        if($flugzeug['flugzeugID'] == $_SESSION['protokoll']['flugzeugID'])
+                        {
+                            $indexMitAktuellerFlugzeugID = $index;
+                            break;
+                        }
+                    }
+                ?>
                 <option value="<?= $_SESSION['protokoll']['flugzeugID'] ?>" selected>
-                        <?=  $flugzeugeDatenArray[$_SESSION['protokoll']['flugzeugID']]["kennung"] . " - " . $flugzeugeDatenArray[$_SESSION['protokoll']['flugzeugID']]["musterSchreibweise"].$flugzeugeDatenArray[$_SESSION['protokoll']['flugzeugID']]["musterZusatz"] ?>
-                    </option>
+                    <?= $flugzeugeDatenArray[$indexMitAktuellerFlugzeugID]["kennung"] . " - " . $flugzeugeDatenArray[$indexMitAktuellerFlugzeugID]["musterSchreibweise"].$flugzeugeDatenArray[$indexMitAktuellerFlugzeugID]["musterZusatz"] ?>
+                </option>
             <?php else: ?>
                 <?php foreach($flugzeugeDatenArray as $flugzeug) :  ?>
                     <option value="<?= esc($flugzeug['flugzeugID']) ?>" <?= (isset($_SESSION['protokoll']['flugzeugID']) && $_SESSION['protokoll']['flugzeugID'] === $flugzeug['flugzeugID']) ? "selected" : "" ?>>

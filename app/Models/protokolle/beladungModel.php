@@ -25,13 +25,13 @@ class beladungModel extends Model
     
     public function speicherNeueBeladung($beladung)
     {
-        $sql = $this->builder()->set($beladung)->getCompiledInsert();
-        $this->query($sql);
+        $query = $this->builder()->set($beladung)->getCompiledInsert();
+        $this->query($query);
     }
     
-    public function ueberschreibeBeladung($beladung)
+    /*public function ueberschreibeBeladung($beladung)
     {
-        $sql = $this->builder()->set($beladung)->getCompiledUpdate();
-        $this->query($sql);
-    }
+        $query = $this->builder()->set($beladung)->getCompiledUpdate();
+        $this->query($query);
+    }*/
 }

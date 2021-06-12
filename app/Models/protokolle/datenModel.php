@@ -34,5 +34,11 @@ class datenModel extends Model
     {		
         return $this->where("id", $id)->first();	
     }
+    
+    public function speicherNeuenWert($wert)
+    {
+        $query = $this->builder()->set($wert)->getCompiledInsert();
+        $this->query($query);
+    }
 	
 }

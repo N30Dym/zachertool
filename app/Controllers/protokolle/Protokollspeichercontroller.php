@@ -64,7 +64,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         $this->updateProtokollGeaendertAm();
         echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
         //exit;
-
+        //return true;
     }  
     
     /**
@@ -118,6 +118,12 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set('bestaetigt', 1)->update();
             }
+            
+            $copilotID = $_SESSION['protokoll']['copilotID'] ?? null;
+
+            $protokolleModel->ueberschreibeProtokoll(['copilotID' => $copilotID], $_SESSION['protokoll']['protokollSpeicherID']);
+            echo "CopilotID wurde aktualisiert";
+            
             return self::FERTIG;
         }
         else
@@ -130,8 +136,10 @@ class Protokollspeichercontroller extends Protokollcontroller
                 'flugzeit'      => null,
                 'bemerkung'     => null,
             ];
+            
             $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
             $protokolleModel->ueberschreibeProtokoll($zuSpeicherndeProtokollDaten, $_SESSION['protokoll']['protokollSpeicherID']);
+            
             echo "Jetzt wäre das Protokoll geupdatet worden<br>";
             return self::ANGEFANGEN;
         }
@@ -148,7 +156,7 @@ class Protokollspeichercontroller extends Protokollcontroller
     {
         $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
         
-        //$this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
+        $this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
         
         //$this->speicherHStWege($zuSpeicherndeDaten['hStWege']);
         
@@ -160,7 +168,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * Zunächst werden die bereits vorhandenen Daten mit dieser ProtokollSpeicherID geladen. Wenn keine gespeicherten
      * Daten vorhanden sind, werden die übermittelten Daten ohne weitere Prüfung gespeichert.
      * Wenn schon Daten vorhanden sind, wird geprüft, ob diese mit den neu zuSpeicherndenWerten übereinstimmen und werden
-     * ggf. neu hinzugefügt oder geändert (s. verarbeiteEingebeneWerte).
+     * ggf. neu hinzugefügt oder geändert (s. zuSpeichernderWertVorhanden).
      * 
      * Wenn $gespeicherteWerte nicht in den $zuSpeicherndenWerten enthalten sind, werden sie gelöscht.
      * 
@@ -171,31 +179,25 @@ class Protokollspeichercontroller extends Protokollcontroller
         $datenModel         = new datenModel();
         $gespeicherteWerte  = $datenModel->getDatenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        var_dump($zuSpeicherndeWerte);
-        echo "<br><br>";
-        var_dump($gespeicherteWerte);
-        
         if($gespeicherteWerte == null)
         {
             foreach($zuSpeicherndeWerte as $wert)
             {
                 $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                $datenModel->insert($wert);
+                $datenModel->speicherNeuenWert($wert);
                 echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
             }
         }
         else 
         {
             foreach($zuSpeicherndeWerte as $wert)
-            {
-                print_r($wert);
-                
+            {                
                 $wertVorhanden = $this->zuSpeichernderWertVorhanden($wert, $gespeicherteWerte);
                 
                 if($wertVorhanden === false)
                 {
                     $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                    $datenModel->insert($wert);
+                    $datenModel->speicherNeuenWert($wert);
                     echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
                 }
                 else
@@ -261,12 +263,103 @@ class Protokollspeichercontroller extends Protokollcontroller
         return false;
     }
     
+    /**
+     * Diese Funktion bekommt die Werte übermittelt, die in der Datenbank `kommentare` gespeichert werden sollen.
+     * Zunächst werden die bereits vorhandenen Daten mit dieser ProtokollSpeicherID geladen. Wenn keine gespeicherten
+     * Kommentare vorhanden sind, werden die übermittelten Kommentare ohne weitere Prüfung gespeichert.
+     * Wenn schon Kommentare vorhanden sind, wird geprüft, ob diese mit den neu zuSpeicherndenKOmmentaren übereinstimmen und werden
+     * ggf. neu hinzugefügt oder geändert (s. zuSpeichernderKommentarVorhanden).
+     * 
+     * Wenn $gespeicherteKommentare nicht in den $zuSpeicherndeKommentaren enthalten sind, werden sie gelöscht.
+     * 
+     * @param array_mit_arrays $zuSpeicherndeKommentare
+     */
+    protected function speicherKommentare($zuSpeicherndeKommentare)
+    {
+        $kommentareModel        = new kommentareModel();
+        $gespeicherteKommentare = $kommentareModel->getKommentareNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
+
+        if($gespeicherteKommentare == null)
+        {
+            foreach($zuSpeicherndeKommentare as $kommentar)
+            {
+                $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
+                $kommentareModel->speicherNeuenKommentar($kommentar);
+                echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+            }
+        }
+        else 
+        {
+            foreach($zuSpeicherndeKommentare as $kommentar)
+            {                
+                $kommentarVorhanden = $this->zuSpeichernderKommentarVorhanden($kommentar, $gespeicherteKommentare);
+                
+                if($kommentarVorhanden === false)
+                {
+                    $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
+                    $kommentareModel->speicherNeuenKommentar($kommentar);
+                    echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+                }
+                else
+                {
+                    unset($gespeicherteKommentare[$kommentarVorhanden]);
+                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteKommentare entfernt<br>";
+                }
+            }
+        }
+        
+        foreach($gespeicherteKommentare as $gespeicherterKommentar)
+        {
+            $kommentareModel->delete(['id' => $gespeicherterKommentar['id']]);
+            echo "Datensatz wurde jetzt aus DB `kommentar` gelöscht<br>";
+        }
+    }
+    
+    /**
+     * Vergleicht die bereits gespeicherten Kommentare mit dem übergebenen Kommentar und updatet ihn ggf.
+     * 
+     * Diese Funktion bekommt zwei Arrays übergeben. $kommentar enthält den aktuellen zuSpeicherndenKommentar. 
+     * $zuVergleichendeKommentare enthält alle bereits gespeicherten Kommentare (abzüglich die, die in dieser Schleife daraus gelöscht werden).
+     * Es wird geprüft, ob es den zuSpeicherndenKommentar bereits in der Datenbank gibt:
+     * Wenn die Werte der Spalte 'protokollKapitelID' bei beiden Arrays übereinstimmen, wird geprüft, ob auch der Kommentar identisch ist.
+     * Wenn nicht wird dieser aktualisiert. 
+     * Ist der Wert noch nicht vorhanden wird FALSE zurückgegeben, ansonsten der Index des gespeicherten Wertes 
+     * im $zuVergleichenderKommentare-Array, um ihn im nächsten Schritt aus dem Array zu löschen.
+     * 
+     * @param array $kommentar
+     * @param array_mit_arrays $zuVergleichendeKommentare
+     * 
+     * @return int|false
+     */
+    protected function zuSpeichernderKommentarVorhanden($kommentar, $zuVergleichendeKommentare)
+    {
+        $kommentareModel = new kommentareModel();
+        
+        foreach($zuVergleichendeKommentare as $index => $zuVergleichenderKommentar)
+        {                
+            if($kommentar['protokollKapitelID'] == $zuVergleichenderKommentar['protokollKapitelID'])
+            {                
+                echo "Kommentar wurde gefunden<br>";
+                
+                if($kommentar['kommentar'] != $zuVergleichenderKommentar['kommentar'])
+                {
+                    $kommentareModel->where('id', $zuVergleichenderKommentar['id'])->set('kommentar', $kommentar['kommentar'])->update();
+                    echo "Kommentar wurde angepasst<br>";
+                }
+                
+                return $index;
+            }
+        }
+        echo "Kommentar nicht vorhanden<br>";
+        return false;
+    }
+    
      /**
      * Diese Funktion bekommt die Werte übermittelt, die in der Datenbank `beladung` gespeichert werden sollen.
      * Zunächst werden die bereits vorhandenen Datensätze mit dieser ProtokollSpeicherID geladen. Wenn keine gespeicherten
      * Daten vorhanden sind, werden die übermittelten Daten ohne weitere Prüfung gespeichert.
      * Wenn schon Daten vorhanden sind, wird geprüft, ob diese mit den neu zuSpeicherndenWerten übereinstimmen und werden
-     * ggf. neu hinzugefügt oder geändert (s. verarbeiteEingebeneWerte).
+     * ggf. neu hinzugefügt oder geändert (s. zuSpeicherndeBeladungVorhanden).
      * 
      * Wenn $gespeicherteWerte nicht in den $zuSpeicherndenWerten enthalten sind, werden sie gelöscht.
      * 
@@ -276,11 +369,7 @@ class Protokollspeichercontroller extends Protokollcontroller
     {
         $beladungModel          = new beladungModel();
         $gespeicherteBeladungen = $beladungModel->getBeladungenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
-        
-        //var_dump($zuSpeicherndeBeladung);
-        //echo "<br><br>";
-        //var_dump($gespeicherteBeladungen);
-        
+
         if($gespeicherteBeladungen == null)
         {
             foreach($zuSpeicherndeBeladung as $beladung)
@@ -294,8 +383,6 @@ class Protokollspeichercontroller extends Protokollcontroller
         {
             foreach($zuSpeicherndeBeladung as $beladung)
             {
-                //print_r($beladung);
-                
                 $beladungVorhanden = $this->zuSpeicherndeBeladungVorhanden($beladung, $gespeicherteBeladungen);
                 
                 if($beladungVorhanden === false)
@@ -353,8 +440,9 @@ class Protokollspeichercontroller extends Protokollcontroller
                 
                 if($beladung['gewicht'] != $zuVergleichendeBeladung['gewicht'])
                 {
+                    print_r($zuVergleichendeBeladung);
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
-                    $beladungModel->where('id', $zuVergleichendeBeladungen['id'])->set('gewicht', $beladung['gewicht'])->update();
+                    $beladungModel->where('id', $zuVergleichendeBeladung['id'])->set('gewicht', $beladung['gewicht'])->update();
                     echo "Gewicht wurde angepasst<br>";
                 }
                 

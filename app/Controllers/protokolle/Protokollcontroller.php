@@ -114,14 +114,14 @@ class Protokollcontroller extends Controller
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
         echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
         //print_r($_SESSION['protokoll']['fehlerArray'] ?? "");
-        echo "<br>FlugzeugID: ";
+        /*echo "<br>FlugzeugID: ";
         print_r($_SESSION['protokoll']['flugzeugID'] ?? "");
         echo "<br>PilotID: ";
         print_r($_SESSION['protokoll']['pilotID'] ?? "");
         echo "<br>CopilotID: ";
         print_r($_SESSION['protokoll']['copilotID'] ?? "");
         echo "<br>Beladungszustand: ";
-        print_r($_SESSION['protokoll']['beladungszustand'] ?? "");
+        print_r($_SESSION['protokoll']['beladungszustand'] ?? "");*/
         
             // datenHeader mit Titel füttern
         $datenHeader['titel'] = $_SESSION['protokoll']['protokollInformationen']['titel'];
@@ -148,7 +148,7 @@ class Protokollcontroller extends Controller
         {
             if($this->speicherProtokollDaten($zuSpeicherndeDaten))
             {
-                echo "Protokolldaten erfolgreich gespeichert";
+                echo "<br>Protokolldaten erfolgreich gespeichert";
                 /*$session = session();
                 $session->setFlashdata('nachricht', "Protokolldaten erfolgreich gespeichert");
                 $session->setFlashdata('link', base_url());
@@ -156,7 +156,7 @@ class Protokollcontroller extends Controller
             }
             else 
             {
-                echo "Jetzt wärst du zurückgeleitet worden";
+                echo "<br>Jetzt wärst du zurückgeleitet worden";
                 echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
                 //return redirect()->to(base_url() .'/protokolle/kapitel/'. array_key_first($_SESSION['protokoll']['fehlerArray']);
             }
@@ -211,7 +211,7 @@ class Protokollcontroller extends Controller
         $protokollAnzeigeController->ladeErsteSeiteView($datenHeader, $datenInhalt);
     }
     
-        /*
+        /**
          * Diese Funktion erstellt einen Protokollladecontroller um anschließend
          * die Daten des Protokolls mit der übergebenen protokollSpeicherID zu laden
          * 
@@ -226,25 +226,13 @@ class Protokollcontroller extends Controller
         $protokollDatenLadeController->ladeProtokollDaten($protokollSpeicherID); 
     }
     
-        /*
-        * Löschen aller Session-Daten
-        *
-        * @return void
-        */
-    
-    protected function loescheSessionDaten() 
-    {
-        //session_destroy();
-        //unset($_SESSION['protokoll']);       
-    }
-
-        /*
-        * Diese Funktion wird am Ende der erstenSeite (index) aufgerufen, um bei Änderungen
-        * der gewähltenProtokolle das entsprechende Layout laden zu können. Die geschieht
-        * aber auch, wenn die ersteSeite aufgerufen wird und keine Änderung vorgenommen wurde 
-        * 
-         * @return void
-        */
+    /**
+     * Diese Funktion wird am Ende der erstenSeite (index) aufgerufen, um bei Änderungen
+     * der gewähltenProtokolle das entsprechende Layout laden zu können. Die geschieht
+     * aber auch, wenn die ersteSeite aufgerufen wird und keine Änderung vorgenommen wurde 
+     * 
+     * @return void
+     */
     protected function loescheLayoutDaten()
     {
         unset(

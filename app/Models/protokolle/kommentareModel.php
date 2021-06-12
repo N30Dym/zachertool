@@ -22,4 +22,10 @@ class kommentareModel extends Model
     {
         return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
     }
+  
+    public function speicherNeuenKommentar($kommentar)
+    {
+        $query = $this->builder()->set($kommentar)->getCompiledInsert();
+        $this->query($query);
+    }
 }

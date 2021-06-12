@@ -51,4 +51,10 @@ class hStWegeModel extends Model
     {	
         return $this->where("id", $id)->first();           
     }
+    
+    public function  speicherNeuenHStWeg($hStWeg)
+    {
+        $query = $this->builder()->set($hStWeg)->getCompiledInsert();
+        $this->query($query);
+    }
 }

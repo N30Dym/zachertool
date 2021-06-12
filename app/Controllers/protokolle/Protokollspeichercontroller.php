@@ -62,9 +62,9 @@ class Protokollspeichercontroller extends Protokollcontroller
         }
 
         $this->updateProtokollGeaendertAm();
-        echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
+        //echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
         //exit;
-        //return true;
+        return true;
     }  
     
     /**
@@ -154,13 +154,13 @@ class Protokollspeichercontroller extends Protokollcontroller
      */
     protected function speicherZuSpeicherndeDaten($zuSpeicherndeDaten)
     {
-        $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
+        empty($zuSpeicherndeDaten['eingegebeneWerte'])  ? null : $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
         
-        $this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
+        empty($zuSpeicherndeDaten['kommentare'])        ? null : $this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
         
-        //$this->speicherHStWege($zuSpeicherndeDaten['hStWege']);
+        empty($zuSpeicherndeDaten['hStWege'])           ? null : $this->speicherHStWege($zuSpeicherndeDaten['hStWege']);
         
-        $this->speicherBeladung($zuSpeicherndeDaten['beladung']);
+        empty($zuSpeicherndeDaten['beladung'])          ? null : $this->speicherBeladung($zuSpeicherndeDaten['beladung']);
     }
     
     /**
@@ -340,7 +340,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             if($kommentar['protokollKapitelID'] == $zuVergleichenderKommentar['protokollKapitelID'])
             {                
                 echo "Kommentar wurde gefunden<br>";
-                
+
                 if($kommentar['kommentar'] != $zuVergleichenderKommentar['kommentar'])
                 {
                     $kommentareModel->where('id', $zuVergleichenderKommentar['id'])->set('kommentar', $kommentar['kommentar'])->update();
@@ -351,6 +351,108 @@ class Protokollspeichercontroller extends Protokollcontroller
             }
         }
         echo "Kommentar nicht vorhanden<br>";
+        return false;
+    }
+    
+    /**
+     * Diese Funktion bekommt die Werte übermittelt, die in der Datenbank `hst-wege` gespeichert werden sollen.
+     * Zunächst werden die bereits vorhandenen hStWege mit dieser ProtokollSpeicherID geladen. Wenn keine gespeicherten
+     * hStWege vorhanden sind, werden die übermittelten hStWege ohne weitere Prüfung gespeichert.
+     * Wenn schon hStWege vorhanden sind, wird geprüft, ob diese mit den neu zuSpeicherndenHStWegen übereinstimmen und werden
+     * ggf. neu hinzugefügt oder geändert (s. zuSpeichernderKommentarVorhanden).
+     * 
+     * Wenn $gespeicherteHStWege nicht in den $zuSpeicherndeHStWegen enthalten sind, werden sie gelöscht.
+     * 
+     * @param array_mit_arrays $zuSpeicherndeHStWege
+     */
+    protected function speicherHStWege($zuSpeicherndeHStWege)
+    {
+        $hStWegeModel        = new hStWegeModel();
+        $gespeicherteHStWege = $hStWegeModel->getHStWegeNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
+
+        if($gespeicherteHStWege == null)
+        {
+            foreach($zuSpeicherndeHStWege as $hStWeg)
+            {
+                $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
+                $hStWegeModel->speicherNeuenHStWeg($hStWeg);
+                echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+            }
+        }
+        else 
+        {
+            foreach($zuSpeicherndeHStWege as $hStWeg)
+            {                
+                $hStWegVorhanden = $this->zuSpeichernderHStWegVorhanden($hStWeg, $gespeicherteHStWege);
+                
+                if($hStWegVorhanden === false)
+                {
+                    $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
+                    $hStWegeModel->speicherNeuenHStWeg($hStWeg);
+                    echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+                }
+                else
+                {
+                    unset($gespeicherteHStWege[$hStWegVorhanden]);
+                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteHStWege entfernt<br>";
+                }
+            }
+        }
+        
+        foreach($gespeicherteHStWege as $gespeicherterHStWeg)
+        {
+            $hStWegeModel->delete(['id' => $gespeicherterHStWeg['id']]);
+            echo "Datensatz wurde jetzt aus DB `hst-wege` gelöscht<br>";
+        }
+    }
+    
+    /**
+     * Vergleicht die bereits gespeicherten hStWege mit dem übergebenen hStWeg und updatet ihn ggf.
+     * 
+     * Diese Funktion bekommt zwei Arrays übergeben. $hStWeg enthält den aktuellen zuSpeichernden hStWeg. 
+     * $zuVergleichendeHStWege enthält alle bereits gespeicherten hStWege (abzüglich die, die in dieser Schleife daraus gelöscht werden).
+     * Es wird geprüft, ob es den zuSpeicherndenhStWeg bereits in der Datenbank gibt:
+     * Wenn die Werte der Spalte 'protokollKapitelID' bei beiden Arrays übereinstimmen, wird geprüft, ob auch der die hSt-Positionen
+     * identisch sind.
+     * Wenn nicht werden diese aktualisiert. 
+     * Ist der hStWeg noch nicht vorhanden wird FALSE zurückgegeben, ansonsten der Index des gespeicherten Wertes 
+     * im $zuVergleichendeHStWege-Array, um ihn im nächsten Schritt aus dem Array zu löschen.
+     * 
+     * @param array $hStWeg
+     * @param array_mit_arrays $zuVergleichendeHStWege
+     * 
+     * @return int|false
+     */
+    protected function zuSpeichernderHStWegVorhanden($hStWeg, $zuVergleichendeHStWege)
+    {
+        $hStWegeModel        = new hStWegeModel();
+        
+        foreach($zuVergleichendeHStWege as $index => $zuVergleichenderHStWeg)
+        {                
+            if($hStWeg['protokollKapitelID'] == $zuVergleichenderHStWeg['protokollKapitelID'])
+            {                
+                echo "hStWeg wurde gefunden<br>";
+                
+                if($hStWeg['gedruecktHSt'] != $zuVergleichenderHStWeg['gedruecktHSt'])
+                {
+                    $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('gedruecktHSt', $hStWeg['gedruecktHSt'])->update();
+                    echo "gedruecktHSt wurde angepasst<br>";
+                }
+                if($hStWeg['neutralHSt'] != $zuVergleichenderHStWeg['neutralHSt'])
+                {
+                    $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('neutralHSt', $hStWeg['neutralHSt'])->update();
+                    echo "neutralHSt wurde angepasst<br>";
+                }
+                if($hStWeg['gezogenHSt'] != $zuVergleichenderHStWeg['gezogenHSt'])
+                {
+                    $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('gezogenHSt', $hStWeg['gezogenHSt'])->update();
+                    echo "gezogenHSt wurde angepasst<br>";
+                }
+                
+                return $index;
+            }
+        }
+        echo "hStWeg nicht vorhanden<br>";
         return false;
     }
     
@@ -467,6 +569,7 @@ class Protokollspeichercontroller extends Protokollcontroller
     
     protected function meldeProtokollKannNichtUeberschriebenWerden()
     {
+        $session = session();
         $session->setFlashdata('nachricht', "Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde");
         $session->setFlashdata('link', base_url());
         header('Location: '. base_url() .'/nachricht');

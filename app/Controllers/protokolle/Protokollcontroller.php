@@ -135,7 +135,7 @@ class Protokollcontroller extends Controller
 	
     public function speichern()
     {
-        //$this->zeigeWarteSeite();
+        $this->zeigeWarteSeite();
         
         if($this->request->getPost() != null)
         {            
@@ -149,10 +149,10 @@ class Protokollcontroller extends Controller
             if($this->speicherProtokollDaten($zuSpeicherndeDaten))
             {
                 echo "<br>Protokolldaten erfolgreich gespeichert";
-                /*$session = session();
+                $session = session();
                 $session->setFlashdata('nachricht', "Protokolldaten erfolgreich gespeichert");
                 $session->setFlashdata('link', base_url());
-                return redirect()->to(base_url() . '/nachricht');*/
+                return redirect()->to(base_url() . '/nachricht');
             }
             else 
             {
@@ -290,5 +290,11 @@ class Protokollcontroller extends Controller
     {
         $protokollLayoutController  = new Protokolllayoutcontroller;
         $protokollLayoutController->ladeProtokollLayout();
+    }
+    
+    protected function zeigeWarteSeite()
+    {
+        $protokollAnzeigeController = new Protokollanzeigecontroller();       
+        $protokollAnzeigeController->zeigeWarteSeite();
     }
 }

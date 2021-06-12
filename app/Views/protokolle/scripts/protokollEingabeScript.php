@@ -1,6 +1,23 @@
 <script type="text/javascript">    
 $( document ).ready( function() {
+    
+        
+        $(window).keydown(function(event){
+        //alert(event.keyCode);
+            // Refreshen verhindern
+        if(event.keyCode == 116) {
+            event.preventDefault();
+            return false;
+        }
+          // Submit mit Enter verhindern
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
 
+    });
+
+    
     var pilotenListe = $( '#pilotAuswahl option' );
     var copilotenListe = $( '#copilotAuswahl option' );
     var flugzeugListe = $( '#flugzeugAuswahl option' );

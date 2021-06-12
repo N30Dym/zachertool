@@ -51,4 +51,11 @@ class Protokollanzeigecontroller extends Protokollcontroller
                 echo view('protokolle/protokollKapitelView', $datenInhalt);
         }
     }
+    
+    protected function zeigeWarteSeite()
+    {
+        echo view('templates/headerView');
+        echo view('templates/wartenView');
+        echo view('templates/footerView');
+    }
 }

@@ -19,6 +19,8 @@ class Protokolllistencontroller extends Controller
         $protokolleModel        = new protokolleModel();     
         $angefangeneProtokolle  = $protokolleModel->getAngefangeneProtokolle();     
         $titel                  = "Angefangenes Protokoll zur Anzeige oder Bearbeitung wählen";
+        
+        $this->protokollSessionDatenLoeschen();
 
         $this->ladeZuUebermittelndeDatenUndAnzeigen($angefangeneProtokolle, $titel); 
     } 
@@ -28,6 +30,8 @@ class Protokolllistencontroller extends Controller
         $protokolleModel    = new protokolleModel();       
         $fertigeProtokolle  = $protokolleModel->getFertigeProtokolle();
         $titel              = 'Fertiges Protokoll zur Anzeige oder Bearbeitung wählen';
+        
+        $this->protokollSessionDatenLoeschen();
 
         $this->ladeZuUebermittelndeDatenUndAnzeigen($fertigeProtokolle, $titel); 
     }
@@ -37,6 +41,8 @@ class Protokolllistencontroller extends Controller
         $protokolleModel        = new protokolleModel();     
         $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolleNachJahrenSoriert();      
         $titel                  = 'Abgegebenes Protokoll zur Anzeige wählen';
+        
+        $this->protokollSessionDatenLoeschen();
         
         $this->ladeZuUebermittelndeDatenUndAnzeigen($bestaetigteProtokolle, $titel); 
     }
@@ -116,5 +122,18 @@ class Protokolllistencontroller extends Controller
         echo view('templates/navbarView');
         echo view('protokolle/protokollListenView', $datenInhalt);
         echo view('templates/footerView'); 
+    }
+    
+    protected function protokollSessionDatenLoeschen()
+    {
+        if(session_status() !== PHP_SESSION_ACTIVE)
+        {
+            $session = session();    
+        }
+
+        if(isset($_SESSION['protokoll']))
+        {
+            unset($_SESSION['protokoll']);
+        }
     }
 }

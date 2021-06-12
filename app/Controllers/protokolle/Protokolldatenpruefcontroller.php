@@ -31,7 +31,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         else
         {
             echo "Keine Werte zum speichern vorhanden<br>";
-            //$this->meldeKeineWerteEingegeben();
+            $this->meldeKeineWerteEingegeben();
             exit;
         }
     }
@@ -388,6 +388,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function meldeKeineWerteEingegeben()
     {
+        $session = session();
         $session->setFlashdata('nachricht', "Protokoll konnte nicht gespeichert werden, weil noch kein Protokolldaten eingegeben wurden");
         $session->setFlashdata('link', base_url());
         header('Location: '. base_url() .'/nachricht');

@@ -6,13 +6,11 @@ use CodeIgniter\Controller;
 use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeMitMusterModel;
 use App\Models\piloten\pilotenModel;
-use Auth\Controllers\SessionController;
+
+helper(['url', 'array']);
 
 class Startseitecontroller extends Controller
-{
-
-    protected $session;
-    
+{    
     /*
     * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):
     * -> /
@@ -24,11 +22,6 @@ class Startseitecontroller extends Controller
     */
     public function index()
     {
-        $this->session = session();
-        if($this->session->isLoggedIn && ($this->session->mitgliedsStatus == ADMINISTRATOR OR $this->session->mitgliedsStatus == ZACHEREINWEISER))
-        {
-            echo "Eingeloggt";
-        }
         $title          = "Willkommen beim Zachertool";
         $anzahlJahre    = 5;          
 

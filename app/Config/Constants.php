@@ -100,5 +100,5 @@ defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // "Angaben zu
  * Administrator, bzw. Zachereinweiser definiert. Weitere Status können ergänzt werden.
  */
 
-defined('ADMINISTRATOR')    || define('ADMINISTRATOR', 0); // Administrator ID setzen
-defined('ZACHEREINWEISER')  || define('ZACHEREINWEISER', 1); // Zachereinweiser ID setzen
+defined('ADMINISTRATOR')    || define('ADMINISTRATOR', 1); // Administrator ID setzen
+defined('ZACHEREINWEISER')  || define('ZACHEREINWEISER', 2); // Zachereinweiser ID setzen

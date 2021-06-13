@@ -55,9 +55,13 @@
                         Admin
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Piloten</a>
-                        <a class="dropdown-item" href="#">Flugzeuge</a>
-                        <a class="dropdown-item" href="#">Protokolle</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/piloten/index">Piloten</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/flugzeuge/index">Flugzeuge</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/protokolle/index">Protokolle</a>
+                        <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && $_SESSION['mitgliedsStatus'] == ADMINISTRATOR) : ?>
+                            <a class="dropdown-item" href="#">Benutzer</a>
+                            <a class="dropdown-item" href="#">Protokoll Layout</a>
+                        <?php endif ?>
                     </div>
                 </li>
             </ul>

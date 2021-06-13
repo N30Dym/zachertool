@@ -74,7 +74,7 @@ class LoginController extends Controller
 		];
 
 		if (! $this->validate($rules)) {
-			return redirect()->to('login')
+			return redirect()->to(base_url('login'))
 				->withInput()
 				->with('errors', $this->validator->getErrors());
 		}
@@ -117,9 +117,11 @@ class LoginController extends Controller
 	 */
 	public function logout()
 	{
-		$this->session->remove(['isLoggedIn', 'userData']);
+		$this->session->remove(['isLoggedIn', 'mitgliedsStatus', 'userData']);
 
-		return redirect()->to('login');
+		$this->session->setFlashdata('nachricht', 'Erfolgreich abgemeldet');
+                $this->session->setFlashdata('link', base_url());
+                return redirect()->to(base_url('nachricht'));
 	}
 
 }

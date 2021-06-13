@@ -43,11 +43,14 @@ class RegistrationController extends Controller
                     
                 $mitgliedsStatusModel = new MitgliedsStatusModel(); // Neu hinzugefügt
 
-                $datenHeader = $datenInhalt = array();
+                $datenHeader['titel']                   = "Neuen User hinzufügen";
+                $datenInhalt['config']                  = $this->config;
+                $datenInhalt['mitgliedsStatusArray']    = $mitgliedsStatusModel->getAlleStatusBezeichnungen();
+                
                 echo view('templates/headerView', $datenHeader);
                 echo view('flugzeuge/scripts/musterListeScript');
                 echo view('templates/navbarView');
-                echo view('flugzeuge/musterListeView', $datenInhalt);
+                echo view('Auth\Views\register', $datenInhalt);
                 echo view('templates/footerView');
             }
             else

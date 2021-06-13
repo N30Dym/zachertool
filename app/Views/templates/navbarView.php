@@ -1,12 +1,12 @@
 <!-- Hier wird der <head> beendet, der in headerView.php gestartet wird -->
 
 </head>
-<body class="white d-flex flex-column min-vh-100">
+<body class="bg-light d-flex flex-column min-vh-100">
 <header>
 
 
     
-<nav class="navbar navbar-expand-md navbar-dark bg-dark bg-gradient">
+<nav class="navbar navbar-expand-md navbar-light bg-gradient" style="background-color: #343a40;">
     <div class="container-fluid" >
         <a class="navbar-brand" href="<?= base_url() ?>">
             <img src="<?= base_url() ?>/public/bilder/Idaflieg Logo_invertiert.svg" alt="" height="40">
@@ -84,6 +84,6 @@
     </div>
 </nav>    
 </header>
-<main class="container bg-light shadow pb-5 pt-3">
+<main class="container bg-white shadow pb-5 pt-3">
     
 <!-- Hier beginnt <main>. </main> ist in footerView.php zu finden. Der gesamte Inhalt wird dazwischen geladen -->

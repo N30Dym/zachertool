@@ -2,7 +2,7 @@
 
 </main>
 <div style="height:3rem !important"></div>
-<footer class="footer mt-auto py-2 bg-dark bg-gradient">
+<footer class="footer mt-auto py-2 bg-gradient" style="background-color: #343a40;">
 	<div class="container-fluid">
 		<div class="row mx-3 flex-nowrap justify-content-between align-items-center">
 		  <div class="col-6 d-flex">

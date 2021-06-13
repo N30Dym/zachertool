@@ -43,6 +43,8 @@ class Pilotenadmincontroller extends Pilotencontroller
     
     protected function liste($anzuzeigendeDaten)
     {
+        $this->pruefeAdministratorOderZachereinweiser();
+        
         switch($anzuzeigendeDaten)
         {
             case 'sichtbarePiloten':
@@ -53,6 +55,8 @@ class Pilotenadmincontroller extends Pilotencontroller
     
     protected function sichtbarePilotenListe()
     {
+        $this->pruefeAdministratorOderZachereinweiser();
+        
         $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
         $pilotenDaten = $pilotenMitAkafliegsModel->getSichtbarePilotenMitAkaflieg();
         $titel = "Sichtbare Piloten";
@@ -77,6 +81,8 @@ class Pilotenadmincontroller extends Pilotencontroller
     
     protected function zeigeAdminPilotenIndexView($datenHeader)
     {
+        $this->pruefeAdministratorOderZachereinweiser();
+        
         echo view('templates/headerView', $datenHeader);
         echo view('templates/navbarView');
         echo view('admin/piloten/indexView');
@@ -85,6 +91,8 @@ class Pilotenadmincontroller extends Pilotencontroller
     
     protected function zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName)
     {
+        $this->pruefeAdministratorOderZachereinweiser();
+        
         $datenInhalt = [
             'datenArray' => $datenArray,
             'ueberschriftArray' => $ueberschriftArray,

@@ -1,5 +1,6 @@
 <?php
 
+use Auth\Models\MitgliedsStatusModel;
 /*
  | --------------------------------------------------------------------
  | App Namespace
@@ -78,6 +79,8 @@ defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
+//-------------------------------------------------------------------------------------------------------------------------------------
+
 /*
  * Beim Erstellen des Protokolllayouts gibt nehmen die Kapitel "Angaben zum Flugzeug", "Angaben zum Piloten / zu den Piloten" und "Angaben zum Beladungszustand"
  * eine besondere Rolle ein. Diese können bei allen ProtokollTypen aufgerufen werden und sind fest programmierte Seiten.
@@ -85,7 +88,17 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
  * So kommt es zu keinen Verwechslungen
  * 
  */
-defined('PROTOKOLL_AUSWAHL')    || define('PROTOKOLL_AUSWAHL', 0); // "Angaben zum Piloten / zu den Piloten"
+defined('PROTOKOLL_AUSWAHL')    || define('PROTOKOLL_AUSWAHL', 0); // "Angaben zum Protokoll"
 defined('FLUGZEUG_EINGABE')     || define('FLUGZEUG_EINGABE', 1); // "Angaben zum Flugzeug"
 defined('PILOT_EINGABE')        || define('PILOT_EINGABE', 2); // "Angaben zum Piloten / zu den Piloten"
-defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // "Angaben zum Piloten / zu den Piloten"
+defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // "Angaben zur Beladung"
+
+//-------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Um den Mitgliedsstatus klar zu definieren werden hier die IDs der jeweiligen Status geladen und als
+ * Administrator, bzw. Zachereinweiser definiert. Weitere Status können ergänzt werden.
+ */
+
+defined('ADMINISTRATOR')    || define('ADMINISTRATOR', 0); // Administrator ID setzen
+defined('ZACHEREINWEISER')  || define('ZACHEREINWEISER', 1); // Zachereinweiser ID setzen

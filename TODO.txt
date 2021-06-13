@@ -1,7 +1,5 @@
 - Wenn man nach einem Fehler auf die Protokolleingabe Seite zurückgeleitet wird und dort auf "Speichern und Zurück" sind einige $_SESSION['protokoll']
-    Variablen nicht mehr gesetzt, was zu Fehlern führt. Das muss behoben werden.
-	
-- Speichern der Flugzeit funktioniert nicht
+    Variablen nicht mehr gesetzt, was zu Fehlern führt. Das muss behoben werden
 
 - Vom Styleguide: https://github.com/codeigniter4/CodeIgniter4/blob/develop/contributing/styleguide.rst
 	$result = true && false; // $result is false, expected

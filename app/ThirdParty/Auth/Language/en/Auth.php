@@ -3,10 +3,12 @@
 return [
     // Registration
     'registration' 			=> 'Registration',
-    'name' 					=> 'Name',
+    'name'                              => 'Name',
     'email' 				=> 'E-mail address',
+    'username'                          => 'Username',
     'password'				=> 'Password',
     'passwordAgain'			=> 'Password again',
+    'memberStatus'                      => 'Member Status',
     'register'				=> 'Register',
     'alreadyRegistered'		=> 'Already registered? Log in!',
 

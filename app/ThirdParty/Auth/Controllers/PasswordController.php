@@ -2,7 +2,7 @@
 namespace Auth\Controllers;
 
 use CodeIgniter\Controller;
-use Config\Email;
+//use Config\Email;
 use Config\Services;
 use Auth\Models\UserModel;
 
@@ -35,18 +35,18 @@ class PasswordController extends Controller
 
     //--------------------------------------------------------------------
 
-    public function forgotPassword()
+    /*public function forgotPassword()
 	{
 		if ($this->session->isLoggedIn) {
 			return redirect()->to('account');
 		}
 
 		return view($this->config->views['forgot-password'], ['config' => $this->config]);
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
-	public function attemptForgotPassword()
+	/*public function attemptForgotPassword()
 	{
 		// validate request
 		if (! $this->validate(['email' => 'required|valid_email'])) {
@@ -77,11 +77,11 @@ class PasswordController extends Controller
         send_password_reset_email($this->request->getPost('email'), $updatedUser['reset_hash']);
 
         return redirect()->back()->with('success', lang('Auth.forgottenPasswordEmail'));
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
-	public function resetPassword()
+	/*public function resetPassword()
 	{
 		// check reset hash and expiration
 		$users = new UserModel();
@@ -94,11 +94,11 @@ class PasswordController extends Controller
         }
 
 		return view($this->config->views['reset-password'], ['config' => $this->config]);
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
-	public function attemptResetPassword()
+	/*public function attemptResetPassword()
 	{
 		// validate request
 		$rules = [
@@ -130,6 +130,6 @@ class PasswordController extends Controller
 		// redirect to login
         return redirect()->to('login')->with('success', lang('Auth.passwordUpdateSuccess'));
 
-	}
+	}*/
 
 }

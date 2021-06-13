@@ -6,7 +6,7 @@ $routes->group('', ['namespace' => 'Auth\Controllers'], function($routes) {
     $routes->post('register', 'RegistrationController::attemptRegister');
 
     // Activation
-    $routes->get('activate-account', 'RegistrationController::activateAccount', ['as' => 'activate-account']);
+    //$routes->get('activate-account', 'RegistrationController::activateAccount', ['as' => 'activate-account']);
 
     // Login/out
     $routes->get('login', 'LoginController::login', ['as' => 'login']);
@@ -14,10 +14,10 @@ $routes->group('', ['namespace' => 'Auth\Controllers'], function($routes) {
     $routes->get('logout', 'LoginController::logout');
 
     // Forgotten password and reset
-    $routes->get('forgot-password', 'PasswordController::forgotPassword', ['as' => 'forgot-password']);
+    /*$routes->get('forgot-password', 'PasswordController::forgotPassword', ['as' => 'forgot-password']);
     $routes->post('forgot-password', 'PasswordController::attemptForgotPassword');
     $routes->get('reset-password', 'PasswordController::resetPassword', ['as' => 'reset-password']);
-    $routes->post('reset-password', 'PasswordController::attemptResetPassword');
+    $routes->post('reset-password', 'PasswordController::attemptResetPassword');*/
 
     // Account settings
     $routes->get('account', 'AccountController::account', ['as' => 'account']);

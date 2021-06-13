@@ -14,24 +14,25 @@ class UserModel extends Model
 
     // this happens first, model removes all other fields from input data
     protected $allowedFields = [
-            'name', 'email', 'new_email', 'password', 'password_confirm',
-            'activate_hash', 'reset_hash', 'reset_expires', 'active'
+            'name', 'username', 'password', 'password_confirm', // 'username' war ursprünglich 'email', 'new_email' entfernt
+            'activate_hash', 'reset_hash', 'reset_expires', 'active', 'memberstatus' // 'mitgliedsstatus' neu hinzugefügt
     ];
 
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $dateFormat  	 = 'int';
+    protected $useTimestamps    = true;
+    protected $createdField     = 'created_at';
+    protected $updatedField     = 'updated_at';
+    protected $dateFormat       = 'int';
 
-    protected $validationRules = [];
+    protected $validationRules  = [];
 
     // we need different rules for registration, account update, etc
-    protected $dynamicRules = [
+    protected $dynamicRules     = [
             'registration' => [
-                    'name' 				=> 'required|min_length[2]',
-                    'email' 			=> 'required|valid_email|is_unique[users.email]',
-                    'password'			=> 'required|min_length[5]',
-                    'password_confirm'	=> 'matches[password]'
+                    'name'              => 'permit_empty|min_length[2]',
+                    'username'          => 'required|string|is_unique[users.username]',
+                    'password'          => 'required|min_length[5]',
+                    'password_confirm'	=> 'matches[password]',
+                    'memberstatus'      => 'required|integer'
             ],
             'updateAccount' => [
                     'id'	=> 'required|is_natural_no_zero',

@@ -2,9 +2,9 @@
 namespace Auth\Controllers;
 
 use CodeIgniter\Controller;
-use Config\Email;
+//use Config\Email;
 use Config\Services;
-use Auth\Models\UserModel;
+use Auth\Models\{ UserModel, MitgliedsStatusModel };
 
 class RegistrationController extends Controller
 {
@@ -39,11 +39,23 @@ class RegistrationController extends Controller
 	 */
 	public function register()
 	{
-		if ($this->session->isLoggedIn) {
-			return redirect()->to('account');
-		}
+            if ($this->session->isLoggedIn && $this->session->mitgliedsStatus == 0) {
+                    
+                $mitgliedsStatusModel = new MitgliedsStatusModel(); // Neu hinzugefügt
 
-		return view($this->config->views['register'], ['config' => $this->config]);
+                $datenHeader = $datenInhalt = array();
+                echo view('templates/headerView', $datenHeader);
+                echo view('flugzeuge/scripts/musterListeScript');
+                echo view('templates/navbarView');
+                echo view('flugzeuge/musterListeView', $datenInhalt);
+                echo view('templates/footerView');
+            }
+            else
+            {
+                return redirect()->to(base_url());
+            }
+            
+            //return view($this->config->views['register'], ['config' => $this->config, 'mitgliedsStatusArray' => $mitgliedsStatusModel->getAlleStatusBezeichnungen()]);
 	}
 
     //--------------------------------------------------------------------
@@ -61,10 +73,12 @@ class RegistrationController extends Controller
 		$users->setValidationRules($getRule);
         $user = [
             'name'          	=> $this->request->getPost('name'),
-            'email'         	=> $this->request->getPost('email'),
-            'password'     		=> $this->request->getPost('password'),
+            'username'         	=> $this->request->getPost('username'), // ursprünglich 'email'
+            'password'          => $this->request->getPost('password'),
             'password_confirm'	=> $this->request->getPost('password_confirm'),
-            'activate_hash' 	=> random_string('alnum', 32)
+            'activate_hash' 	=> random_string('alnum', 32),                    
+            'memberstatus'      => $this->request->getPost('memberstatus'), // Neu hinzugefügt
+            
         ];
 
         if (! $users->save($user)) {
@@ -72,8 +86,8 @@ class RegistrationController extends Controller
         }
 
 		// send activation email
-		helper('auth');
-        send_activation_email($user['email'], $user['activate_hash']);
+		//helper('auth');
+        //send_activation_email($user['email'], $user['activate_hash']);
 
 		// success
         return redirect()->to('login')->with('success', lang('Auth.registrationSuccess'));
@@ -84,7 +98,7 @@ class RegistrationController extends Controller
 	/**
 	 * Activate account.
 	 */
-	public function activateAccount()
+	/*public function activateAccount()
 	{
 		$users = new UserModel();
 
@@ -103,6 +117,6 @@ class RegistrationController extends Controller
 		$users->save($updatedUser);
 
 		return redirect()->to('login')->with('success', lang('Auth.activationSuccess'));
-	}
+	}*/
 
 }

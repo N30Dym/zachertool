@@ -37,13 +37,27 @@ class LoginController extends Controller
 	/**
 	 * Displays login form or redirects if user is already logged in.
 	 */
-	public function login()
+	/*public function login()
 	{
 		if ($this->session->isLoggedIn) {
-			return redirect()->to('account');
+			return redirect()->to(base_url());
 		}
 
 		return view($this->config->views['login'], ['config' => $this->config]);
+	}*/
+        
+        public function login()
+	{
+            if ($this->session->isLoggedIn) {
+                    return redirect()->to(base_url());
+            }
+
+            $datenHeader['titel'] = "Einloggen";
+            
+            echo view('templates/headerView', $datenHeader);
+            echo view('templates/navbarView');
+            echo view('Auth\Views\login');
+            echo view('templates/footerView');
 	}
 
     //--------------------------------------------------------------------
@@ -55,8 +69,8 @@ class LoginController extends Controller
 	{
 		// validate request
 		$rules = [
-			'email'		=> 'required|valid_email',
-			'password' 	=> 'required|min_length[5]',
+			'username'  => 'required|string', // ursprünglich 'email'  => 'required|valid_email',
+			'password'  => 'required|min_length[5]',
 		];
 
 		if (! $this->validate($rules)) {
@@ -67,7 +81,7 @@ class LoginController extends Controller
 
 		// check credentials
 		$users = new UserModel();
-		$user = $users->where('email', $this->request->getPost('email'))->first();
+		$user = $users->where('username', $this->request->getPost('username'))->first(); // ursprünglich 'email'
 		if (
 			is_null($user) ||
 			! password_verify($this->request->getPost('password'), $user['password_hash'])
@@ -82,14 +96,18 @@ class LoginController extends Controller
 
 		// login OK, save user data to session
 		$this->session->set('isLoggedIn', true);
+                $this->session->set('mitgliedsStatus', $user['memberstatus']);
 		$this->session->set('userData', [
 		    'id'        => $user['id'],
 		    'name'      => $user['name'],
-		    'email'     => $user['email'],
-		    'new_email' => $user['new_email']
+		    'username'  => $user['username'], // ursprünglich 'email'
+		    //'new_email' => $user['new_email']
 		]);
-
-        return redirect()->to('account');
+                
+                //$session = session();
+                $this->session->setFlashdata('nachricht', 'Erfolgreich angemeldet');
+                $this->session->setFlashdata('link', base_url());
+                return redirect()->to(base_url('nachricht'));
 	}
 
     //--------------------------------------------------------------------

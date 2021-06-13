@@ -2,7 +2,7 @@
 namespace Auth\Controllers;
 
 use CodeIgniter\Controller;
-use Config\Email;
+//use Config\Email;
 use Config\Services;
 use Auth\Models\UserModel;
 
@@ -55,7 +55,7 @@ class AccountController extends Controller
 	/**
 	 * Updates regular account settings.
 	 */
-	public function updateAccount()
+	/*public function updateAccount()
 	{
 		// update user, validation happens in model
 		$users = new UserModel();
@@ -74,14 +74,14 @@ class AccountController extends Controller
         $this->session->push('userData', $user);
 
         return redirect()->to('account')->with('success', lang('Auth.updateSuccess'));
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
 	/**
 	 * Handles email address change.
 	 */
-	public function changeEmail()
+	/*public function changeEmail()
 	{
 		helper('text');
 
@@ -118,14 +118,14 @@ class AccountController extends Controller
         send_notification_email($user['email']);
 
         return redirect()->to('account')->with('success', lang('Auth.emailUpdateStarted'));
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
 	/**
 	 * Verifies and sets new e-mail address.
 	 */
-	public function confirmNewEmail()
+	/*public function confirmNewEmail()
 	{
 		$users = new UserModel();
 
@@ -156,14 +156,14 @@ class AccountController extends Controller
 		}
 
 		return redirect()->to('login')->with('success', lang('Auth.confirmEmailSuccess'));
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
 	/**
 	 * Handles password change.
 	 */
-	public function changePassword()
+	/*public function changePassword()
 	{
 		// validate request
 		$rules = [
@@ -195,14 +195,14 @@ class AccountController extends Controller
 
 		// redirect to account with success message
 		return redirect()->to('account')->with('success', lang('Auth.passwordUpdateSuccess'));
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
 	/**
 	 * Deletes user account.
 	 */
-	public function deleteAccount()
+	/*public function deleteAccount()
 	{
 		// check current password
 		$users = new UserModel();
@@ -223,6 +223,6 @@ class AccountController extends Controller
 
 		// redirect to register with success message
 		return redirect()->to('register')->with('success', lang('Auth.accountDeleted'));
-	}
+	}*/
 
 }

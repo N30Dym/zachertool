@@ -13,14 +13,9 @@
 	</p>
 	<p>
 		<label><?= lang('Auth.email') ?></label><br />
-		<input disabled type="text" value="<?= $userData['email']; ?>" />
+		<input disabled type="text" value="<?= $userData['username']; ?>" />
 	</p>
-	<?php if ($userData['new_email']): ?>
-	<p>
-		<label><?= lang('Auth.pendingEmail') ?></label><br />
-		<input disabled type="text" value="<?= $userData['new_email']; ?>" />
-	</p>
-	<?php endif; ?>
+
     <p>
         <button type="submit"><?= lang('Auth.update') ?></button>
     </p>

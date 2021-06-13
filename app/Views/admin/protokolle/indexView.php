@@ -1,4 +1,4 @@
-<div class="p-3 p-md-5 mb-4 text-white rounded bg-dark">
+<div class="p-3 p-md-5 mb-4 text-white rounded bg-primary">
     <h1>Administrator-Panel</h1>
     <p>Protokolldaten</p>
 </div>

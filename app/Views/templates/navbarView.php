@@ -6,7 +6,7 @@
 
 
     
-<nav class="navbar navbar-expand-md navbar-light bg-secondary bg-gradient">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark bg-gradient">
     <div class="container-fluid" >
         <a class="navbar-brand" href="<?= base_url() ?>">
             <img src="<?= base_url() ?>/public/bilder/Idaflieg Logo_invertiert.svg" alt="" height="40">

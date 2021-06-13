@@ -75,9 +75,18 @@ $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencont
 $routes->get('protokolle/protokollListe/offen', 'protokolle\Protokolllistencontroller::angefangeneProtokolle');
 $routes->get('protokolle/protokollListe/abgegeben', 'protokolle\Protokolllistencontroller::abgegebeneProtokolle');
 
+    // Admin-Piloten
+//$routes->get('admin/piloten', 'piloten\Pilotencontroller::uebersicht/index');
+$routes->get('admin/piloten/index', 'piloten\Pilotencontroller::adminFunktionen/index');
+$routes->get('admin/piloten/(:segment)', 'piloten\Pilotencontroller::adminFunktionen/$1');
 
-//$routes->get('sessionAufheben', 'Startseitecontroller::index');
+    // Admin-Flugzeuge
+$routes->get('admin/flugzeuge', 'flugzeuge\Flugzeugcontroller::uebersicht');
+$routes->get('admin/flugzeuge/index', 'flugzeuge\Flugzeugcontroller::uebersicht');
 
+    // Admin-Protokolle
+$routes->get('admin/protokolle', 'protokolle\Protokollcontroller::uebersicht');
+$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');
 
 
 

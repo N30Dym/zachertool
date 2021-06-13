@@ -107,6 +107,20 @@ class Pilotencontroller extends Controller
         }
     }
     
+    public function adminFunktionen($funktion)
+    {
+        $pilotenAdminController = new Pilotenadmincontroller();
+        
+        switch($funktion)
+        {
+            case 'index':
+                $pilotenAdminController->uebersicht();
+                break;
+            case 'sichtbarePilotenListe':
+                $pilotenAdminController->liste('sichtbarePiloten');
+        }
+    }
+    
     protected function ladePilotenDaten()
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       

@@ -7,10 +7,10 @@ use App\Models\protokolle\protokolleModel;
 use App\Models\flugzeuge\flugzeugeMitMusterModel;
 use App\Models\piloten\pilotenModel;
 
-helper(["array", "url"]);
+helper(['url', 'array']);
 
 class Startseitecontroller extends Controller
-{
+{    
     /*
     * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Routes.php):
     * -> /

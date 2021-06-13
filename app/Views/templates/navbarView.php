@@ -33,15 +33,6 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="<?= base_url() ?>/flugzeuge/liste"">Flugzeugliste</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/muster/liste">Flugzeug hinzufügen</a>
-
-                        <?php if (isset($_SESSION["admin"]) && $SESSION["admin"] == TRUE) :?>
-                            <a class="dropdown-item" href="#">Flugzeug bearbeiten</a>
-                        <?php endif ?>
-
-                        <?php if (isset($_SESSION["admin"]) && $SESSION["admin"] == TRUE) :?>
-                            <a class="dropdown-item" href="#">Muster bearbeiten</a>
-                        <?php endif ?>
-
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -56,20 +47,34 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle disabled text-white-50" id="navbardrop" data-toggle="dropdown">
+                    <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && ($_SESSION['mitgliedsStatus'] == ADMINISTRATOR OR $_SESSION['mitgliedsStatus'] == ZACHEREINWEISER)) : ?>
+                        <a class="nav-link dropdown-toggle text-white" id="navbardrop" data-toggle="dropdown"  style="cursor:pointer;">
+                    <?php else: ?>
+                        <a class="nav-link dropdown-toggle disabled text-white-50" id="navbardrop" data-toggle="dropdown"> 
+                    <?php endif ?>
                         Admin
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Link 1</a>
-                        <a class="dropdown-item" href="#">Link 2</a>
-                        <a class="dropdown-item" href="#">Link 3</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/piloten/index">Piloten</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/flugzeuge/index">Flugzeuge</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/protokolle/index">Protokolle</a>
+                        <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && $_SESSION['mitgliedsStatus'] == ADMINISTRATOR) : ?>
+                            <a class="dropdown-item" href="#">Benutzer</a>
+                            <a class="dropdown-item" href="#">Protokoll Layout</a>
+                        <?php endif ?>
                     </div>
                 </li>
             </ul>
             <div class="navbar-nav col-md-6 d-flex flex-row-reverse pe-3">
-            <a class="nav-link align-baseline text-white float-end" href="<?= base_url() ?>/flugzeuge/test">
-                Login
-            </a>	
+                <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1) : ?>
+                    <a class="nav-link align-baseline text-white float-end" href="<?= base_url() ?>/logout">
+                        Logout
+                    </a>
+                <?php else: ?>
+                    <a class="nav-link align-baseline text-white float-end" href="<?= base_url() ?>/login">
+                        Login
+                    </a>	
+                <?php endif ?>               
 
             </div>
         </div>

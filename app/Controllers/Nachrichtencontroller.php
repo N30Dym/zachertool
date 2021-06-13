@@ -11,16 +11,23 @@ class Nachrichtencontroller extends Controller
 	public function nachricht()
 	{
 		$session = session();
-		$datenNachricht = [
-			'nachricht' => $_SESSION["nachricht"],
-			'link'      => $_SESSION["link"]
-		];
-                echo view('templates/headerView');
-		echo view('templates/nachrichtView', $datenNachricht);
-                echo view('templates/footerView');
+                if(isset($_SESSION["nachricht"]) && isset($_SESSION["link"]))
+                {
+                    $datenNachricht = [
+                            'nachricht' => $_SESSION["nachricht"],
+                            'link'      => $_SESSION["link"]
+                    ];
+                    echo view('templates/headerView');
+                    echo view('templates/nachrichtView', $datenNachricht);
+                    echo view('templates/footerView');
+                }
+                else
+                {
+                    return redirect()->to(base_url());
+                }
 	}
 	
-	public function sessionAufheben()
+	/*public function sessionAufheben()
 	{
 		session_destroy();
                 $_SESSION = [];
@@ -41,5 +48,5 @@ class Nachrichtencontroller extends Controller
                     $_SESSION['aktuellesKapitel'],
                 );
 		return redirect()->to(base_url());
-	}
+	}*/
 }

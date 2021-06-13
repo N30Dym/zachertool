@@ -1,15 +1,15 @@
 <!-- Hier endet die <main>, die in navbarView.php gestartet wird und den Seiteninhalt umschließt -->
 
 </main>
-<div style="height:5rem !important"></div>
-<footer class="footer fixed-bottom py-3 bg-light">
+<div style="height:3rem !important"></div>
+<footer class="footer mt-auto py-1 bg-secondary bg-gradient">
 	<div class="container-fluid">
 		<div class="row mx-3 flex-nowrap justify-content-between align-items-center">
 		  <div class="col-6 d-flex">
-			<span class="text-muted"><em>&copy; <?= date('Y') ?></em></span>
+			<span class="text-white-50"><em>&copy; <?= date('Y') ?></em></span>
 		  </div>
 		  <div class="col-6 d-flex justify-content-end text-end">
-                      <span class="text-muted">Designed mit <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></em></span>
+                      <span class="text-white-50">Designed mit <a href="https://getbootstrap.com/" class="link-light" target="_blank">Bootstrap</a></em></span>
 		  </div>
 		</div>
 	</div>

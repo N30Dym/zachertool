@@ -1,7 +1,7 @@
 <!-- Hier wird der <head> beendet, der in headerView.php gestartet wird -->
 
 </head>
-<body class="white">
+<body class="white d-flex flex-column min-vh-100">
 <header>
 
 

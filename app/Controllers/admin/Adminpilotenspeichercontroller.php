@@ -79,7 +79,7 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
             $pilotenDetailsModel->where(['pilotID' => $pilotID])->delete();
             $pilotenModel->where(['id' => $pilotID])->delete();
         }
-        //exit;
+
         $this->meldeErfolg();
     }
 }

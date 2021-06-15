@@ -1,4 +1,4 @@
-<div class="p-3 p-md-5 mb-4 text-white rounded bg-secondary">
+<div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
     <h1>Administrator-Panel</h1>
     <p>Pilotendaten</p>
 </div>
@@ -9,10 +9,10 @@
         <div class="p-3 m-3 rounded shadow border">
             <h3 class="m-2">Pilotenlisten</h3>
             <ul style="list-style-type:none">
-                <li><a href="<?= base_url() ?>/piloten/liste">Pilotenliste</a></li>
+                <li><a href="<?= base_url() ?>/piloten/liste">Liste aller sichtbaren Piloten</a></li>
                 <li><a href="<?= base_url() ?>/admin/piloten/liste/sichtbarePiloten">Sichtbare Piloten anzeigen und Sichtbarkeit ändern</a></li>
                 <li><a href="<?= base_url() ?>/admin/piloten/liste/unsichtbarePiloten">Unsichtbare Piloten anzeigen und Sichtbarkeit ändern</a></li>
-                <li><a href="#">Piloten löschen</a></li>
+                <li><a href="<?= base_url() ?>/admin/piloten/liste/pilotenLoeschen">Piloten löschen</a></li>
             </ul>
         </div>
                        

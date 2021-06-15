@@ -16,6 +16,8 @@ class protokolleModel extends Model
     protected $primaryKey       = 'id';
     protected $createdField  	= 'erstelltAm';
     protected $validationRules 	= 'protokolle';
+    
+    protected $returnType     = 'array';
 
     protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
@@ -172,5 +174,14 @@ class protokolleModel extends Model
     {
         $query = $this->builder()->set($protokollDaten)->where('id', $id)->getCompiledUpdate();
         $this->query($query);
+    }
+    
+    public function getAnzahlProtokolleNachPilotID($pilotID) 
+    {
+        return $this->selectCount("id")->where('pilotID', $pilotID)->first();
+    }
+    public function getAnzahlProtokolleAlsCopilotNachPilotID($copilotID) 
+    {
+        return $this->selectCount("id")->where('copilotID', $copilotID)->first();
     }
 }	

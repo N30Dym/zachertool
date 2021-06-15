@@ -29,6 +29,11 @@ class pilotenModel extends Model
     {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
     }
+    
+    public function getUnsichtbarePiloten()
+    {
+        return $this->where('sichtbar', null)->orWhere('sichtbar', 0)->orderBy('geaendertAm', 'DESC')->findAll();
+    }
 	
     public function getPilotNachID($id)
     {

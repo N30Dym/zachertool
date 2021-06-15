@@ -34,8 +34,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
     // Startseite
-$routes->get('/', 'Startseitecontroller::index');
-$routes->get('startseite', 'Startseitecontroller::index');
+$routes->add('/', 'Startseitecontroller::index');
+$routes->add('startseite', 'Startseitecontroller::index');
 
     // Piloten
 $routes->get('piloten/neu', 'piloten\Pilotencontroller::pilotAnlegen');
@@ -70,7 +70,7 @@ $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protoko
 $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcontroller::speichern/');
 $routes->match(['get', 'post'], 'protokolle/absenden', 'protokolle\Protokollcontroller::absenden/');
 
-$routes->get('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
+$routes->add('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
 $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencontroller::fertigeProtokolle');
 $routes->get('protokolle/protokollListe/offen', 'protokolle\Protokolllistencontroller::angefangeneProtokolle');
 $routes->get('protokolle/protokollListe/abgegeben', 'protokolle\Protokolllistencontroller::abgegebeneProtokolle');
@@ -90,13 +90,13 @@ $routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersic
 
 $routes->group('admin', function($routes)
 {
-    //$routes->add('flugzeuge', 'admin\Adminflugzeugcontroller::index');
     $routes->group('piloten', function($routes)
     {
         $routes->add('', 'admin\Adminpilotencontroller::index');
         $routes->add('index', 'admin\Adminpilotencontroller::index');
         $routes->add('liste/(:segment)', 'admin\Adminpilotencontroller::liste/$1');
-        $routes->add('speichern/(:segment)', 'admin\Adminpilotencontroller::speichern/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
     });
     
     $routes->addRedirect('', '/');

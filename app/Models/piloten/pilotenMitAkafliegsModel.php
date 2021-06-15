@@ -25,4 +25,9 @@ class pilotenMitAkafliegsModel extends Model {
     {
         return $this->where('sichtbar', 1)->findAll();
     }
+    
+    public function getUnsichtbarePilotenMitAkaflieg()
+    {
+        return $this->where('sichtbar', null)->orWhere('sichtbar', 0)->orderBy('geaendertAm', 'DESC')->findAll();
+    }
 }

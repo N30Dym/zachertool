@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 11. Jun 2021 um 15:31
+-- Erstellungszeit: 16. Jun 2021 um 00:15
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 8.0.3
 
@@ -780,19 +780,22 @@ ALTER TABLE `flugzeuge`
 -- Indizes für die Tabelle `flugzeug_details`
 --
 ALTER TABLE `flugzeug_details`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `flugzeug_details_ibfk_1` (`flugzeugID`);
 
 --
 -- Indizes für die Tabelle `flugzeug_hebelarme`
 --
 ALTER TABLE `flugzeug_hebelarme`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `flugzeug_hebelarme_ibfk_1` (`flugzeugID`);
 
 --
 -- Indizes für die Tabelle `flugzeug_klappen`
 --
 ALTER TABLE `flugzeug_klappen`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `flugzeug_klappen_ibfk_1` (`flugzeugID`);
 
 --
 -- Indizes für die Tabelle `flugzeug_waegung`
@@ -810,19 +813,22 @@ ALTER TABLE `muster`
 -- Indizes für die Tabelle `muster_details`
 --
 ALTER TABLE `muster_details`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `muster_details_ibfk_1` (`musterID`);
 
 --
 -- Indizes für die Tabelle `muster_hebelarme`
 --
 ALTER TABLE `muster_hebelarme`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `muster_hebelarme_ibfk_1` (`musterID`);
 
 --
 -- Indizes für die Tabelle `muster_klappen`
 --
 ALTER TABLE `muster_klappen`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `muster_klappen_ibfk_1` (`musterID`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -1141,7 +1147,7 @@ CREATE TABLE `piloten_mit_akafliegs` (
 DROP TABLE IF EXISTS `piloten_mit_akafliegs`;
 
 DROP VIEW IF EXISTS `piloten_mit_akafliegs`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `piloten_mit_akafliegs`  AS SELECT `piloten`.`id` AS `id`, `piloten`.`vorname` AS `vorname`, `piloten`.`spitzname` AS `spitzname`, `piloten`.`nachname` AS `nachname`, `piloten`.`akafliegID` AS `akafliegID`, `piloten`.`groesse` AS `groesse`, `piloten`.`sichtbar` AS `sichtbar`, `piloten`.`zachereinweiser` AS `zachereinweiser`, `piloten`.`erstelltAm` AS `erstelltAm`, `piloten`.`geaendertAm` AS `geaendertAm`, `piloten_akafliegs`.`akaflieg` AS `akaflieg` FROM (`piloten` join `piloten_akafliegs` on(`piloten`.`akafliegID` = `piloten_akafliegs`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `piloten_mit_akafliegs`  AS SELECT `piloten`.`id` AS `id`, `piloten`.`vorname` AS `vorname`, `piloten`.`spitzname` AS `spitzname`, `piloten`.`nachname` AS `nachname`, `piloten`.`akafliegID` AS `akafliegID`, `piloten`.`groesse` AS `groesse`, `piloten`.`sichtbar` AS `sichtbar`, `piloten`.`zachereinweiser` AS `zachereinweiser`, `piloten`.`erstelltAm` AS `erstelltAm`, `piloten`.`geaendertAm` AS `geaendertAm`, `piloten_akafliegs`.`akaflieg` AS `akaflieg` FROM (`piloten` left join `piloten_akafliegs` on(`piloten`.`akafliegID` = `piloten_akafliegs`.`id`)) ;
 
 --
 -- Indizes der exportierten Tabellen
@@ -9098,43 +9104,6 @@ INSERT INTO `protokolle` (`id`, `protokollTypID`, `datumVon`, `datumBis`, `erste
 -- --------------------------------------------------------
 
 --
--- Stellvertreter-Struktur des Views `protokoll_aufbau`
--- (Siehe unten für die tatsächliche Ansicht)
---
-DROP VIEW IF EXISTS `protokoll_aufbau`;
-CREATE TABLE `protokoll_aufbau` (
-`id` int(11)
-,`protokollID` int(11)
-,`kapitelNummer` int(11)
-,`protokollTypID` int(11)
-,`kapitel_bezeichnung` varchar(255)
-,`kapitel_zusatztext` text
-,`kapitel_woelbklappen` tinyint(1)
-,`kapitel_kommentar` tinyint(1)
-,`unterkapitelNummer` int(11)
-,`unterkapitel_bezeichnung` varchar(255)
-,`unterkapitel_zusatztext` text
-,`unterkapitel_woelbklappen` tinyint(1)
-,`eingabe_bezeichnung` varchar(255)
-,`eingabe_multipel` tinyint(2) unsigned
-,`eingabe_linksUndRechts` tinyint(1)
-,`eingabe_doppelsitzer` tinyint(1)
-,`input_bezeichnung` varchar(255)
-,`input_aktiv` tinyint(1)
-,`input_einheit` varchar(255)
-,`input_hStWeg` tinyint(1)
-,`input_bereichVon` double(10,2)
-,`input_bereichBis` double(10,2)
-,`input_groesse` int(11)
-,`input_schrittweite` double(10,2)
-,`input_multipel` tinyint(4)
-,`input_benoetigt` tinyint(1)
-,`inputTyp` varchar(255)
-);
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `protokoll_eingaben`
 --
 
@@ -9600,16 +9569,6 @@ INSERT INTO `protokoll_unterkapitel` (`id`, `protokollTypID`, `unterkapitelNumme
 -- --------------------------------------------------------
 
 --
--- Struktur des Views `protokoll_aufbau`
---
-DROP TABLE IF EXISTS `protokoll_aufbau`;
-
-DROP VIEW IF EXISTS `protokoll_aufbau`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `protokoll_aufbau`  AS SELECT `protokoll_layouts`.`id` AS `id`, `protokoll_layouts`.`protokollID` AS `protokollID`, `protokoll_layouts`.`kapitelNummer` AS `kapitelNummer`, `protokoll_kapitel`.`protokollTypID` AS `protokollTypID`, `protokoll_kapitel`.`bezeichnung` AS `kapitel_bezeichnung`, `protokoll_kapitel`.`zusatztext` AS `kapitel_zusatztext`, `protokoll_kapitel`.`woelbklappen` AS `kapitel_woelbklappen`, `protokoll_kapitel`.`kommentar` AS `kapitel_kommentar`, `protokoll_unterkapitel`.`unterkapitelNummer` AS `unterkapitelNummer`, `protokoll_unterkapitel`.`bezeichnung` AS `unterkapitel_bezeichnung`, `protokoll_unterkapitel`.`zusatztext` AS `unterkapitel_zusatztext`, `protokoll_unterkapitel`.`woelbklappen` AS `unterkapitel_woelbklappen`, `protokoll_eingaben`.`bezeichnung` AS `eingabe_bezeichnung`, `protokoll_eingaben`.`multipel` AS `eingabe_multipel`, `protokoll_eingaben`.`linksUndRechts` AS `eingabe_linksUndRechts`, `protokoll_eingaben`.`doppelsitzer` AS `eingabe_doppelsitzer`, `protokoll_inputs`.`bezeichnung` AS `input_bezeichnung`, `protokoll_inputs`.`aktiv` AS `input_aktiv`, `protokoll_inputs`.`einheit` AS `input_einheit`, `protokoll_inputs`.`hStWeg` AS `input_hStWeg`, `protokoll_inputs`.`bereichVon` AS `input_bereichVon`, `protokoll_inputs`.`bereichBis` AS `input_bereichBis`, `protokoll_inputs`.`groesse` AS `input_groesse`, `protokoll_inputs`.`schrittweite` AS `input_schrittweite`, `protokoll_inputs`.`multipel` AS `input_multipel`, `protokoll_inputs`.`benoetigt` AS `input_benoetigt`, `input_typen`.`inputTyp` AS `inputTyp` FROM (((((`protokoll_layouts` join `protokoll_kapitel` on(`protokoll_kapitel`.`id` = `protokoll_layouts`.`protokollKapitelID`)) join `protokoll_unterkapitel` on(`protokoll_unterkapitel`.`id` = `protokoll_layouts`.`protokollUnterkapitelID`)) join `protokoll_eingaben` on(`protokoll_eingaben`.`id` = `protokoll_layouts`.`protokollEingabeID`)) join `protokoll_inputs` on(`protokoll_inputs`.`id` = `protokoll_layouts`.`protokollInputID`)) join `input_typen` on(`input_typen`.`id` = `protokoll_inputs`.`inputID`)) ;
-
--- --------------------------------------------------------
-
---
 -- Struktur des Views `protokoll_inputs_mit_inputtyp`
 --
 DROP TABLE IF EXISTS `protokoll_inputs_mit_inputtyp`;
@@ -9732,6 +9691,94 @@ ALTER TABLE `protokoll_typen`
 --
 ALTER TABLE `protokoll_unterkapitel`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- Datenbank: `users`
+--
+DROP DATABASE IF EXISTS `users`;
+CREATE DATABASE IF NOT EXISTS `users` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `users`;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `mitgliedsstatus`
+--
+
+DROP TABLE IF EXISTS `mitgliedsstatus`;
+CREATE TABLE `mitgliedsstatus` (
+  `id` int(11) NOT NULL,
+  `statusBezeichnung` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `mitgliedsstatus`
+--
+
+INSERT INTO `mitgliedsstatus` (`id`, `statusBezeichnung`) VALUES
+(1, 'Administrator'),
+(2, 'Zachereinweiser'),
+(3, 'Mitglied');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `username` varchar(191) NOT NULL,
+  `password_hash` varchar(191) NOT NULL,
+  `name` varchar(191) DEFAULT NULL,
+  `activate_hash` varchar(191) DEFAULT NULL,
+  `reset_hash` varchar(191) DEFAULT NULL,
+  `reset_expires` bigint(20) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `memberstatus` int(2) UNSIGNED NOT NULL,
+  `created_at` bigint(20) DEFAULT NULL,
+  `updated_at` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password_hash`, `name`, `activate_hash`, `reset_hash`, `reset_expires`, `active`, `memberstatus`, `created_at`, `updated_at`) VALUES
+(1, 'test', '$2y$10$QvOwdAKUNJ7keAWo3tSdgup.zbcApxLIwxXmNbWzHy/KExvT2LWdO', '', 'TS5J9piPmRhN8MbLBt4GWIDVs3vcdQUj', NULL, NULL, 1, 1, 1623588893, 1623588893),
+(2, 'einweiser', '$2y$10$bKf4VdBg4cAJrgOzEa.VmOtAxKhQJA1bweCPOi6v9rI6pNy/Cw1nW', '', 'vmkjuQ05P3gUDTRLMNdqV7eAX8oBFixS', NULL, NULL, 1, 2, 1623616670, 1623616670);
+
+--
+-- Indizes der exportierten Tabellen
+--
+
+--
+-- Indizes für die Tabelle `mitgliedsstatus`
+--
+ALTER TABLE `mitgliedsstatus`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT für exportierte Tabellen
+--
+
+--
+-- AUTO_INCREMENT für Tabelle `mitgliedsstatus`
+--
+ALTER TABLE `mitgliedsstatus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

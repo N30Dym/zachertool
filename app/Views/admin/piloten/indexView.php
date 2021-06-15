@@ -9,8 +9,10 @@
         <div class="p-3 m-3 rounded shadow border">
             <h3 class="m-2">Pilotenlisten</h3>
             <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/piloten/liste">Pilotenliste</a></li>
                 <li><a href="<?= base_url() ?>/admin/piloten/sichtbarePilotenListe">Sichtbare Piloten anzeigen</a></li>
                 <li><a href="#">Unsichtbare Piloten anzeigen</a></li>
+                <li><a href="#">Piloten löschen</a></li>
             </ul>
         </div>
                        

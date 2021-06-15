@@ -2,7 +2,7 @@
 namespace App\Controllers\piloten;
 
 use App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel, pilotenAkafliegsModel };
-use App\Controllers\piloten\{ Pilotencontroller };
+use App\Controllers\piloten\{ Pilotencontroller, Pilotenadminspeichercontroller };
 use Config\Services;
 
 class Pilotenadmincontroller extends Pilotencontroller
@@ -41,6 +41,20 @@ class Pilotenadmincontroller extends Pilotencontroller
         $this->zeigeAdminPilotenIndexView($datenHeader);
     }
     
+    protected function speichern($zuSpeicherndeDaten, $speicherOrt)
+    {
+        $this->pruefeAdministratorOderZachereinweiser();
+        
+        $pilotenAdminSpeicherController = new Pilotenadminspeichercontroller();
+
+        switch($speicherOrt)
+        {
+            case 'sichtbarePiloten':
+                $this->sichtbarePilotenListe();
+                break;
+        }
+    }
+    
     protected function liste($anzuzeigendeDaten)
     {
         $this->pruefeAdministratorOderZachereinweiser();
@@ -57,26 +71,27 @@ class Pilotenadmincontroller extends Pilotencontroller
     {
         $this->pruefeAdministratorOderZachereinweiser();
         
-        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
-        $pilotenDaten = $pilotenMitAkafliegsModel->getSichtbarePilotenMitAkaflieg();
-        $titel = "Sichtbare Piloten";
-        $datenArray = [];
-        $ueberschriftArray = ['Vorname', 'Spitzname', 'Nachname'];
-        $switchSpaltenName = 'Sichtbar';
+        $pilotenMitAkafliegsModel   = new pilotenMitAkafliegsModel();
+        $pilotenDaten               = $pilotenMitAkafliegsModel->getSichtbarePilotenMitAkaflieg();
+        $titel                      = "Sichtbare Piloten";
+        $datenArray                 = [];
+        $ueberschriftArray          = ['Vorname', 'Spitzname', 'Nachname'];
+        $switchSpaltenName          = 'Sichtbar';
+        $linkZumSpeichern           = base_url() . "/admin/piloten/speichern"
         
         foreach($pilotenDaten as $pilot)
         {
             $temporaeresPilotenArray = [
                 'id'        => $pilot['id'],
                 'vorname'   => $pilot['vorname'],
-                'spitzname' => empty($pilot['spitzname']) ? "" : '<b>"'.$pilot['spitzname'].'"</b>',
+                'spitzname' => empty($pilot['spitzname']) ? null : '<b>"'.$pilot['spitzname'].'"</b>',
                 'nachname'  => $pilot['nachname'],
                 'checked'   => $pilot['sichtbar'] == 1 ? 1 : null,
             ];
             array_push($datenArray, $temporaeresPilotenArray);
         }
 
-        $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+        $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName, $linkZumSpeichern);
     }
     
     protected function zeigeAdminPilotenIndexView($datenHeader)
@@ -89,14 +104,15 @@ class Pilotenadmincontroller extends Pilotencontroller
         echo view('templates/footerView');
     }
     
-    protected function zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName)
+    protected function zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName, $linkZumSpeichern)
     {
         $this->pruefeAdministratorOderZachereinweiser();
         
         $datenInhalt = [
-            'datenArray' => $datenArray,
+            'datenArray'        => $datenArray,
             'ueberschriftArray' => $ueberschriftArray,
-            'switchSpaltenName' => $switchSpaltenName
+            'switchSpaltenName' => $switchSpaltenName,
+            'linkZumSpeichern'  => $linkZumSpeichern,
         ];
         $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
         
@@ -104,7 +120,6 @@ class Pilotenadmincontroller extends Pilotencontroller
         echo view('admin/templates/scripts/listeMitSwitchSpalteScript');
         echo view('templates/navbarView');
         echo view('admin/templates/listeMitSwitchSpalteView', $datenInhalt);
-        //echo view( speicher button );
         echo view('templates/footerView');
     }
     

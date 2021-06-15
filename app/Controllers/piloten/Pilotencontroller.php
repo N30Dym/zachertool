@@ -116,7 +116,7 @@ class Pilotencontroller extends Controller
             case 'index':
                 $pilotenAdminController->uebersicht();
                 break;
-            case 'sichtbarePilotenListe':
+            case 'liste':
                 $pilotenAdminController->liste('sichtbarePiloten');
         }
     }

@@ -1,10 +1,15 @@
+<div class="p-4 p-md-5 mb-4 text-white rounded shadow bg-secondary">
+  <h1><?= esc($titel) ?></h1>
+
+</div>
+
 <div class="col-12 text-end mt-3">
     <a href="<?= base_url() ?>/muster/liste">
         <button type="button" class="btn btn-success">Neues Flugzeug anlegen</button>
     </a>
 </div>
 
-<h2 class="text-center m-4"><?= esc($titel) ?></h2>	
+<!--<h2 class="text-center m-4"><?= esc($titel) ?></h2>-->	
 <div class="row">
     <div class="col-lg-2">
     </div>
@@ -37,7 +42,7 @@
                             <td><?= esc($flugzeug['protokollAnzahl']) ?></td>
                             <td>
                                 <a href="/zachern-dev/flugzeuge/anzeigen/<?= esc($flugzeug["flugzeugID"]) ?>">
-                                    <button class="btn btn-sm btn-secondary">Anzeigen</button>
+                                    <button class="btn btn-sm btn-primary">Anzeigen</button>
                                 </a>
                             </td>
                         </tr>

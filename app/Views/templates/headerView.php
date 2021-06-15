@@ -7,6 +7,8 @@
 
 				
     <link href="<?=  base_url() ?>/public/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="<?=  base_url() ?>/public/css/zachertool_colors.css" rel="stylesheet">
 			
     <script src="<?= base_url() ?>/public/js/jquery.min.js"></script>
 			

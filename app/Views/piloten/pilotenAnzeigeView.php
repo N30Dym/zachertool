@@ -9,7 +9,9 @@
 
             <input type="hidden" name="pilotID" value="<?= $pilot['id'] ?>"> 
             <button type="submit" class="btn btn-success" formaction="<?= base_url() ?>/protokolle/index">Protokoll mit diesem Piloten anlegen</button>
-            <button type="" class="btn btn-success" formaction="<?= base_url() ?>/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">Daten hinzufügen</button>
+            <a href="<?= base_url() ?>/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
+                <button type="button" class="btn btn-success">Daten hinzufügen</button>
+            </a>
             <button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>
             <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/admin/piloten/<?= $pilot['id'] ?>">Bearbeiten</button>
         </div>

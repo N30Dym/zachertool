@@ -166,18 +166,20 @@ class Pilotencontroller extends Controller
         if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
-                'pilotID'           => old('pilotID'),
-                'pilot'             => old('pilot'),
-                'pilotDetail'       => old('pilotDetail'),
-                'pilotDetailsArray' => $pilotenLadeController->ladePilotDetails($pilotID)
+                'pilotID'               => old('pilotID'),
+                'pilot'                 => old('pilot'),
+                'pilotDetail'           => old('pilotDetail'),
+                'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
+                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
             ];
         }
         else
         {        
             $datenInhalt = [
-                'pilotID'           => $pilotID,
-                'pilot'             => $pilotenLadeController->ladePilotDaten($pilotID),
-                'pilotDetailsArray' => $pilotenLadeController->ladePilotDetails($pilotID),
+                'pilotID'               => $pilotID,
+                'pilot'                 => $pilotenLadeController->ladePilotDaten($pilotID),
+                'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
+                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
             ];
         }
         

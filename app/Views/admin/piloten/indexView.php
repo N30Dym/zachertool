@@ -10,8 +10,8 @@
             <h3 class="m-2">Pilotenlisten</h3>
             <ul style="list-style-type:none">
                 <li><a href="<?= base_url() ?>/piloten/liste">Pilotenliste</a></li>
-                <li><a href="<?= base_url() ?>/admin/piloten/sichtbarePilotenListe">Sichtbare Piloten anzeigen</a></li>
-                <li><a href="#">Unsichtbare Piloten anzeigen</a></li>
+                <li><a href="<?= base_url() ?>/admin/piloten/liste/sichtbarePiloten">Sichtbare Piloten anzeigen und Sichtbarkeit ändern</a></li>
+                <li><a href="<?= base_url() ?>/admin/piloten/liste/unsichtbarePiloten">Unsichtbare Piloten anzeigen und Sichtbarkeit ändern</a></li>
                 <li><a href="#">Piloten löschen</a></li>
             </ul>
         </div>

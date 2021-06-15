@@ -77,7 +77,7 @@ $routes->get('protokolle/protokollListe/abgegeben', 'protokolle\Protokolllistenc
 
     // Admin-Piloten
 //$routes->get('admin/piloten', 'piloten\Pilotencontroller::uebersicht/index');
-$routes->get('admin/piloten/index', 'piloten\Pilotencontroller::adminFunktionen/index');
+/*$routes->get('admin/piloten/index', 'admin\Admincontroller::Piloten');
 $routes->get('admin/piloten/(:segment)', 'piloten\Pilotencontroller::adminFunktionen/$1');
 
     // Admin-Flugzeuge
@@ -86,7 +86,21 @@ $routes->get('admin/flugzeuge/index', 'flugzeuge\Flugzeugcontroller::uebersicht'
 
     // Admin-Protokolle
 $routes->get('admin/protokolle', 'protokolle\Protokollcontroller::uebersicht');
-$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');
+$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');*/
+
+$routes->group('admin', function($routes)
+{
+    //$routes->add('flugzeuge', 'admin\Adminflugzeugcontroller::index');
+    $routes->group('piloten', function($routes)
+    {
+        $routes->add('', 'admin\Adminpilotencontroller::index');
+        $routes->add('index', 'admin\Adminpilotencontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminpilotencontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminpilotencontroller::speichern/$1');
+    });
+    
+    $routes->addRedirect('', '/');
+});
 
 
 

@@ -1,5 +1,6 @@
 <form method="post">
 
+    <?= str_replace('liste', 'speichern', current_url()) ?>
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
             <a href="<?= previous_url() ?>" >
@@ -7,7 +8,7 @@
             </a>
         </div>
         <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
-            <button type="submit" class="btn btn-success" formaction="<?= $linkZumSpeichern ?>">Speichern</button>
+            <button type="submit" class="btn btn-success" formaction="<?= str_replace('liste', 'speichern', current_url()) ?>">Speichern</button>
         </div>
     </div>
 

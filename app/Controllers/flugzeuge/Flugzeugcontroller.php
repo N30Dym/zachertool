@@ -24,14 +24,14 @@ class Flugzeugcontroller extends Controller
     
     public function musterListe()
     {
-        $title = 'Musterauswahl';		
+        $titel = 'Musterauswahl';		
 
         $datenHeader = [
-            'title'     => $title,
+            'titel'     => $titel,
         ];
 
         $datenInhalt = [
-            'title'     => $title,
+            'titel'     => $titel,
             'muster'    => $this->ladeSichtbareMuster()
         ];
         

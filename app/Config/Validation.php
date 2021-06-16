@@ -878,7 +878,15 @@ class Validation
             'errors' => [
                 'is_natural'   => 'Die AkafliegID enthält ungültige Zeichen.'
             ]
-        ]
+        ],
+        'sichtbar' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Die Sichtbarkeit ist kein Boolean.'
+        ],
+        'zachereinweiser' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Die Sichtbarkeit ist kein Boolean.'
+        ],
     ];
     
     public $pilotDetailsOhnePilotID = [
@@ -915,7 +923,15 @@ class Validation
             'errors' => [
                 'valid_date' => 'Das Datum hat ein falsches Format.'
             ]
-        ]
+        ],
+        'sichtbar' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Die Sichtbarkeit ist kein Boolean.'
+        ],
+        'zachereinweiser' => [
+            'rules'  => 'is_natural|less_than_equal_to[1]|permit_empty',
+            'errors' => 'Die Sichtbarkeit ist kein Boolean.'
+        ],
     ];
     
     public $pilotDetails = [

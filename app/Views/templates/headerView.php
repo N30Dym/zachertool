@@ -20,6 +20,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta name="<?= csrf_header() ?>" content="<?= csrf_hash() ?>">
+    
 <?php
 
     if(session_status() !== PHP_SESSION_ACTIVE)

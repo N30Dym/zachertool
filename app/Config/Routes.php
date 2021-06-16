@@ -99,6 +99,24 @@ $routes->group('admin', function($routes)
         $routes->post('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
     });
     
+    $routes->group('flugzeuge', function($routes)
+    {
+        $routes->add('', 'admin\Adminflugzeugcontroller::index');
+        $routes->add('index', 'admin\Adminflugzeugcontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminflugzeugcontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
+    });
+    
+    $routes->group('protokolle', function($routes)
+    {
+        $routes->add('', 'admin\Adminprotokollcontroller::index');
+        $routes->add('index', 'admin\Adminprotokollcontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminprotokollcontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminprotokollspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminprotokollspeichercontroller::speichern/$1');
+    });
+    
     $routes->addRedirect('', '/');
 });
 

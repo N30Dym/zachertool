@@ -1,4 +1,11 @@
+<div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
+    <h1><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h1>
+</div>
+
 <form method="post">
+    
+    <?= csrf_field() ?>
+    
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
             <a href="<?= base_url() ?>/flugzeuge/liste" >
@@ -17,7 +24,6 @@
         </div>
     </div>
 
-    <h2 class="m-5 text-center"><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h2>
     <div class="row">
 
         <div class="col-sm-2">

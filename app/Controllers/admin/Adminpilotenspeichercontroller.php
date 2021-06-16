@@ -4,12 +4,14 @@ namespace App\Controllers\admin;
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel, pilotenAkafliegsModel };
 use App\Controllers\piloten\{ Pilotenspeichercontroller, Pilotencontroller };
 
+helper('nachrichtAnzeigen');
+
 class Adminpilotenspeichercontroller extends Adminpilotencontroller
 {
     public function speichern($speicherOrt)
     {
-        if(!empty($zuSpeicherndeDaten = $this->request->getPost())){
-        
+        if(!empty($zuSpeicherndeDaten = $this->request->getPost()))
+        {       
             switch($speicherOrt)
             {
                 case 'sichtbarePiloten':
@@ -21,12 +23,23 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
                 case 'pilotenLoeschen':
                     $this->loeschePiloten($zuSpeicherndeDaten);
                     break;
+                case 'einweiserAuswählen':
+                    $this->setzeZachereinweiser($zuSpeicherndeDaten);
+                    break;
+                case 'akafliegsAnzeigen':
+                    $this->setzeAkafliegSichtbarkeit($zuSpeicherndeDaten);
+                    break;
+                case 'akafliegHinzufügen':
+                    $this->hinzufuegenAkaflieg($zuSpeicherndeDaten['eingabe']);
+                    break;
                 default:
-                    $this->meldeKeineZuSpeicherndenDaten();
+                    nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/piloten"));
             }
+            nachrichtAnzeigen("Daten erfolgreich geändert", base_url("admin/piloten"));
         }
-        else {
-            $this->meldeKeineZuSpeicherndenDaten();
+        else 
+        {
+            nachrichtAnzeigen("Keine Daten zum Speichern vorhanden", base_url("admin/piloten"));
         }
     }
     
@@ -50,23 +63,16 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
                 $pilotenModel->where('id', $pilotID)->set('sichtbar', null)->update();
             }
         }
-        
-        $this->meldeErfolg();
     }
     
     protected function setzeSichtbar($zuUeberschreibendeDaten)
     {
         $pilotenModel = new pilotenModel();
         
-        foreach($zuUeberschreibendeDaten['id'] as $pilotID)
+        foreach($zuUeberschreibendeDaten['switch'] as $pilotID => $on)
         {
-            if(isset($zuUeberschreibendeDaten['switch'][$pilotID]))
-            {
-                $pilotenModel->where('id', $pilotID)->set('sichtbar', 1)->update();
-            }
+            $pilotenModel->where('id', $pilotID)->set('sichtbar', 1)->update();
         }
-        
-        $this->meldeErfolg();
     }
     
     protected function loeschePiloten($zuLoeschendeDaten)
@@ -79,7 +85,44 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
             $pilotenDetailsModel->where(['pilotID' => $pilotID])->delete();
             $pilotenModel->where(['id' => $pilotID])->delete();
         }
+    }
+    
+    protected function setzeZachereinweiser($zuUeberschreibendeDaten)
+    {
+        $pilotenModel = new pilotenModel();
+        
+        var_dump($zuUeberschreibendeDaten['switch']);
 
-        $this->meldeErfolg();
+        foreach($zuUeberschreibendeDaten['switch'] as $pilotID => $on)
+        {
+            $pilotenModel->builder()->set(['zachereinweiser' => 1])->where('id', $pilotID)->update();
+        }
+    }
+    
+    protected function setzeAkafliegSichtbarkeit($zuUeberschreibendeDaten)
+    {
+        $pilotenAkafliegsModel = new pilotenAkafliegsModel();
+        
+        foreach($zuUeberschreibendeDaten['id'] as $akafliegID)
+        {
+            if( ! isset($zuUeberschreibendeDaten['switch'][$akafliegID]))
+            {
+                $pilotenAkafliegsModel->where('id', $akafliegID)->set('sichtbar', null)->update();
+            }
+            else
+            {
+                $pilotenAkafliegsModel->where('id', $akafliegID)->set('sichtbar', 1)->update();
+            }
+        }
+    }
+    
+    protected function hinzufuegenAkaflieg($zuSpeicherndeEingabe)
+    {
+        $pilotenAkafliegsModel = new pilotenAkafliegsModel();
+        
+        if( ! $pilotenAkafliegsModel->builder()->set('akaflieg', $zuSpeicherndeEingabe)->insert())
+        {
+            nachrichtAnzeigen("Da ist was schiefgelaufen", base_url('admin/piloten/akafliegHinzufügen'));
+        }
     }
 }

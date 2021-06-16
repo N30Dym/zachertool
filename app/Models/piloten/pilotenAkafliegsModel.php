@@ -13,9 +13,9 @@ class pilotenAkafliegsModel extends Model {
     protected $DBGroup          = 'pilotenDB';
     protected $table            = 'piloten_akafliegs';
     protected $primaryKey       = 'id';
-    //protected $validationRules 	= '';
+    protected $validationRules 	= ['akaflieg' => 'required'];
     
-    //protected $allowedFields = [ 'akafliegs', 'sichtbar' ];
+    protected $allowedFields = [ 'akafliegs', 'sichtbar' ];
     
     public function getAlleAkafliegs()
     {

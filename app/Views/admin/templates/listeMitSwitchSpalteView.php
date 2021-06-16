@@ -5,6 +5,8 @@
 
 <form method="post" action="<?= str_replace('liste', 'speichern', current_url()) ?>">
 
+     <?= csrf_field() ?>
+    
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
             <a href="<?= previous_url() ?>" >

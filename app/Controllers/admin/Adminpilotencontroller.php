@@ -7,7 +7,7 @@ use App\Models\protokolle\{ protokolleModel };
 
 use App\Controllers\piloten\{ Pilotencontroller };
 
-
+helper('nachrichtAnzeigen');
 
 class Adminpilotencontroller extends Controller
 {    
@@ -40,8 +40,20 @@ class Adminpilotencontroller extends Controller
             case 'pilotenLoeschen':
                 $this->pilotenLoeschenListe();
                 break;
+            case 'einweiserAnzeigen':
+                $this->einweiserListe();
+                break;
+            case 'einweiserAuswählen':
+                $this->einweiserAuswaehlen();
+                break;
+            case 'akafliegsAnzeigen':
+                $this->akafliegsListe();
+                break;
+            case 'akafliegHinzufügen':
+                $this->akafliegHinzufuegen();
+                break;
             default:
-                echo "Nicht die richtige URL erwischt";
+                nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/piloten')) ;
         }
     }
     
@@ -50,7 +62,7 @@ class Adminpilotencontroller extends Controller
         $pilotenModel       = new pilotenModel();
         $pilotenDaten       = $pilotenModel->getSichtbarePiloten();
         $titel              = "Sichtbare Piloten";
-        $datenArray         = $this->ladePilotenDatenArray($pilotenDaten, 1);
+        $datenArray         = $this->setzePilotenDatenArray($pilotenDaten, 1);
         $ueberschriftArray  = ['Vorname', 'Spitzname', 'Nachname'];
         $switchSpaltenName  = 'Sichtbar';      
 
@@ -62,7 +74,7 @@ class Adminpilotencontroller extends Controller
         $pilotenModel       = new pilotenModel();
         $pilotenDaten       = $pilotenModel->getUnsichtbarePiloten();
         $titel              = "Unsichtbare Piloten";
-        $datenArray         = $this->ladePilotenDatenArray($pilotenDaten, 0);
+        $datenArray         = $this->setzePilotenDatenArray($pilotenDaten, 0);
         $ueberschriftArray  = ['Vorname', 'Spitzname', 'Nachname'];
         $switchSpaltenName  = 'Sichtbar'; 
 
@@ -87,12 +99,73 @@ class Adminpilotencontroller extends Controller
             }
         }
         
-        $datenArray  = $this->ladePilotenDatenArray($pilotenDieGeloeschtWerdenKoennen, 0);
+        $datenArray  = $this->setzePilotenDatenArray($pilotenDieGeloeschtWerdenKoennen, 0);
         
         $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
     
-    protected function ladePilotenDatenArray($pilotenDaten, $switchStellung)
+    protected function einweiserListe()
+    {
+        $pilotenModel       = new pilotenModel();
+        $pilotenDaten       = $pilotenModel->getAlleZachereinweiser();
+        $titel              = "Zachereinweiser";
+        $datenArray         = $this->setzePilotenDatenArray($pilotenDaten, 0);
+        $ueberschriftArray  = ['Vorname', 'Spitzname', 'Nachname'];
+        $switchSpaltenName  = ''; 
+
+        $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+    }
+    
+    protected function einweiserAuswaehlen()
+    {
+        $pilotenModel       = new pilotenModel();
+        $pilotenDaten       = $pilotenModel->getSichtbarePilotenOhneZachereinweiser();
+        $titel              = "Piloten zum Zachereinweiser ernennen";
+        $datenArray         = $this->setzePilotenDatenArray($pilotenDaten, 0);
+        $ueberschriftArray  = ['Vorname', 'Spitzname', 'Nachname'];
+        $switchSpaltenName  = 'Zachereinweiser'; 
+
+        $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+    }
+    
+    protected function akafliegsListe() 
+    {       
+        $pilotenAkafliegsModel  = new pilotenAkafliegsModel();
+        $akafliegDaten          = $pilotenAkafliegsModel->getAlleAkafliegs();
+        $titel                  = "Akafliegs mit Sichtbarkeit";
+        $ueberschriftArray      = ['Akaflieg'];
+        $switchSpaltenName      = 'Sichtbar';
+        $datenArray             = [];
+        
+        foreach($akafliegDaten as $akaflieg)
+        {
+            $temporaeresAkafliegArray = [
+                'id'        => $akaflieg['id'],
+                'akaflieg'  => $akaflieg['akaflieg'],
+                'checked'   => $akaflieg['sichtbar'] == 1 ? 1 : 0,
+            ];
+            
+            array_push($datenArray, $temporaeresAkafliegArray);
+        }
+
+        $this->zeigeAdminPilotenListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);    
+    }
+    
+    protected function akafliegHinzufuegen()
+    {
+        $datenHeader['titel'] = $datenInhalt['titel'] = "Neue Akaflieg anlegen";
+        $datenInhalt['eingabeArray'] = [
+            'label' => "Akaflieg hinzufügen",
+            'type'  => 'text',
+        ];
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('templates/navbarView');
+        echo view('admin/templates/einzelneEingabeView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
+    protected function setzePilotenDatenArray($pilotenDaten, $switchStellung)
     {
         $datenArray = [];
         
@@ -105,6 +178,7 @@ class Adminpilotencontroller extends Controller
                 'nachname'  => $pilot['nachname'],
                 'checked'   => $switchStellung,
             ];
+            
             array_push($datenArray, $temporaeresPilotenArray);
         }
         
@@ -133,24 +207,5 @@ class Adminpilotencontroller extends Controller
         echo view('templates/navbarView');
         echo view('admin/templates/listeMitSwitchSpalteView', $datenInhalt);
         echo view('templates/footerView');
-    }
-    
-    protected function meldeKeineZuSpeicherndenDaten()
-    {
-        $session = session();
-        $session->setFlashdata('nachricht', 'Keine Daten zum Speichern vorhanden');
-        $session->setFlashdata('link', base_url());
-        header('Location: '. base_url() .'/nachricht');
-        exit;
-    }
-    
-    protected function meldeErfolg()
-    {
-        $session = session();
-        $session->setFlashdata('nachricht', 'Pilotendaten erfolgreich geändert');
-        $session->setFlashdata('link', base_url()."/admin/piloten");
-        header('Location: '. base_url() .'/nachricht');
-        exit;
-    }
-    
+    }    
 }

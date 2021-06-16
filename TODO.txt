@@ -5,3 +5,5 @@
 	$result = true && false; // $result is false, expected
 	$result = true AND false; // $result is true, evaluated as "($result = true) AND false"
 	$result = (true AND false); // $result is false
+	
+- Protokolle: Multipler-Input JS Button, der weitere Spalten am Ende hinzufügt. Entfernen-Button nicht nötig

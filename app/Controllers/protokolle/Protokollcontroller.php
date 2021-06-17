@@ -3,32 +3,38 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
+use Config\Services;
+
 use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller };
 
 use App\Models\protokolllayout\protokollTypenModel;
-
-if(session_status() !== PHP_SESSION_ACTIVE){
-    $session = session();
-}
 
 helper(['form', 'url', 'array']);
 
 class Protokollcontroller extends Controller
 {
-        /**
-        * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /protokolle/index/...*
-        *
-        * Wenn eine protokollSpeicherID gegeben ist, werden die jeweilige Daten geladen. Ist das Protokoll als "fertig" markiert,
-        * kann die ersteSeite nicht mehr aufgerufen werden.
-        * 
-        * Wenn die protokollSpeicherID einmal gesetzt ist, wird diese nicht mehr geändert und ist somit als Referenz gültig
-        * ob es sich um ein neues oder ein bereits gespeichertes Protokoll handelt
-         * 
-         * @param int|null   Die protokollSpeicherID zeigt, dass das Protokoll schon eingegeben wurde und nun geladen wird
-         *          
-         * @return void    
-        */
+    protected $session;
+    
+    public function __construct()
+    {
+        // start session
+        $this->session = Services::session();
+    }
+    
+    /**
+    * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
+    * -> /protokolle/index/...*
+    *
+    * Wenn eine protokollSpeicherID gegeben ist, werden die jeweilige Daten geladen. Ist das Protokoll als "fertig" markiert,
+    * kann die ersteSeite nicht mehr aufgerufen werden.
+    * 
+    * Wenn die protokollSpeicherID einmal gesetzt ist, wird diese nicht mehr geändert und ist somit als Referenz gültig
+    * ob es sich um ein neues oder ein bereits gespeichertes Protokoll handelt
+     * 
+     * @param int|null   Die protokollSpeicherID zeigt, dass das Protokoll schon eingegeben wurde und nun geladen wird
+     *          
+     * @return void    
+    */
     public function index($protokollSpeicherID = null) // Leeres Protokoll
     {
         $_SESSION['protokoll']['aktuellesKapitel']                   = 1;
@@ -113,15 +119,6 @@ class Protokollcontroller extends Controller
 
             // Wenn protokollSpeicherID vorhanden, dann anzeigen
         echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
-        //print_r($_SESSION['protokoll']['fehlerArray'] ?? "");
-        /*echo "<br>FlugzeugID: ";
-        print_r($_SESSION['protokoll']['flugzeugID'] ?? "");
-        echo "<br>PilotID: ";
-        print_r($_SESSION['protokoll']['pilotID'] ?? "");
-        echo "<br>CopilotID: ";
-        print_r($_SESSION['protokoll']['copilotID'] ?? "");
-        echo "<br>Beladungszustand: ";
-        print_r($_SESSION['protokoll']['beladungszustand'] ?? "");*/
         
             // datenHeader mit Titel füttern
         $datenHeader['titel'] = $_SESSION['protokoll']['protokollInformationen']['titel'];
@@ -146,7 +143,7 @@ class Protokollcontroller extends Controller
         
         if($zuSpeicherndeDaten !== false && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-            if($this->speicherProtokollDaten($zuSpeicherndeDaten))
+            if($this->speicherProtokollDaten($zuSpeicherndeDaten, $this->request->getPost('bestaetigt')))
             {
                 echo "<br>Protokolldaten erfolgreich gespeichert";
                 $session = session();
@@ -264,10 +261,10 @@ class Protokollcontroller extends Controller
         return $protokollDatenValidierController->validiereDatenZumSpeichern($zuValidierendeDaten);
     }
     
-    protected function speicherProtokollDaten($zuSpeicherndeDaten)
+    protected function speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt)
     {
         $protokollSpeicherController = new Protokollspeichercontroller();
-        return $protokollSpeicherController->speicherProtokollDaten($zuSpeicherndeDaten);
+        return $protokollSpeicherController->speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt);
     }
     
     protected function ladeDatenInhalt()
@@ -277,8 +274,13 @@ class Protokollcontroller extends Controller
         $datenInhalt = [
             'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],
             'kapitelDatenArray'         => $protokollLayoutController->getKapitelNachKapitelID(),
-            'unterkapitelDatenArray'    => $protokollLayoutController->getUnterkapitel(),                  
+            'unterkapitelDatenArray'    => $protokollLayoutController->getUnterkapitel(),        
         ];
+        
+        if($this->session->isLoggedIn AND ($this->session->mitgliedsStatus != ADMINISTRATOR OR $this->session->mitgliedsStatus != ZACHEREINWEISER))
+        {
+            $datenInhalt['adminOderEinweiser'] = true;
+        }
         
             // Weitere Daten werden nach Bedarf zum datenInhalt hinzugefügt (siehe Protokolllayoutcontroller)
         $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();

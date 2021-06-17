@@ -35,8 +35,8 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @var string $protokollStatus 'bestaetigt'|'fertig'|'angefangen'
      */
-    protected function speicherProtokollDaten($zuSpeicherndeDaten)
-    {
+    protected function speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt = null)
+    {       
         $protokollStatus = self::ANGEFANGEN;
         
         if(!isset($_SESSION['protokoll']['protokollSpeicherID']))
@@ -47,6 +47,11 @@ class Protokollspeichercontroller extends Protokollcontroller
         }
         else
         {
+            if(!empty($bestaetigt))
+            {
+                $zuSpeicherndeDaten['protokoll']['bestaetigt'] = 1;
+            }
+            
             $protokollStatus = $this->aktualisiereProtokollDaten($zuSpeicherndeDaten['protokoll']);    
         }
         

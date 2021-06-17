@@ -21,8 +21,6 @@ class Protokolldatenladecontroller extends Protokollcontroller
         $this->ladeHStWege($protokollSpeicherID);
         
         $this->ladeKommentare($protokollSpeicherID);
-        
-        $this->ladeProtokollIDs($protokollSpeicherID); 
     }
 
     protected function ladeBeladungszustand($protokollSpeicherID)
@@ -96,7 +94,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
                 nachrichtAnzeigen("Dieses Protokoll ist bereits abgegeben und darf nicht mehr bearbeitet werden", base_url());
             }
             
-            $_SESSION['protokoll']['protokollInformationen']['datum']   = date('d.m.Y', strtotime($protokollInformationen["datum"]));          
+            $_SESSION['protokoll']['protokollInformationen']['datum']   = $protokollInformationen["datum"];          
             $_SESSION['protokoll']['protokollInformationen']['titel']   = "Vorhandenes Protokoll bearbeiten";
             
             $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollInformationen["protokollIDs"]);

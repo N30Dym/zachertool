@@ -12,9 +12,7 @@ use App\Models\protokolllayout\protokollTypenModel;
 helper(['form', 'url', 'array', 'nachrichtAnzeigen']);
 
 class Protokollcontroller extends Controller
-{
-    protected $session;
-    
+{    
     /**
      *  Wenn der Benutzer eingeloggt ist und eine Admin- oder Zachereinweiserberechtigung hat, ist diese Variable true, sonst false
      * 
@@ -31,9 +29,9 @@ class Protokollcontroller extends Controller
     public function __construct()
     {
         // start session
-        $this->session = Services::session();
-        
-        if($this->session->isLoggedIn AND ($this->session->mitgliedsStatus === ADMINISTRATOR OR $this->session->mitgliedsStatus === ZACHEREINWEISER))
+        $session = Services::session();
+               
+        if($session->isLoggedIn AND ($session->mitgliedsStatus == ADMINISTRATOR OR $session->mitgliedsStatus == ZACHEREINWEISER))
         {
             $this->adminOderZachereinweiser = true;
         }
@@ -294,6 +292,8 @@ class Protokollcontroller extends Controller
     protected function ladeDatenInhalt()
     {
         $protokollLayoutController  = new Protokolllayoutcontroller;
+        
+        var_dump($this->adminOderZachereinweiser);
         
         $datenInhalt = [
             'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],

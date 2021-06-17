@@ -57,6 +57,20 @@ class Adminpilotencontroller extends Controller
         }
     }
     
+    public function test()
+    {
+        $protokolleModel = new protokolleModel();
+        $jsonObjekt = json_encode([0=>1, 1=>2]);
+        var_dump($jsonObjekt);
+        //echo $protokolleModel->builder()->where('id', 260)->set('protokollIDs', $jsonObjekt)->update();
+        $gespeichertesJsonObjekt = $protokolleModel->select('protokollIDs')->where('id', 260)->first();
+        echo "<br>";
+        echo gettype($gespeichertesJsonObjekt['protokollIDs']);
+        echo "<br>";
+        print_r($gespeichertesJsonObjekt['protokollIDs']);
+        var_dump(json_decode($gespeichertesJsonObjekt['protokollIDs']));
+    }
+    
     protected function sichtbarePilotenListe()
     {        
         $pilotenModel       = new pilotenModel();

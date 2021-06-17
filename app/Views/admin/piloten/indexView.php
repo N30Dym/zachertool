@@ -35,6 +35,14 @@
                 <li><a href="<?= base_url() ?>/admin/piloten/liste/einweiserAuswählen">Zachereinweiser wählen aus sichtbaren Piloten</a></li>
             </ul>
         </div>
+        
+        <div class="p-3 m-3 rounded shadow border">
+            <h3 class="m-2">Testing</h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/admin/piloten/test">JSON Objekt in die Protokolle laden</a></li>
+
+            </ul>
+        </div>
       
     </div>
 </div>

@@ -4,6 +4,8 @@ namespace App\Controllers\protokolle;
 
 use App\Models\protokolle\{ datenModel, protokolleModel, beladungModel, hStWegeModel, kommentareModel };
 
+helper('nachrichtAnzeigen');
+
 class Protokollspeichercontroller extends Protokollcontroller
 {	
     const ANGEFANGEN    = 'angefangen';
@@ -42,7 +44,6 @@ class Protokollspeichercontroller extends Protokollcontroller
         if(!isset($_SESSION['protokoll']['protokollSpeicherID']))
         {
             $this->speicherNeuesProtokoll($zuSpeicherndeDaten['protokoll']);
-
             $protokollStatus = (isset($zuSpeicherndeDaten['protokoll']['fertig']) && $zuSpeicherndeDaten['protokoll']['fertig'] == 1) ? self::FERTIG : self::ANGEFANGEN;
         }
         else
@@ -52,13 +53,13 @@ class Protokollspeichercontroller extends Protokollcontroller
                 $zuSpeicherndeDaten['protokoll']['bestaetigt'] = 1;
             }
             
-            $protokollStatus = $this->aktualisiereProtokollDaten($zuSpeicherndeDaten['protokoll']);    
+            $protokollStatus = $this->aktualisiereProtokollDetails($zuSpeicherndeDaten['protokoll']);    
         }
         
         switch($protokollStatus) 
         {
             case self::BESTAETIGT:
-                $this->meldeProtokollKannNichtUeberschriebenWerden();
+                nachrichtAnzeigen("Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde", base_url());
                 break;
             case self::FERTIG:
             case self::ANGEFANGEN:
@@ -67,8 +68,6 @@ class Protokollspeichercontroller extends Protokollcontroller
         }
 
         $this->updateProtokollGeaendertAm();
-        //echo '<br><a href="'.base_url().'"><button>click me!</button></a>';
-        //exit;
         return true;
     }  
     
@@ -77,14 +76,14 @@ class Protokollspeichercontroller extends Protokollcontroller
      * Es wird automatisch die ID des neu angelegten Datensatzes zurückgegeben. Diese ist im weiteren Verlauf
      * als protokollSpeicherID zu betrachten und wird auch so in die $_SESSION-Variable übertragen.
      * 
-     * @param array $zuSpeicherndeProtokollDaten
+     * @param array $zuSpeicherndeProtokollDetails
      * 
      * @return int protokollSpeicherID
      */
-    protected function speicherNeuesProtokoll($zuSpeicherndeProtokollDaten)
+    protected function speicherNeuesProtokoll($zuSpeicherndeProtokollDetails)
     {        
         $protokolleModel = new protokolleModel();
-        $_SESSION['protokoll']['protokollSpeicherID'] = $protokolleModel->speicherNeuesProtokoll($zuSpeicherndeProtokollDaten);
+        $_SESSION['protokoll']['protokollSpeicherID'] = $protokolleModel->speicherNeuesProtokoll($zuSpeicherndeProtokollDetails);
         echo "Das neue Protokoll wurde gespeichert<br>";
     }
     
@@ -104,22 +103,21 @@ class Protokollspeichercontroller extends Protokollcontroller
      * NULL sein dürfen zu NULL gesetzt (Ausnahmen sind die Flags 'fertig' und 'bestaetigt', die nicht mehr geändert werden sollen)
      * und anschließend werden, die neuen Daten eingespeist.
      * 
-     * @param array $zuSpeicherndeProtokollDaten
+     * @param array $zuSpeicherndeProtokollDetails
      * @return string 'angefangen'|'fertig'|'bestaetigt'
      */
-    protected function aktualisiereProtokollDaten($zuSpeicherndeProtokollDaten)
+    protected function aktualisiereProtokollDetails($zuSpeicherndeProtokollDetails)
     {
         $protokolleModel = new protokolleModel();
+        $gespeicherteProtokollDetails = $protokolleModel->getProtokollNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        $gespeicherteProtokollDaten = $protokolleModel->getProtokollNachID($_SESSION['protokoll']['protokollSpeicherID']);
-        
-        if(isset($gespeicherteProtokollDaten['bestaetigt']) && $gespeicherteProtokollDaten['bestaetigt'] == 1)
+        if(isset($gespeicherteProtokollDetails['bestaetigt']) && $gespeicherteProtokollDetails['bestaetigt'] == 1)
         {
             return self::BESTAETIGT;
         }
-        elseif(isset($gespeicherteProtokollDaten['fertig']) AND $gespeicherteProtokollDaten['fertig'] == 1) 
+        elseif(isset($gespeicherteProtokollDetails['fertig']) AND $gespeicherteProtokollDetails['fertig'] == 1) 
         {           
-            if(isset($zuSpeicherndeProtokollDaten['bestaetigt']) && $zuSpeicherndeProtokollDaten['bestaetigt'] == 1)
+            if(isset($zuSpeicherndeProtokollDetails['bestaetigt']) && $zuSpeicherndeProtokollDetails['bestaetigt'] == 1)
             {
                 $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set('bestaetigt', 1)->update();
             }
@@ -132,8 +130,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             return self::FERTIG;
         }
         else
-        {
-            
+        {           
             $loescheEintraege = [
                 'flugzeugID'    => null,
                 'pilotID'       => null,
@@ -143,7 +140,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             ];
             
             $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
-            $protokolleModel->ueberschreibeProtokoll($zuSpeicherndeProtokollDaten, $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->ueberschreibeProtokoll($zuSpeicherndeProtokollDetails, $_SESSION['protokoll']['protokollSpeicherID']);
             
             echo "Jetzt wäre das Protokoll geupdatet worden<br>";
             return self::ANGEFANGEN;
@@ -245,13 +242,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         {       
             
             if($wert['protokollInputID'] == $zuVergleichenderWert['protokollInputID'] AND $wert['woelbklappenstellung'] == $zuVergleichenderWert['woelbklappenstellung'] AND $wert['linksUndRechts'] == $zuVergleichenderWert['linksUndRechts'] AND $wert['multipelNr'] == $zuVergleichenderWert['multipelNr'])
-            {
-                /*echo "<br>protokollInputID: ". $wert['protokollInputID'] . " ". $zuVergleichenderWert['protokollInputID'];
-                echo "<br>woelbklappenstellung: ". $wert['woelbklappenstellung'] . " ". $zuVergleichenderWert['woelbklappenstellung'];
-                echo "<br>linksUndRechts: ". $wert['linksUndRechts'] . " ". $zuVergleichenderWert['linksUndRechts'];
-                echo "<br>multipelNr: ". $wert['multipelNr'] . " ". $zuVergleichenderWert['multipelNr']. "<br>";
-                echo "<br>wert: <br>". $wert['wert'] . " <br> ". $zuVergleichenderWert['wert']. "<br>";*/
-                
+            {                
                 echo "Wert wurde gefunden<br>";
                 
                 if($wert['wert'] != $zuVergleichenderWert['wert'])
@@ -562,23 +553,14 @@ class Protokollspeichercontroller extends Protokollcontroller
     
     /**
      * Updatet den Wert für 'geandertAm' für die id, die in der $_SESSION['protokoll']['protokollSpeicherID'] gespeichert ist.
+     * 
+     * @return void
      */
     protected function updateProtokollGeaendertAm()
     {
-        $protokolleModel = new protokolleModel();
-        
+        $protokolleModel = new protokolleModel();        
         $protokolleModel->updateGeaendertAmNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
         echo "geändertAm aktualisiert<br>";
     }
-    
-    protected function meldeProtokollKannNichtUeberschriebenWerden()
-    {
-        $session = session();
-        $session->setFlashdata('nachricht', "Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde");
-        $session->setFlashdata('link', base_url());
-        header('Location: '. base_url() .'/nachricht');
-        unset($_SESSION['protokoll']);
-        exit;
-    }  
 }

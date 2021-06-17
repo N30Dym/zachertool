@@ -6,7 +6,7 @@
 <!---------------------------------------->   
 <!--        Seitennavigation            --> 
 <!----------------------------------------> 
-            <?php if(isset($_SESSION['protokoll']['protokollSpeicherID']) AND end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] AND $adminOderEinweiser === true) : ?>
+            <?php if(isset($_SESSION['protokoll']['protokollSpeicherID']) AND end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] AND isset($adminOderEinweiser) AND $adminOderEinweiser === true) : ?>
                 <div class="col-12 alert alert-danger">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="bestaetigt" id="bestaetigt">

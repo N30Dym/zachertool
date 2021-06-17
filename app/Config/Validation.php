@@ -799,10 +799,10 @@ class Validation
             ]
         ], 
         'datum' => [
-            'rules'  => 'required|valid_date',
+            'rules'  => 'required|valid_date[Y-m-d]',
             'errors' => [
                 'required'      => 'Das Datum der letzten Wägung wurde nicht angegeben.',
-                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
+                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben: JJJJ-MM-TT'
             ]
         ]
     ];
@@ -837,10 +837,10 @@ class Validation
             ]
         ], 
         'datum' => [
-            'rules'  => 'required|valid_date',
+            'rules'  => 'required|valid_date[Y-m-d]',
             'errors' => [
                 'required'      => 'Das Datum der letzten Wägung wurde nicht angegeben.',
-                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben.'
+                'valid_date'    => 'Das Datum der letzten Wägung wurde in einem falschen Format angegeben: JJJJ-MM-TT.'
             ]
         ]
     ];
@@ -919,9 +919,9 @@ class Validation
             ]
         ],
         'datum' => [
-            'rules'  => 'permit_empty|valid_date',
+            'rules'  => 'permit_empty|valid_date[Y-m-d]',
             'errors' => [
-                'valid_date' => 'Das Datum hat ein falsches Format.'
+                'valid_date' => 'Das Datum hat ein falsches Format: JJJJ-MM-TT'
             ]
         ],
         'sichtbar' => [
@@ -971,25 +971,23 @@ class Validation
             ]
         ],
         'datum' => [
-            'rules'  => 'permit_empty|valid_date',
+            'rules'  => 'permit_empty|valid_date[Y-m-d]',
             'errors' => [
-                'valid_date' => 'Das Datum hat ein falsches Format.'
+                'valid_date' => 'Das Datum hat ein falsches Format: JJJJ-MM-TT'
             ]
         ]
     ];
     
     public $protokolle = [
         'flugzeugID' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
-                'required'  => 'Es wurde keine FlugzeugID gegeben.',
                 'numeric'   => 'Die FlugzeugID ist ungültig.'
             ]
         ],
         'pilotID' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
-                'required'      => 'Es wurde keine PilotID gegeben.',
                 'is_natural'    => 'Die PilotID ist ungültig.'
             ]
         ],
@@ -997,6 +995,13 @@ class Validation
             'rules'  => 'permit_empty|is_natural',
             'errors' => [
                 'is_natural'    => 'Die CopilotID ist ungültig.'
+            ]
+        ], 
+        'protokollIDs' => [
+            'rules'  => 'required|valid_json',
+            'errors' => [
+                'valid_json'    => "Das Format der ProtokollIDs ist invalide.",
+                'required'      => "Es wurde keine ProtokollID angegeben."
             ]
         ], 
         'flugzeit' => [
@@ -1026,9 +1031,9 @@ class Validation
             ]
         ],
         'datum' => [
-            'rules'  => 'required|valid_date',
+            'rules'  => 'required|valid_date[Y-m-d]',
             'errors' => [
-                'valid_date'    => 'Das Datum hat ein falsches Format: TT.MM.JJJJ',
+                'valid_date'    => 'Das Datum hat ein falsches Format: JJJJ.MM.TT',
                 'required'      => 'Das Datum muss angegeben werden.'
             ]
         ]

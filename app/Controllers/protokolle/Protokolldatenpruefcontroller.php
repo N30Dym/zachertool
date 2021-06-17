@@ -84,7 +84,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst das Datum angeben");
         }
-        if(empty($_SESSION['protokoll']['gewaehlteProtokollTypen']))
+        if(empty($_SESSION['protokoll']['gewaehlteProtokollTypen']) OR empty($_SESSION['protokoll']['protokollIDs']))
         {
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst mindestens ein Protokoll auswählen");
@@ -151,7 +151,8 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     protected function setzeProtokollDetails()
     {
         $protokollDetails = [
-            'datum' => $_SESSION['protokoll']['protokollInformationen']['datum'] 
+            'datum'         => $_SESSION['protokoll']['protokollInformationen']['datum'],
+            'protokollIDs'  => json_encode($_SESSION['protokoll']['protokollIDs']),
         ];
 
         empty($_SESSION['protokoll']['flugzeugID']) ? null :                            $protokollDetails['flugzeugID'] = $_SESSION['protokoll']['flugzeugID'];

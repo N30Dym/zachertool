@@ -6,11 +6,13 @@ use App\Models\protokolle\{ beladungModel, datenModel, hStWegeModel, kommentareM
 use App\Models\protokolllayout\protokolleLayoutProtokolleModel;
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
+helper('nachrichtAnzeigen');
+
 class Protokolldatenladecontroller extends Protokollcontroller
 {	
     protected function ladeProtokollDaten($protokollSpeicherID)
     {
-        $this->ladeProtokollInformationen($protokollSpeicherID);
+        $this->ladeProtokollDetails($protokollSpeicherID);
         
         $this->ladeBeladungszustand($protokollSpeicherID);
         
@@ -25,9 +27,8 @@ class Protokolldatenladecontroller extends Protokollcontroller
 
     protected function ladeBeladungszustand($protokollSpeicherID)
     {
-        $beladungModel = new beladungModel();
-        
-        $beladungen = $beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID);
+        $beladungModel  = new beladungModel();       
+        $beladungen     = $beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID);
         
         foreach($beladungen as $beladung)
         {
@@ -42,13 +43,11 @@ class Protokolldatenladecontroller extends Protokollcontroller
                 $_SESSION['protokoll']['beladungszustand']['weiterer']['gewicht']        = $beladung['gewicht']; 
             }
         }
-        //var_dump( $_SESSION['protokoll']['beladungszustand']);
     }
             
     protected function ladeWerte($protokollSpeicherID)
     {
-        $datenModel = new datenModel();
-        
+        $datenModel     = new datenModel();        
         $protokollDaten = $datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID);
         
         foreach($protokollDaten as $datenSatz)
@@ -85,64 +84,64 @@ class Protokolldatenladecontroller extends Protokollcontroller
         }
     }
     
-    protected function ladeProtokollInformationen($protokollSpeicherID)
+    protected function ladeProtokollDetails($protokollSpeicherID)
     {
-        $protokolleModel = new protokolleModel();
-        
+        $protokolleModel        = new protokolleModel();       
         $protokollInformationen = $protokolleModel->getProtokollNachID($protokollSpeicherID);
         
         if($protokollInformationen != null)
         {
-            $_SESSION['protokoll']['protokollInformationen']['datum']        = $protokollInformationen["datum"];
-            $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = date('H:i', strtotime($protokollInformationen["flugzeit"]));
-            $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
-            $_SESSION['protokoll']['protokollInformationen']['titel']        = "Vorhandenes Protokoll bearbeiten";
-
+            if($protokollInformationen["bestaetigt"] == 1 && $this->adminOderZachereinweiser == false)
+            {
+                nachrichtAnzeigen("Dieses Protokoll ist bereits abgegeben und darf nicht mehr bearbeitet werden", base_url());
+            }
             
-            $this->ladeFlugzeugDaten($protokollInformationen["flugzeugID"]);
-            $_SESSION['protokoll']['pilotID']                                = $protokollInformationen["pilotID"];
-            $_SESSION['protokoll']['copilotID']                              = $protokollInformationen["copilotID"];   
+            $_SESSION['protokoll']['protokollInformationen']['datum']   = date('d.m.Y', strtotime($protokollInformationen["datum"]));          
+            $_SESSION['protokoll']['protokollInformationen']['titel']   = "Vorhandenes Protokoll bearbeiten";
+            
+            $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollInformationen["protokollIDs"]);
+            $this->setzeGewaehlteProtokollTypen();
+            
+            empty($protokollInformationen["flugzeugID"])    ? null : $this->ladeFlugzeugDaten($protokollInformationen["flugzeugID"]);
+            empty($protokollInformationen["flugzeit"])      ? null : $_SESSION['protokoll']['protokollInformationen']['flugzeit'] = date('H:i', strtotime($protokollInformationen["flugzeit"]));           
+            empty($protokollInformationen["pilotID"])       ? null : $_SESSION['protokoll']['pilotID'] = $protokollInformationen["pilotID"];
+            empty($protokollInformationen["copilotID"])     ? null : $_SESSION['protokoll']['copilotID'] = $protokollInformationen["copilotID"]; 
+            empty($protokollInformationen["bemerkung"])     ? null : $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
 
             $protokollInformationen["fertig"]       == 1 ? $_SESSION['protokoll']['fertig'] = [] : null;
-            $protokollInformationen["bestaetigt"]   == 1 ? $_SESSION['protokoll']['bestaetigt'] = [] : null;
+            $protokollInformationen["bestaetigt"]   == 1 ? $_SESSION['protokoll']['bestaetigt'] = [] : null;           
         }
         else
         {
-            throw new Exception("Kein Protokoll mit dieser ID vorhanden!");
+            nachrichtAnzeigen("Kein Protokoll mit dieser ID vorhanden!", base_url());
         }
     }
     
-    protected function ladeProtokollIDs($protokollSpeicherID)
+    /**
+     * 
+     * @param array $protokollIDs
+     * @return void
+     */
+    protected function setzeGewaehlteProtokollTypen()
     {
-        $protokolleModel                        = new protokolleModel();
-        $protokolleLayoutProtokolleModel        = new protokolleLayoutProtokolleModel();
-        $_SESSION['protokoll']['gewaehlteProtokollTypen']    = [];
-        $_SESSION['protokoll']['protokollIDs']               = [];
+        $protokollLayoutProtokolleModel = new protokolleLayoutProtokolleModel();
         
-        $protokollIDs = $protokolleModel->getProtokollIDsNachProtokollSpeicherID($protokollSpeicherID);
+        $_SESSION['protokoll']['gewaehlteProtokollTypen'] = array();
         
-        foreach($protokollIDs as $protokollID)
+        foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
         {
-            array_push($_SESSION['protokoll']['gewaehlteProtokollTypen'], $protokollID['protokollID']);
-        }    
-   
-        foreach($_SESSION['protokoll']['gewaehlteProtokollTypen'] as $protokollTypID)
-        {
-            $protokollTypIDArray = $protokolleLayoutProtokolleModel->getProtokollIDNachProtokollDatumUndProtokollTypID($_SESSION['protokoll']['protokollInformationen']['datum'], $protokollTypID);
-            
-            array_push($_SESSION['protokoll']['protokollIDs'], $protokollTypIDArray[0]['id']);
+            array_push($_SESSION['protokoll']['gewaehlteProtokollTypen'], $protokollLayoutProtokolleModel->getProtokollTypIDNachID($protokollID)['protokollTypID']);
         }
     }
-    
+        
     protected function ladeFlugzeugDaten($flugzeugID)
     {
-        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
-        $flugzeugDaten = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $flugzeugDaten              = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
         
-        $_SESSION['protokoll']['flugzeugID']    = $flugzeugID;
+        $_SESSION['protokoll']['flugzeugID'] = $flugzeugID;
         
-        $flugzeugDaten['istDoppelsitzer'] == 1 ?            $_SESSION['protokoll']['doppelsitzer'] = [] : null;
-        $flugzeugDaten['istWoelbklappenFlugzeug'] == 1 ?    $_SESSION['protokoll']['woelbklappenFlugzeug'] = ["Neutral", "Kreisflug"] : null;
+        $flugzeugDaten['istDoppelsitzer'] == 1          ? $_SESSION['protokoll']['doppelsitzer']            = [] : null;
+        $flugzeugDaten['istWoelbklappenFlugzeug'] == 1  ? $_SESSION['protokoll']['woelbklappenFlugzeug']    = ["Neutral", "Kreisflug"] : null;
     }
-
 }

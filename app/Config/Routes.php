@@ -97,6 +97,7 @@ $routes->group('admin', function($routes)
         $routes->add('liste/(:segment)', 'admin\Adminpilotencontroller::liste/$1');
         $routes->add('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
         $routes->post('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
+        $routes->add('test', 'admin\Adminpilotencontroller::test');
     });
     
     $routes->group('flugzeuge', function($routes)

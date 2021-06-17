@@ -30,7 +30,7 @@
                         <tr class="text-center">
                             <th>Kennzeichen</th>
                             <th>Flugzeugmuster</th>
-                            <th>Anazhl Protokolle</th>
+                            <th>Anzahl Protokolle</th>
                             <td></td>                 
                         </tr>
                     </thead>

@@ -2,10 +2,9 @@
 
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
+
 <header>
 
-
-    
 <nav class="navbar navbar-expand-md navbar-light bg-gradient" style="background-color: #343a40;">
     <div class="container-fluid" >
         <a class="navbar-brand" href="<?= base_url() ?>">
@@ -79,10 +78,11 @@
             </div>
         </div>
         <a class="navbar-brand" href="">
-            <img class="rounded-1" src="<?= base_url() ?>/public/bilder/DLRLogoDeutschinWeißalsPNG.png" alt="" height="40">
+            <img src="<?= base_url() ?>/public/bilder/DLRLogoDeutschinWeißalsPNG.png" alt="" height="40">
         </a>
     </div>
 </nav>    
+    
 </header>
 <main class="container bg-white shadow pb-5 pt-3">
     

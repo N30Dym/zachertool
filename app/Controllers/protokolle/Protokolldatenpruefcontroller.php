@@ -176,7 +176,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {
                 foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
-                {
+                {                   
                     if(sizeof($werteMultipelNr)>1)
                     {                    
                         foreach($werteMultipelNr as $multipelNr => $wert)
@@ -194,7 +194,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                     }
                     else 
                     {
-                        $wert = $werteMultipelNr[0];
+                        $wert = array_values($werteMultipelNr)[0];
                         if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;

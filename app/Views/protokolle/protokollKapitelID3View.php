@@ -7,15 +7,20 @@
 
 <div class="col-lg-10 g-2 row border rounded shadow p-4">
     <?php if ( ! isset($_SESSION['protokoll']['flugzeugID'])) : ?>
-        <span class="text-danger m-3">Es wurde kein Flugzeug ausgewählt</span>
+        <span class="alert alert-danger">Es wurde kein Flugzeug ausgewählt</span>
 
     <?php elseif (! isset($_SESSION['protokoll']['pilotID'])) : ?> 
-        <span class="text-danger m-3">Es wurde kein Pilot ausgewählt</span>
+        <span class="alert alert-danger">Es wurde kein Pilot ausgewählt</span>
 
     <?php elseif ((isset($pilotGewicht) AND $pilotGewicht == null) OR (isset($_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[0]['id']]['']) && $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[0]['id']][''] == "")) : ?>
-        <span class="text-danger m-3">Für den Pilot wurde kein Gewicht gefunden. Bitte Pilotengewicht unter Pilot -> Pilotenliste -> bearbeiten hinzufügen</span>
+        <span class="alert alert-danger">Für den Pilot wurde kein Gewicht gefunden. Bitte Pilotengewicht unter Pilot -> Pilotenliste -> bearbeiten hinzufügen</span>
 
     <?php else: ?>
+        
+        <div class="col-12 alert alert-secondary">
+            <small>Bitte die gesamte Beladung angegeben. Das Feld für das Fallschirmsgewicht darf nicht leer bleiben, kann aber mit "0" angegeben werden.
+                Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein.</small>
+        </div>
         <div class="table-responsive-lg">
             <table class="table">
     <!-- Überschriften -->
@@ -129,7 +134,9 @@
         </div>
         
     <!-- Leerzeile -->
-    <small class="m-3">Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden (z.B. Heckwassertank)</small>
+        <div class="col-12 alert alert-secondary">
+            <small>Hier kann bei Bedarf ein zusätzlicher Hebelarm definiert werden (z.B. Heckwassertank):</small>
+        </div>
         <div class="col-sm-4">
             <label class="form-label">Hebelarmbezeichnung</label>
             <input type="text" class="form-control" name="hebelarm[weiterer][bezeichnung]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['bezeichnung'] ?? "" ?>">

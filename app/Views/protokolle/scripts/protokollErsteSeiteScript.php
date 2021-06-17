@@ -3,7 +3,9 @@
 <script type="text/javascript">    
 $( document ).ready( function() {
 
-    $( '#springeZu' ).removeClass( 'd-none' );
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
+    
+    $( '.JSunsichtbar' ).addClass( 'd-none' );
         
     $( document ).on('click', 'input:submit', function (e){        
         if( ! $( '#protokollTypen[type=checkbox]:checked' ).length )
@@ -20,8 +22,7 @@ $( document ).ready( function() {
     if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         $('input[type=date], .datepicker').keydown(function() { return false });
         $('input[type=date], .datepicker').datepicker({
-          //yearRange: "-80:0",
-          dateFormat: 'dd.mm.yyyy',
+          dateFormat: 'dd.mm.yy',
           changeMonth: true,
           changeYear: true,
           firstDay: 1,

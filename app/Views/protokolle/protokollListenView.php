@@ -9,7 +9,7 @@
         <?php if (isset($protokolleArray[0])) : ?>
             
                 <?php if($protokolleArray == null) : ?>
-                    Keine Protokolle gefunden
+                    Es sind keine Protokolle vorhanden
                 <?php else : ?>
                     
                     <div class="table-responsive-lg">
@@ -49,7 +49,7 @@
         <?php else : ?>
                     
             <?php if($protokolleArray == null) : ?>
-                    Keine Protokolle gefunden  
+                    Es sind keine Protokolle vorhanden  
             <?php else : ?>
                     
                 <?php foreach($protokolleArray as $jahr => $protokolleProJahr) : ?>

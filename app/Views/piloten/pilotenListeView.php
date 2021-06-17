@@ -15,7 +15,7 @@
     <div class="col-lg-8 border p-4 rounded shadow mb-3">	
         <?php if($pilotenArray == null): ?>
             <div class="text-center">
-                Die Verbindung ist fehlgeschlagen
+                Es sind keine Piloten vorhanden
             </div>
         <?php else: ?>
             <div class="col-12">

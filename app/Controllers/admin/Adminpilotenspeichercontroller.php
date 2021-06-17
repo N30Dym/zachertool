@@ -2,7 +2,7 @@
 namespace App\Controllers\admin;
 
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel, pilotenAkafliegsModel };
-use App\Controllers\piloten\{ Pilotenspeichercontroller, Pilotencontroller };
+use App\Controllers\piloten\{ Pilotenspeichercontroller };
 
 helper('nachrichtAnzeigen');
 

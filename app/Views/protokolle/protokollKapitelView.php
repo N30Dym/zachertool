@@ -1,15 +1,19 @@
 <!---------------------------------------->   
 <!--               Kapitel              --> 
 <!---------------------------------------->
-    <div class="col-12">
-        <small><?= $kapitelDatenArray['zusatztext'] ?></small>
-    </div>
-<?php
+    <?php if($kapitelDatenArray['zusatztext'] != ""): ?>
+        <div class="col-12 alert alert-secondary">
+            <small><?= $kapitelDatenArray['zusatztext'] ?></small>
+        </div>
+    <?php endif ?>
 
-    $woelbklappe = (isset($_SESSION['protokoll']['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['protokoll']['woelbklappenFlugzeug'] : [0];
-    $unterkapitelNummer = 0;
-    $hStWegFeldBenoetigt = false;
-    foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollUnterkapitelID => $unterkapitel): ?>
+    <?php
+
+        $woelbklappe = (isset($_SESSION['protokoll']['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['protokoll']['woelbklappenFlugzeug'] : [0];
+        $unterkapitelNummer = 0;
+        $hStWegFeldBenoetigt = false;
+        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollUnterkapitelID => $unterkapitel): 
+    ?>
 
 <!---------------------------------------->   
 <!--   Unterkapitel Titel und Nummer    --> 
@@ -19,9 +23,11 @@
             <?php $woelbklappe = (isset($_SESSION['protokoll']['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$protokollUnterkapitelID]['woelbklappen']) ? $_SESSION['protokoll']['woelbklappenFlugzeug'] : [0]; ?>
             <?php $unterkapitelNummer++ ?>
             <h4 class="ms-2"><?= $_SESSION['protokoll']['aktuellesKapitel'] . "." . $unterkapitelNummer . " " . $unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung'] ?></h4>
-            <div class="col-12">
-                <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
-            </div>
+            <?php if($unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] != "") : ?>
+                <div class="col-12 alert alert-secondary">
+                    <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
+                </div>
+            <?php endif ?>
         <?php endif ?>    
 
         <?php foreach($woelbklappe as $woelbklappenStellung) : ?>
@@ -37,7 +43,9 @@
 <!--             Eingaben               --> 
 <!---------------------------------------->
             <?php if($eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1) : ?>
-                <small class="text-danger warnhinweisKeinJS">Wenn du "Ohne Richtungsangabe" wählst und dort einen Wert eingibst, wird für "Rechtskurve" kein Wert gespeichert</small>
+                <div class="alert alert-danger JSunsichtbar">
+                    <small>Wenn du "Ohne Richtungsangabe" wählst und dort einen Wert eingibst, wird für "Rechtskurve" kein Wert gespeichert</small>
+                </div>
             <?php endif ?>
 
             <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>

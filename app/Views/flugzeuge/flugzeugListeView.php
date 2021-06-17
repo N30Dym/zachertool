@@ -3,9 +3,9 @@
 
 </div>
 
-<div class="col-12 text-end mt-3">
+<div class="mb-5 d-grid gap-2 d-md-flex justify-content-md-end">
     <a href="<?= base_url() ?>/muster/liste">
-        <button type="button" class="btn btn-success">Neues Flugzeug anlegen</button>
+        <button type="button" class="btn btn-success col-12">Neues Flugzeug anlegen</button>
     </a>
 </div>
 
@@ -13,10 +13,10 @@
 <div class="row">
     <div class="col-lg-2">
     </div>
-    <div class="row col-lg-8 d-flex justify-content-center">	
+    <div class="col-md-8 border p-4 rounded shadow mb-3">	
         <?php if($flugzeugeArray == null): ?>
             <div class="text-center">
-                Die Verbindung ist fehlgeschlagen
+                Es sind keine Flugzeuge vorhanden
             </div>
         <?php else: ?>
             <div class="col-12">
@@ -42,7 +42,7 @@
                             <td><?= esc($flugzeug['protokollAnzahl']) ?></td>
                             <td>
                                 <a href="/zachern-dev/flugzeuge/anzeigen/<?= esc($flugzeug["flugzeugID"]) ?>">
-                                    <button class="btn btn-sm btn-primary">Anzeigen</button>
+                                    <button class="btn btn-sm btn-secondary">Anzeigen</button>
                                 </a>
                             </td>
                         </tr>

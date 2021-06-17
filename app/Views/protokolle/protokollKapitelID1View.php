@@ -10,7 +10,7 @@
         <h4>Flugzeugauswahl</h4>
     </div>
     <div class="col-12">
-        <input class="form-control d-none" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
+        <input class="form-control JSsichtbar d-none" id="flugzeugSuche" type="text" placeholder="Suche nach Flugzeug...">
         <br>
     </div>
 

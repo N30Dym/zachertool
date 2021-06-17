@@ -6,8 +6,8 @@ use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
 use CodeIgniter\Filters\Honeypot;
-use App\Filters\adminAuth;
-use App\Filters\einweiserAuth;
+use App\Filters\{ adminAuth, einweiserAuth, umgebungFilter, protokollSessionDatenLoeschenFilter };
+
 
 class Filters extends BaseConfig
 {
@@ -18,11 +18,13 @@ class Filters extends BaseConfig
 	 * @var array
 	 */
 	public $aliases = [
-		'csrf'          => CSRF::class,
-		'toolbar'       => DebugToolbar::class,
-		'honeypot'      => Honeypot::class,
-                'adminAuth'     => adminAuth::class,
-                'einweiserAuth' => einweiserAuth::class,
+            'csrf'                                  => CSRF::class,
+            'toolbar'                               => DebugToolbar::class,
+            'honeypot'                              => Honeypot::class,
+            'adminAuth'                             => adminAuth::class,
+            'einweiserAuth'                         => einweiserAuth::class,
+            'umgebungFilter'                        => umgebungFilter::class,
+            'protokollSessionDatenLoeschenFilter'   => protokollSessionDatenLoeschenFilter::class,
 	];
 
 	/**
@@ -32,14 +34,17 @@ class Filters extends BaseConfig
 	 * @var array
 	 */
 	public $globals = [
-		'before' => [
-			// 'honeypot',
-			 'csrf',
-		],
-		'after'  => [
-			'toolbar',
-			// 'honeypot',
-		],
+            'before' => [
+                // 'honeypot',
+                'csrf',
+                'umgebungFilter',
+                'protokollSessionDatenLoeschenFilter' => ['except' => [ 'protokolle/index*', 'protokolle/kapitel*', 'protokolle/speichern*', 'protokolle/absenden*' ]],
+
+            ],
+            'after'  => [
+                'toolbar',
+                // 'honeypot',
+            ],
 	];
 
 	/**

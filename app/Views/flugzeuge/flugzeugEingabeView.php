@@ -38,8 +38,8 @@
             </div>
             <?php if(!isset($musterID) AND !isset($flugzeugID)) : ?>
                 <datalist id="musterListe">
-                    <?php foreach ($musterEingaben as $musterDetails) : ?>
-                        <option value="<?= esc($musterDetails) ?>">
+                    <?php foreach ($musterEingaben as $eingabe) : ?>
+                        <option value="<?= esc($eingabe) ?>">
                     <?php endforeach ?>
                 </datalist>
             <?php endif ?>
@@ -50,11 +50,11 @@
                 <input type="text" class="form-control" name="muster[musterZusatz]" id="musterZusatz" <?= isset($flugzeugID) ? "" : 'placeholder="b, XL, FES, 18m"' ?> value="<?= esc($muster['musterZusatz'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>> 
 
             </div>
-            <div class="col-2">
+            <div class="col-lg-2">
             </div>
-            <div class="col-12 ms-3 <?= isset($flugzeugID) ? "d-none" : "" ?>">
-                <small class="text-muted">Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
-                <br \><small class="text-muted">Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
+            <div class="col-12 alert alert-secondary <?= isset($flugzeugID) ? "d-none" : "" ?>">
+                <small>Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
+                <br \><small>Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
             </div>
 
             <div class="col-12">
@@ -205,8 +205,8 @@
 
             <div class="table-responsive-xxl <?= (!isset($muster['istWoelbklappenFlugzeug']) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
                 <h3  class="m-4">Wölbklappen</h3>
-                <div class="col-12">
-                    <small class="text-muted">Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
+                <div class="col-12 alert alert-secondary">
+                    <small>Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
                 </div>
                 <table class="table" id="woelbklappenTabelle">
                     <thead>
@@ -371,9 +371,9 @@
 <!--         Hebelarme          -->
 <!-------------------------------->            
         <h3 class="m-4">Hebelarme</h3>
-        <div class="col-12">
-            <small class="text-muted">Pilotenhebelarm und ggf. Begleiterhebelarm müssen angegeben werden <br></small>
-            <small class="text-muted">Für Trimmballast mit dem gleichen Hebelarm wie der Pilot (für Bleikissen, etc.) muss kein extra Hebelarm angelegt werden</small>
+        <div class="col-12 alert alert-secondary">
+            <small>Pilotenhebelarm und ggf. Begleiterhebelarm müssen angegeben werden <br></small>
+            <small>Für Trimmballast mit dem gleichen Hebelarm wie der Pilot (für Bleikissen, etc.) muss kein extra Hebelarm angelegt werden</small>
         </div>
 
         <div class="table-responsive-md">
@@ -391,7 +391,7 @@
                             <tr valign="middle" id="<?= $hebelarmDetails['beschreibung'] == "Pilot" ? 'pilot' : ($hebelarmDetails['beschreibung'] == "Copilot" ? 'copilot' : $i ) ?>">
                                 <td class="text-center <?= isset($flugzeugID) ? "" : "JSsichtbar" ?> d-none"><?php if($hebelarmDetails['beschreibung'] != "Pilot" && $hebelarmDetails['beschreibung'] != "Copilot") : ?><button type="button" class="btn btn-danger btn-close loeschen"></button><?php endif ?></td>
                                 <td><input type="text" name="hebelarm[<?= $i ?>][beschreibung]" class="form-control" value="<?= $hebelarmDetails['beschreibung'] ?>" <?= ($hebelarmDetails['beschreibung'] == "Pilot" OR $hebelarmDetails['beschreibung'] == "Copilot") ? "readonly" : "" ?>  <?= isset($flugzeugID) ? "disabled" : "" ?>></td>
-                                <td>
+                                <td style="min-width:250px">
                                     <div class="input-group">
                                         <input type="number" name="hebelarm[<?= $i ?>][hebelarm]" class="form-control" value="<?= $hebelarmDetails['hebelarm'] ?>" <?= ($hebelarmDetails['beschreibung'] == "Pilot" OR $hebelarmDetails['beschreibung'] == "Copilot") ? "required" : "" ?>  <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                         <select name="hebelarm[<?= $i ?>][vorOderHinter]" class="form-select input-group-text"  <?= isset($flugzeugID) ? "disabled" : "" ?>>

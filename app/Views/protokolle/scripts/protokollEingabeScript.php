@@ -27,7 +27,8 @@ $( document ).ready( function() {
     $( '#pilotSuche' ).removeClass( 'd-none' );
     $( '#copilotSuche' ).removeClass( 'd-none' );
     $( '#flugzeugSuche' ).removeClass( 'd-none' );
-    $( '.warnhinweisKeinJS' ).addClass( 'd-none' );
+    $( '.JSunsichtbar' ).addClass( 'd-none' );
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
         
         /*
         * Beim Laden der Seite werden linksUndRechts-Felder auf "Ohne Richtungsangabe" gesetzt und die zweite Zeile unsichtbar
@@ -139,6 +140,8 @@ $( document ).ready( function() {
         });		
     });
     
+    
+    
         // Wenn bei linksUndRechts-Feldern eine Auswahl der eineRichtung getroffen wird, 
         // wird die andereRichtung entsprechend angepasst, bzw. ausgeblendet 
     $( document ).on( 'change', 'select.eineRichtung', function(){
@@ -188,5 +191,10 @@ input[type=number] {
 
 label {
     margin-left: 0.5rem;
+}
+
+input[type=select]
+{
+    -webkit-appearance: none;
 }
 </style>

@@ -29,7 +29,7 @@
         <div class="col-sm-2">
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg-8 mt-4">
             <div class="table-responsive-lg">
                 <table class="table">
                     <tr>

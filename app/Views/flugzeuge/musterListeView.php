@@ -16,7 +16,7 @@
     <div class="col-md-8 border p-4 rounded shadow mb-3">	
         <?php if(count($muster) == 0): ?>
                 <div class="text-center">
-                        Die Verbindung ist fehlgeschlagen
+                        Es sind keine Muster vorhanden
                 </div>
         <?php else: ?>
         <div class="col-12 mb-4">

@@ -4,7 +4,7 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 
-use App\Controllers\flugzeuge\{ Flugzeugadmincontroller, Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
+use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
 helper(["array","form","text","url"]);
 

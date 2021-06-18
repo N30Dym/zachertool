@@ -99,6 +99,11 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PILOT_EINGABE, "Du musst den Pilot auswählen");
         }
+        if(isset($_SESSION['protokoll']['pilotID']) AND isset($_SESSION['protokoll']['copilotID']) AND $_SESSION['protokoll']['copilotID'] == $_SESSION['protokoll']['pilotID'])
+        {
+            $protokollDetailsVorhanden = false;
+            $this->setzeFehlerCode(PILOT_EINGABE, "Der Begleiter darf nicht gleichzeitig Pilot sein");
+        }
         if(array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) AND !$this->pruefeBeladungsZustand())
         {
             $protokollDetailsVorhanden = false;
@@ -142,6 +147,10 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             if(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Pilot")
             {
                 ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : null;
+            }
+            elseif(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Copilot")
+            {
+                ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : (($hebelarm[0] == "" AND $hebelarm['Fallschirm'] == "") ? true : null);
             }
         }
         

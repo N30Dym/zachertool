@@ -72,7 +72,6 @@ class Protokollcontroller extends Controller
         if($protokollSpeicherID && ! isset($_SESSION['protokoll']['protokollSpeicherID']))
         {
             $_SESSION['protokoll']['protokollSpeicherID'] = $protokollSpeicherID;
-
             $this->protokollDatenLaden($protokollSpeicherID);
         }
        

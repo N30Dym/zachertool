@@ -42,29 +42,11 @@
 <!---------------------------------------->   
 <!--             Eingaben               --> 
 <!---------------------------------------->
-<<<<<<< HEAD
-            <?php if($eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1) : ?>
-                <div class="alert alert-danger JSunsichtbar">
-                    <small>Wenn du "Ohne Richtungsangabe" wählst und dort einen Wert eingibst, wird für "Rechtskurve" kein Wert gespeichert</small>
-                </div>
-            <?php endif ?>
 
-            <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
-                
-
-
-                    <div class="g-3 mt-3">
-
-                        <?php if($eingabenDatenArray[$protokollEingabeID]['multipel'] == 0 OR $eingabenDatenArray[$protokollEingabeID]['multipel'] == "") : ?>
-                            <label class="form-label ms-3"><b><?= $eingabenDatenArray[$protokollEingabeID]['bezeichnung'] ?></b></label>
-                        <?php endif ?>
-                        <?php foreach($eingabe as $protokollInputID => $input) : ?>
-                            <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : "" ?>
-                            <?php if($eingabenDatenArray[$protokollEingabeID]['multipel'] == 0 OR $eingabenDatenArray[$protokollEingabeID]['multipel'] == "") : ?>
-                            
-=======
                     <?php if($eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1) : ?>
-                        <small class="text-danger warnhinweisKeinJS">Wenn du "Ohne Richtungsangabe" wählst und dort einen Wert eingibst, wird für "Rechtskurve" kein Wert gespeichert</small>
+                        <div class="alert alert-danger JSunsichtbar">
+                            <small>Wenn du "Ohne Richtungsangabe" wählst und dort einen Wert eingibst, wird für "Rechtskurve" kein Wert gespeichert</small>
+                        </div>
                     <?php endif ?>
 
                     <?php if($eingabenDatenArray[$protokollEingabeID]['multipel'] == 0 OR $eingabenDatenArray[$protokollEingabeID]['multipel'] == "") : ?>
@@ -79,7 +61,6 @@
                                 <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                     
                                     
->>>>>>> protokollMultipelAlsTabelle
 <!---------------------------------------->   
 <!--            Inputfelder             --> 
 <!---------------------------------------->                                                                           
@@ -367,7 +348,10 @@
 
         <div class="col-lg-9 row p-4 g-3 border rounded shadow">
             <h3 class="ms-2">Höhensteuerwege</h3>
-            <small class="text-muted">Falls du verschiedene Höhensteuerwege angeben musst, erstelle dafür ein neues Protokoll. Dort neben den Pflichtangaben (Flugzeug, Beladungszustand, usw.) nur dieses Kapitel mit den Höhensteuerwegen und den dazugehörigen Daten eingeben.</small>
+            <div class="alert alert-secondary">
+                <small>Falls du dieses Kapitel in mehreren Flügen gemacht hast und die HSt-Wege unterscheiden, erstelle dafür ein neues Protokoll. Dort musst du dann neben den Pflichtangaben (Flugzeug, Beladungszustand, usw.) nur dieses Kapitel mit den Höhensteuerwegen und den dazugehörigen Daten eingeben.</small>
+            </div>
+            
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer voll gedrückt:</label>
                 <div class="input-group">

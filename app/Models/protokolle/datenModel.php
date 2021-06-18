@@ -40,5 +40,10 @@ class datenModel extends Model
         $query = $this->builder()->set($wert)->getCompiledInsert();
         $this->query($query);
     }
+    
+    public function getAnzahlDatenNachProtokollSpeicherIDUndProtokollInputID($protokollSpeicherID, $protokollInputID)
+    {
+        return $this->selectMax('multipelNr')->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first();
+    }
 	
 }

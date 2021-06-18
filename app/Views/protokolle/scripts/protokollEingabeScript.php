@@ -171,7 +171,14 @@ $( document ).ready( function() {
         
     });
 
-   
+   $( document ).on( 'click', '.multipelHinzufügen', function()
+    {
+        $( this ).parent( 'div' ).parent( 'div' ).children( 'div.multibelTabelle' ).children( 'table' ).children( 'tbody' ).children( 'tr' ).each( function() 
+        {
+            $( this ).children( 'td:last' ).clone().appendTo( $( this ) );                
+            $( this ).children( 'td:last' ).find( 'input' ).val( '' );    
+        });
+    });
 
 });
 </script>

@@ -47,4 +47,9 @@ class protokollLayoutsModel extends Model
         
         return $this->query($query)->getResultArray();
     }
+    
+    public function getInputIDsNachProtokollEingabeID($protokollEingabeID)
+    {
+        return $this->select('protokollInputID')->where('protokollEingabeID', $protokollEingabeID)->findAll();
+    }
 }

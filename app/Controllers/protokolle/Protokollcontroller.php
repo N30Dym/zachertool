@@ -3,9 +3,11 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
+
 use Config\Services;
 
-use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller };
+use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller, Protokolldateninhaltladecontroller };
+
 
 use App\Models\protokolllayout\protokollTypenModel;
 
@@ -290,7 +292,8 @@ class Protokollcontroller extends Controller
     
     protected function ladeDatenInhalt()
     {
-        $protokollLayoutController  = new Protokolllayoutcontroller;
+        $protokollLayoutController          = new Protokolllayoutcontroller;
+        $protokollDatenInhaltLadeController = new Protokolldateninhaltladecontroller();
         
         var_dump($this->adminOderZachereinweiser);
         
@@ -302,7 +305,7 @@ class Protokollcontroller extends Controller
         ];
 
             // Weitere Daten werden nach Bedarf zum datenInhalt hinzugefügt (siehe Protokolllayoutcontroller)
-        $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
+        $datenInhalt += $protokollDatenInhaltLadeController->datenZumDatenInhaltHinzufügen();
         
         return $datenInhalt;
     }

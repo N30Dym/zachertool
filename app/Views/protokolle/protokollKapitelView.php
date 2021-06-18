@@ -15,7 +15,7 @@
 <!--   Unterkapitel Titel und Nummer    --> 
 <!---------------------------------------->                
 
-        <?php if($protokollUnterkapitelID > 0) : ?>
+        <?php if(!empty($protokollUnterkapitelID)) : ?>
             <?php $woelbklappe = (isset($_SESSION['protokoll']['woelbklappenFlugzeug']) && $unterkapitelDatenArray[$protokollUnterkapitelID]['woelbklappen']) ? $_SESSION['protokoll']['woelbklappenFlugzeug'] : [0]; ?>
             <?php $unterkapitelNummer++ ?>
             <h4 class="ms-2"><?= $_SESSION['protokoll']['aktuellesKapitel'] . "." . $unterkapitelNummer . " " . $unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung'] ?></h4>
@@ -51,7 +51,7 @@
                                 <?php endif ?>
                                 <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                     
-                                    <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : "" ?>
+                                    <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : null ?>
                                     
 <!---------------------------------------->   
 <!--            Inputfelder             --> 
@@ -272,45 +272,58 @@
 <!---------------------------------------->   
 <!--               Multipel             --> 
 <!---------------------------------------->
-                    <?php else : ?> <!-- if Multipel -->  
-                        <div class="table-responsive-xxl multibelTabelle">
-                            <table class="table">
-                                <?php foreach($eingabe as $protokollInputID => $input) : ?>
-                                    <tr>
-
-                                        <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
-                                            <td class="text-end" valign="middle" style="min-width:150px"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></td>
-                                        <?php endif ?>
-
-                                        <?php for($i = 1; $i <= $eingabenDatenArray[$protokollEingabeID]['multipel']; $i++) : ?>
-
-                                            <?php switch($inputsDatenArray[$protokollInputID]['inputTyp']) :
-
-                                                case "Dezimalzahl": ?>
-                                                    <td valign="middle" style="min-width:150px">
-                                                        <div class="input-group">
-                                                            <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][<?= $i ?>]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$protokollInputID]['schrittweite']) ?>" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
-                                                <?php break ?> <!-- case "Dezimalzahl" -->
-
-                                                <?php case "Ganzzahl": ?>
-                                                    <td valign="middle" style="min-width:150px">
-                                                        <div class="input-group">
-                                                            <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][<?= $i ?>]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
-                                                <?php break ?> <!-- case "Ganzzahl" -->
-
-                                            <?php endswitch ?>
-                                                <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
-                                                            <span class="input-group-text"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
-                                                <?php endif ?>
-                                                        </div>
-                                                    </td>
-                                        <?php endfor ?>
-
-                                    </tr>
+                    <?php else : ?> <!-- if Multipel --> 
+                        <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
+                            <div class="table-responsive-xxl multibelTabelle">
+                                <table class="table">
+                                
+                                    <?php foreach($eingabe as $protokollInputID => $input) : ?>
+                                
+                                        <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : null ?>
                                     
-                                <?php endforeach ?>
-                            </table>
-                        </div>
+                                
+                                        <tr>
+
+                                            <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
+                                                <td class="text-end" valign="middle" style="min-width:150px"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></td>
+                                            <?php endif ?>
+
+                                            <?php for($i = 1; $i <= $eingabenDatenArray[$protokollEingabeID]['multipel']; $i++) : ?>
+
+                                                <?php switch($inputsDatenArray[$protokollInputID]['inputTyp']) :
+
+                                                    case "Dezimalzahl": ?>
+                                                        <td valign="middle" style="min-width:150px">
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="<?= esc($inputsDatenArray[$protokollInputID]['schrittweite']) ?>" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+                                                    <?php break ?> <!-- case "Dezimalzahl" -->
+
+                                                    <?php case "Ganzzahl": ?>
+                                                        <td valign="middle" style="min-width:150px">
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+                                                    <?php break ?> <!-- case "Ganzzahl" -->
+
+                                                <?php endswitch ?>
+                                                    <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
+                                                                <span class="input-group-text"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
+                                                    <?php endif ?>
+                                                            </div>
+                                                        </td>
+                                            <?php endfor ?>
+
+                                        </tr>
+                                    
+                                    <?php endforeach ?> <!-- Inputs -->
+                                
+                                </table>
+                                
+                                
+                            </div>
+                            <div class="JSsichtbar mt-3 mb-3 d-grid gap-2">
+                                <button type="button" class="btn btn-secondary col-12 multipelHinzufügen">Weitere Felder hinzufügen</button>
+                            </div>
+                        <?php endif ?> <!-- Doppelsitzer -->
                         <div>
                     <?php endif ?> <!-- if Multipel -->  
                     

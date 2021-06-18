@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller };
+use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller, Protokolldateninhaltladecontroller };
 
 use App\Models\protokolllayout\protokollTypenModel;
 

@@ -186,32 +186,16 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {
                 foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
-                {                   
-                    if(sizeof($werteMultipelNr)>1)
-                    {                    
-                        foreach($werteMultipelNr as $multipelNr => $wert)
-                        {
-                            if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
-                            {
-                                $temporaeresWertArray['protokollInputID'] = $protokollInputID;
-                                $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
-                                $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
-                                $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                                $temporaeresWertArray['multipelNr'] = $multipelNr;
-                                array_push($zuSpeicherndeWerte, $temporaeresWertArray);
-                            } 
-                        }
-                    }
-                    else 
+                {                                      
+                    foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        $wert = array_values($werteMultipelNr)[0];
                         if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
                             $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
                             $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
                             $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                            $temporaeresWertArray['multipelNr'] = null;
+                            $temporaeresWertArray['multipelNr'] = empty($multipelNr) ? null : $multipelNr;
                             array_push($zuSpeicherndeWerte, $temporaeresWertArray);
                         } 
                     }

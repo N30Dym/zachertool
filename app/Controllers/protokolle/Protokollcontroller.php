@@ -94,6 +94,16 @@ class Protokollcontroller extends Controller
         }
     }
     
+    public function neu()
+    {
+        if(isset($_SESSION['protokoll']))
+        {
+            unset($_SESSION['protokoll']);
+        }
+        
+        return $this->index();
+    } 
+    
     /**
      * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
      * -> /protokolle/kapitel/...*

@@ -39,7 +39,7 @@
                         Protokolle
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/index">Neues Protokoll</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/neu">Neues Protokoll</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/offen">Angefangene Protokolle</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/fertig">Fertige Protokolle</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/abgegeben">Abgegebene Protokolle</a>

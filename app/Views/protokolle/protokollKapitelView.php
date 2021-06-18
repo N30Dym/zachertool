@@ -5,10 +5,9 @@
         <small><?= $kapitelDatenArray['zusatztext'] ?></small>
     </div>
 <?php
-
+    print_r($anzahlMultipelFelder);
     $woelbklappe = (isset($_SESSION['protokoll']['woelbklappenFlugzeug']) && $kapitelDatenArray['woelbklappen']) ? $_SESSION['protokoll']['woelbklappenFlugzeug'] : [0];
     $unterkapitelNummer = 0;
-    $hStWegFeldBenoetigt = false;
     foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollUnterkapitelID => $unterkapitel): ?>
 
 <!---------------------------------------->   
@@ -51,7 +50,6 @@
                                 <?php endif ?>
                                 <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                     
-                                    <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : null ?>
                                     
 <!---------------------------------------->   
 <!--            Inputfelder             --> 
@@ -279,16 +277,13 @@
                                 
                                     <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                 
-                                        <?php $inputsDatenArray[$protokollInputID]['hStWeg'] == 1 ? $hStWegFeldBenoetigt = true : null ?>
-                                    
-                                
                                         <tr>
 
                                             <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
                                                 <td class="text-end" valign="middle" style="min-width:150px"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></td>
                                             <?php endif ?>
 
-                                            <?php for($i = 1; $i <= $eingabenDatenArray[$protokollEingabeID]['multipel']; $i++) : ?>
+                                            <?php for($i = 1; $i <= $anzahlMultipelFelder[$protokollEingabeID]; $i++) : ?>
 
                                                 <?php switch($inputsDatenArray[$protokollInputID]['inputTyp']) :
 
@@ -337,7 +332,7 @@
 <!---------------------------------------->   
 <!--           Höhensteuerwege          --> 
 <!---------------------------------------->                
-    <?php if($hStWegFeldBenoetigt) : ?>
+    <?php if($hStFeldNotwendig) : ?>
         <div class="col-sm-1">
         </div> 
 
@@ -378,7 +373,7 @@
 <!---------------------------------------->   
 <!--           Kommentarfelder          --> 
 <!---------------------------------------->                     
-    <?php if($kapitelDatenArray['kommentar'] == 1) : ?>
+    <?php if($kommentarFeldNotwendig) : ?>
         <label for="kommentar" class="form-label">Hier kannst du weitere Kommentare einfügen:</label>
         <textarea class="form-control" id="kommentar" name="kommentar[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>]" rows="3"><?= $_SESSION['protokoll']['kommentare'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]] ?? "" ?></textarea>
     <?php endif ?> 

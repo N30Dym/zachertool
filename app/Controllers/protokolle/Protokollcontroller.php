@@ -272,7 +272,8 @@ class Protokollcontroller extends Controller
     
     protected function ladeDatenInhalt()
     {
-        $protokollLayoutController  = new Protokolllayoutcontroller;
+        $protokollLayoutController          = new Protokolllayoutcontroller;
+        $protokollDatenInhaltLadeController = new Protokolldateninhaltladecontroller();
         
         $datenInhalt = [
             'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],
@@ -281,7 +282,7 @@ class Protokollcontroller extends Controller
         ];
         
             // Weitere Daten werden nach Bedarf zum datenInhalt hinzugefügt (siehe Protokolllayoutcontroller)
-        $datenInhalt += $protokollLayoutController->datenZumDatenInhaltHinzufügen();
+        $datenInhalt += $protokollDatenInhaltLadeController->datenZumDatenInhaltHinzufügen();
         
         return $datenInhalt;
     }

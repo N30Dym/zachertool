@@ -170,13 +170,11 @@ $( document ).ready( function() {
 
    $( document ).on( 'click', '.multipelHinzufügen', function()
     {
-        //$( this ).parent( 'div' ).parent( 'div' ).children( 'div' ).
-        /*var letzteZeile = $( '#woelbklappenTabelle tbody tr:last-child' ).attr( 'id' );
-        letzteZeile++;
-        var wertNeutral = $( '#woelbklappenTabelle tbody tr:last-child' ).find( 'input.iasVGNeutral').val();
-        var wertKreisflug = $( '#woelbklappenTabelle tbody tr:last-child' ).find( 'input.iasVGKreisflug').val();
-        
-        $( '#woelbklappenTabelle' ).append( '<tr valign="middle" id="' + letzteZeile + '"><td class="text-center JSsichtbar"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="woelbklappe[' + letzteZeile + '][stellungBezeichnung]" class="form-control"></td><td><div class="input-group"><input type="number" name="woelbklappe[' + letzteZeile + '][stellungWinkel]" step="0.1" class="form-control"><span class="input-group-text">°</span></div></td><td class="text-center neutral"><div class="input-group d-none"><div class="input-group-text"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="' + letzteZeile + '"></div><input type="number" name="woelbklappe[' + letzteZeile + '][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="' + wertNeutral + '"><span class="input-group-text">km/h</span></div><div class="neutralAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral"></div></td><td class="text-center kreisflug"><div class="input-group d-none"><div class="input-group-text"><input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="' + letzteZeile + '"></div><input type="number" name="woelbklappe[' + letzteZeile + '][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="' + wertKreisflug + '"><span class="input-group-text">km/h</span></div><div class="kreisflugAuswahl"><input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug"></div></td></tr>' );*/
+        $( this ).parent( 'div' ).parent( 'div' ).children( 'div.multibelTabelle' ).children( 'table' ).children( 'tbody' ).children( 'tr' ).each( function() 
+        {
+            $( this ).children( 'td:last' ).clone().appendTo( $( this ) );                
+            $( this ).children( 'td:last' ).find( 'input' ).val( '' );    
+        });
     });
 
 });

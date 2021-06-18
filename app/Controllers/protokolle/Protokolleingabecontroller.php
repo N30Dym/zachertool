@@ -288,8 +288,6 @@ class Protokolleingabecontroller extends Protokollcontroller
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {
                     // Wenn $werteRichtungMulitpelNr['eineRichtung']! [0 - 10] [eingegebener Wert]
-                var_dump($werteRichtungMulitpelNr);
-                echo "<br>";
                 if(isset($eineRichtung[$protokollInputID][$woelbklappenStellung]))
                 {
                         // $multipelNr[0 - 10] [eingegebener Wert]
@@ -330,9 +328,6 @@ class Protokolleingabecontroller extends Protokollcontroller
                 }
             }
         }
-        echo "<br>";
-        print_r($_SESSION['protokoll']['eingegebeneWerte']);
-        //exit;
     }
     
         /*

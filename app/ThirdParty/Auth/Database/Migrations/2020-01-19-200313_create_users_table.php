@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             'updated_at'        => ['type' => 'bigint', 'null' => true]
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addUniqueKey('email');
+        //$this->forge->addUniqueKey('email');
         $this->forge->createTable('users', true);
     }
 

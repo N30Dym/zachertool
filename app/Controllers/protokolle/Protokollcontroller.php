@@ -230,7 +230,7 @@ class Protokollcontroller extends Controller
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
             'titel' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
-            'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
+            'protokollTypen' 	=> $protokollTypenModel->getSichtbareProtokollTypen()
         ];
 
             // Laden der ersten Seite mit den oben geladenen Daten

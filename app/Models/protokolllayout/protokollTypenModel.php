@@ -17,15 +17,15 @@ class protokollTypenModel extends Model
     protected $createdField  	= 'erstelltAm';
     //protected $validationRules 	= '';
 
-    protected $allowedFields 	= ['bezeichnung', 'verfügbar', 'erstelltAm'];
+    protected $allowedFields 	= ['bezeichnung', 'sichtbar', 'erstelltAm'];
 
     public function getAlleProtokollTypen()
     {		
         return($this->findAll());
     }
 
-    public function getAlleVerfügbarenProtokollTypen()
+    public function getSichtbareProtokollTypen()
     {		
-        return($this->where("verfuegbar",1)->findAll());
+        return($this->where("sichtbar",1)->findAll());
     }
 }

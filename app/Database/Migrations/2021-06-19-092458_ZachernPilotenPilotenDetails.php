@@ -23,7 +23,7 @@ class ZachernPilotenPilotenDetails extends Migration
             ],
             'pilotID' => [
                 'type'              => 'INT',
-                'constraint'        => '11',
+                'constraint'        => '10',
                 'null'              => false,
             ],
             "`datum` date NOT NULL DEFAULT current_timestamp()",
@@ -38,15 +38,14 @@ class ZachernPilotenPilotenDetails extends Migration
                 'null'              => false,
             ],
             'typenAnzahl' => [
-                'type'              => 'DOUBLE',
-                'constraint'        => '10,2',
+                'type'              => 'INT',
+                'constraint'        => '11',
                 'null'              => false,
             ],
             'gewicht' => [
-                'type'              => 'TINYINT',
-                'constraint'        => '1',
-                'null'              => true,
-                'default'           => '1',
+                'type'              => 'DOUBLE',
+                'constraint'        => '10,2',
+                'null'              => false,
             ],
         ]);
         $this->forge->addKey('id', true);

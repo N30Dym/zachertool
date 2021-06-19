@@ -4,13 +4,13 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernPiloten extends Migration
+class ZachernFlugzeugeMuster extends Migration
 {
-    protected $DBGroup = 'pilotenDB';
+    protected $DBGroup = 'flugzeugeDB';
     
     public function up()
-    {
-        if ($this->forge->createDatabase('zachern_piloten', TRUE))
+    { 
+        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
         {
             echo 'Database created!';
         }
@@ -21,31 +21,21 @@ class ZachernPiloten extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'vorname' => [
+            'musterSchreibweise' => [
                 'type'              => 'VARCHAR',
                 'constraint'        => '255',
                 'null'              => false,
             ],
-            'spitzname' => [
+            'musterKlarname' => [
+                'type'              => 'VARCHAR',
+                'constraint'        => '255',
+                'null'              => false,
+            ],
+            'musterZusatz' => [
                 'type'              => 'VARCHAR',
                 'constraint'        => '255',
                 'null'              => true,
                 'default'           => null,
-            ],
-            'nachname' => [
-                'type'              => 'VARCHAR',
-                'constraint'        => '255',
-                'null'              => false,
-            ],
-            'akafliegID' => [
-                'type'              => 'INT',
-                'constraint'        => '10',
-                'null'              => true,
-            ],
-            'groesse' => [
-                'type'              => 'INT',
-                'constraint'        => '5',
-                'null'              => true,
             ],
             'sichtbar' => [
                 'type'              => 'TINYINT',
@@ -53,21 +43,23 @@ class ZachernPiloten extends Migration
                 'null'              => true,
                 'default'           => '1',
             ],
-            'zachereinweiser' => [
+            'sichtbar' => [
                 'type'              => 'TINYINT',
                 'constraint'        => '1',
                 'null'              => true,
-                'default'           => null,
             ],
-            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
-            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()"
+            'sichtbar' => [
+                'type'              => 'TINYINT',
+                'constraint'        => '1',
+                'null'              => true,
+            ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('piloten', TRUE);
+        $this->forge->createTable('muster', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('piloten');
+        $this->forge->dropTable('muster');
     }
 }

@@ -4,13 +4,13 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernFlugzeugeMusterKlappen extends Migration
+class ZachernProtokolleDaten extends Migration
 {
-    protected $DBGroup = 'flugzeugeDB';
+    protected $DBGroup = 'protokolleDB';
     
     public function up()
-    {    
-        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
+    {
+        if ($this->forge->createDatabase('zachern_protokolle', TRUE))
         {
             echo 'Database created!';
         }
@@ -21,44 +21,47 @@ class ZachernFlugzeugeMusterKlappen extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'musterID' => [
+            'protokollSpeicherID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,
             ],
-            'stellungBezeichnung' => [
+            'protokollInputID' => [
+                'type'              => 'INT',
+                'constraint'        => '10',
+                'null'              => false,
+            ],
+            'wert' => [
+                'type'              => 'TEXT',
+                'null'              => false,
+            ],
+            'woelbklappenstellung' => [
                 'type'              => 'VARCHAR',
                 'constraint'        => '255',
-                'null'              => false,
-            ],
-            'stellungWinkel' => [
-                'type'              => 'DOUBLE',
-                'constraint'        => '10,2',
                 'null'              => true,
+                'default'           => null,
             ],
-            'neutral' => [
-                'type'              => 'TINYINT',
-                'constraint'        => '1',
+            'linksUndRechts' => [
+                'type'              => 'VARCHAR',
+                'constraint'        => '255',
                 'null'              => true,
+                'default'           => null,
             ],
-            'kreisflug' => [
-                'type'              => 'TINYINT',
-                'constraint'        => '1',
-                'null'              => true,
-            ],
-            'iasVG' => [
+            'multipelNr' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => true,
+                'default'           => null,
             ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
+            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('flugzeuge_klappen', TRUE);
+        $this->forge->createTable('daten', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('flugzeuge_klappen');
+        $this->forge->dropTable('daten');
     }
 }

@@ -32,6 +32,7 @@ class ZachernPilotenAkafliegs extends Migration
                 'null'              => true,
                 'default'           => '1',
             ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('piloten_akafliegs');

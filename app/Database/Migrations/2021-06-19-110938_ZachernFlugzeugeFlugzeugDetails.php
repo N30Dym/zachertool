@@ -130,6 +130,7 @@ class ZachernFlugzeugeFlugzeugDetails extends Migration
                 'type'              => 'TEXT',
                 'null'              => false,
             ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('flugzeug_details', TRUE);

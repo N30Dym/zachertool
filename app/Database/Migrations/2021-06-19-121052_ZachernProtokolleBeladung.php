@@ -4,13 +4,13 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernPilotenPilotenDetails extends Migration
+class ZachernProtokolleBeladung extends Migration
 {
-    protected $DBGroup = 'pilotenDB';
+    protected $DBGroup = 'protokolleDB';
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_piloten', TRUE))
+        if ($this->forge->createDatabase('zachern_protokolle', TRUE))
         {
             echo 'Database created!';
         }
@@ -21,26 +21,27 @@ class ZachernPilotenPilotenDetails extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'pilotID' => [
+            'protokollSpeicherID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,
             ],
-            "`datum` date NOT NULL DEFAULT current_timestamp()",
-            'stundenNachSchein' => [
+            'flugzeugHebelarmID' => [
                 'type'              => 'INT',
-                'constraint'        => '11',
-                'null'              => false,
+                'constraint'        => '10',
+                'null'              => true,
+                'default'           => null,
             ],
-            'geflogeneKm' => [
-                'type'              => 'INT',
-                'constraint'        => '11',
-                'null'              => false,
+            'bezeichnung' => [
+                'type'              => 'VARCHAR',
+                'constraint'        => '255',
+                'null'              => true,
+                'default'           => null,
             ],
-            'typenAnzahl' => [
-                'type'              => 'INT',
-                'constraint'        => '11',
-                'null'              => false,
+            'hebelarm' => [
+                'type'              => 'DOUBLE',
+                'constraint'        => '10,2',
+                'null'              => true,
             ],
             'gewicht' => [
                 'type'              => 'DOUBLE',
@@ -48,13 +49,14 @@ class ZachernPilotenPilotenDetails extends Migration
                 'null'              => false,
             ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
+            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('piloten_details');
+        $this->forge->createTable('beladung', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('piloten_details');
+        $this->forge->dropTable('beladung');
     }
 }

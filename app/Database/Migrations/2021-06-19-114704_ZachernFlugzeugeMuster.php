@@ -53,6 +53,7 @@ class ZachernFlugzeugeMuster extends Migration
                 'constraint'        => '1',
                 'null'              => true,
             ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('muster', TRUE);

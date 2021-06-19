@@ -4,13 +4,13 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernPilotenPilotenDetails extends Migration
+class ZachernProtokolleHStWege extends Migration
 {
-    protected $DBGroup = 'pilotenDB';
+    protected $DBGroup = 'protokolleDB';
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_piloten', TRUE))
+        if ($this->forge->createDatabase('zachern_protokolle', TRUE))
         {
             echo 'Database created!';
         }
@@ -21,40 +21,41 @@ class ZachernPilotenPilotenDetails extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'pilotID' => [
+            'protokollSpeicherID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,
             ],
-            "`datum` date NOT NULL DEFAULT current_timestamp()",
-            'stundenNachSchein' => [
+            'protokollKapitelID' => [
                 'type'              => 'INT',
-                'constraint'        => '11',
+                'constraint'        => '10',
                 'null'              => false,
             ],
-            'geflogeneKm' => [
+            'gedruecktHSt' => [
                 'type'              => 'INT',
-                'constraint'        => '11',
+                'constraint'        => '10',
+                'null'              => true,
+                'default'           => 0,
+            ],
+            'neutralHSt' => [
+                'type'              => 'INT',
+                'constraint'        => '10',
                 'null'              => false,
             ],
-            'typenAnzahl' => [
+            'gezogenHSt' => [
                 'type'              => 'INT',
-                'constraint'        => '11',
-                'null'              => false,
-            ],
-            'gewicht' => [
-                'type'              => 'DOUBLE',
-                'constraint'        => '10,2',
+                'constraint'        => '10',
                 'null'              => false,
             ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
+            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('piloten_details');
+        $this->forge->createTable('hst-wege', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('piloten_details');
+        $this->forge->dropTable('hst-wege');
     }
 }

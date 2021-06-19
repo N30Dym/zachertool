@@ -50,6 +50,7 @@ class ZachernFlugzeugeFlugzeugWaegung extends Migration
                 'type'              => 'DATE',
                 'null'              => false,
             ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('flugzeuge_waegung', TRUE);

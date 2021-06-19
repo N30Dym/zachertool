@@ -4,13 +4,13 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernFlugzeugeMusterHebelarme extends Migration
+class ZachernProtokolleKommentare extends Migration
 {
-    protected $DBGroup = 'flugzeugeDB';
+    protected $DBGroup = 'protokolleDB';
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
+        if ($this->forge->createDatabase('zachern_protokolle', TRUE))
         {
             echo 'Database created!';
         }
@@ -21,29 +21,29 @@ class ZachernFlugzeugeMusterHebelarme extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'musterID' => [
+            'protokollSpeicherID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,
             ],
-            'beschreibung' => [
-                'type'              => 'VARCHAR',
-                'constraint'        => '255',
+            'protokollKapitelID' => [
+                'type'              => 'INT',
+                'constraint'        => '10',
                 'null'              => false,
             ],
-            'hebelarm' => [
-                'type'              => 'DOUBLE',
-                'constraint'        => '10,2',
+            'kommentar' => [
+                'type'              => 'TEXT',
                 'null'              => false,
             ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
+            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('muster_hebelarme', TRUE);
+        $this->forge->createTable('kommentare', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('muster_hebelarme');
+        $this->forge->dropTable('kommentare');
     }
 }

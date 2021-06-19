@@ -51,6 +51,7 @@ class ZachernFlugzeugeFlugzeugKlappen extends Migration
                 'constraint'        => '10',
                 'null'              => true,
             ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('flugzeuge_klappen', TRUE);

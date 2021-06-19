@@ -59,19 +59,11 @@ class ZachernPiloten extends Migration
                 'null'              => true,
                 'default'           => null,
             ],
-            'erstelltAm' => [
-                'type'              => 'DATETIME',
-                'null'              => false,
-                'default'           => 'CURRENT_TIMESTAMP()',
-            ],
-            'geaendertAm' => [
-                'type'              => 'DATETIME',
-                'null'              => false,
-                'default'           => 'CURRENT_TIMESTAMP()',
-            ],
+            "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
+            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()"
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('piloten');
+        $this->forge->createTable('piloten', TRUE);
     }
 
     public function down()

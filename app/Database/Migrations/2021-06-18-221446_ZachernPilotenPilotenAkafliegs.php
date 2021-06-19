@@ -6,6 +6,8 @@ use CodeIgniter\Database\Migration;
 
 class ZachernPilotenAkafliegs extends Migration
 {
+    protected $DBGroup = 'pilotenDB';
+    
     public function up()
     {
         if ($this->forge->createDatabase('zachern_piloten', TRUE))

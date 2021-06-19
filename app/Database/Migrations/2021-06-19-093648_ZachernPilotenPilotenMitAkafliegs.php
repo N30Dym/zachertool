@@ -9,9 +9,7 @@ class ZachernPilotenPilotenMitAkafliegs extends Migration
     protected $DBGroup = 'pilotenDB';
     
     public function up()
-    {
-        $pilotenDB          = \Config\Database::connect('pilotenDB');
-        
+    {        
         $query = "CREATE VIEW `piloten_mit_akafliegs` AS
             SELECT 
                 `piloten`.`id` AS `id`,
@@ -31,19 +29,17 @@ class ZachernPilotenPilotenMitAkafliegs extends Migration
         
         try 
         {
-            $pilotenDB->query($query);
+            $this->db->query($query);
         } 
         catch (Exception $ex) 
         {
             $this->showError($ex);
-        }
-        
+        }      
     }
 
     public function down()
-    {
-        $query = "DROP VIEW `piloten_mit_akafliegs`";
-        
-        $this->DBGroup->query($query);
+    {        
+        $query = "DROP VIEW `piloten_mit_akafliegs`";        
+        $this->db->query($query);
     }
 }

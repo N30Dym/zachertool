@@ -26,11 +26,7 @@ class ZachernPilotenPilotenDetails extends Migration
                 'constraint'        => '11',
                 'null'              => false,
             ],
-            'datum' => [
-                'type'              => 'DATE',
-                'null'              => false,
-                'default'           => 'CURRENT_TIMESTAMP()',
-            ],
+            "`datum` date NOT NULL DEFAULT current_timestamp()",
             'stundenNachSchein' => [
                 'type'              => 'INT',
                 'constraint'        => '11',
@@ -54,7 +50,7 @@ class ZachernPilotenPilotenDetails extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('piloten');
+        $this->forge->createTable('piloten_details');
     }
 
     public function down()

@@ -10,18 +10,13 @@ class ZachernFlugzeugeFlugzeugWaegung extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'flugzeugID ' => [
+            'flugzeugID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,

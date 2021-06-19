@@ -10,11 +10,6 @@ class ZachernFlugzeugeMuster extends Migration
     
     public function up()
     { 
-        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',
@@ -43,12 +38,12 @@ class ZachernFlugzeugeMuster extends Migration
                 'null'              => true,
                 'default'           => '1',
             ],
-            'sichtbar' => [
+            'istDoppelsitzer' => [
                 'type'              => 'TINYINT',
                 'constraint'        => '1',
                 'null'              => true,
             ],
-            'sichtbar' => [
+            'istWoelbklappenFlugzeug' => [
                 'type'              => 'TINYINT',
                 'constraint'        => '1',
                 'null'              => true,

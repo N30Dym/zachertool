@@ -10,11 +10,6 @@ class ZachernProtokolllayoutProtokollUnterkapitel extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_protokolllayout', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',
@@ -37,7 +32,7 @@ class ZachernProtokolllayoutProtokollUnterkapitel extends Migration
                 'null'              => false,
             ],
             'zusatztext' => [
-                'type'              => 'TEXT',,
+                'type'              => 'TEXT',
                 'null'              => true,
                 'default'           => null,
             ],

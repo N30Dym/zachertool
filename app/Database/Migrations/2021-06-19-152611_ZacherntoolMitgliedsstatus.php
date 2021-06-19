@@ -10,11 +10,6 @@ class ZacherntoolMitgliedsstatus extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachertool', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',

@@ -10,11 +10,6 @@ class ZachernPilotenAkafliegs extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_piloten', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',

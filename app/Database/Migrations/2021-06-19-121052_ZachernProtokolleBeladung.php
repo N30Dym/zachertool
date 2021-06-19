@@ -9,12 +9,7 @@ class ZachernProtokolleBeladung extends Migration
     protected $DBGroup = 'protokolleDB';
     
     public function up()
-    {
-        if ($this->forge->createDatabase('zachern_protokolle', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
+    {        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',

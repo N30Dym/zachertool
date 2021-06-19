@@ -10,11 +10,6 @@ class ZachernProtokolllayoutProtokollInputs extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_protokolllayout', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',

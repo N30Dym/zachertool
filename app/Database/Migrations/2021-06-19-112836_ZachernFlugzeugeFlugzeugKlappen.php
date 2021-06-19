@@ -10,11 +10,6 @@ class ZachernFlugzeugeFlugzeugKlappen extends Migration
     
     public function up()
     {
-        if ($this->forge->createDatabase('zachern_flugzeuge', TRUE))
-        {
-            echo 'Database created!';
-        }
-        
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',

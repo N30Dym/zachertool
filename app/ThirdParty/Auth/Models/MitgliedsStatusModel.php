@@ -10,7 +10,7 @@ use CodeIgniter\Model;
 class MitgliedsStatusModel extends Model
 {
     
-    protected $DBGroup      = 'userDB';
+    protected $DBGroup      = 'zachertoolDB';
     protected $table        = 'mitgliedsstatus';
     protected $primaryKey   = 'id';
 

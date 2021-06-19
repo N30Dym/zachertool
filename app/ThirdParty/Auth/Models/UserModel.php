@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     
-    protected $DBGroup      = 'userDB';
+    protected $DBGroup      = 'zachertoolDB';
     protected $table        = 'users';
     protected $primaryKey   = 'id';
 

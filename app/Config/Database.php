@@ -55,8 +55,8 @@ class Database extends Config
 	public $flugzeugeDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'idaflieg',
-		'password' => 'zachertoolDB',
+		'username' => 'root',
+		'password' => '',
 		'database' => 'zachern_flugzeuge',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -75,8 +75,8 @@ class Database extends Config
 	public $pilotenDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'idaflieg',
-		'password' => 'zachertoolDB',
+		'username' => 'root',
+		'password' => '',
 		'database' => 'zachern_piloten',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -95,8 +95,8 @@ class Database extends Config
 	public $protokolleDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'idaflieg',
-		'password' => 'zachertoolDB',
+		'username' => 'root',
+		'password' => '',
 		'database' => 'zachern_protokolle',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -115,8 +115,8 @@ class Database extends Config
 	public $protokolllayoutDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'idaflieg',
-		'password' => 'zachertoolDB',
+		'username' => 'root',
+		'password' => '',
 		'database' => 'zachern_protokolllayout',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
@@ -132,12 +132,12 @@ class Database extends Config
 		'port'     => 3306,
 	];
         
-        public $userDB = [
+        public $zachertoolDB = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'idaflieg',
-		'password' => 'zachertoolDB',
-		'database' => 'users',
+		'username' => 'root',
+		'password' => '',
+		'database' => 'zachertool',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,

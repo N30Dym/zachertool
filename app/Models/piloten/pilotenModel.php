@@ -23,11 +23,16 @@ class pilotenModel extends Model
     
     protected $validationRules          = 'pilot';
     
-    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'akafliegID', 'groesse', 'sichtbar', 'geaendertAm'];
+    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'akafliegID', 'groesse', 'sichtbar', 'zachereinweiser', 'geaendertAm'];
 
     public function getSichtbarePiloten()
     {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
+    }
+    
+    public function getUnsichtbarePiloten()
+    {
+        return $this->where('sichtbar', null)->orWhere('sichtbar', 0)->orderBy('geaendertAm', 'DESC')->findAll();
     }
 	
     public function getPilotNachID($id)
@@ -39,11 +44,6 @@ class pilotenModel extends Model
     {
         return $this->findAll();
     }
-
-    /*public function getPilotenDiesesJahr()
-    {
-        return $this->where(["geaendertAm >" => date("Y-m-d", strtotime("-24 months")), "sichtbar" => 1])->findAll();
-    }*/
     
     public function getPilotNachVornameUndSpitzname($vorname, $spitzname) 
     {
@@ -59,5 +59,15 @@ class pilotenModel extends Model
         {
             $error = $this->error(); // Has keys 'code' and 'message'
         }
+    }
+    
+    public function getAlleZachereinweiser()
+    {
+        return $this->where('sichtbar', 1)->where('zachereinweiser', 1)->findAll();
+    }
+    
+    public function getSichtbarePilotenOhneZachereinweiser()
+    {
+        return $this->where('sichtbar', 1)->where("(`zachereinweiser` = 0 OR `zachereinweiser` IS NULL)")->findAll();
     }
 }

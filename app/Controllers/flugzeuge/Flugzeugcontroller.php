@@ -4,7 +4,7 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 
-use App\Controllers\flugzeuge\{ Flugzeugadmincontroller, Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
+use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
 helper(["array","form","text","url"]);
 
@@ -24,14 +24,14 @@ class Flugzeugcontroller extends Controller
     
     public function musterListe()
     {
-        $title = 'Musterauswahl';		
+        $titel = 'Musterauswahl';		
 
         $datenHeader = [
-            'title'     => $title,
+            'titel'     => $titel,
         ];
 
         $datenInhalt = [
-            'title'     => $title,
+            'titel'     => $titel,
             'muster'    => $this->ladeSichtbareMuster()
         ];
         

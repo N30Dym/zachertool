@@ -34,8 +34,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
     // Startseite
-$routes->get('/', 'Startseitecontroller::index');
-$routes->get('startseite', 'Startseitecontroller::index');
+$routes->add('/', 'Startseitecontroller::index');
+$routes->add('startseite', 'Startseitecontroller::index');
 
     // Piloten
 $routes->get('piloten/neu', 'piloten\Pilotencontroller::pilotAnlegen');
@@ -61,23 +61,23 @@ $routes->get('nachricht', 'Nachrichtencontroller::nachricht');
 
     // Protokolle
 $routes->get('protokolle/index', 'protokolle\Protokollcontroller::index/');
+$routes->get('protokolle/neu', 'protokolle\Protokollcontroller::neu');
 $routes->get('protokolle/kapitel', 'protokolle\Protokollcontroller::index/');
 $routes->get('protokolle/abbrechen', 'protokolle\Protokollcontroller::abbrechen/');
 $routes->match(['get', 'post'], 'protokolle/index', 'protokolle\Protokollcontroller::index');
 $routes->match(['get', 'post'], 'protokolle/index/(:num)', 'protokolle\Protokollcontroller::index/$1');
-//$routes->match(['get', 'post'], 'protokolle/kapitel/1', 'protokolle\Protokollcontroller::index/');
 $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protokollcontroller::kapitel/$1');
 $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcontroller::speichern/');
 $routes->match(['get', 'post'], 'protokolle/absenden', 'protokolle\Protokollcontroller::absenden/');
 
-$routes->get('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
+$routes->add('protokolle/protokollListe/', 'protokolle\Protokolllistencontroller::index');
 $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencontroller::fertigeProtokolle');
 $routes->get('protokolle/protokollListe/offen', 'protokolle\Protokolllistencontroller::angefangeneProtokolle');
 $routes->get('protokolle/protokollListe/abgegeben', 'protokolle\Protokolllistencontroller::abgegebeneProtokolle');
 
     // Admin-Piloten
 //$routes->get('admin/piloten', 'piloten\Pilotencontroller::uebersicht/index');
-$routes->get('admin/piloten/index', 'piloten\Pilotencontroller::adminFunktionen/index');
+/*$routes->get('admin/piloten/index', 'admin\Admincontroller::Piloten');
 $routes->get('admin/piloten/(:segment)', 'piloten\Pilotencontroller::adminFunktionen/$1');
 
     // Admin-Flugzeuge
@@ -86,7 +86,40 @@ $routes->get('admin/flugzeuge/index', 'flugzeuge\Flugzeugcontroller::uebersicht'
 
     // Admin-Protokolle
 $routes->get('admin/protokolle', 'protokolle\Protokollcontroller::uebersicht');
-$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');
+$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');*/
+
+$routes->group('admin', function($routes)
+{
+    $routes->group('piloten', function($routes)
+    {
+        $routes->add('', 'admin\Adminpilotencontroller::index');
+        $routes->add('index', 'admin\Adminpilotencontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminpilotencontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminpilotenspeichercontroller::speichern/$1');
+        $routes->add('test', 'admin\Adminpilotencontroller::test');
+    });
+    
+    $routes->group('flugzeuge', function($routes)
+    {
+        $routes->add('', 'admin\Adminflugzeugcontroller::index');
+        $routes->add('index', 'admin\Adminflugzeugcontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminflugzeugcontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
+    });
+    
+    $routes->group('protokolle', function($routes)
+    {
+        $routes->add('', 'admin\Adminprotokollcontroller::index');
+        $routes->add('index', 'admin\Adminprotokollcontroller::index');
+        $routes->add('liste/(:segment)', 'admin\Adminprotokollcontroller::liste/$1');
+        $routes->add('speichern/(:segment)', 'admin\Adminprotokollspeichercontroller::speichern/$1');
+        $routes->post('speichern/(:segment)', 'admin\Adminprotokollspeichercontroller::speichern/$1');
+    });
+    
+    $routes->addRedirect('', '/');
+});
 
 
 
@@ -105,5 +138,5 @@ $routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersic
  */
 if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
 {
-	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
+    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }

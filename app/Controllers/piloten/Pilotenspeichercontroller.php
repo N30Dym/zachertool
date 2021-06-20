@@ -75,7 +75,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
          * Das Array "pilotDetails" beinhaltet alle Daten, die in der Datenbanktabelle piloten_details gespeichert werden, richtig formatiert.
          */
     
-    protected function setzeDatenPilotUndPilotDetails($uebergebeneDaten)
+    public function setzeDatenPilotUndPilotDetails($uebergebeneDaten)
     {       
         $rueckgabeArray = [];
         
@@ -97,7 +97,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
          * 
          * Das Array "pilot" beinhaltet alle Daten, die in der Datenbanktabelle piloten gespeichert werden, richtig formatiert.
          */
-    protected function setzeDatenPilotDetails($uebergebeneDaten)
+    public function setzeDatenPilotDetails($uebergebeneDaten)
     {
         $rueckgabeArray = [];
         

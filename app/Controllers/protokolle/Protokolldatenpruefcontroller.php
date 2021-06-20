@@ -84,7 +84,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst das Datum angeben");
         }
-        if(empty($_SESSION['protokoll']['gewaehlteProtokollTypen']))
+        if(empty($_SESSION['protokoll']['gewaehlteProtokollTypen']) OR empty($_SESSION['protokoll']['protokollIDs']))
         {
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst mindestens ein Protokoll auswählen");
@@ -98,6 +98,11 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         {
             $protokollDetailsVorhanden = false;
             $this->setzeFehlerCode(PILOT_EINGABE, "Du musst den Pilot auswählen");
+        }
+        if(isset($_SESSION['protokoll']['pilotID']) AND isset($_SESSION['protokoll']['copilotID']) AND $_SESSION['protokoll']['copilotID'] == $_SESSION['protokoll']['pilotID'])
+        {
+            $protokollDetailsVorhanden = false;
+            $this->setzeFehlerCode(PILOT_EINGABE, "Der Begleiter darf nicht gleichzeitig Pilot sein");
         }
         if(array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) AND !$this->pruefeBeladungsZustand())
         {
@@ -143,6 +148,10 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             {
                 ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : null;
             }
+            elseif(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Copilot")
+            {
+                ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : (($hebelarm[0] == "" AND $hebelarm['Fallschirm'] == "") ? true : null);
+            }
         }
         
         return $hebelarmeKorrekt;
@@ -151,7 +160,8 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     protected function setzeProtokollDetails()
     {
         $protokollDetails = [
-            'datum' => $_SESSION['protokoll']['protokollInformationen']['datum'] 
+            'datum'         => $_SESSION['protokoll']['protokollInformationen']['datum'],
+            'protokollIDs'  => json_encode($_SESSION['protokoll']['protokollIDs']),
         ];
 
         empty($_SESSION['protokoll']['flugzeugID']) ? null :                            $protokollDetails['flugzeugID'] = $_SESSION['protokoll']['flugzeugID'];
@@ -176,32 +186,16 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {
                 foreach($werteRichtungMulitpelNr as $richtung => $werteMultipelNr)
-                {
-                    if(sizeof($werteMultipelNr)>1)
-                    {                    
-                        foreach($werteMultipelNr as $multipelNr => $wert)
-                        {
-                            if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
-                            {
-                                $temporaeresWertArray['protokollInputID'] = $protokollInputID;
-                                $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
-                                $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
-                                $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                                $temporaeresWertArray['multipelNr'] = $multipelNr;
-                                array_push($zuSpeicherndeWerte, $temporaeresWertArray);
-                            } 
-                        }
-                    }
-                    else 
+                {                                      
+                    foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        $wert = $werteMultipelNr[0];
                         if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
                             $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
                             $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
                             $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                            $temporaeresWertArray['multipelNr'] = null;
+                            $temporaeresWertArray['multipelNr'] = empty($multipelNr) ? null : $multipelNr;
                             array_push($zuSpeicherndeWerte, $temporaeresWertArray);
                         } 
                     }

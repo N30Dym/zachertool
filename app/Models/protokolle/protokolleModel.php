@@ -16,8 +16,10 @@ class protokolleModel extends Model
     protected $primaryKey       = 'id';
     protected $createdField  	= 'erstelltAm';
     protected $validationRules 	= 'protokolle';
+    
+    protected $returnType     = 'array';
 
-    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
+    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
 
         /**
@@ -135,7 +137,7 @@ class protokolleModel extends Model
     
     public function getZehnMeisteZacherer()
     {
-        $query = "SELECT pilotID, COUNT(pilotID) as anzahlProtokolle FROM `protokolle` WHERE fertig = 1 GROUP BY 1 ORDER BY 2 DESC LIMIT 10";
+        $query = "SELECT pilotID, COUNT(pilotID) as anzahlProtokolle FROM `protokolle` WHERE bestaetigt = 1 GROUP BY 1 ORDER BY 2 DESC LIMIT 10";
         return $this->query($query)->getResultArray();
     }
     
@@ -172,5 +174,14 @@ class protokolleModel extends Model
     {
         $query = $this->builder()->set($protokollDaten)->where('id', $id)->getCompiledUpdate();
         $this->query($query);
+    }
+    
+    public function getAnzahlProtokolleNachPilotID($pilotID) 
+    {
+        return $this->selectCount("id")->where('pilotID', $pilotID)->first();
+    }
+    public function getAnzahlProtokolleAlsCopilotNachPilotID($copilotID) 
+    {
+        return $this->selectCount("id")->where('copilotID', $copilotID)->first();
     }
 }	

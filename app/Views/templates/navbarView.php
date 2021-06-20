@@ -2,10 +2,9 @@
 
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
+
 <header>
 
-
-    
 <nav class="navbar navbar-expand-md navbar-light bg-gradient" style="background-color: #343a40;">
     <div class="container-fluid" >
         <a class="navbar-brand" href="<?= base_url() ?>">
@@ -40,7 +39,7 @@
                         Protokolle
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/index">Neues Protokoll</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/neu">Neues Protokoll</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/offen">Angefangene Protokolle</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/fertig">Fertige Protokolle</a>
                         <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/abgegeben">Abgegebene Protokolle</a>
@@ -79,10 +78,11 @@
             </div>
         </div>
         <a class="navbar-brand" href="">
-            <img class="rounded-1" src="<?= base_url() ?>/public/bilder/DLRLogoDeutschinWeißalsPNG.png" alt="" height="40">
+            <img src="<?= base_url() ?>/public/bilder/DLRLogoDeutschinWeißalsPNG.png" alt="" height="40">
         </a>
     </div>
 </nav>    
+    
 </header>
 <main class="container bg-white shadow pb-5 pt-3">
     

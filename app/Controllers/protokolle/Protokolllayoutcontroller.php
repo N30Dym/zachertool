@@ -97,126 +97,18 @@ class Protokolllayoutcontroller extends Protokollcontroller
         return $temporaeresUnterkapitelArray;  
     }
     
-    protected function getEingaben() 
-    {
-        $protokollEingabenModel = new protokollEingabenModel();
-        
-        $temporaeresEingabeArray = [];
+    
+    
+   
+    
+  
 
-        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
-        {
-            foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']][$protokollKapitelID] as $protokollUnterkapitelID => $eingaben)
-            {
-                $temporaeresEingabeArray[$protokollUnterkapitelID] = $protokollEingabenModel->getProtokollEingabeNachID($protokollUnterkapitelID);
-            }
-        }
-        //var_dump($temporaeresEingabeArray);
-        return $temporaeresEingabeArray;            
-    }
     
-    protected function getProtokollInputs()
-    {
-        $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();            
-        $temporaeresInputArray              = [];
+    
+    
+    
+    
 
-        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollUnterkapitelID => $unterkapitel)
-        {
-            foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']][$protokollUnterkapitelID] as $protokollEingabeID => $eingaben)
-            {
-                foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']][$protokollUnterkapitelID][$protokollEingabeID] as $protokollInputID => $inputs)
-                {
-                    $temporaeresInputArray[$protokollInputID] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($protokollInputID);
-                }
-            }
-        }
-        
-        return $temporaeresInputArray;  
-    }
-    
-    protected function getAuswahllisten() 
-    {
-        $auswahllistenModel = new auswahllistenModel();
-             
-        $temporaeresAuswahllistenArray  = [];
-        
-        foreach($this->getProtokollInputs() as $protokollInput)
-        {
-            
-            if($protokollInput["inputTyp"] === "Auswahloptionen")
-            {
-                $temporaeresAuswahllistenArray[$protokollInput["id"]] = $auswahllistenModel->getAuswahllisteNachProtokollInputID($protokollInput["id"]);
-            }   
-        }
-        
-        return $temporaeresAuswahllistenArray;
-    }
-    
-    protected function getFlugzeugeFuerAuswahl()
-    {
-        $flugzeugeMitMusterModel        = new flugzeugeMitMusterModel();
-        $sichtbareFlugzeugeMitMuster    = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
-              
-        array_sort_by_multiple_keys($sichtbareFlugzeugeMitMuster, ["musterKlarname" => SORT_ASC]);
-        
-        return $sichtbareFlugzeugeMitMuster;
-    }
-    
-    protected function getFlugzeugHebelarme()
-    {
-        $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
-        
-        $flugzeugHebelarme = $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($_SESSION['protokoll']['flugzeugID']);
-        $flugzeugHebelarmeSortiert = [];
-        $indexPilot = $indexCopilot = null;
-        
-        foreach($flugzeugHebelarme as $key => $flugzeugHebelarm)			
-        {  
-            array_search("Pilot", $flugzeugHebelarme[$key]) ?  $indexPilot = $key : "";
-            array_search("Copilot", $flugzeugHebelarme[$key]) ?  $indexCopilot = $key : "";
-        }
-
-            // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
-        $flugzeugHebelarmeSortiert[0] = $flugzeugHebelarme[$indexPilot];
-        if($indexCopilot)
-        {
-            $flugzeugHebelarmeSortiert[1] = $flugzeugHebelarme[$indexCopilot];
-        }
-        else 
-        {
-            $flugzeugHebelarmeSortiert[1] = [];
-        }
-
-            // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
-        foreach($flugzeugHebelarme as $key => $flugzeugHebelarm)
-        {
-            if($key !== $indexPilot AND $key !== $indexCopilot)
-            {
-                array_push($flugzeugHebelarmeSortiert,$flugzeugHebelarm);
-            }
-        }
-        return $flugzeugHebelarmeSortiert;
-    }
-    
-    protected function getPilotenFuerAuswahl()
-    {
-        $pilotenModel           = new pilotenModel();
-        
-        $temporaeresPilotArray  = [];
-
-        foreach($pilotenModel->getSichtbarePiloten() as $pilot)
-        {
-            $temporaeresPilotArray[$pilot['id']] = $pilot;
-        }
-         
-        return $temporaeresPilotArray;
-    }  
-    
-    protected function getPilotGewichtNachPilotID($pilotID) 
-    {
-        $pilotenDetailsModel = new pilotenDetailsModel();
-        
-        return $pilotenDetailsModel->getPilotenGewichtNachPilotIDUndDatum($pilotID, $_SESSION['protokoll']['protokollInformationen']['datum'])[0]['gewicht'];
-    }
     
     protected function erhalteEingebebeneDatenBeiProtokollWechsel($datenArray, $protokollInputID)
     {
@@ -243,42 +135,5 @@ class Protokolllayoutcontroller extends Protokollcontroller
         }
     }
     
-    protected function datenZumDatenInhaltHinzufügen() 
-    {        
-        $inhaltZusatz = [];
-        
-        switch($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']])
-        {
-            case FLUGZEUG_EINGABE:
-                $inhaltZusatz['flugzeugeDatenArray'] = $this->getFlugzeugeFuerAuswahl();
-                break;
-            case PILOT_EINGABE:
-                $inhaltZusatz['pilotenDatenArray'] = $this->getPilotenFuerAuswahl();
-                break;
-            case BELADUNG_EINGABE:
-                $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
-                if(isset($_SESSION['protokoll']['flugzeugID'])) //&& ! isset($_SESSION['protokoll']['protokollSpeicherID']))
-                {
-                    //$inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
-                    if(isset($_SESSION['protokoll']['pilotID']))
-                    {
-                        $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['protokoll']['pilotID']);      
-                    }
-                    if(isset($_SESSION['protokoll']['copilotID']))
-                    {
-                        $inhaltZusatz['copilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['protokoll']['copilotID']);
-                    }
-                }
-                 
-                break;
-            default:
-                $inhaltZusatz = [
-                    'eingabenDatenArray'        => $this->getEingaben(),
-                    'inputsDatenArray'          => $this->getProtokollInputs(),
-                    'auswahllistenDatenArray'   => $this->getAuswahllisten()
-                ];
-        }
-        
-        return $inhaltZusatz;
-    }
+    
 }

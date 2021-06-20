@@ -1,9 +1,15 @@
+<div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
+    <h1><?= $titel ?></h1>
+</div>
 
 <div class="row">
-    <div class="col-1"></div>
+    <div class="col-lg-1">
+    </div>
 
-    <div class="col-10 row">
+    <div class="col-md-10 border p-4 rounded shadow mb-3">
         <form action="<?= base_url() ?>/piloten/speichern" method="post">
+            
+            <?= csrf_field() ?>
             
             <input type="hidden" name="pilotID" value="<?= $pilotID ?? "" ?>">
             
@@ -120,21 +126,24 @@
                 </div>
             
             </div>
-            <div class="row gx-3 mt-5">
-                <div class="col-6">
-                    <a href="<?= base_url() ?>">
+            <div class="row">
+                
+                <div class="mt-3 col-lg-6 d-grid gap-2 d-md-block">
+                    <a href="<?= base_url() ?>" class="">
                         <button type="button" id="Abbrechen" class="btn btn-danger col-12">Abbrechen</button>
                     </a>
                 </div>
-                <div class="col-6">
+                
+                <div class="mt-3 col-lg-6 d-grid gap-2 d-md-block">
                     <button type="submit" class="btn btn-success col-12">Speichern</button>
                 </div>
+                
             </div>
-            
         </form>
  
     </div>
+        
+    <div class="col-lg-1">
+    </div>
     
-    
-    <div class="col-1"></div>
 </div>

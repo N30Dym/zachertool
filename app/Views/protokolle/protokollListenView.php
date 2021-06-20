@@ -9,7 +9,7 @@
         <?php if (isset($protokolleArray[0])) : ?>
             
                 <?php if($protokolleArray == null) : ?>
-                    Keine Protokolle gefunden
+                    Es sind keine Protokolle vorhanden
                 <?php else : ?>
                     
                     <div class="table-responsive-lg">
@@ -35,8 +35,8 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= $protokoll['id'] ?> &raquo;</button></a></td>
-                                    <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten <?= $protokoll['id'] ?> &raquo;</button></a></td>
+                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
+                                    <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
                                 </tr>
 
                             <?php endforeach ?>  
@@ -49,7 +49,7 @@
         <?php else : ?>
                     
             <?php if($protokolleArray == null) : ?>
-                    Keine Protokolle gefunden  
+                    Es sind keine Protokolle vorhanden  
             <?php else : ?>
                     
                 <?php foreach($protokolleArray as $jahr => $protokolleProJahr) : ?>
@@ -78,8 +78,7 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= $protokoll['id'] ?> &raquo;</button></a></td>
-                                    <td></td>
+                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
                                 </tr>
 
                             <?php endforeach ?>  

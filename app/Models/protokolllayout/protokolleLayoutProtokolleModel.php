@@ -21,7 +21,7 @@ class protokolleLayoutProtokolleModel extends Model
 
     public function getProtokollTypIDNachID($id)
     {	
-        return $this->where("id", $id)->first();
+        return $this->select('protokollTypID')->where("id", $id)->first();
     }
 
     public function getProtokollAktuelleProtokollIDNachProtokollTypID($protokollTypID)

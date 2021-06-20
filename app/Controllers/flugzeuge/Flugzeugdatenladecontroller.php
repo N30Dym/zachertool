@@ -208,12 +208,12 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         $musterModel            = new musterModel();
         
         return [
-            "musterEingaben"        => $musterModel->getDistinctSichtbareMusterSchreibweisen(),
-            "variometerEingaben"    => $flugzeugDetailsModel->getDistinctVariometerEingaben(),
-            "tekEingaben"           => $flugzeugDetailsModel->getDistinctTekEingaben(),
-            "pitotPositionEingaben" => $flugzeugDetailsModel->getDistinctPitotPositionEingaben(),
-            "bremsklappenEingaben"  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben(),
-            "bezugspunktEingaben"   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben(),            
+            "musterEingaben"        => $musterModel->getDistinctSichtbareMusterSchreibweisen() ?? array(),
+            "variometerEingaben"    => $flugzeugDetailsModel->getDistinctVariometerEingaben() ?? array(),
+            "tekEingaben"           => $flugzeugDetailsModel->getDistinctTekEingaben() ?? array(),
+            "pitotPositionEingaben" => $flugzeugDetailsModel->getDistinctPitotPositionEingaben() ?? array(),
+            "bremsklappenEingaben"  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben() ?? array(),
+            "bezugspunktEingaben"   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben() ?? array(),            
         ];
     
     }   

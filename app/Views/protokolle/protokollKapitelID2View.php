@@ -3,7 +3,10 @@
 <!----------------------------------------> 
 
 <?php if( ! isset($_SESSION['protokoll']['flugzeugID'])) : ?>
-    <span class="text-danger m-3">Es wurde kein Flugzeug ausgewählt</span>
+    <div class="col-12 alert alert-danger">
+        <small>Es wurde kein Flugzeug ausgewählt</small>
+    </div>
+
     <?php 
         unset($_SESSION['protokoll']['pilotID']);
         unset($_SESSION['protokoll']['copilotID']);
@@ -11,8 +14,8 @@
 
 <?php else: ?>
     <?php if (isset($_SESSION['protokoll']['doppelsitzer'])) : ?>
-        <div class="col-12 text-center">
-            <small class="text-danger">Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
+        <div class="col-12 alert alert-danger">
+            <small>Wenn der Begleiter nicht aufgeführt ist, kann er entweder neu angelegt oder das Gewicht im nächsten Schritt manuell eintragen werden</small>
         </div>
 
         <div class="col-md-5 border rounded shadow p-4">
@@ -30,7 +33,7 @@
                 <div class="col-12 text-center">  
                     <h4>Pilotenauswahl</h4>
                 </div>
-                <input class="form-control d-none" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
+                <input class="form-control JSsichtbar d-none" id="pilotSuche" type="text" placeholder="Suche nach Piloten...">
                 <br>
             </div>
             <div class="col-12">
@@ -66,7 +69,7 @@
                 <h4>Begleiterauswahl</h4>
             </div>
             <div class="col-12">
-                <input class="form-control d-none" id="copilotSuche" type="text" placeholder="Suche nach Begleiter...">
+                <input class="form-control JSsichtbar d-none" id="copilotSuche" type="text" placeholder="Suche nach Begleiter...">
                 <br>
             </div>
 

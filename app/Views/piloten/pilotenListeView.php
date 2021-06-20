@@ -1,18 +1,21 @@
-<div class="col-12 text-end">
-    <a href="<?= base_url() ?>/piloten/neu">
-        <button type="button" class="btn btn-success">Neuen Piloten anlegen</button>
-    </a>
+<div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
+    <h1><?= $titel ?></h1>
 </div>
 
-<h2 class="text-center m-3"><?= esc($titel) ?></h2>	
+<div class="mb-5 d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="<?= base_url() ?>/piloten/neu">
+        <button type="button" class="btn btn-success col-12">Neuen Piloten anlegen</button>
+    </a>
+</div>
+	
 <div class="row">
     <div class="col-lg-2">
       
     </div>
-    <div class="row col-lg-8 d-flex justify-content-center">	
+    <div class="col-lg-8 border p-4 rounded shadow mb-3">	
         <?php if($pilotenArray == null): ?>
             <div class="text-center">
-                Die Verbindung ist fehlgeschlagen
+                Es sind keine Piloten vorhanden
             </div>
         <?php else: ?>
             <div class="col-12">

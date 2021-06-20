@@ -27,7 +27,8 @@ $( document ).ready( function() {
     $( '#pilotSuche' ).removeClass( 'd-none' );
     $( '#copilotSuche' ).removeClass( 'd-none' );
     $( '#flugzeugSuche' ).removeClass( 'd-none' );
-    $( '.warnhinweisKeinJS' ).addClass( 'd-none' );
+    $( '.JSunsichtbar' ).addClass( 'd-none' );
+    $( '.JSsichtbar' ).removeClass( 'd-none' );
         
         /*
         * Beim Laden der Seite werden linksUndRechts-Felder auf "Ohne Richtungsangabe" gesetzt und die zweite Zeile unsichtbar
@@ -139,6 +140,8 @@ $( document ).ready( function() {
         });		
     });
     
+    
+    
         // Wenn bei linksUndRechts-Feldern eine Auswahl der eineRichtung getroffen wird, 
         // wird die andereRichtung entsprechend angepasst, bzw. ausgeblendet 
     $( document ).on( 'change', 'select.eineRichtung', function(){
@@ -168,7 +171,14 @@ $( document ).ready( function() {
         
     });
 
-   
+   $( document ).on( 'click', '.multipelHinzufügen', function()
+    {
+        $( this ).parent( 'div' ).parent( 'div' ).children( 'div.multibelTabelle' ).children( 'table' ).children( 'tbody' ).children( 'tr' ).each( function() 
+        {
+            $( this ).children( 'td:last' ).clone().appendTo( $( this ) );                
+            $( this ).children( 'td:last' ).find( 'input' ).val( '' );    
+        });
+    });
 
 });
 </script>
@@ -188,5 +198,10 @@ input[type=number] {
 
 label {
     margin-left: 0.5rem;
+}
+
+input[type=select]
+{
+    -webkit-appearance: none;
 }
 </style>

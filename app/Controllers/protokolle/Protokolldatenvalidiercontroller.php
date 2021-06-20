@@ -14,7 +14,7 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     {
         $validation = \Config\Services::validation();
         
-        $this->validereProtokollDaten($zuValidierendeDaten['protokoll'], $validation);
+        $this->validereProtokollDetails($zuValidierendeDaten['protokoll'], $validation);
         
         $this->validereWerte($zuValidierendeDaten['eingegebeneWerte'], $validation);
         
@@ -33,9 +33,9 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         return empty($_SESSION['protokoll']['fehlerArray']) ? true : false;
     }
     
-    protected function validereProtokollDaten($zuValidierendeProtokollDaten, $validation)
+    protected function validereProtokollDetails($zuValidierendeProtokollDetails, $validation)
     {
-        $validation->run($zuValidierendeProtokollDaten, 'protokolle');
+        $validation->run($zuValidierendeProtokollDetails, 'protokolle');
 
         if(!empty($validation->getErrors()))
         {

@@ -37,12 +37,25 @@ class Startseitecontroller extends Controller
         $datenInhalt["flugzeuge"]       = $this->getProtokolleDerLetztenJahreProFlugzeug($anzahlJahre);
 
         $datenInhalt["zacherkoenig"]    = $this->getProtokolleDerLetztenJahreProPilot($anzahlJahre);
+        
+        $letztesJahrInDemProtokolleExistieren = null;
+
+        foreach($datenInhalt["flugzeuge"] as $jahr => $flugzeugArray)
+        {
+            if(!empty($flugzeugArray))
+            {
+                $letztesJahrInDemProtokolleExistieren = $jahr;
+                break;
+            }
+        }
+
+        $datenInhalt['letztesJahrInDemProtokolleExistieren'] = empty($letztesJahrInDemProtokolleExistieren) ? array_values($datenInhalt["flugzeuge"])[0] : $letztesJahrInDemProtokolleExistieren;
 
         $this->ladeStartseiteView($datenHeader, $datenInhalt);
     }
 
     protected function ladeStartseiteView($datenHeader, $datenInhalt)
-    {
+    {        
         echo view('templates/headerView', $datenHeader);
         echo view('startseiteScript');
         echo view('templates/navbarView');

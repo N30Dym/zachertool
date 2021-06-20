@@ -1,22 +1,26 @@
-<div class="col-12 text-end mb-3">
-    <a href="<?= base_url() ?>/flugzeuge/neu">
-        <button type="button" class="btn btn-success">Neues Muster und Flugzeug anlegen</button>
-    </a>
+<div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
+    <h1><?= $titel ?></h1>
 </div>
 
-<h2 class="text-center m-4"><?= esc($title) ?></h2>	
+<div class="mb-5 d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="<?= base_url() ?>/flugzeuge/neu">
+        <button type="button" class="btn btn-success col-12">Neues Muster und Flugzeug anlegen</button>
+    </a>
+</div>
+	
 <div class="row">
-    <div class="col-2">
+    
+    <div class="col-lg-2">
     </div>
-    <div class="row col-8 d-flex justify-content-center">	
+    
+    <div class="col-md-8 border p-4 rounded shadow mb-3">	
         <?php if(count($muster) == 0): ?>
                 <div class="text-center">
-                        Die Verbindung ist fehlgeschlagen
+                        Es sind keine Muster vorhanden
                 </div>
         <?php else: ?>
-        <div class="col-12">
-                <input class="form-control JSsichtbar d-none" id="musterSuche" type="text" placeholder="Suche nach Muster...">
-                <br>
+        <div class="col-12 mb-4">
+            <input class="form-control JSsichtbar d-none bg-light" id="musterSuche" type="text" placeholder="Suche nach Muster...">
         </div>
 
         <div class="col-12">
@@ -36,6 +40,6 @@
             <?php endif ?>
         </table>
     </div>
-    <div class="col-2">
+    <div class="col-lg-2">
     </div>
 </div>

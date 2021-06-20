@@ -1,8 +1,9 @@
-
+<!-- Hiervor kommt protokollButtonsView mit dem <form>-Tag -->
 
 <!---------------------------------------->   
 <!--              Titel                 --> 
 <!----------------------------------------> 
+
     <div class="col-sm-1">
     </div>
     
@@ -24,3 +25,5 @@
 <!---------------------------------------->         
 
         <div class="row g-3 mt-3">
+            
+<!-- Hiernach kommt entweder protokollErsteSeiteView, eine der protokollKapitelIDXViews oder prootkollKapitelView -->

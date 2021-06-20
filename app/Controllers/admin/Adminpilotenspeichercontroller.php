@@ -43,6 +43,11 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
         }
     }
     
+    public function ueberschreibePilotenDaten($pilotID)
+    {
+        var_dump($this->request->postDaten());
+    }
+    
     protected function ueberschreibePilotenDaten($zuUeberschreibendeDaten)
     {
         $pilotenSpeicherController = new Pilotenspeichercontroller();

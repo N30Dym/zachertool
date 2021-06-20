@@ -2,7 +2,11 @@
     <h1><?= $titel ?></h1>
 </div>
 
-<form action="<?= base_url() ?>/piloten/speichern" method="post">
+<?php if($adminOderZachereinweiser === true) : ?>
+    <form action="<?= base_url() ?>admin/piloten/datenSpeichern" method="post">
+<?php else: ?>
+    <form action="<?= base_url() ?>/piloten/speichern" method="post">
+<?php endif ?>
     
     <?= csrf_field() ?>
     
@@ -28,30 +32,32 @@
                             <?= $validation->listErrors() ?>
                         </div>
                     <?php endif ?>
-
-                    <div class="col-12 <?= isset($pilotID) ? "" : "d-none" ?>">
-                         <small class="text-muted ms-5">Der Name und die Größe können nur von einem Admin geändert werden</small>
-                    </div>
+                    
+                    <?php if($adminOderZachereinweiser !== true) : ?>
+                        <div class="col-12 alert alert-secondary <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "" : "d-none" ?>">
+                             <small>Der Name und die Größe können nur von einem Admin oder Zachereinweiser geändert werden</small>
+                        </div>
+                    <?php endif ?>
                    
                     <div class="col-sm-4">
                         <label for="vorname" class="form-label ms-2"><b>Vorname</b></label>
-                        <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="spitzname" class="form-label ms-2"><b>Spitzname</b></label>
-                        <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="nachname" class="form-label ms-2"><b>Nachname</b></label>
-                        <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-6">
                         <label for="groesse" class="form-label ms-2"><b>Größe</b></label>
                         <div class="input-group">
-                            <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                            <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "disabled" : "" ?>>
                             <span class="input-group-text">cm</span>
                         </div>
                     </div>
@@ -59,7 +65,7 @@
                     <div class="col-6">
                         <label for="akaflieg" class="form-label ms-2"><b>Akaflieg</b></label>
                         <div class="input-group">
-                            <select class="form-select" name="pilot[akafliegID]" <?= isset($pilotID) ? "disabled" : "" ?>>
+                            <select class="form-select" name="pilot[akafliegID]" <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "disabled" : "" ?>>
                                 <option></option>
                                 <?php foreach($akafliegDatenArray as $akaflieg) : ?>
                                     <option value="<?= $akaflieg['id'] ?>" <?= isset($pilot) && $pilot['akafliegID'] == $akaflieg['id'] ? "selected" : "" ?>><?= $akaflieg['akaflieg'] ?></option>
@@ -72,7 +78,7 @@
                         <table class="table mt-5">
                             <thead>
                                 <tr class="text-center">
-                                    <?= isset($pilotID) ? "<th>Datum</th>" : "" ?>
+                                    <?= (isset($pilotID) && $adminOderZachereinweiser !== true) ? "<th>Datum</th>" : "" ?>
                                     <th>Segelflugstunden nach Lizenz</th>
                                     <th>Summe geflogener Überlandkilometer nach Schein</th>
                                     <th>Anzahl geflogener Segelflugzeugtypen</th>
@@ -107,7 +113,7 @@
                         <?php endif ?>
                             <tfoot>
                                 <tr>
-                                    <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
+                                    <?php if(!(isset($pilotID) && $adminOderZachereinweiser !== true)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
                                     <td>
                                         <div class="input-group">
                                             <input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= $pilotDetail['stundenNachSchein'] ?? "" ?>" required>

@@ -5,7 +5,7 @@ use CodeIgniter\Controller;
 use App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel, pilotenAkafliegsModel, pilotenModel };
 use App\Models\protokolle\{ protokolleModel };
 
-use App\Controllers\piloten\{ Pilotencontroller };
+use App\Controllers\piloten\{ Pilotencontroller, Pilotendatenladecontrollercontroller };
 
 helper('nachrichtAnzeigen');
 
@@ -57,18 +57,21 @@ class Adminpilotencontroller extends Controller
         }
     }
     
-    public function test()
+    public function bearbeiten($pilotID)
     {
-        $protokolleModel = new protokolleModel();
-        $jsonObjekt = json_encode([0=>1, 1=>2]);
-        var_dump($jsonObjekt);
-        //echo $protokolleModel->builder()->where('id', 260)->set('protokollIDs', $jsonObjekt)->update();
-        $gespeichertesJsonObjekt = $protokolleModel->select('protokollIDs')->where('id', 260)->first();
-        echo "<br>";
-        echo gettype($gespeichertesJsonObjekt['protokollIDs']);
-        echo "<br>";
-        print_r($gespeichertesJsonObjekt['protokollIDs']);
-        var_dump(json_decode($gespeichertesJsonObjekt['protokollIDs']));
+        $pilotenController = new Pilotencontroller();
+        
+        if(empty($pilotenController->pruefeObPilotIDVergeben($pilotID)))
+        {
+            nachrichtAnzeigen("Kein Pilot mit dieser ID gefunden", base_url('piloten/liste'));
+        }
+        
+        $datenHeader['titel'] = $datenInhalt['titel'] = "Pilotendaten bearbeiten";
+        
+        $datenInhalt = $pilotenController->setzeDatenInhaltFuerPilotBearbeiten($pilotID);
+        $datenInhalt['adminOderZachereinweiser'] = true;
+        
+        $this->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
     
     protected function sichtbarePilotenListe()
@@ -222,4 +225,13 @@ class Adminpilotencontroller extends Controller
         echo view('admin/templates/listeMitSwitchSpalteView', $datenInhalt);
         echo view('templates/footerView');
     }    
+    
+    protected function zeigePilotenEingabeView($datenHeader, $datenInhalt)
+    {
+        echo view('templates/headerView', $datenHeader);
+        echo view('piloten/scripts/pilotenEingabeScript');
+        echo view('templates/navbarView');
+        echo view('piloten/pilotenEingabeView', $datenInhalt);
+        echo view('templates/footerView');
+    }
 }

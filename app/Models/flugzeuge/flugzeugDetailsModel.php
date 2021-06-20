@@ -17,7 +17,7 @@ class flugzeugDetailsModel extends Model
     protected $primaryKey       = 'id';
     protected $validationRules 	= 'flugzeugDetails';
 	
-    protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tek', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel'];
+    protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tekArt', 'tekPosition', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel'];
 
         /**
         * Diese Funktion ruft nur die Flugzeugdetails mit
@@ -49,9 +49,20 @@ class flugzeugDetailsModel extends Model
         *
         * @return array
         */
-    public function getDistinctTekEingaben()
+    public function getDistinctTekArtEingaben()
     {
-        return $this->distinct()->findColumn("tek");
+        return $this->distinct()->findColumn("tekArt");
+    }
+    
+            /**
+        * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "tek"
+        * gespeichert wurden. Dabei werden Dopplungen ignoriert
+        *
+        * @return array
+        */
+    public function getDistinctTekPositionEingaben()
+    {
+        return $this->distinct()->findColumn("tekPosition");
     }
 
         /**

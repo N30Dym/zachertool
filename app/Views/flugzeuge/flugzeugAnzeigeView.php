@@ -82,8 +82,12 @@
                         <td><?= $flugzeugDetails['variometer'] ?></td>
                     </tr>
                     <tr>
-                        <td>Art und Ort der TEK-Düse</td>
-                        <td><?= $flugzeugDetails['tek'] ?></td>
+                        <td>Art der TEK-Düse</td>
+                        <td><?= $flugzeugDetails['tekArt'] ?></td>
+                    </tr>
+                    <tr>
+                        <td>Position der TEK-Düse</td>
+                        <td><?= $flugzeugDetails['tekPosition'] ?></td>
                     </tr>
                     <tr>
                         <td>Lage der Gesamtdrucksonde</td>

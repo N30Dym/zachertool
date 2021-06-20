@@ -81,6 +81,22 @@ class PasswordController extends Controller
 
     //--------------------------------------------------------------------
 
+	public function setPassword($username)
+	{
+            // check reset hash and expiration
+            $users = new UserModel();
+            $user = $users->where('username', $username)
+                    ->first();
+
+            if (! is_null($user['password_hash'])) {
+                return redirect()->to('login')->with('error', lang('Auth.invalidRequest'));
+            }
+
+            return view($this->config->views['reset-password'], ['config' => $this->config]);
+	}
+
+    //--------------------------------------------------------------------
+
 	/*public function resetPassword()
 	{
 		// check reset hash and expiration

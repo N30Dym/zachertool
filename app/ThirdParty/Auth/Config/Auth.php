@@ -10,10 +10,11 @@ class Auth extends BaseConfig
     //--------------------------------------------------------------------
 
     public $views = [
-        'login'     => 'Auth\Views\login',
-        'register'  => 'Auth\Views\register',
+        'login'         => 'Auth\Views\login',
+        'register'      => 'Auth\Views\register',
+        //'firstLogin'    => 'Auth\Views\firstLogin', // Neu erstellt
         //'forgot-password' => 'Auth\Views\forgot',
-        //'reset-password' => 'Auth\Views\reset',
+        'reset-password' => 'Auth\Views\reset',
         //'account' => 'Auth\Views\account'
     ];
 

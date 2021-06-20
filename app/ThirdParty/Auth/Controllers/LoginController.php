@@ -67,7 +67,19 @@ class LoginController extends Controller
 	 */
 	public function attemptLogin()
 	{
-		// validate request
+		$users = new UserModel();
+		$user = $users->where('username', $this->request->getPost('username'))->first(); // ursprünglich "email"
+                var_dump($user);
+                //exit;
+		if( // if-Bedingung neu erstellt
+                    $user['username'] == 'admin' &&
+                    empty($user['password_hash'])
+                ) {
+                    $passwordController = new PasswordController();
+                    return $passwordController->setPassword($user['username']);
+                }
+
+                // validate request
 		$rules = [
 			'username'  => 'required|string', // ursprünglich 'email'  => 'required|valid_email',
 			'password'  => 'required|min_length[5]',
@@ -80,9 +92,7 @@ class LoginController extends Controller
 		}
 
 		// check credentials
-		$users = new UserModel();
-		$user = $users->where('username', $this->request->getPost('username'))->first(); // ursprünglich 'email'
-		if (
+                if (
 			is_null($user) ||
 			! password_verify($this->request->getPost('password'), $user['password_hash'])
 		) {

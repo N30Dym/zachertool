@@ -4,10 +4,8 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZacherntoolMitgliedsstatus extends Migration
-{
-    protected $DBGroup = 'zachertoolDB';
-    
+class ZachertoolMitgliedsstatus extends Migration
+{    
     public function up()
     {
         $this->forge->addField([
@@ -25,6 +23,11 @@ class ZacherntoolMitgliedsstatus extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('mitgliedsstatus', TRUE);
+        
+        $query = "INSERT IGNORE INTO `mitgliedsstatus` (`id`, `statusBezeichnung`) VALUES
+            (1, 'Administrator');";
+        
+        $this->db->query($query);
     }
 
     public function down()

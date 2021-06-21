@@ -72,21 +72,10 @@
             <div class="col-lg-3 d-grid gap-2 d-md-flex ">             
             </div>
             <div class="col-lg-6 d-grid gap-2 d-md-flex">
-                 <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>
 
-                    <div class="input-group JSsichtbar d-none">
-                        <select id="kapitelAuswahl" class="form-select">
-                            <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
-                                <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$kapitelNummer]])) ? 'style="background-color: #f8d7da"' : "" ?>><?= esc($kapitelNummer) . ". " . esc($_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
-                            <?php endforeach ?>
-                        </select>
-                        <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>
-                    </div>           
-    
-                <?php endif ?>
             </div>
             <div class="col-lg-3 d-grid gap-2 d-md-flex">  
-                <button type="submit" formaction="<?= base_url() ?>/protokolle/kapitel/2" class="btn btn-secondary col-12">Weiter ></button>
+                <input type="submit" formaction="<?= base_url() ?>/protokolle/kapitel/2" class="btn btn-secondary col-12" value="Weiter >">
             </div>
         </div>
     </div>

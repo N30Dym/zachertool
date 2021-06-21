@@ -4,15 +4,15 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class ZachernProtokolllayoutProtokollTypen extends Seeder
+class ZachernprotokolllayoutProtokolle extends Seeder
 {
     protected $DBGroup = 'protokolllayoutDB';
     
     public function run()
     {
-        $query = "INSERT IGNORE INTO `protokoll_typen` (`id`, `bezeichnung`, `sichtbar`, `erstelltAm`) VALUES
-            (1, 'Zacherprotokoll ohne \"Statische\"', 1, CURRENT_TIMESTAMP),
-            (2, 'nur \"Statische\"', 1, CURRENT_TIMESTAMP);";
+        $query = "INSERT IGNORE INTO `protokolle` (`id`, `protokollTypID`, `datumVon`, `datumBis`, `erstelltAm`) VALUES
+            (1, 1, '2012-01-01', NULL, CURRENT_TIMESTAMP),
+            (2, 2, '2012-01-01', NULL, CURRENT_TIMESTAMP);";
         
         try
         {

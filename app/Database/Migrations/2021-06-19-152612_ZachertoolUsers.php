@@ -49,7 +49,7 @@ class ZachertoolUsers extends Migration
             'active' => [
                 'type' => 'tinyint', 
                 'constraint' => 1, 
-                'null' => 0, 
+                'null' => true, 
                 'default' => 1
             ], 
             'memberstatus' => [

@@ -169,7 +169,7 @@ class Pilotencontroller extends Controller
         {
             $datenInhalt = [
                 'pilotID'               => old('pilotID'),
-                'pilot'                 => old('pilot'),
+                'pilot'                 => old('pilot') !== null ? old('pilot') : $pilotenLadeController->ladePilotDaten($pilotID),
                 'pilotDetail'           => old('pilotDetail'),
                 'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
                 'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()

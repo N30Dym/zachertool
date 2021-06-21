@@ -14,8 +14,13 @@ class Pilotenspeichercontroller extends Pilotencontroller
         
         $zuSpeicherndeDaten                 = [];
             
-        if($pilotID === null)
+        if($pilotID === null )
         {     
+            if($this->pruefePilotNochNichtVorhanden($postDaten['pilot']))
+            {             
+                $this->meldePilotVorhanden();
+            }
+            
             $zuSpeicherndeDaten             = $this->setzeDatenPilotUndPilotDetails($postDaten);
         }
         else
@@ -39,30 +44,33 @@ class Pilotenspeichercontroller extends Pilotencontroller
         return true;       
     }  
     
-    protected function pruefeDaten($pilotenDaten)
+    public function pruefeDaten($pilotenDaten)
     {
         $validation = \Config\Services::validation();        
         
         if(isset($pilotenDaten['pilot']))
-        {
-            if($this->pruefePilotNochNichtVorhanden($pilotenDaten['pilot']))
-            {             
-                $this->meldePilotVorhanden();
-            }
-            else if( ! $validation->run($pilotenDaten['pilot'], 'pilot'))
+        {           
+            if( ! $validation->run($pilotenDaten['pilot'], 'pilot'))
             {
                 return false;
             }
         }
         
-        if(isset($pilotenDaten['pilotDetails']['datum']))
+        foreach($pilotenDaten['pilotDetails'] as $pilotDetails)
         {
-            $pilotenDaten['pilotDetails']['datum'] = date('Y-m-d', strtotime($pilotenDaten['pilotDetails']['datum']));
-        }
-        
-        if( ! $validation->run($pilotenDaten['pilotDetails'], 'pilotDetailsOhnePilotID'))
-        {
-            return false;
+            if(isset($pilotDetails['datum']) && $this->validiereDatum($pilotDetails['datum']))
+            {
+                $pilotDetails['datum'] = $this->validiereDatum($pilotDetails['datum']); 
+            }
+            else
+            {
+                return false;
+            }
+
+            if( ! $validation->run($pilotDetails, 'pilotDetailsOhnePilotID'))
+            {
+                return false;
+            }
         }
         
         return true;
@@ -120,7 +128,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
             $zuSpeicherndeDaten['pilotID'] = $pilotenModel->insert($zuSpeicherndeDaten['pilot']);
         }
         
-        $zuSpeicherndePilotDetails             = $zuSpeicherndeDaten['pilotDetails'];
+        $zuSpeicherndePilotDetails             = $zuSpeicherndeDaten['pilotDetails'][0];
         $zuSpeicherndePilotDetails['pilotID']  = $zuSpeicherndeDaten['pilotID'];
         
         $pilotenModel->updateGeaendertAmNachID($zuSpeicherndeDaten['pilotID']);
@@ -135,6 +143,21 @@ class Pilotenspeichercontroller extends Pilotencontroller
         $pilotVorhanden = $pilotenModel->getPilotNachVornameUndSpitzname($namenArray['vorname'], $namenArray['spitzname']);
 
         return $pilotVorhanden == null ? false : true;
+    }
+    
+    protected function validiereDatum($datum) 
+    {
+        $validation =  \Config\Services::validation();
+        $jahr = date('Y');
+        
+        $zuSpeicherndesDatum = date('Y-m-d', strtotime($datum));
+
+        if($validation->check(date('Y', strtotime($zuSpeicherndesDatum)), 'required|is_natural|greater_than[1950]|less_than_equal_to[' . $jahr . ']'))
+        {
+            return $zuSpeicherndesDatum;
+        }
+        
+        return false;
     }
     
     protected function meldePilotVorhanden()

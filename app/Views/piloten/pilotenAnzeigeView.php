@@ -24,7 +24,7 @@
             <a href="<?= base_url() ?>/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
                 <button type="button" class="btn btn-success col-12">Daten hinzufügen</button>
             </a>
-            <button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>
+            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>-->
         </div>
     </div>
 

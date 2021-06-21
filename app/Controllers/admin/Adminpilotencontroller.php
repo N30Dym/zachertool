@@ -5,7 +5,7 @@ use CodeIgniter\Controller;
 use App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel, pilotenAkafliegsModel, pilotenModel };
 use App\Models\protokolle\{ protokolleModel };
 
-use App\Controllers\piloten\{ Pilotencontroller, Pilotendatenladecontrollercontroller };
+use App\Controllers\piloten\{ Pilotencontroller };
 
 helper('nachrichtAnzeigen');
 
@@ -69,6 +69,11 @@ class Adminpilotencontroller extends Controller
         $datenHeader['titel'] = $datenInhalt['titel'] = "Pilotendaten bearbeiten";
         
         $datenInhalt = $pilotenController->setzeDatenInhaltFuerPilotBearbeiten($pilotID);
+        if(null !== old('pilotDetails'))
+        {
+            $datenInhalt['pilotDetailsArray'] = old('pilotDetails');
+        }
+        
         $datenInhalt['adminOderZachereinweiser'] = true;
         
         $this->zeigePilotenEingabeView($datenHeader, $datenInhalt);

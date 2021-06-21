@@ -43,18 +43,18 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
         }
     }
     
-    public function ueberschreibePilotenDaten($pilotID)
-    {
-        var_dump($this->request->postDaten());
-    }
-    
-    protected function ueberschreibePilotenDaten($zuUeberschreibendeDaten)
+    public function ueberschreibePilotenDaten()
     {
         $pilotenSpeicherController = new Pilotenspeichercontroller();
-        //$pilotenSpeicherController = new Pilotenspeichercontroller();
         
-        $pilotDaten = $pilotenSpeicherController->setzeDatenPilotDetails($zuUeberschreibendeDaten['pilot']);
-        $pilotDetails = $pilotenSpeicherController->setzeDatenPilotDetails($zuUeberschreibendeDaten['pilotDetails']);
+        if(!$pilotenSpeicherController->pruefeDaten($this->request->getPost()))
+        {
+            return redirect()->back()->withInput();
+        }
+        
+        $this->speicherDaten($this->request->getPost());
+        
+        nachrichtAnzeigen("Pilotendaten erfolgreich geändert", base_url('admin/piloten'));
     }
     
     protected function setzeUnsichtbar($zuUeberschreibendeDaten)
@@ -128,6 +128,38 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
         if( ! $pilotenAkafliegsModel->builder()->set('akaflieg', $zuSpeicherndeEingabe)->insert())
         {
             nachrichtAnzeigen("Da ist was schiefgelaufen", base_url('admin/piloten/akafliegHinzufügen'));
+        }
+    }
+    
+    protected function speicherDaten($zuSpeicherndeDaten)
+    {
+        $pilotenModel           = new pilotenModel(); 
+        $pilotenDetailsModel    = new pilotenDetailsModel();       
+
+        echo $zuSpeicherndeDaten['pilotID'];
+
+        try
+        {
+            $pilotenModel->where('id', $zuSpeicherndeDaten['pilotID'])->set($zuSpeicherndeDaten['pilot'])->update();
+        }
+        catch(Exception $ex)
+        {
+            $this->showError($ex);
+            exit;
+        }
+        
+        foreach($zuSpeicherndeDaten['pilotDetails'] as $pilotDetailID => $pilotDetails)
+        {
+            $pilotDetails['datum'] = date('Y-m-d', strtotime($pilotDetails['datum']));
+            try
+            {
+                $pilotenDetailsModel->where('id', $pilotDetailID)->set($pilotDetails)->update();
+            }
+            catch(Exception $ex)
+            {
+                $this->showError($ex);
+                exit;
+            }
         }
     }
 }

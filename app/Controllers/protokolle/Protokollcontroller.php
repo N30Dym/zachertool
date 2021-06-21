@@ -116,6 +116,7 @@ class Protokollcontroller extends Controller
      */
     public function kapitel($kapitelNummer = 0)
     {       
+        
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
@@ -149,6 +150,7 @@ class Protokollcontroller extends Controller
         if(ENVIRONMENT === 'development')
         {
             echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
+            echo $_SESSION['protokoll']['protokollInformationen']['datum'] ?? "";
         }
         
             // datenHeader mit Titel füttern
@@ -305,7 +307,7 @@ class Protokollcontroller extends Controller
         $protokollLayoutController          = new Protokolllayoutcontroller;
         $protokollDatenInhaltLadeController = new Protokolldateninhaltladecontroller();
         
-        var_dump($this->adminOderZachereinweiser);
+        //var_dump($this->adminOderZachereinweiser);
         
         $datenInhalt = [
             'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],

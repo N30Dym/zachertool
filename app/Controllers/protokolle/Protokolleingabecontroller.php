@@ -64,7 +64,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         */ 
     protected function setzeProtokollInformationen($protokollInformationen)
     {                        
-        $_SESSION['protokoll']['protokollInformationen']['datum']        = $protokollInformationen["datum"];
+        $_SESSION['protokoll']['protokollInformationen']['datum']        = date('Y-m-d', strtotime($protokollInformationen["datum"]));
         $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = $protokollInformationen["flugzeit"];
         $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
         $_SESSION['protokoll']['protokollInformationen']['titel']        = isset($_SESSION['protokoll']['protokollSpeicherID']) ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
@@ -282,6 +282,8 @@ class Protokolleingabecontroller extends Protokollcontroller
     protected function setzeEingegebeneWerte($werte, $eineRichtung, $andereRichtung)
     {
             // $werteWoelbklappenRichtungMultipelNr[0|'Neutral'|'Kreisflug'] [0|'Links'|'Rechts'] [0 - 10] [eingegebener Wert]
+        //var_dump($werte);
+        //exit;
         foreach($werte as $protokollInputID => $werteWoelbklappenRichtungMultipelNr)
         {
                 // $werteRichtungMulitpelNr[0|'eineRichtung'|'andereRichtung'] [0 - 10] [eingegebener Wert]
@@ -296,7 +298,7 @@ class Protokolleingabecontroller extends Protokollcontroller
                         if($wert !== "")
                         {
                                 // $_SESSION['protokoll']['eingegebeneWerte'] [protokollInputID] [0|'Neutral'|'Kreisflug'] ['Links'|'Rechts']! [0 - 10] [wert]
-                            $_SESSION['protokoll']['eingegebeneWerte'] [$protokollInputID] [$woelbklappenStellung] [$eineRichtung[$protokollInputID][$woelbklappenStellung]] [$multipelNr + 1] = $wert;                
+                            $_SESSION['protokoll']['eingegebeneWerte'] [$protokollInputID] [$woelbklappenStellung] [$eineRichtung[$protokollInputID][$woelbklappenStellung]] [$multipelNr] = $wert;                
                         } 
                     }
                 }
@@ -309,7 +311,7 @@ class Protokolleingabecontroller extends Protokollcontroller
                         if($wert !== "")
                         {
                                 // $_SESSION['protokoll']['eingegebeneWerte'] [protokollInputID] [0|'Neutral'|'Kreisflug'] [0]! [0 - 10] [wert]
-                            $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][0][$multipelNr + 1] = $wert;     
+                            $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][0][$multipelNr] = $wert;     
                         }
                     }
                 }
@@ -322,12 +324,13 @@ class Protokolleingabecontroller extends Protokollcontroller
                         if($wert !== "")
                         {
                                 // $_SESSION['protokoll']['eingegebeneWerte'] [protokollInputID] [0|'Neutral'|'Kreisflug'] ['Links'|'Rechts']! [0 - 10] [wert]
-                            $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$andereRichtung[$protokollInputID][$woelbklappenStellung]][$multipelNr + 1] = $wert;     
+                            $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$andereRichtung[$protokollInputID][$woelbklappenStellung]][$multipelNr] = $wert;     
                         }
                     }
                 }
             }
         }
+       // exit;
     }
     
         /*

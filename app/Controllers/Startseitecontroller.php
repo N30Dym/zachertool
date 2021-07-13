@@ -49,7 +49,7 @@ class Startseitecontroller extends Controller
             }
         }
 
-        $datenInhalt['letztesJahrInDemProtokolleExistieren'] = empty($letztesJahrInDemProtokolleExistieren) ? array_values($datenInhalt["flugzeuge"])[0] : $letztesJahrInDemProtokolleExistieren;
+        $datenInhalt['letztesJahrInDemProtokolleExistieren'] = empty($letztesJahrInDemProtokolleExistieren) ? date('Y') : $letztesJahrInDemProtokolleExistieren;
 
         $this->ladeStartseiteView($datenHeader, $datenInhalt);
     }

@@ -79,5 +79,10 @@ class UserModel extends Model
 
             return $data;
     }
+    
+    public function istAdminAktiv()
+    {       
+        return $this->select('active')->where('username', "admin")->first()['active'];
+    }
 
 }

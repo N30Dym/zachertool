@@ -18,6 +18,9 @@ $routes->group('', ['namespace' => 'Auth\Controllers'], function($routes) {
     $routes->post('forgot-password', 'PasswordController::attemptForgotPassword');
     $routes->get('reset-password', 'PasswordController::resetPassword', ['as' => 'reset-password']);
     $routes->post('reset-password', 'PasswordController::attemptResetPassword');*/
+    
+    $routes->get('setPassword', 'PasswordController::setPassword', ['as' => 'reset-password']);
+    $routes->post('setPassword', 'PasswordController::attemptSetAdminPassword');
 
     // Account settings
     /*$routes->get('account', 'AccountController::account', ['as' => 'account']);

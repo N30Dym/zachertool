@@ -48,8 +48,14 @@ class LoginController extends Controller
         
         public function login()
 	{
+            $users = new UserModel();          
+            
             if ($this->session->isLoggedIn) {
                     return redirect()->to(base_url());
+            }            
+            elseif(! $users->istAdminAktiv())
+            {
+                return redirect()->to(base_url('setPassword'));
             }
 
             $datenHeader['titel'] = "Einloggen";
@@ -69,7 +75,7 @@ class LoginController extends Controller
 	{
 		$users = new UserModel();
 		$user = $users->where('username', $this->request->getPost('username'))->first(); // ursprünglich "email"
-                var_dump($user);
+                //var_dump($user);
                 //exit;
 		if( // if-Bedingung neu erstellt
                     $user['username'] == 'admin' &&

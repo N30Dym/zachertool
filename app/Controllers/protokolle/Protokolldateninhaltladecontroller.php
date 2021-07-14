@@ -212,7 +212,19 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
             {                
                 $multipelFelderArray[$protokollEingabeID] = null;
                 
-                if(isset($_SESSION['protokoll']['protokollSpeicherID']))
+                //if(isset($_SESSION['protokoll']['protokollSpeicherID']))
+               // {
+                    $anzahlMultipelFelder = null;
+                    
+                    foreach($protokolleLayoutsModel->getInputIDsNachProtokollEingabeID($protokollEingabeID) as $protokollInputID)
+                    {
+                        $anzahlMultipelFelder = $this->ladeAnzahlMultipelInputs($protokollInputID['protokollInputID']);
+                        $anzahlMultipelFelder > $multipelFelderArray[$protokollEingabeID] ? $multipelFelderArray[$protokollEingabeID] = $anzahlMultipelFelder : null;
+                    }
+                    
+                    empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = 10 : null;
+               /* }
+                else
                 {
                     $anzahlMultipelFelder = null;
                     
@@ -223,11 +235,7 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
                     }
                     
                     empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = 10 : null;
-                }
-                else
-                {
-                    $multipelFelderArray[$protokollEingabeID] = 10;
-                }          
+                } */         
             }
         }
 

@@ -39,7 +39,7 @@
             <div class="col-12">
                 <?php //var_dump($pilotenDatenArray) ?>
                 <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
-                    <?php if(isset($_SESSION['protokoll']['fertig'])) : ?>
+                    <?php if(isset($_SESSION['protokoll']['fertig']) && isset($_SESSION['protokoll']['pilotID'])) : ?>
                         <option value="<?= esc($_SESSION['protokoll']['pilotID']) ?>" selected>
                             <?= esc($pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["vorname"]) ?>
                             <?= $pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["spitzname"] != "" ? " \"" . $pilotenDatenArray[$_SESSION['protokoll']['pilotID']]["spitzname"] . "\" " : "" ?>

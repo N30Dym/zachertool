@@ -1300,7 +1300,7 @@ class Validation
     
     public $eingabeGanzzahl = [
         'wert' => [
-            'rules'  => 'is_natural',
+            'rules'  => 'integer',
             'errors' => [
                 'is_natural'   => 'Eine Zahleneingabe für Ganzzahlen enthält ungültige Zeichen.'
             ] 

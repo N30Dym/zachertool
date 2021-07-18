@@ -10,7 +10,7 @@ class ZachernprotokolllayoutProtokollEingaben extends Seeder
     
     public function run()
     {
-        $query = "INSERT INTO `protokoll_eingaben` (`id`, `protokollTypID`, `bezeichnung`, `multipel`, `linksUndRechts`, `doppelsitzer`) VALUES
+        $query = "INSERT IGNORE INTO `protokoll_eingaben` (`id`, `protokollTypID`, `bezeichnung`, `multipel`, `linksUndRechts`, `doppelsitzer`) VALUES
             (1, 1, 'Beschreiben des Verhaltens im Schlepp', NULL, NULL, NULL),
             (2, 1, 'IAS<sub>min</sub>', NULL, NULL, NULL),
             (3, 1, '&lt;V_S', NULL, NULL, NULL),

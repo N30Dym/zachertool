@@ -8,7 +8,7 @@
     
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="<?= base_url() ?>/flugzeuge/liste" >
+            <a href="<?= base_url() ?>/piloten/liste" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
         </div>

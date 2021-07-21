@@ -9,6 +9,7 @@ class Seedcontroller extends Seeder
     public function run()
     {
         $this->call('ZachertoolMitgliedsstatus');
+        
         $this->call('ZachernProtokolllayoutProtokollTypen');
         $this->call('ZachernProtokolllayoutProtokolle');
         $this->call('ZachernprotokolllayoutInputTypen');
@@ -17,5 +18,12 @@ class Seedcontroller extends Seeder
         $this->call('ZachernprotokolllayoutProtokollEingaben');
         $this->call('ZachernprotokolllayoutProtokollInputs');
         $this->call('ZachernprotokolllayoutProtokollLayouts');
+        
+        $this->call('ZachernPilotenPiloten');
+        $this->call('ZachernPilotenPilotenDetails');
+        $this->call('ZachernPilotenPilotenAkafliegs');
+        
+        $this->call('ZachernFlugzeugeMuster');
+        $this->call('ZachernFlugzeugeMusterDetails');
     }
 }

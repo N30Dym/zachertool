@@ -2,7 +2,11 @@
     <h1><?= $titel ?></h1>
 </div>
 
-<form action="<?= base_url() ?>/piloten/speichern" method="post">
+<?php if(isset($adminOderZachereinweiser)) : ?>
+    <form action="<?= base_url() ?>/admin/piloten/datenSpeichern" method="post">
+<?php else: ?>
+    <form action="<?= base_url() ?>/piloten/speichern" method="post">
+<?php endif ?>
     
     <?= csrf_field() ?>
     
@@ -28,30 +32,32 @@
                             <?= $validation->listErrors() ?>
                         </div>
                     <?php endif ?>
-
-                    <div class="col-12 <?= isset($pilotID) ? "" : "d-none" ?>">
-                         <small class="text-muted ms-5">Der Name und die Größe können nur von einem Admin geändert werden</small>
-                    </div>
+                    
+                    <?php if(!isset($adminOderZachereinweiser)) : ?>
+                        <div class="col-12 alert alert-secondary <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "" : "d-none" ?>">
+                             <small>Der Name und die Größe können nur von einem Admin oder Zachereinweiser geändert werden</small>
+                        </div>
+                    <?php endif ?>
                    
                     <div class="col-sm-4">
                         <label for="vorname" class="form-label ms-2"><b>Vorname</b></label>
-                        <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" minlength="3" class="form-control" name="pilot[vorname]" value="<?= isset($pilot['vorname']) ? esc($pilot['vorname']) : (isset($vorname) ? esc($vorname) : "") ?>" required <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="spitzname" class="form-label ms-2"><b>Spitzname</b></label>
-                        <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" class="form-control" name="pilot[spitzname]" value="<?= isset($pilot['spitzname']) ? esc($pilot['spitzname']) : (isset($spitzname) ? esc($spitzname) : "") ?>" <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="nachname" class="form-label ms-2"><b>Nachname</b></label>
-                        <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                        <input type="text" minlength="3" class="form-control" name="pilot[nachname]" value="<?= isset($pilot['nachname']) ? esc($pilot['nachname']) : (isset($nachname) ? esc($nachname) : "") ?>" required <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "disabled" : "" ?>>
                     </div>
 
                     <div class="col-6">
                         <label for="groesse" class="form-label ms-2"><b>Größe</b></label>
                         <div class="input-group">
-                            <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= isset($pilotID) ? "disabled" : "" ?>>
+                            <input type="number" min="0" step="1" class="form-control" name="pilot[groesse]" value="<?= isset($pilot['groesse']) ? esc($pilot['groesse']) : (isset($groesse) ? esc($groesse) : "") ?>" required <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "disabled" : "" ?>>
                             <span class="input-group-text">cm</span>
                         </div>
                     </div>
@@ -59,7 +65,7 @@
                     <div class="col-6">
                         <label for="akaflieg" class="form-label ms-2"><b>Akaflieg</b></label>
                         <div class="input-group">
-                            <select class="form-select" name="pilot[akafliegID]" <?= isset($pilotID) ? "disabled" : "" ?>>
+                            <select class="form-select" name="pilot[akafliegID]" <?= (isset($pilotID) && !isset($adminOderZachereinweiser)) ? "disabled" : "" ?>>
                                 <option></option>
                                 <?php foreach($akafliegDatenArray as $akaflieg) : ?>
                                     <option value="<?= $akaflieg['id'] ?>" <?= isset($pilot) && $pilot['akafliegID'] == $akaflieg['id'] ? "selected" : "" ?>><?= $akaflieg['akaflieg'] ?></option>
@@ -67,68 +73,70 @@
                             </select>
                         </div>
                     </div>
-
+                    
                     <div class="table-responsive">
                         <table class="table mt-5">
                             <thead>
                                 <tr class="text-center">
-                                    <?= isset($pilotID) ? "<th>Datum</th>" : "" ?>
+                                    <?= (isset($pilotID) OR isset($adminOderZachereinweiser)) ? "<th>Datum</th>" : "" ?>
                                     <th>Segelflugstunden nach Lizenz</th>
                                     <th>Summe geflogener Überlandkilometer nach Schein</th>
                                     <th>Anzahl geflogener Segelflugzeugtypen</th>
                                     <th>Pilotengewicht</th>
                                 </tr>
                             </thead>
-                        <?php if(isset($pilotDetailsArray)) : ?>
-                            <?php foreach($pilotDetailsArray as $pilotDetailAusDB) : ?>
-                                <tr>
-                                    <td><input type="date" class="form-control" min="0" value="<?= $pilotDetailAusDB['datum'] ?>" disabled></td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][stundenNachSchein]" min="0" step="1" value="<?= $pilotDetailAusDB['stundenNachSchein'] ?>" disabled>
-                                            <span class="input-group-text">h</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][geflogeneKm]" min="0" value="<?= $pilotDetailAusDB['geflogeneKm'] ?>" disabled>
-                                            <span class="input-group-text">km</span>
-                                        </div>
-                                    </td>
-                                    <td><input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][typenAnzahl]" min="0" value="<?= $pilotDetailAusDB['typenAnzahl'] ?>" disabled></td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="$pilotDetailAusDB[<?= $pilotDetailAusDB['id'] ?>][gewicht]" min="0" value="<?= $pilotDetailAusDB['gewicht'] ?>" disabled>
-                                            <span class="input-group-text">kg</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        <?php endif ?>
-                            <tfoot>
-                                <tr>
-                                    <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="pilotDetail[stundenNachSchein]" min="0" value="<?= $pilotDetail['stundenNachSchein'] ?? "" ?>" required>
-                                            <span class="input-group-text">h</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="pilotDetail[geflogeneKm]" min="0" value="<?= $pilotDetail['geflogeneKm'] ?? "" ?>" required>
-                                            <span class="input-group-text">km</span>
-                                        </div>
-                                    </td>
-                                    <td><input type="number" class="form-control" name="pilotDetail[typenAnzahl]" min="0" value="<?= $pilotDetail['typenAnzahl'] ?? "" ?>" required></td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" name="pilotDetail[gewicht]" min="0" value="<?= $pilotDetail['gewicht'] ?? "" ?>" required>
-                                            <span class="input-group-text">kg</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tfoot>
+                            <?php if(isset($pilotDetailsArray)) : ?>
+                                <?php foreach($pilotDetailsArray as $pilotDetails) : ?>
+                                    <tr>
+                                        <td><input type="date" class="form-control" min="0" name="pilotDetails[<?= $pilotDetails['id'] ?>][datum]" value="<?= $pilotDetails['datum'] ?>" <?= isset($adminOderZachereinweiser) ? "required" : "disabled" ?>><input type="hidden" name="pilotDetails[<?= $pilotDetails['id'] ?>][id]" value="<?= $pilotDetails['id'] ?>"></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetails[<?= $pilotDetails['id'] ?>][stundenNachSchein]" min="0" step="1" value="<?= $pilotDetails['stundenNachSchein'] ?>" <?= isset($adminOderZachereinweiser) ? "required" : "disabled" ?>>
+                                                <span class="input-group-text">h</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetails[<?= $pilotDetails['id'] ?>][geflogeneKm]" min="0" value="<?= $pilotDetails['geflogeneKm'] ?>" <?= isset($adminOderZachereinweiser) ? "required" : "disabled" ?>>
+                                                <span class="input-group-text">km</span>
+                                            </div>
+                                        </td>
+                                        <td><input type="number" class="form-control" name="pilotDetails[<?= $pilotDetails['id'] ?>][typenAnzahl]" min="0" value="<?= $pilotDetails['typenAnzahl'] ?>" <?= isset($adminOderZachereinweiser) ? "required" : "disabled" ?>></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetails[<?= $pilotDetails['id'] ?>][gewicht]" min="0" value="<?= $pilotDetails['gewicht'] ?>" <?= isset($adminOderZachereinweiser) ? "required" : "disabled" ?>>
+                                                <span class="input-group-text">kg</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                            <?php if(!isset($adminOderZachereinweiser)) : ?>
+                                <tfoot>
+                                    <tr>
+                                        <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetail[0][stundenNachSchein]" min="0" value="<?= $pilotDetail[0]['stundenNachSchein'] ?? "" ?>" required>
+                                                <span class="input-group-text">h</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetail[0][geflogeneKm]" min="0" value="<?= $pilotDetail[0]['geflogeneKm'] ?? "" ?>" required>
+                                                <span class="input-group-text">km</span>
+                                            </div>
+                                        </td>
+                                        <td><input type="number" class="form-control" name="pilotDetail[0][typenAnzahl]" min="0" value="<?= $pilotDetail[0]['typenAnzahl'] ?? "" ?>" required></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" name="pilotDetail[0][gewicht]" min="0" value="<?= $pilotDetail[0]['gewicht'] ?? "" ?>" required>
+                                                <span class="input-group-text">kg</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            <?php endif ?>
                         </table>
                     </div>
                 </div>               

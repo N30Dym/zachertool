@@ -5,7 +5,7 @@ namespace App\Controllers\piloten;
 use CodeIgniter\Controller;
 use App\Controllers\piloten\{Pilotendatenladecontroller, Pilotenspeichercontroller, Pilotenadmincontroller, Pilotenanzeigecontroller};
 
-helper('url');
+helper(['url', 'nachrichtAnzeigen']);
 
 class Pilotencontroller extends Controller 
 {
@@ -57,6 +57,11 @@ class Pilotencontroller extends Controller
     
     public function pilotBearbeiten($pilotID)
     {
+        if(empty($this->pruefeObPilotIDVergeben($pilotID)))
+        {
+            nachrichtAnzeigen("Kein Pilot mit dieser ID gefunden", base_url());
+        }
+        
         $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
         $titel                      = "Pilotendaten aktualisieren";
         
@@ -71,15 +76,20 @@ class Pilotencontroller extends Controller
     
     public function pilotAnzeigen($pilotID)
     {
+        if(empty($this->pruefeObPilotIDVergeben($pilotID)))
+        {
+            nachrichtAnzeigen("Kein Pilot mit dieser ID gefunden", base_url());
+        }
+        
         $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
         $titel                      = "Pilotendaten aktualisieren";
-        
+
         $datenHeader = [
             'titel' => $titel
         ];
-        
+
         $datenInhalt = $this->ladePilotenAnzeigeDaten($pilotID);
-        
+
         $pilotenAnzeigeController->zeigePilotenAnzeigeView($datenHeader, $datenInhalt);
     }
     
@@ -107,18 +117,10 @@ class Pilotencontroller extends Controller
         }
     }
     
-    public function adminFunktionen($funktion)
+    public function pruefeObPilotIDVergeben($pilotID)
     {
-        $pilotenAdminController = new Pilotenadmincontroller();
-        
-        switch($funktion)
-        {
-            case 'index':
-                $pilotenAdminController->uebersicht();
-                break;
-            case 'liste':
-                $pilotenAdminController->liste('sichtbarePiloten');
-        }
+        $pilotenDatenLadeController = new Pilotendatenladecontroller();
+        return $pilotenDatenLadeController->ladePilotDaten($pilotID);
     }
     
     protected function ladePilotenDaten()
@@ -157,7 +159,7 @@ class Pilotencontroller extends Controller
         return $pilotenDatenLadeController->ladeSichtbareAkafliegs();       
     }
     
-    protected function setzeDatenInhaltFuerPilotBearbeiten($pilotID)
+    public function setzeDatenInhaltFuerPilotBearbeiten($pilotID)
     {
         $pilotenLadeController = new Pilotendatenladecontroller();
         
@@ -167,7 +169,7 @@ class Pilotencontroller extends Controller
         {
             $datenInhalt = [
                 'pilotID'               => old('pilotID'),
-                'pilot'                 => old('pilot'),
+                'pilot'                 => old('pilot') !== null ? old('pilot') : $pilotenLadeController->ladePilotDaten($pilotID),
                 'pilotDetail'           => old('pilotDetail'),
                 'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
                 'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()

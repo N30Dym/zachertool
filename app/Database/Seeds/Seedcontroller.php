@@ -25,5 +25,11 @@ class Seedcontroller extends Seeder
         
         $this->call('ZachernFlugzeugeMuster');
         $this->call('ZachernFlugzeugeMusterDetails');
+        $this->call('ZachernFlugzeugeMusterKlappen');
+        $this->call('ZachernFlugzeugeMusterHebelarme');
+        
+        $this->call('ZachernFlugzeugeFlugzeuge');
+        $this->call('ZachernFlugzeugeFlugzeugDetails');
+        $this->call('ZachernFlugzeugeFlugzeugWaegung');
     }
 }

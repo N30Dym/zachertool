@@ -33,7 +33,7 @@ class ZachernPilotenPiloten extends Seeder
             (20, 'Wiebke', 'Frosty', 'Mügge', 170, '2018-08-22 00:00:00', '2019-12-20 18:12:53', 7, 1, NULL),
             (21, 'Simeon', NULL, 'Gubernator', 183, '2018-08-22 00:00:00', '2019-12-20 22:12:03', 4, 1, NULL),
             (22, 'Jonas', 'Bunny', 'Schmidt', 180, '2018-08-06 00:00:00', '2020-04-15 14:57:12', 10, 1, NULL),
-            (23, 'Christoh', 'Poolboy', 'Rothkamm', 182, '2018-08-08 00:00:00', '2019-12-20 23:36:21', 1, 1, NULL),
+            (23, 'Christoph', 'Poolboy', 'Rothkamm', 182, '2018-08-08 00:00:00', '2019-12-20 23:36:21', 1, 1, NULL),
             (24, 'Christian', NULL, 'Weidemann', 183, '2019-08-20 00:00:00', '2020-04-01 14:20:20', NULL, NULL, NULL),
             (25, 'Robert', 'Sofa', 'Berrios Hinz', 180, '2019-08-01 00:00:00', '2020-09-02 22:14:52', 3, 1, NULL),
             (26, 'Kathrin', 'Chimala', 'Deck', 165, '2019-08-01 00:00:00', '2020-04-28 14:25:10', 8, 1, NULL),

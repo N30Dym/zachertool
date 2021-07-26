@@ -10,7 +10,7 @@ class ZachernFlugzeugeFlugzeugWaegung extends Seeder
     
     public function run()
     {
-        $query = "INSERT IGNORE INTO `flugzeug_waegung` (`plane_id`, `empty_weight`, `COG`, `date`) VALUES
+        $query = "INSERT IGNORE INTO `flugzeug_waegung` (`flugzeugID`, `leermasse`, `schwerpunkt`, `zuladungMin`, `zuladungMax`, `datum`) VALUES
             (1, '428.20', '712.00', '2017-03-16', '66.00', '210.00'),
             (2, '282.50', '608.80', '2018-03-25', '65.00', '98.50'),
             (3, '300.80', '539.00', '2014-03-20', '80.00', '115.00'),

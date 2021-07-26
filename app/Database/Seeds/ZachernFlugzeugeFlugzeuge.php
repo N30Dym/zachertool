@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class ZachernFlugzeugeMuster extends Seeder
+class ZachernFlugzeugeFlugzeuge extends Seeder
 {
     protected $DBGroup = 'flugzeugeDB';
     

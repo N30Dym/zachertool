@@ -55,13 +55,13 @@ class ZachernFlugzeugeMusterKlappen extends Seeder
             (19, '0', NULL, 1, NULL, 105),
             (19, '1', NULL, NULL, NULL, NULL),
             (19, '2', NULL, NULL, 1, 105),
-            (19, 'L', NULL, NULL, NULL, NULL)
-            (29, 'S', '-12.00', NULL, NULL, NULL)
-            (29, '-2', '-7.50', NULL, NULL, NULL)
-            (29, '-1', '-5.00', NULL, NULL, NULL)
-            (29, '0', '0.00', 1, NULL, 115)
-            (29, '+1', '3.50', NULL, NULL, NULL)
-            (29, '+2', '7.50', NULL, 1, 112)
+            (19, 'L', NULL, NULL, NULL, NULL),
+            (29, 'S', '-12.00', NULL, NULL, NULL),
+            (29, '-2', '-7.50', NULL, NULL, NULL),
+            (29, '-1', '-5.00', NULL, NULL, NULL),
+            (29, '0', '0.00', 1, NULL, 115),
+            (29, '+1', '3.50', NULL, NULL, NULL),
+            (29, '+2', '7.50', NULL, 1, 112),
             (29, 'L', '15.00', NULL, NULL, NULL);";
         
         try

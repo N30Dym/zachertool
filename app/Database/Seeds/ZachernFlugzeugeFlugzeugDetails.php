@@ -10,7 +10,7 @@ class ZachernFlugzeugeFlugzeugDetails extends Seeder
     
     public function run()
     {
-        $query = "INSERT IGNORE INTO `flugzeug_details` (`flugzeugID`, `baujahr`, `seriennummer`, `kupplung`, `diffQR`, `radgroesse`, `radbremse`, `radfederung`, `fluegelflaeche`, `spannweite`, `variometer`, `tekArt`, `tekPosition` `pitotPosition`, `bremsklappen`, `iasVG`, `mtow`, `leermasseSPMin`, `leermasseSPMax`, `flugSPMin`, `flugSPMax`, `bezugspunkt`, `anstellwinkel`) VALUES
+        $query = "INSERT IGNORE INTO `flugzeug_details` (`flugzeugID`, `baujahr`, `seriennummer`, `kupplung`, `diffQR`, `radgroesse`, `radbremse`, `radfederung`, `fluegelflaeche`, `spannweite`, `variometer`, `tekArt`, `tekPosition`, `pitotPosition`, `bremsklappen`, `iasVG`, `mtow`, `leermasseSPMin`, `leermasseSPMax`, `flugSPMin`, `flugSPMax`, `bezugspunkt`, `anstellwinkel`) VALUES
             (1, 2005, '10-50549', 'Bug', 'Ja', '5\"', 'Scheibe', 'Ja', '17.53', '20.00', 'kompensiertes Stauscheibenvariometer', 'Im Seitenleitwerk Bauart BR', '', 'in der Nase neben F-Schleppkupplung', 'Schempp-Hirth doppelstöckig', 100, 750, '0.00', '0.00', '190.00', '440.00', 'Flügelvorderkante an der Wurzelrippe', '1000:33'),
             (2, 2002, '1', 'Bug', 'Ja', '5\"', 'Scheibe', 'Ja', '10.84', '18.00', 'LX7007', 'Düse', '', 'Seitenleitenwerk', 'Schempp-Hirth', NULL, 541, '0.00', '0.00', '240.00', '360.00', 'Vorderkante Wurzelrippe', '-'),
             (3, 2007, '29522', 'Bug', 'Ja', '5\"', 'Scheibe', 'Ja', '10.50', '18.00', '-', 'Düse', '', 'in TEK_Düse', 'Schempp-Hirth', NULL, 600, '0.00', '0.00', '217.00', '330.00', 'Flügelvorderkante an der Wurzelrippe', '-'),

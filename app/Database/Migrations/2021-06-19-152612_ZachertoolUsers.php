@@ -63,7 +63,7 @@ class ZachertoolUsers extends Migration
         $this->forge->addKey('id', true);
         $this->forge->createTable('users', true);
         
-        $query = "INSERT INTO `users` (`id`, `username`, `password_hash`, `name`, `activate_hash`, `reset_hash`, `reset_expires`, `active`, `memberstatus`, `created_at`, `updated_at`) VALUES
+        $query = "INSERT IGNORE INTO `users` (`id`, `username`, `password_hash`, `name`, `activate_hash`, `reset_hash`, `reset_expires`, `active`, `memberstatus`, `created_at`, `updated_at`) VALUES
             (1, 'admin', '', '', 'TS5J9piPmRhN8MbLBt4GWIDVs3vcdQUj', NULL, NULL, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
         
         $this->db->query($query);

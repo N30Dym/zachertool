@@ -133,6 +133,6 @@ class ZachernFlugzeugeFlugzeugDetails extends Migration
 
     public function down()
     {
-        $this->forge->dropTable('flugzeuge_details');
+        $this->forge->dropTable('flugzeug_details');
     }
 }

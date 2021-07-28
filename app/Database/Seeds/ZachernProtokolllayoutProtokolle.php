@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class ZachernprotokolllayoutProtokolle extends Seeder
+class ZachernProtokolllayoutProtokolle extends Seeder
 {
     protected $DBGroup = 'protokolllayoutDB';
     

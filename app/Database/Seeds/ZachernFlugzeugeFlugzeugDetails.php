@@ -36,7 +36,7 @@ class ZachernFlugzeugeFlugzeugDetails extends Seeder
             (23, 1964, 'V3', 'Bug', 'Nein', '4\"', 'Trommel', 'Ja', '13.70', '17.00', 'Ja', 'nachtragen', 'nachtragen', 'nachtragen', 'Spreizklappen', 100, 374, '1111111.00', '1111111.00', '165.00', '216.00', 'Flügelvorderkante Rippe 1', 'nicht angegeben'),
             (24, 1900, '10-110T34', 'Bug', 'Ja', '380 x 150  6 PR', 'Scheibe', 'Ja', '17.53', '20.00', 'Winter 5 STVM 5', 'Düse', 'SLW', 'Nase', 'Schempp-Hirth doppelstöckig', 110, 750, '0.00', '0.00', '655.00', '710.00', 'Flügelvorderkante an der Wurzelrippe', '1000:33 auf dem Rumpfrücken'),
             (25, 2005, '28745/29-001', 'Bug', 'Ja', '5.00-5, 6PR TT', 'Scheibe', 'Ja', '11.88', '18.00', 'Winter 5 STVM 5', 'Multisonde', 'Vor SLW', 'vorn in der Nasenspitze', 'Schempp-Hirth', 110, 575, '0.00', '999.00', '233.00', '406.00', 'Flügelvorderkante an der Wurzelrippe', '1000:49 auf Rumpfrücken, 2500mm hinter B.E.'),
-            (26, 2014, '43', 'Bug', 'Ja', '5/6 Zoll', 'Scheibe', 'Ja', '15.93', '18.00', 'Stauscheibe', '', 'Seitenleitwerk', 'Seitenleitwerk', 'Schempp-Hirth', NULL, 700, '0.00', '999.00', '170.00', '405.00', 'Flügelvorderkante an der Wurzelrippe', '-');";
+            (26, 2014, '43', 'Bug', 'Ja', '5/6 Zoll', 'Scheibe', 'Ja', '15.93', '18.00', 'Stauscheibe', '', 'Seitenleitwerk', 'Seitenleitwerk', 'Schempp-Hirth', 105, 700, '0.00', '999.00', '170.00', '405.00', 'Flügelvorderkante an der Wurzelrippe', '-');";
         
         try
         {

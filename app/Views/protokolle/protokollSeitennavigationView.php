@@ -30,7 +30,7 @@
                                 </option>
                             <?php endforeach ?>
                         </select>
-                        <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</button>
+                        <button type="submit" id="kapitelGo" class="btn btn-success" formaction="">Go!</button>
                     </div>
                   
                 </div>

@@ -21,8 +21,8 @@
                         Piloten
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/piloten/liste">Pilotenliste</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/piloten/neu">Piloten hinzufügen</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/piloten/neu"><b>Neuen Piloten hinzufügen</b></a>                        
+                        <a class="dropdown-item" href="<?= base_url() ?>/piloten/liste">Pilotenliste anzeigen</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -30,8 +30,8 @@
                         Flugzeuge
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/flugzeuge/liste"">Flugzeugliste</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/muster/liste">Flugzeug hinzufügen</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/muster/liste"><b>Neues Flugzeug hinzufügen</b></a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/flugzeuge/liste"">Flugzeugliste anzeigen</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -39,10 +39,10 @@
                         Protokolle
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/neu">Neues Protokoll</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/offen">Angefangene Protokolle</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/fertig">Fertige Protokolle</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/abgegeben">Abgegebene Protokolle</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/neu"><b>Neues Protokoll eingeben</b></a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/offen">Gespeicherte Protokolle anzeigen</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/fertig">Fertige Protokolle anzeigen</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/protokolle/protokollListe/abgegeben">Abgegebene Protokolle anzeigen</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -54,9 +54,9 @@
                         Admin
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="<?= base_url() ?>/admin/piloten/index">Piloten</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/admin/flugzeuge/index">Flugzeuge</a>
-                        <a class="dropdown-item" href="<?= base_url() ?>/admin/protokolle/index">Protokolle</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/piloten/index">Pilotenverwaltung</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/flugzeuge/index">Flugzeugverwaltung</a>
+                        <a class="dropdown-item" href="<?= base_url() ?>/admin/protokolle/index">Protokollverwaltung</a>
                         <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && $_SESSION['mitgliedsStatus'] == ADMINISTRATOR) : ?>
                             <a class="dropdown-item" href="#">Benutzer</a>
                             <a class="dropdown-item" href="#">Protokoll Layout</a>

@@ -1,5 +1,7 @@
 <div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
-    <h1><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h1>
+    <!-- <h1><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h1> -->
+    <h1><?= $flugzeug['kennung'] ?></h1>
+    <p><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?></p>
 </div>
 
 <form method="post">

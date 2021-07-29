@@ -28,8 +28,6 @@ class ZachernProtokolleKommentare extends Seeder
             (22, 11, 'rechts -> links durch linken Oberschenkel behindert'),
             (22, 19, 'bereits ab 2. Schwingung kaum noch messbar'),
             (23, 7, 'Messungen nach links schiebend nicht möglich, da FM-Anzeige dann 0 km/h. Gesamtdruckabnahme in Nase zeigt nach rechts.'),
-            (23, 8, 'keine Richtungsangabe'),
-            (23, 9, 'keine Richtungsangabe'),
             (24, 5, 'nur rechts herum'),
             (24, 6, 'keine Richtungsangabe'),
             (24, 7, 'tw. keine Richtungsangabe'),

@@ -78,10 +78,10 @@ class ZachernprotokolllayoutProtokollEingaben extends Seeder
             (65, 2, '6. Schwingung', NULL, NULL, NULL),
             (66, 2, 'Schwingungsdauer', NULL, NULL, NULL),
             (67, 2, 'Schwingungsverhalten', NULL, NULL, NULL),
-            (68, 2, 'IAS<sub>tatsächlich</sub>', 10, NULL, NULL),
-            (69, 2, 'HSt-Weg', 10, NULL, NULL),
-            (70, 2, 'IAS<sub>tatsächlich</sub>', 10, NULL, NULL),
-            (71, 2, 'HSt-Kraft', 10, NULL, NULL),
+            (68, 2, NULL, 10, NULL, NULL),
+            (69, 2, NULL, 10, NULL, NULL),
+            (70, 2, NULL, 10, NULL, NULL),
+            (71, 2, NULL, 10, NULL, NULL),
             (72, 1, 'Allgemeiner Eindruck', NULL, NULL, NULL);";
         
         try

@@ -77,7 +77,7 @@ class ZachernProtokolleBeladung extends Seeder
             (24, 27, NULL, NULL, 5),
             (24, 25, 'Fallschirm', NULL, 7),
             (24, 26, 'Fallschirm', NULL, 7),
-            (24, 25, NULL, NULL, 80),
+            (24, 25, NULL, NULL, 79),
             (24, 26, NULL, NULL, 60),
             (25, 27, NULL, NULL, 5),
             (25, 25, 'Fallschirm', NULL, 7),

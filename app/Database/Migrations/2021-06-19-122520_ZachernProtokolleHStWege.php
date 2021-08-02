@@ -35,7 +35,7 @@ class ZachernProtokolleHStWege extends Migration
             'neutralHSt' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
-                'null'              => false,
+                'null'              => true,
             ],
             'gezogenHSt' => [
                 'type'              => 'INT',

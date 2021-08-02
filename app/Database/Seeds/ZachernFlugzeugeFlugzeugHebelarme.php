@@ -62,7 +62,10 @@ class ZachernFlugzeugeFlugzeugHebelarme extends Seeder
             (26, 'Trimmballast', '-1920.00'),
             (27, 'Pilot', '-1468.00'),
             (27, 'Copilot', '-308.00'),
-            (27, 'Trimmballast', '-2153.00');";
+            (27, 'Trimmballast', '-2153.00'),
+            (24, 'Pilot', '-1370.00'),
+            (24, 'Copilot', '-295.00'),
+            (24, 'Trimmballast', '5400.00');";
         
         try
         {

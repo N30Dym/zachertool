@@ -186,7 +186,6 @@ class ZachernProtokolleKommentare extends Seeder
             (58, 9, 'keine Richtungsangaben'),
             (58, 12, 'zu kleiner Kraftmesser'),
             (58, 19, 'bei Schwingungsdauer vermutlich vermessen'),
-            (59, 7, '8.3 keine Richtungsangabe'),
             (59, 11, 'turbulente Luftmasse'),
             (59, 12, '5daN Krafmesser zu klein; Ausfahrkraft: 0% 3,5daN; 33% 5daN; darüber größer 5daN;; Einfahrkraft: 33% 2daN; 0% 0daN'),
             (57, 9, 'vermutlich zu viel QR, wahrscheinlich etwas zu schnell'),

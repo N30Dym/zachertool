@@ -2,7 +2,7 @@
 $( document ).ready( function() {
     
         
-        $(window).keydown(function(event){
+    $(window).keydown(function(event){
         //alert(event.keyCode);
             // Refreshen verhindern
         if(event.keyCode == 116) {
@@ -10,10 +10,10 @@ $( document ).ready( function() {
             return false;
         }
           // Submit mit Enter verhindern
-        if(event.keyCode == 13) {
+        /*if(event.keyCode == 13) {
             event.preventDefault();
             return false;
-        }
+        }*/
 
     });
 

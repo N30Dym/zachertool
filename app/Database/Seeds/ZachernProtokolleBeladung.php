@@ -19,7 +19,7 @@ class ZachernProtokolleBeladung extends Seeder
             (2, 9, NULL, NULL, 80),
             (2, 10, NULL, NULL, 102),
             (2, 9, 'Fallschirm', NULL, 7),
-            (2, 10, 'Fallschirm', NULL, 7),
+            (2, 10, 'Fallschirm', NULL, 5),
             (3, 11, 'Fallschirm', NULL, 7),
             (3, 11, NULL, NULL, 80),
             (4, 14, NULL, NULL, 10),
@@ -123,7 +123,8 @@ class ZachernProtokolleBeladung extends Seeder
             (40, 17, NULL, NULL, 83),
             (41, 17, 'Fallschirm', NULL, 7),
             (41, 17, NULL, NULL, 87),
-            (42, 22, 'Fallschirm', NULL, 22),
+            (42, 22, 'Fallschirm', NULL, 7),
+            (42, 22, 'Zusatz', NULL, 15),
             (42, 22, NULL, NULL, 69),
             (43, 35, 'Fallschirm', NULL, 7),
             (43, 36, 'Fallschirm', NULL, 7),
@@ -138,7 +139,7 @@ class ZachernProtokolleBeladung extends Seeder
             (45, 35, NULL, NULL, 70),
             (45, 36, NULL, NULL, 60),
             (46, 15, 'Fallschirm', NULL, 7),
-            (46, 16, 'Fallschirm', NULL, 12),
+            (46, 16, 'Fallschirm', NULL, 7),
             (46, 15, NULL, NULL, 85),
             (46, 16, NULL, NULL, 80),
             (47, 38, 'Fallschirm', NULL, 6),
@@ -204,7 +205,7 @@ class ZachernProtokolleBeladung extends Seeder
             (69, 47, NULL, NULL, 100),
             (69, 48, NULL, NULL, 68),
             (70, 44, NULL, NULL, 7.5),
-            (70, 43, 'Fallschirm', NULL, 82),
+            (70, 43, 'Fallschirm', NULL, 0),
             (70, 43, NULL, NULL, 82);";
         
         try

@@ -389,14 +389,21 @@ class Validation
                 'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'tek' => [
+        'tekArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required'  => 'Die TEK wurde nicht angegeben.',
+                'required'  => 'Die Art der TEK-Düse wurde nicht angegeben.',
                 'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'pitotPosition' => [
+        'tekPosition' => [
+            'rules'  	=> 'required|string',
+            'errors' 	=> [
+                'required'  => 'Die Position der TEK-Düse wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+            ]
+        ],
+        'pitotArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
                 'required'  => 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
@@ -526,10 +533,17 @@ class Validation
                 'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'tek' => [
+        'tekArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required'  => 'Die TEK wurde nicht angegeben.',
+                'required'  => 'Die Art der TEK-Düse wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+            ]
+        ],
+        'tekPosition' => [
+            'rules'  	=> 'required|string',
+            'errors' 	=> [
+                'required'  => 'Die Position der TEK-Düse wurde nicht angegeben.',
                 'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],

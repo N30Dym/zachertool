@@ -30,7 +30,8 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         {
             $musterID = $this->musterIDVorhanden($postDaten);                                  
         }
-        else if($musterID != null && $this->musterMitMusterZusatzVorhanden($postDaten))
+            //Wenn sich der Musterzusatz ändert, muss ein neues Muster angelegt werden
+        else if($musterID != null && !$this->musterMitMusterZusatzVorhanden($postDaten))
         {
             $musterID = null;
         }
@@ -43,7 +44,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         {
             return false;
         }
-
+        
             // Wenn noch keine musterID vorhanden, dann erst Muster anlegen und musterID setzen
         if($musterID == null)
         {
@@ -93,7 +94,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     
     protected function musterMitMusterZusatzVorhanden($postDaten)
     {
-        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
         
         return $flugzeugeMitMusterModel->getMusterIDNachMusterIDUndZusatz($postDaten['musterID'], $postDaten['muster']['musterZusatz']) ? true : false;
     }
@@ -278,7 +279,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             {
                 case 'flugzeugDetailsOhneFlugzeugID':
                     $datenArray['flugzeugID'] = $flugzeugID;
-                    $flugzeugDetailsModel->insert($datenArray);
+                    $flugzeugDetailsModel->builder()->set($datenArray)->insert();
                     break;
                 case 'flugzeugWaegungOhneFlugzeugID':
                     $datenArray['flugzeugID'] = $flugzeugID;

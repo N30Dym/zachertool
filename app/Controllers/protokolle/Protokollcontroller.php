@@ -150,7 +150,7 @@ class Protokollcontroller extends Controller
         if(ENVIRONMENT === 'development')
         {
             echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
-            echo $_SESSION['protokoll']['protokollInformationen']['datum'] ?? "";
+            //echo $_SESSION['protokoll']['protokollInformationen']['datum'] ?? "";
         }
         
             // datenHeader mit Titel füttern

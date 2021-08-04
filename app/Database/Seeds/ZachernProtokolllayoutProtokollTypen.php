@@ -10,9 +10,10 @@ class ZachernProtokolllayoutProtokollTypen extends Seeder
     
     public function run()
     {
-        $query = "INSERT IGNORE INTO `protokoll_typen` (`id`, `bezeichnung`, `sichtbar`, `erstelltAm`) VALUES
-            (1, 'Zacherprotokoll ohne \"Statische\"', 1, CURRENT_TIMESTAMP),
-            (2, '\"Statische\"', 1, CURRENT_TIMESTAMP);";
+        $query = "INSERT IGNORE INTO `protokoll_typen` (`id`, `kategorieID`, `bezeichnung`, `sichtbar`, `erstelltAm`) VALUES
+            (1, 1, 'Zacherprotokoll ohne \"Statische\"', 1, CURRENT_TIMESTAMP),
+            (2, 1, '\"Statische\"', 1, CURRENT_TIMESTAMP),
+            (3, 2, 'Geräuschmessung in Kleinflugzeugen', 1, CURRENT_TIMESTAMP);";
         
         try
         {

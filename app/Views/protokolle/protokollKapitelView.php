@@ -162,6 +162,20 @@
                                                         </select>
 
                                                     <?php break ?> <!-- case "Note" -->
+                                                    
+                                                    <?php case "Textzeile": ?>
+    <!-- Textzeile -->
+                                                        <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
+                                                            <span class="input-group-text col-md-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
+                                                        <?php endif ?>
+
+                                                        <input type="text" class="form-control" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] ?? "" ) ?><?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+
+                                                        <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
+                                                            <span class="input-group-text col-md-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
+                                                        <?php endif ?>
+
+                                                    <?php break ?> <!-- case "Textzeile" -->
 
                                                     <?php default: ?>
                                                         <?= esc($inputsDatenArray[$protokollInputID]['inputTyp']) ?>
@@ -303,6 +317,10 @@
                                                     <?php case "Ganzzahl": ?>
                                                         <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
                                                     <?php break ?> <!-- case "Ganzzahl" -->
+                                                    
+                                                    <?php case "Textzeile": ?>
+                                                        <input type="text" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+                                                    <?php break ?> <!-- case "Textzeile" -->
 
                                                 <?php endswitch ?>
                                                     <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>

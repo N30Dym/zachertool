@@ -45,7 +45,11 @@ class ZachernprotokolllayoutAuswahllisten extends Seeder
             (32, 53, 'sehr gut'),
             (33, 53, 'gut'),
             (34, 53, 'mäßig'),
-            (35, 53, 'schlecht');";
+            (35, 53, 'schlecht'),
+            (36, 103, 'vorne'),
+            (37, 103, 'hinten'),
+            (38, 103, 'links'),
+            (39, 103, 'rechts');";
         
         try
         {

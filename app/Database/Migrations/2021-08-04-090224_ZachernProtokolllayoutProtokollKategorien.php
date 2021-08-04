@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ZachernProtokolllayoutProtokollTypen extends Migration
+class ZachernProtokolllayoutProtokollKategorien extends Migration
 {
     protected $DBGroup = 'protokolllayoutDB';
     
@@ -15,11 +15,6 @@ class ZachernProtokolllayoutProtokollTypen extends Migration
                 'type'              => 'INT',
                 'unsigned'          => true,
                 'auto_increment'    => true,
-            ],
-            'kategorieID' => [
-                'type'              => 'INT',
-                'constraint'        => '11',
-                'null'              => false,
             ],
             'bezeichnung' => [
                 'type'              => 'VARCHAR',
@@ -32,14 +27,13 @@ class ZachernProtokolllayoutProtokollTypen extends Migration
                 'null'              => true,
             ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
-            "`geaendertAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('protokoll_typen', TRUE);
+        $this->forge->createTable('protokoll_kategorien', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('protokoll_typen');
+        $this->forge->dropTable('protokoll_kategorien');
     }
 }

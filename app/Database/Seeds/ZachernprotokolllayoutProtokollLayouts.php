@@ -111,7 +111,14 @@ class ZachernprotokolllayoutProtokollLayouts extends Seeder
             (109, 1, 22, 17, NULL, 61, 92),
             (110, 1, 22, 17, NULL, 62, 93),
             (111, 1, 13, 12, NULL, 34, 97),
-            (113, 1, 13, 12, NULL, 35, 98);";
+            (113, 1, 13, 12, NULL, 35, 98),
+            (114, 3, 2, 1, NULL, NULL, NULL),
+            (115, 3, 3, 2, NULL, NULL, NULL),
+            (116, 3, 4, 21, NULL, 73, 103),
+            (117, 3, 4, 21, NULL, 74, 104),
+            (118, 3, 4, 21, NULL, 74, 105),
+            (119, 3, 4, 21, NULL, 74, 106),
+            (120, 3, 4, 21, NULL, 74, 107);";
         
         try
         {

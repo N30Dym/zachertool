@@ -12,13 +12,14 @@ class SeedController extends Seeder
         
         $this->call('ZachernProtokolllayoutProtokollTypen');
         $this->call('ZachernProtokolllayoutProtokolle');
-        $this->call('ZachernprotokolllayoutInputTypen');
-        $this->call('ZachernprotokolllayoutProtokollKapitel');
-        $this->call('ZachernprotokolllayoutProtokollUnterkapitel');
-        $this->call('ZachernprotokolllayoutProtokollEingaben');
-        $this->call('ZachernprotokolllayoutProtokollInputs');
-        $this->call('ZachernprotokolllayoutProtokollLayouts');
-        $this->call('ZachernprotokolllayoutAuswahllisten');     
+        $this->call('ZachernProtokolllayoutInputTypen');
+        $this->call('ZachernProtokolllayoutProtokollKapitel');
+        $this->call('ZachernProtokolllayoutProtokollUnterkapitel');
+        $this->call('ZachernProtokolllayoutProtokollEingaben');
+        $this->call('ZachernProtokolllayoutProtokollInputs');
+        $this->call('ZachernProtokolllayoutProtokollLayouts');
+        $this->call('ZachernProtokolllayoutAuswahllisten');
+        $this->call('ZachernProtokolllayoutProtokollKategorien'); 
         
         $this->call('ZachernPilotenPiloten');
         $this->call('ZachernPilotenPilotenDetails');

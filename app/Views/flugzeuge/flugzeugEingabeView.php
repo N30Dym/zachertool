@@ -47,7 +47,7 @@
 
 
                 <div class="col-sm-3">
-                    <label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
+                    <label for="musterZusatz" class="form-label">Zusatzbezeichnung / Konfiguration</label>
                     <input type="text" class="form-control" name="muster[musterZusatz]" id="musterZusatz" <?= isset($flugzeugID) ? "" : 'placeholder="b, XL, FES, 18m"' ?> value="<?= esc($muster['musterZusatz'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>> 
 
                 </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-12 alert alert-secondary <?= isset($flugzeugID) ? "d-none" : "" ?>">
                     <small>Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
-                    <br \><small>Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
+                    <br \><small>Beispiel "AK-8b neue Winglets": Muster = "AK-8", Zusatzbezeichnung = "b neue Winglets" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
                 </div>
 
                 <div class="col-12">

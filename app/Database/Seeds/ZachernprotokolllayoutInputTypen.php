@@ -17,7 +17,8 @@ class ZachernprotokolllayoutInputTypen extends Seeder
             (4, 'Dezimalzahl'),
             (5, 'Checkbox'),
             (7, 'Textfeld'),
-            (8, 'Note');";
+            (8, 'Note'),
+            (9, 'Radiobutton');";
         
         try
         {

@@ -28,7 +28,7 @@ class ZachernFlugzeugeMuster extends Seeder
             (15, 'Cirrus', 'cirrus', NULL, 1, NULL, NULL),
             (16, 'D-40', 'd40', NULL, NULL, NULL, 1),
             (17, 'Elfe', 'elfe', ' S4D', 1, NULL, NULL),
-            (18, 'Discus 2', 'discus2', 'c', 1, NULL, NULL),
+            (18, 'Discus 2', 'discus2', 'c 18m', 1, NULL, NULL),
             (19, 'fs33', 'fs33', NULL, NULL, 1, 1),
             (20, 'fs25', 'fs25', NULL, NULL, NULL, NULL),
             (21, 'Duo Discus', 'duodiscus', ' XL', 1, 1, NULL),

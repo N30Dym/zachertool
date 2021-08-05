@@ -71,9 +71,19 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
         
         $temporaeresPilotArray  = [];
 
-        foreach($pilotenModel->getSichtbarePiloten() as $pilot)
+        if(isset($_SESSION['protokoll']['fertig']))
         {
-            $temporaeresPilotArray[$pilot['id']] = $pilot;
+            foreach($pilotenModel->getAllePiloten() as $pilot)
+            {
+                $temporaeresPilotArray[$pilot['id']] = $pilot;
+            }
+        }
+        else
+        {
+            foreach($pilotenModel->getSichtbarePiloten() as $pilot)
+            {
+                $temporaeresPilotArray[$pilot['id']] = $pilot;
+            }
         }
          
         return $temporaeresPilotArray;

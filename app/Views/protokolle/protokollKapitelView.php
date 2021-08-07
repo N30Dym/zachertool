@@ -294,7 +294,7 @@
                     <?php else : ?> <!-- if Multipel --> 
                         <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
                             <div class="table-responsive-xxl multibelTabelle">
-                                <table class="table">
+                                <table class="table table-sm">
                                 
                                     <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                 
@@ -319,7 +319,7 @@
                                                     <?php break ?> <!-- case "Ganzzahl" -->
                                                     
                                                     <?php case "Textzeile": ?>
-                                                        <input type="text" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+                                                        <input type="text" class="form-control" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
                                                     <?php break ?> <!-- case "Textzeile" -->
 
                                                 <?php endswitch ?>

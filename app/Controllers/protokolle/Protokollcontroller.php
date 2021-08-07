@@ -9,7 +9,7 @@ use Config\Services;
 use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller, Protokolldateninhaltladecontroller };
 
 
-use App\Models\protokolllayout\protokollTypenModel;
+use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen']);
 
@@ -223,6 +223,7 @@ class Protokollcontroller extends Controller
     {
         $protokollTypenModel        = new protokollTypenModel();
         $protokollAnzeigeController = new Protokollanzeigecontroller();
+        $protokollKategorienModel   = new protokollKategorienModel();
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
@@ -232,7 +233,8 @@ class Protokollcontroller extends Controller
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
             'titel' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
-            'protokollTypen' 	=> $protokollTypenModel->getSichtbareProtokollTypen()
+            'protokollTypen' 	=> $protokollTypenModel->getSichtbareProtokollTypen(),
+            'protokollKategorien' => $protokollKategorienModel->getSichtbareKategorien()
         ];
 
             // Laden der ersten Seite mit den oben geladenen Daten

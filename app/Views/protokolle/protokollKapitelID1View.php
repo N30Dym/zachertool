@@ -40,7 +40,19 @@
             <?php endif ?>
         </select>
     </div>
-</div>
+</div>  
 
 <div class="col-sm-2">
+</div>
+
+
+<div class="col-sm-1"> 
+</div>
+<div class="col-lg-10 mt-5">
+    <div class="border p-4 rounded shadow mb-3">
+        <label class="form-label ms-3"><b>Stunden auf dem Muster</b></label>
+        <input type="number" class="form-control" name="protokollInformation[stundenAufDemMuster]" min="0" step="0.1" value="<?= esc($_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'] ?? "" ) ?>">
+    </div>
+</div>
+<div class="col-sm-1"> 
 </div>

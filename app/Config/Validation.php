@@ -1024,6 +1024,12 @@ class Validation
                 'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
             ]
         ], 
+        'stundenAufDemMuster' => [
+            'rules'  => 'permit_empty|numeric',
+            'errors' => [
+                'numeric'    => 'Die Eingabe zur Anzahl der Stunden auf dem Muster enth#lt ungültige Zeichen.'
+            ]
+        ],
         'bemerkung' => [
             'rules'  => 'permit_empty|string',
             'errors' => [

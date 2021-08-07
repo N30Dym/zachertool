@@ -11,7 +11,7 @@ class ZachernprotokolllayoutProtokollEingaben extends Seeder
     public function run()
     {
         $query = "INSERT IGNORE INTO `protokoll_eingaben` (`id`, `protokollTypID`, `bezeichnung`, `multipel`, `linksUndRechts`, `doppelsitzer`) VALUES
-            (1, 1, 'Beschreiben des Verhaltens im Schlepp', NULL, NULL, NULL),
+            (1, 1, 'Beschreiben des Verhaltens beim Start', NULL, NULL, NULL),
             (2, 1, 'IAS<sub>min</sub>', NULL, NULL, NULL),
             (3, 1, '&lt;V_S', NULL, NULL, NULL),
             (4, 1, 'IAS<sub>max</sub>', NULL, NULL, NULL),
@@ -84,7 +84,8 @@ class ZachernprotokolllayoutProtokollEingaben extends Seeder
             (71, 2, NULL, 10, NULL, NULL),
             (72, 1, 'Allgemeiner Eindruck', NULL, NULL, NULL),
             (73, 3, 'Mikrofonposition', NULL, NULL, NULL),
-            (74, 3, NULL, 20, NULL, NULL);";
+            (74, 3, NULL, 20, NULL, NULL),
+            (75, 1, NULL, NULL, NULL, NULL);";
         
         try
         {

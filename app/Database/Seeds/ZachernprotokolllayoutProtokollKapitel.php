@@ -14,7 +14,7 @@ class ZachernprotokolllayoutProtokollKapitel extends Seeder
             (1, NULL, 'Angaben zum Flugzeug', NULL, NULL, NULL),
             (2, NULL, 'Angaben zum Piloten / zu den Piloten', NULL, NULL, NULL),
             (3, NULL, 'Angaben zum Beladungszustand', NULL, NULL, 1),
-            (4, 1, 'Start im Schleppflug', NULL, NULL, NULL),
+            (4, 1, 'Start', NULL, NULL, NULL),
             (5, 1, 'Trimmung', NULL, 1, 1),
             (6, 1, 'Stationärer Kreisflug', NULL, NULL, 1),
             (7, 1, 'Langsamflug und Überziehverhalten', NULL, 1, 1),

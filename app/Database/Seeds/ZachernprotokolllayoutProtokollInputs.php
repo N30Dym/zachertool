@@ -117,7 +117,10 @@ class ZachernprotokolllayoutProtokollInputs extends Seeder
             (104, 3, 'IAS', 1, 'km/h', NULL, 100.00, 200.00, NULL, 5.00, NULL, NULL),
             (105, 3, 'Höhe_1013', 1, 'm', NULL, 200.00, NULL, NULL, 1.00, NULL, NULL),
             (106, 4, 'Dezibel', 1, 'dB', NULL, 0, NULL, NULL, 0.01, NULL, NULL),
-            (107, 1, 'Bemerkungen', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+            (107, 1, 'Bemerkungen', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+            (108, 1, 'F-Schlepp', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+            (109, 1, 'Winde', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+            (110, 1, 'Eigenstart', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
         
         try
         {

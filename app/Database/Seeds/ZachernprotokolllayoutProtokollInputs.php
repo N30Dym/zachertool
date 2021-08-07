@@ -120,7 +120,8 @@ class ZachernprotokolllayoutProtokollInputs extends Seeder
             (107, 1, 'Bemerkungen', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
             (108, 1, 'F-Schlepp', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
             (109, 1, 'Winde', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
-            (110, 1, 'Eigenstart', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+            (110, 1, 'Eigenstart', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+            (111, 5, 'Keine', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
         
         try
         {

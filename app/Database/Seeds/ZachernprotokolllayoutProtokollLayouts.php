@@ -104,6 +104,7 @@ class ZachernprotokolllayoutProtokollLayouts extends Seeder
             (2, 2, 1, NULL, NULL, NULL),
             (2, 3, 2, NULL, NULL, NULL),
             (2, 4, 3, NULL, NULL, NULL),
+            (2, 15, 18, NULL, 63, 111),
             (2, 15, 18, NULL, 63, 69),
             (2, 16, 19, NULL, 64, 70),
             (2, 16, 19, NULL, 64, 71),

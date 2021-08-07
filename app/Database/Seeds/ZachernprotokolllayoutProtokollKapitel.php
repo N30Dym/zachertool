@@ -28,7 +28,7 @@ class ZachernprotokolllayoutProtokollKapitel extends Seeder
             (15, 1, 'Nach dem Flug – Bremsklappen', NULL, NULL, NULL),
             (16, 1, 'Nach dem Flug – Fahrwerk', NULL, NULL, NULL),
             (17, 1, 'Nach dem Flug – Cockpit', NULL, NULL, 1),
-            (18, 2, 'Freier Geradeausflug', NULL, NULL, NULL),
+            (18, 2, 'Freier Geradeausflug', NULL, NULL, 1),
             (19, 2, 'Dynamische Längsstabilität', NULL, NULL, 1),
             (20, 2, 'Statische Längsstabilität ', 'Wenn du mehr Geschwindigkeiten angeflogen bist, als du hier eintragen kannst, erstelle ein weiteres Protokoll. Dort müssen dann nur die Protokoll-, Flugzeug- und Beladungsangaben gemacht und diese Seite mit den restlichen Werten gefüllt werden. Es reicht wenn du nur die \"Statische\" auswählst.', NULL, 1),
             (21, 3, 'Geräuschpegelmessungen', NULL, NULL, 1);";

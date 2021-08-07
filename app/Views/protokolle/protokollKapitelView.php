@@ -293,7 +293,7 @@
 <!---------------------------------------->
                     <?php else : ?> <!-- if Multipel --> 
                         <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
-                            <div class="table-responsive-xxl multibelTabelle">
+                            <div class="table-responsive multibelTabelle">
                                 <table class="table table-sm">
                                 
                                     <?php foreach($eingabe as $protokollInputID => $input) : ?>

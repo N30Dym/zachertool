@@ -49,8 +49,8 @@
             <h4 class="m-4">Wähle aus was du eingeben möchtest</h4>
             <div class="row">
                 <div class="col-sm-6"> 
-                    <?php foreach($protokollKategorien as $kategorie) : ?>
-                        <?php if($kategorie['id'] % 2 != 0) : ?>                           
+                    <?php foreach($protokollKategorien as $nummer => $kategorie) : ?>
+                        <?php if($nummer % 2 == 0) : ?>                           
                             <div class="alert alert-secondary ps-4" role="alert">
                                 <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
                                 <?php foreach($protokollTypen as $protokollTyp): ?>
@@ -64,8 +64,8 @@
                     <?php endforeach ?>                   
                 </div>
                 <div class="col-sm-6">
-                    <?php foreach($protokollKategorien as $kategorie) : ?>
-                        <?php if($kategorie['id'] % 2 == 0) : ?>                           
+                    <?php foreach($protokollKategorien as $nummer => $kategorie) : ?>
+                        <?php if($nummer % 2 != 0) : ?>                           
                             <div class="alert alert-secondary ps-4" role="alert">
                                 <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
                                 <?php foreach($protokollTypen as $protokollTyp): ?>

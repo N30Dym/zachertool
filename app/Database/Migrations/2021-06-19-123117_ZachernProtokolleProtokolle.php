@@ -43,6 +43,12 @@ class ZachernProtokolleProtokolle extends Migration
                 'null'              => true,
                 'default'           => null,
             ],
+            'stundenAufDemMuster' => [
+                'type'              => 'DOUBLE',
+                'constraint'        => '10,2',
+                'null'              => true,
+                'default'           => null,
+            ],
             'bemerkung' => [
                 'type'              => 'TEXT',
                 'null'              => true,

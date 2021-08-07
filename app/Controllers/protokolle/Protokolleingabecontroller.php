@@ -64,10 +64,11 @@ class Protokolleingabecontroller extends Protokollcontroller
         */ 
     protected function setzeProtokollInformationen($protokollInformationen)
     {                        
-        $_SESSION['protokoll']['protokollInformationen']['datum']        = date('Y-m-d', strtotime($protokollInformationen["datum"]));
-        $_SESSION['protokoll']['protokollInformationen']['flugzeit']     = $protokollInformationen["flugzeit"];
-        $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
-        $_SESSION['protokoll']['protokollInformationen']['titel']        = isset($_SESSION['protokoll']['protokollSpeicherID']) ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        isset($protokollInformationen['datum']) ? $_SESSION['protokoll']['protokollInformationen']['datum'] = date('Y-m-d', strtotime($protokollInformationen["datum"])) : null;
+        isset($protokollInformationen['flugzeit']) ? $_SESSION['protokoll']['protokollInformationen']['flugzeit'] = $protokollInformationen["flugzeit"] : null;
+        isset($protokollInformationen['bemerkung']) ? $_SESSION['protokoll']['protokollInformationen']['bemerkung'] = $protokollInformationen["bemerkung"] : null;
+        isset($_SESSION['protokoll']['protokollSpeicherID']) ? $_SESSION['protokoll']['protokollInformationen']['titel'] = "Vorhandenes Protokoll bearbeiten" : $_SESSION['protokoll']['protokollInformationen']['titel'] = "Neues Protokoll eingeben";
+        isset($protokollInformationen['stundenAufDemMuster']) ? $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'] = $protokollInformationen['stundenAufDemMuster'] : null;
 
             // Wenn protokollSpeicherID existiert, werden gewaehlteProtokollTypen und protokollIDs im Protokolldatenladecontroller geladen
         if( ! isset($_SESSION['protokoll']['fertig']))

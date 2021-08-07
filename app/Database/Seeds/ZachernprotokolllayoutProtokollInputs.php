@@ -123,7 +123,9 @@ class ZachernprotokolllayoutProtokollInputs extends Seeder
             (110, 1, 'Eigenstart', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
             (111, 5, 'Keine', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
             (112, 7, 'Begründung', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-            (113, 8, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);";
+            (113, 8, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+            (114, 5, '6. Schwingung nur mit festgehaltenem HSt möglich', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+            (115, 4, NULL, 1, NULL, NULL, 0.00, NULL, NULL, 0.1, NULL, NULL);";
         
         try
         {

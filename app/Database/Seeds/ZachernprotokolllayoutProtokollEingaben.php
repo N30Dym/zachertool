@@ -85,7 +85,8 @@ class ZachernprotokolllayoutProtokollEingaben extends Seeder
             (72, 1, 'Allgemeiner Eindruck', NULL, NULL, NULL),
             (73, 3, 'Mikrofonposition', NULL, NULL, NULL),
             (74, 3, NULL, 20, NULL, NULL),
-            (75, 1, NULL, NULL, NULL, NULL);";
+            (75, 1, NULL, NULL, NULL, NULL),
+            (76, 2, 'Anzahl Schwingungen bis außerhalb Betriebsbereich', NULL, NULL, NULL);";
         
         try
         {

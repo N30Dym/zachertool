@@ -108,10 +108,13 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             'flugzeugWaegungOhneFlugzeugID' => $postDaten['waegung']
         ];
         
-        $vorbereiteteDaten['muster']['musterSchreibweise']  = $postDaten['muster']['musterSchreibweise'];
-        $vorbereiteteDaten['muster']['musterKlarname']      = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
-        $vorbereiteteDaten['muster']['musterZusatz']        = $postDaten['muster']['musterZusatz'];
-               
+        $vorbereiteteDaten['muster']['musterKlarname'] = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
+
+        if(empty($postDaten['muster']['musterZusatz']))
+        {
+            unset($vorbereiteteDaten['muster']['musterZusatz']);
+        }
+        
         if(isset($postDaten['muster']['istWoelbklappenFlugzeug']) AND ($postDaten['muster']['istWoelbklappenFlugzeug'] == "on" OR $postDaten['muster']['istWoelbklappenFlugzeug'] == "1"))
         {
             $vorbereiteteDaten['muster']['istWoelbklappenFlugzeug'] = "1";

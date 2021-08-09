@@ -73,12 +73,14 @@ class ZachernFlugzeugeMusterDetails extends Migration
             'leermasseSPMin' => [
                 'type'              => 'DOUBLE',
                 'constraint'        => '10,2',
-                'null'              => false,
+                'null'              => true,
+                'default'           => null
             ],
             'leermasseSPMax' => [
                 'type'              => 'DOUBLE',
                 'constraint'        => '10,2',
-                'null'              => false,
+                'null'              => true,
+                'default'           => null
             ],
             'flugSPMin' => [
                 'type'              => 'DOUBLE',

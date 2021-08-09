@@ -97,7 +97,7 @@ class Pilotencontroller extends Controller
     {
         if($this->request->getPost() != null)
         {
-            $this->zeigeWarteSeite();
+            //$this->zeigeWarteSeite();
 
             if($this->speicherPilotenDaten($this->request->getPost()))
             {               

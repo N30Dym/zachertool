@@ -1,7 +1,7 @@
 <div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
     <h1><?= $titel ?></h1>
 </div>
-
+<?= \Config\Services::validation()->listErrors() ?>
 <?php if(isset($adminOderZachereinweiser)) : ?>
     <form action="<?= base_url() ?>/admin/piloten/datenSpeichern" method="post">
 <?php else: ?>

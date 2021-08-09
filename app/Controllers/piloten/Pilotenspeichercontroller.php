@@ -14,7 +14,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
         
         $zuSpeicherndeDaten                 = [];
             
-        if($pilotID === null )
+        if($pilotID === null)
         {     
             if($this->pruefePilotNochNichtVorhanden($postDaten['pilot']))
             {             
@@ -46,7 +46,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
     
     public function pruefeDaten($pilotenDaten)
     {
-        $validation = \Config\Services::validation();        
+        $validation = \Config\Services::validation(); 
         
         if(isset($pilotenDaten['pilot']))
         {           
@@ -55,9 +55,9 @@ class Pilotenspeichercontroller extends Pilotencontroller
                 return false;
             }
         }
-        
+
         foreach($pilotenDaten['pilotDetails'] as $pilotDetails)
-        {
+        {            
             if(isset($pilotDetails['datum']) && $this->validiereDatum($pilotDetails['datum']))
             {
                 $pilotDetails['datum'] = $this->validiereDatum($pilotDetails['datum']); 
@@ -84,7 +84,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
          */
     
     public function setzeDatenPilotUndPilotDetails($uebergebeneDaten)
-    {       
+    {               
         $rueckgabeArray = [];
         
         foreach($uebergebeneDaten['pilot'] as $feldName => $feldInhalt)
@@ -97,6 +97,11 @@ class Pilotenspeichercontroller extends Pilotencontroller
             $rueckgabeArray['pilotDetails'][$feldName] = $feldInhalt;
         } 
         
+        foreach($rueckgabeArray['pilotDetails'] as $nummer => $pilotDetails)
+        {
+            $pilotDetails['datum'] = $rueckgabeArray['pilotDetails'][$nummer]['datum'] ?? date('Y-m-d');
+        }
+
         return $rueckgabeArray;
     }
     
@@ -113,6 +118,11 @@ class Pilotenspeichercontroller extends Pilotencontroller
         {
             $rueckgabeArray['pilotDetails'][$feldName] = $feldInhalt;
         } 
+        
+        foreach($rueckgabeArray['pilotDetails'] as $nummer => $pilotDetails)
+        {
+            $pilotDetails['datum'] = $rueckgabeArray['pilotDetails'][$nummer]['datum'] ?? date('Y-m-d');
+        }
         
         return $rueckgabeArray;
     }

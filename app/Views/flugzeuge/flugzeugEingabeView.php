@@ -46,7 +46,7 @@
                 <?php endif ?>
 
 
-                <div class="col-sm-3">
+                <div class="col-sm-5">
                     <label for="musterZusatz" class="form-label">Zusatzbezeichnung / Konfiguration</label>
                     <input type="text" class="form-control" name="muster[musterZusatz]" id="musterZusatz" <?= isset($flugzeugID) ? "" : 'placeholder="b, XL, FES, 18m"' ?> value="<?= esc($muster['musterZusatz'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>> 
 

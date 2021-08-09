@@ -44,7 +44,14 @@ class flugzeugeMitMusterModel extends Model {
     
     public function getMusterIDNachMusterIDUndZusatz($musterID, $musterZusatz)
     {
-        return $this->where(['musterID' => $musterID, 'musterZusatz' => $musterZusatz])->first();
+        if(empty($musterZusatz))
+        {
+            return $this->select('musterID')->where(['musterID' => $musterID])->where('musterZusatz IS NULL')->first();
+        }
+        else
+        {
+            return $this->select('musterID')->where(['musterID' => $musterID, 'musterZusatz' => $musterZusatz])->first();
+        }    
     }
     
     public function getMusterNachFlugzeugID($flugzeugID)

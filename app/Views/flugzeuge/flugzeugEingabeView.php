@@ -555,7 +555,14 @@
                 </div>
 
             </div>
+            <h3 class="m-4">Kommentarfeld</h3>
+            <div class="row g-3">
+                <label for="kommentar">Weitere Kommentare, wichtige Anmerkungen; Dinge, die keinen Platz gefunden haben:</label>
+                <textarea name="flugzeugDetails[kommentar]" class="form-control" id="kommentar" <?= isset($flugzeugID) ? "disabled" : "" ?>><?= esc($flugzeugDetails['kommentar'] ?? "") ?></textarea>
+            </div>
         </div>
+        
+        
 <!-------------------------------->
 <!--   Abbrechen, Speichern     -->
 <!-------------------------------->

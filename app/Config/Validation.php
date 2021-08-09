@@ -464,6 +464,12 @@ class Validation
                 'string'    => 'Falsches Format für die Längsneigung.'
             ]
         ],
+        'kommentar' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Falsches Format für den Kommentar.'
+            ]
+        ]
     ];
 	
     public $flugzeugDetailsOhneFlugzeugID =[
@@ -606,6 +612,12 @@ class Validation
             'errors' => [
                 'required'  => 'Die Längsneigung wurde nicht angegeben.',
                 'string'    => 'Falsches Format für die Längsneigung.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Falsches Format für den Kommentar.'
             ]
         ]
     ];

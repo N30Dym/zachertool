@@ -17,7 +17,7 @@ class flugzeugDetailsModel extends Model
     protected $primaryKey       = 'id';
     protected $validationRules 	= 'flugzeugDetails';
 	
-    protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tekArt', 'tekPosition', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel'];
+    protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tekArt', 'tekPosition', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel', 'kommentar'];
 
         /**
         * Diese Funktion ruft nur die Flugzeugdetails mit

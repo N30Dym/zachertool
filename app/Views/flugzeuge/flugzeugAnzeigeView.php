@@ -219,6 +219,9 @@
                     <?php endforeach ?>
                 </table>
             </div>
+            
+            <h3 class="m-3 mt-5">Weitere Informationen</h3>
+            <textarea class="form-control" disabled><?= $flugzeugDetails['kommentar'] ?></textarea>
         </div>
     </div>  
      

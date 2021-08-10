@@ -21,7 +21,7 @@
             <a href="<?= base_url() ?>/flugzeuge/bearbeiten/<?= esc($flugzeugID) ?>">
                 <button type="button" class="btn btn-success col-12">Waegung hinzufügen</button>
             </a>
-            <button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>
+            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>-->
             <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/damin/flugzeuge/<?= $flugzeugID ?>">Bearbeiten</button>
         </div>
     </div>

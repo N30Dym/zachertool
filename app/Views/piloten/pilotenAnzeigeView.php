@@ -100,7 +100,7 @@
                                 <td><?= $protokollDaten['flugzeugDetails']['musterSchreibweise'].$protokollDaten['flugzeugDetails']['musterZusatz'] ?></td>
                                 <td><?= $protokollDaten['flugzeugDetails']['kennung'] ?></td>
                                 <td><?php if(isset($protokollDaten['copilotDetails'])) : ?><?= $protokollDaten['copilotDetails']['vorname'] ?><?= (isset($protokollDaten['copilotDetails']['spitzname']) && $protokollDaten['copilotDetails']['spitzname'] != "") ? ' "'. $protokollDaten['copilotDetails']['spitzname'] .'" ' : " " ?><?= $protokollDaten['copilotDetails']['nachname'] ?><?php endif ?></td>
-                                <td><a href="<?= base_url() ?>/protokolle/anzeigen/<?= $protokollDaten['id'] ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
+                                <td><!--<a href="<?= base_url() ?>/protokolle/anzeigen/<?= $protokollDaten['id'] ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a>--></td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>

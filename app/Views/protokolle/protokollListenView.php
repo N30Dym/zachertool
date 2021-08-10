@@ -35,7 +35,7 @@
                                     <?php endif ?>
                                     </td>
                                     <td><?= $protokoll['bemerkung'] ?></td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
+                                    <td><!--<a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a>--></td>
                                     <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
                                 </tr>
 
@@ -80,7 +80,7 @@
                                     <?php endif ?>
                                     </td>
                                     <td><?= $protokoll['bemerkung'] ?></td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
+                                    <td><!--<a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a>--></td>
                                 </tr>
 
                             <?php endforeach ?>  

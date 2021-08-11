@@ -78,7 +78,8 @@
                         <table class="table mt-5">
                             <thead>
                                 <tr class="text-center">
-                                    <?= (isset($pilotID) OR isset($adminOderZachereinweiser)) ? "<th>Datum</th>" : "" ?>
+                                    <th>Datum</th>
+                                    <?php // (isset($pilotID) OR isset($adminOderZachereinweiser)) ? "<th>Datum</th>" : "" ?>
                                     <th>Segelflugstunden nach Lizenz</th>
                                     <th>Summe geflogener Überlandkilometer nach Schein</th>
                                     <th>Anzahl geflogener Segelflugzeugtypen</th>
@@ -114,9 +115,12 @@
                             <?php if(!isset($adminOderZachereinweiser)) : ?>
                                 <tfoot>
                                     <tr>
-                                        <?php if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php endif ?>
+                                        <!-- <?php// if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php// endif ?> -->
                                         <td>
-                                            <div class="input-group">
+                                            <input type="date" class="form-control" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>">
+                                        </td>
+                                        <td>
+                                            <div class="input-group" >
                                                 <input type="number" class="form-control" name="pilotDetail[0][stundenNachSchein]" min="0" value="<?= $pilotDetail[0]['stundenNachSchein'] ?? "" ?>" required>
                                                 <span class="input-group-text">h</span>
                                             </div>

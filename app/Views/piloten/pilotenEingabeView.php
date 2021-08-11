@@ -117,7 +117,7 @@
                                     <tr>
                                         <!-- <?php// if(isset($pilotID)) : ?><td class="text-end"><b>Neu:</b></td><?php// endif ?> -->
                                         <td>
-                                            <input type="date" class="form-control" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>">
+                                            <input type="date" class="form-control" name="pilotDetail[0][datum]" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>">
                                         </td>
                                         <td>
                                             <div class="input-group" >

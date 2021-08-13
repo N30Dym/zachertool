@@ -19,7 +19,7 @@ class protokolleModel extends Model
     
     protected $returnType     = 'array';
 
-    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
+    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit','stundenAufDemMuster', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
 
         /**

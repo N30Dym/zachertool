@@ -3,9 +3,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-1">
-    </div>
-    <div class="col-lg-10 mt-3">
+    <div class="col-lg-12 mt-3">
         <?php if (isset($protokolleArray[0])) : ?>
             
                 <?php if($protokolleArray == null) : ?>
@@ -20,6 +18,7 @@
                                     <th>Flugzeugmuster</th>
                                     <th>Pilot</th>
                                     <th>Begleiter</th>
+                                    <th>Bemerkungen</th>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -35,7 +34,8 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
+                                    <td><?= $protokoll['bemerkung'] ?></td>
+                                    <td><!--<a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a>--></td>
                                     <td><a href="<?= base_url() ?>/protokolle/index/<?= $protokoll['id'] ?>"><button class="btn btn-sm btn-success">Bearbeiten <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
                                 </tr>
 
@@ -64,6 +64,7 @@
                                     <th>Flugzeugmuster</th>
                                     <th>Pilot</th>
                                     <th>Begleiter</th>
+                                    <th>Bemerkungen</th>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -78,7 +79,8 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a></td>
+                                    <td><?= $protokoll['bemerkung'] ?></td>
+                                    <td><!--<a href="<?= base_url() ?>"><button class="btn btn-sm btn-secondary">Anzeigen <?= ENVIRONMENT == 'development' ? $protokoll['id'] : "" ?> &raquo;</button></a>--></td>
                                 </tr>
 
                             <?php endforeach ?>  
@@ -91,6 +93,4 @@
         <?php endif?>
     </div>
 
-    <div class="col-sm-1">
-    </div>
 </div>

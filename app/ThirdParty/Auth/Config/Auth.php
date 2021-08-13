@@ -13,8 +13,9 @@ class Auth extends BaseConfig
         'login'         => 'Auth\Views\login',
         'register'      => 'Auth\Views\register',
         //'firstLogin'    => 'Auth\Views\firstLogin', // Neu erstellt
-        //'forgot-password' => 'Auth\Views\forgot',
+        'forgot-password' => 'Auth\Views\forgot',
         'reset-password' => 'Auth\Views\reset',
+        'set-password' => 'Auth\Views\setPassword',
         //'account' => 'Auth\Views\account'
     ];
 

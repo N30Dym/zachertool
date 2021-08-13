@@ -1,6 +1,6 @@
 <div class="p-4 p-md-5 mb-4 text-white rounded shadow bg-secondary">
   <h1><?php echo $title ?></h1>
-  <p>Dashboard</p>
+  <p>Startseite</p>
 </div>
 
 

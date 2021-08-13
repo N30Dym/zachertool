@@ -389,14 +389,21 @@ class Validation
                 'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'tek' => [
+        'tekArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required'  => 'Die TEK wurde nicht angegeben.',
+                'required'  => 'Die Art der TEK-Düse wurde nicht angegeben.',
                 'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'pitotPosition' => [
+        'tekPosition' => [
+            'rules'  	=> 'required|string',
+            'errors' 	=> [
+                'required'  => 'Die Position der TEK-Düse wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+            ]
+        ],
+        'pitotArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
                 'required'  => 'Die Lage der Gesamtdruckabnahme wurde nicht angegeben.',
@@ -457,6 +464,12 @@ class Validation
                 'string'    => 'Falsches Format für die Längsneigung.'
             ]
         ],
+        'kommentar' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Falsches Format für den Kommentar.'
+            ]
+        ]
     ];
 	
     public $flugzeugDetailsOhneFlugzeugID =[
@@ -526,10 +539,17 @@ class Validation
                 'string'    => 'Die Eingabe des Variometers enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
-        'tek' => [
+        'tekArt' => [
             'rules'  	=> 'required|string',
             'errors' 	=> [
-                'required'  => 'Die TEK wurde nicht angegeben.',
+                'required'  => 'Die Art der TEK-Düse wurde nicht angegeben.',
+                'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
+            ]
+        ],
+        'tekPosition' => [
+            'rules'  	=> 'required|string',
+            'errors' 	=> [
+                'required'  => 'Die Position der TEK-Düse wurde nicht angegeben.',
                 'string'    => 'Die Eingabe der TEK enthält Zeichen, die nicht gespeichert werden können.'
             ]
         ],
@@ -592,6 +612,12 @@ class Validation
             'errors' => [
                 'required'  => 'Die Längsneigung wurde nicht angegeben.',
                 'string'    => 'Falsches Format für die Längsneigung.'
+            ]
+        ],
+        'kommentar' => [
+            'rules'  => 'permit_empty|string',
+            'errors' => [
+                'string'    => 'Falsches Format für den Kommentar.'
             ]
         ]
     ];
@@ -1010,6 +1036,12 @@ class Validation
                 'valid_date'    => 'Die eingegebene Flugzeit hat ein falsches Format: hh:mm.'
             ]
         ], 
+        'stundenAufDemMuster' => [
+            'rules'  => 'permit_empty|numeric',
+            'errors' => [
+                'numeric'    => 'Die Eingabe zur Anzahl der Stunden auf dem Muster enth#lt ungültige Zeichen.'
+            ]
+        ],
         'bemerkung' => [
             'rules'  => 'permit_empty|string',
             'errors' => [
@@ -1300,7 +1332,7 @@ class Validation
     
     public $eingabeGanzzahl = [
         'wert' => [
-            'rules'  => 'is_natural',
+            'rules'  => 'integer',
             'errors' => [
                 'is_natural'   => 'Eine Zahleneingabe für Ganzzahlen enthält ungültige Zeichen.'
             ] 

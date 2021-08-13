@@ -46,8 +46,8 @@
                 <?php endif ?>
 
 
-                <div class="col-sm-3">
-                    <label for="musterZusatz" class="form-label">Zusatzbezeichnung</label>
+                <div class="col-sm-5">
+                    <label for="musterZusatz" class="form-label">Zusatzbezeichnung / Konfiguration</label>
                     <input type="text" class="form-control" name="muster[musterZusatz]" id="musterZusatz" <?= isset($flugzeugID) ? "" : 'placeholder="b, XL, FES, 18m"' ?> value="<?= esc($muster['musterZusatz'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>> 
 
                 </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-12 alert alert-secondary <?= isset($flugzeugID) ? "d-none" : "" ?>">
                     <small>Beispiel "Discus CS": Muster = "Discus", Zusatzbezeichnung = "<small class="text-danger">_</small>CS"</small><small class="text-danger"><- Leerzeichen beachten!</small>
-                    <br \><small>Beispiel "AK-8b": Muster = "AK-8", Zusatzbezeichnung = "b" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
+                    <br \><small>Beispiel "AK-8b neue Winglets": Muster = "AK-8", Zusatzbezeichnung = "b neue Winglets" </small><small class="text-danger">ohne</small> <small class="text-muted"> Leerzeichen</small>
                 </div>
 
                 <div class="col-12">
@@ -214,116 +214,115 @@
 <!-------------------------------->
 <!--        Wölbklappen         -->
 <!-------------------------------->
-            <?php if(!isset($flugzeugID) OR $muster['istWoelbklappenFlugzeug'] == 1) : ?>
+            
 
-                <div class="table-responsive-xxl <?= (!isset($muster['istWoelbklappenFlugzeug']) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
-                    <h3  class="m-4">Wölbklappen</h3>
-                    <div class="col-12 alert alert-secondary">
-                        <small>Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
-                    </div>
-                    <table class="table" id="woelbklappenTabelle">
-                        <thead>
-                            <tr class="text-center">
-                                <th class="<?= isset($flugzeugID) ? "" : "JSsichtbar" ?>d-none">Löschen</th>
-                                <th style="min-width:150px">Bezeichnung</th>
-                                <th style="min-width:150px">Ausschlag</th>
-                                <th style="min-width:200px">Neutralstellung mit IAS<sub>VG</sub> </th>
-                                <th style="min-width:200px">Kreisflugstellung mit IAS<sub>VG</sub></th>    
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if(isset($woelbklappe) AND $woelbklappe != null) : ?>
-                                <?php foreach($woelbklappe as $i => $woelbklappeDetails) : ?>
-                                    <?php if(is_numeric($i)) : ?>
-                                        <tr valign="middle" id="<?= $i ?>">
-                                            <td class="text-center <?= isset($flugzeugID) ? "" : "JSsichtbar" ?>d-none" ><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
-                                            <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control" value="<?= $woelbklappeDetails['stellungBezeichnung'] ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>></td>
-                                            <td>
-                                                <div class="input-group">
-                                                    <input type="number" name="woelbklappe[<?= $i ?>][stellungWinkel]" step="0.1" class="form-control" value="<?= $woelbklappeDetails['stellungWinkel'] ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                                    <span class="input-group-text">°</span>
-                                                </div>	
-                                            </td>
-                                            <td class="text-center neutral">
-                                                <div class="input-group">
-                                                    <div class="input-group-text">
-                                                        <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $i ?>" <?= $woelbklappe['neutral'] == $i ? "checked" : "" ?> <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                                    </div>
-                                                    <input type="number" name="woelbklappe[<?= $i ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="<?= $woelbklappe[$woelbklappe['neutral']]['iasVGNeutral'] ?? "" ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                                    <span class="input-group-text">km/h</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-center kreisflug">
-                                                <div class="input-group">
-                                                    <div class="input-group-text">
-                                                        <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $i ?>" <?= $woelbklappe['kreisflug'] == $i ? "checked" : "" ?> <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                                    </div>
-                                                    <input type="number" name="woelbklappe[<?= $i ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="<?= $woelbklappe[$woelbklappe['kreisflug']]['iasVGKreisflug'] ?? "" ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                                    <span class="input-group-text">km/h</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endif ?>
-                                <?php endforeach ?>
-
-                            <?php else: ?>
-                                <?php for($i = 0; $i < 10; $i++) : ?>
-                                    <tr valign="middle" id="<?= $i ?>" <?php if($i>5): ?> class="JSloeschen" <?php endif ?>>
-                                        <td class="text-center JSsichtbar d-none"><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
-                                        <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control"></td>
+            <div class="table-responsive-xxl <?= (!isset($muster['istWoelbklappenFlugzeug']) OR $muster['istWoelbklappenFlugzeug'] == 1 OR $muster['istWoelbklappenFlugzeug'] == "on") ? "" : "d-none" ?>" id="woelbklappen">
+                <h3  class="m-4">Wölbklappen</h3>
+                <div class="col-12 alert alert-secondary">
+                    <small>Wölbklappen bitte von negativer (falls vorhanden) nach positiver Wölbung eintragen</small>
+                </div>
+                <table class="table" id="woelbklappenTabelle">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="<?= isset($flugzeugID) ? "" : "JSsichtbar" ?> d-none">Löschen</th>
+                            <th style="min-width:150px">Bezeichnung</th>
+                            <th style="min-width:150px">Ausschlag</th>
+                            <th style="min-width:200px">Neutralstellung mit IAS<sub>VG</sub> </th>
+                            <th style="min-width:200px">Kreisflugstellung mit IAS<sub>VG</sub></th>    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(isset($woelbklappe) AND $woelbklappe != null) : ?>
+                            <?php foreach($woelbklappe as $i => $woelbklappeDetails) : ?>
+                                <?php if(is_numeric($i)) : ?>
+                                    <tr valign="middle" id="<?= $i ?>">
+                                        <td class="text-center <?= isset($flugzeugID) ? "" : "JSsichtbar" ?>d-none" ><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
+                                        <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control" value="<?= $woelbklappeDetails['stellungBezeichnung'] ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>></td>
                                         <td>
                                             <div class="input-group">
-                                                <input type="number" name="woelbklappe[<?= $i ?>][stellungWinkel]" step="0.1" class="form-control">
+                                                <input type="number" name="woelbklappe[<?= $i ?>][stellungWinkel]" step="0.1" class="form-control" value="<?= $woelbklappeDetails['stellungWinkel'] ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                                 <span class="input-group-text">°</span>
                                             </div>	
                                         </td>
                                         <td class="text-center neutral">
                                             <div class="input-group">
                                                 <div class="input-group-text">
-                                                    <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $i ?>">
+                                                    <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $i ?>" <?= $woelbklappe['neutral'] == $i ? "checked" : "" ?> <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                                 </div>
-                                                <input type="number" name="woelbklappe[<?= $i ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral">
+                                                <input type="number" name="woelbklappe[<?= $i ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="<?= $woelbklappe[$woelbklappe['neutral']]['iasVGNeutral'] ?? "" ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                                 <span class="input-group-text">km/h</span>
                                             </div>
                                         </td>
                                         <td class="text-center kreisflug">
                                             <div class="input-group">
                                                 <div class="input-group-text">
-                                                    <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $i ?>" >
+                                                    <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $i ?>" <?= $woelbklappe['kreisflug'] == $i ? "checked" : "" ?> <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                                 </div>
-                                                <input type="number" name="woelbklappe[<?= $i ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug">
+                                                <input type="number" name="woelbklappe[<?= $i ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="<?= $woelbklappe[$woelbklappe['kreisflug']]['iasVGKreisflug'] ?? "" ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
                                                 <span class="input-group-text">km/h</span>
                                             </div>
                                         </td>
-
                                     </tr>
-                                <?php endfor ?>
-                            <?php endif ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
 
-                        </tbody>
-                    </table>
-                </div>
+                        <?php else: ?>
+                            <?php for($i = 0; $i < 10; $i++) : ?>
+                                <tr valign="middle" id="<?= $i ?>" <?php if($i>5): ?> class="JSloeschen" <?php endif ?>>
+                                    <td class="text-center JSsichtbar d-none"><button type="button" class="btn btn-close btn-danger loeschen"></button></td>
+                                    <td><input type="text" name="woelbklappe[<?= $i ?>][stellungBezeichnung]" class="form-control"></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" name="woelbklappe[<?= $i ?>][stellungWinkel]" step="0.1" class="form-control">
+                                            <span class="input-group-text">°</span>
+                                        </div>	
+                                    </td>
+                                    <td class="text-center neutral">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $i ?>">
+                                            </div>
+                                            <input type="number" name="woelbklappe[<?= $i ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral">
+                                            <span class="input-group-text">km/h</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center kreisflug">
+                                        <div class="input-group">
+                                            <div class="input-group-text">
+                                                <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $i ?>" >
+                                            </div>
+                                            <input type="number" name="woelbklappe[<?= $i ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug">
+                                            <span class="input-group-text">km/h</span>
+                                        </div>
+                                    </td>
 
-                <div class="d-grid pt-3 <?= isset($flugzeugID) ? "" : "JSsichtbar" ?> d-none">
-                    <button id="neueZeileWoelbklappe" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
-                </div>
+                                </tr>
+                            <?php endfor ?>
+                        <?php endif ?>
 
-            <?php elseif(!isset($flugzeugID) OR $muster['istWoelbklappenFlugzeug'] != 1) : ?>
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="row g-3<?= (!isset($muster['istWoelbklappenFlugzeug']) OR ($muster['istWoelbklappenFlugzeug'] != "1" AND $muster['istWoelbklappenFlugzeug'] != "on")) ? "" : "d-none" ?>" id="iasVGDiv">
-                    <div class="col-12 ">
-                        <h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
-                        <div class="col-12">
-                        <label class="form-label">IAS<sub>VG</sub></label>
-                            <div class="input-group">
-                                <input type="number" step="1" name="flugzeugDetails[iasVG]" class="form-control" id="iasVG" value="<?= esc($flugzeugDetails['iasVG'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
-                                <span class="input-group-text">km/h</span>
-                            </div>
+            <div class="d-grid pt-3 <?= isset($flugzeugID) ? "" : "JSsichtbar" ?> d-none">
+                <button id="neueZeileWoelbklappe" type="button" class="btn btn-secondary">Zeile hinzufügen</button>
+            </div>
+
+
+
+            <div class="row g-3<?= (!isset($muster['istWoelbklappenFlugzeug']) OR ($muster['istWoelbklappenFlugzeug'] != "1" AND $muster['istWoelbklappenFlugzeug'] != "on")) ? "" : "d-none" ?>" id="iasVGDiv">
+                <div class="col-12 ">
+                    <h3 class="m-4">Vergleichsfluggeschwindigkeit</h3>
+                    <div class="col-12">
+                    <label class="form-label">IAS<sub>VG</sub></label>
+                        <div class="input-group">
+                            <input type="number" step="1" name="flugzeugDetails[iasVG]" class="form-control" id="iasVG" value="<?= esc($flugzeugDetails['iasVG'] ?? "") ?>" <?= isset($flugzeugID) ? "disabled" : "" ?>>
+                            <span class="input-group-text">km/h</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-            <?php endif ?>
 <!-------------------------------->
 <!--       FlugzeugDetails      -->
 <!-------------------------------->
@@ -556,7 +555,14 @@
                 </div>
 
             </div>
+            <h3 class="m-4">Kommentarfeld</h3>
+            <div class="row g-3">
+                <label for="kommentar">Weitere Kommentare, wichtige Anmerkungen; Dinge, die keinen Platz gefunden haben:</label>
+                <textarea name="flugzeugDetails[kommentar]" class="form-control" id="kommentar" <?= isset($flugzeugID) ? "disabled" : "" ?>><?= esc($flugzeugDetails['kommentar'] ?? "") ?></textarea>
+            </div>
         </div>
+        
+        
 <!-------------------------------->
 <!--   Abbrechen, Speichern     -->
 <!-------------------------------->

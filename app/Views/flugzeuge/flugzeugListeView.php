@@ -41,7 +41,7 @@
                             <td><?= esc($flugzeug['musterSchreibweise']).esc($flugzeug['musterZusatz']) ?></td>
                             <td><?= esc($flugzeug['protokollAnzahl']) ?></td>
                             <td>
-                                <a href="/zachern-dev/flugzeuge/anzeigen/<?= esc($flugzeug["flugzeugID"]) ?>">
+                                <a href="<?= base_url("flugzeuge/anzeigen/" . esc($flugzeug["flugzeugID"])) ?>">
                                     <button class="btn btn-sm btn-secondary">Anzeigen</button>
                                 </a>
                             </td>

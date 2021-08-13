@@ -10,11 +10,11 @@ class ZachernPilotenSetzeforeignkeys extends Migration
     
     public function up()
     {
-        $this->db->query("ALTER TABLE `piloten` ADD CONSTRAINT `fk_piloten_akafliegs` FOREIGN KEY(`akafliegID`) REFERENCES `piloten_akaflieg`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;");
+        //$this->db->query("ALTER TABLE `piloten` ADD CONSTRAINT `fk_piloten_akafliegs` FOREIGN KEY(`akafliegID`) REFERENCES `piloten_akaflieg`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;");
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('tablename','users_foreign');
+        //$this->forge->dropForeignKey('tablename','users_foreign');
     }
 }

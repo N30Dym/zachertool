@@ -34,11 +34,11 @@ class ZachernFlugzeugeFlugzeugHebelarme extends Migration
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('flugzeuge_hebelarme', TRUE);
+        $this->forge->createTable('flugzeug_hebelarme', TRUE);
     }
 
     public function down()
     {
-        $this->forge->dropTable('flugzeuge_hebelarme');
+        $this->forge->dropTable('flugzeug_hebelarme');
     }
 }

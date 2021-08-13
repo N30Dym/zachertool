@@ -100,12 +100,14 @@ class ZachernFlugzeugeFlugzeugDetails extends Migration
             'leermasseSPMin' => [
                 'type'              => 'DOUBLE',
                 'constraint'        => '10,2',
-                'null'              => false,
+                'null'              => true,
+                'default'           => null
             ],
             'leermasseSPMax' => [
                 'type'              => 'DOUBLE',
                 'constraint'        => '10,2',
-                'null'              => false,
+                'null'              => true,
+                'default'           => null
             ],
             'flugSPMin' => [
                 'type'              => 'DOUBLE',
@@ -125,6 +127,11 @@ class ZachernFlugzeugeFlugzeugDetails extends Migration
                 'type'              => 'TEXT',
                 'null'              => false,
             ],
+            'kommentar'    => [
+                'type'              => 'TEXT',
+                'null'              => true,
+                'default'           => null
+            ],
             "`erstelltAm` datetime NOT NULL DEFAULT current_timestamp()",
         ]);
         $this->forge->addKey('id', true);
@@ -133,6 +140,6 @@ class ZachernFlugzeugeFlugzeugDetails extends Migration
 
     public function down()
     {
-        $this->forge->dropTable('flugzeuge_details');
+        $this->forge->dropTable('flugzeug_details');
     }
 }

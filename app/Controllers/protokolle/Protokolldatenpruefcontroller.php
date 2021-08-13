@@ -170,6 +170,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         isset($_SESSION['protokoll']['fertig']) ?                                       $protokollDetails['fertig']     = "1" : null;
         (empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) OR $_SESSION['protokoll']['protokollInformationen']['flugzeit'] == '00:00') ? null : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
         empty($_SESSION['protokoll']['protokollInformationen']['bemerkung']) ? null :   $protokollDetails['bemerkung']  = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
+        empty($_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']) ? null :   $protokollDetails['stundenAufDemMuster']  = $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'];
         
         return $protokollDetails;
     }
@@ -256,42 +257,49 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function setzeBeladung()
     {        
-        if($this->pruefeBenoetigteHebelarmeVorhanden())
+        if(isset($_SESSION['protokoll']['beladungszustand']) && !empty($_SESSION['protokoll']['beladungszustand']))  
         {
-            $zuSpeichenderBeladungszustand = [];
-            
-            foreach($_SESSION['protokoll']['beladungszustand'] as $flugzeugHebelarmID => $hebelarm)
+            if($this->pruefeBenoetigteHebelarmeVorhanden())
             {
-                if(is_numeric($flugzeugHebelarmID))
+                $zuSpeichenderBeladungszustand = [];
+
+                foreach($_SESSION['protokoll']['beladungszustand'] as $flugzeugHebelarmID => $hebelarm)
                 {
-                    foreach($hebelarm as $bezeichnung => $gewicht)
+                    if(is_numeric($flugzeugHebelarmID))
                     {
-                        if($gewicht != "")
+                        foreach($hebelarm as $bezeichnung => $gewicht)
                         {
-                            $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
-                            $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? null : $bezeichnung;
-                            $temporaeresBeladungsArray['hebelarm']              = null;                           
-                            $temporaeresBeladungsArray['gewicht']               = $gewicht;
-                            
-                            array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
+                            if($gewicht != "")
+                            {
+                                $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
+                                $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? null : $bezeichnung;
+                                $temporaeresBeladungsArray['hebelarm']              = null;                           
+                                $temporaeresBeladungsArray['gewicht']               = $gewicht;
+
+                                array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
+                            }
+                        }
+                    }
+                    elseif($flugzeugHebelarmID == "weiterer")
+                    {
+                        if($hebelarm['laenge'] != "" AND !empty($hebelarm['gewicht']))
+                        {
+                            $temporaeresBeladungsArray['flugzeugHebelarmID']    = null;
+                            $temporaeresBeladungsArray['bezeichnung']           = $hebelarm['bezeichnung'];
+                            $temporaeresBeladungsArray['hebelarm']              = $hebelarm['laenge'];
+                            $temporaeresBeladungsArray['gewicht']               = $hebelarm['gewicht'];
+
+                            array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray); 
                         }
                     }
                 }
-                elseif($flugzeugHebelarmID == "weiterer")
-                {
-                    if($hebelarm['laenge'] != "" AND !empty($hebelarm['gewicht']))
-                    {
-                        $temporaeresBeladungsArray['flugzeugHebelarmID']    = null;
-                        $temporaeresBeladungsArray['bezeichnung']           = $hebelarm['bezeichnung'];
-                        $temporaeresBeladungsArray['hebelarm']              = $hebelarm['laenge'];
-                        $temporaeresBeladungsArray['gewicht']               = $hebelarm['gewicht'];
-                        
-                        array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray); 
-                    }
-                }
+
+                return $zuSpeichenderBeladungszustand;
             }
-            
-            return $zuSpeichenderBeladungszustand;
+        }
+        else
+        {
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Es wurden keine Angaben zum Beladungszustand gemacht");
         }
         
         return null;
@@ -361,7 +369,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $erforderlicheHebelarmeVorhanden = false;
         }
 
-        if($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] == "" OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] < 0)
+        if(! isset($_SESSION['protokoll']['beladungszustand']) && ($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] == "" OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] < 0))
         {
             $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Pilotenfallschirms muss angegeben sein (0kg ist auch valide)");
             $erforderlicheHebelarmeVorhanden = false;
@@ -372,7 +380,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)
     {
-        if(!isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
+        if(! isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
         {
             $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = [];
         }

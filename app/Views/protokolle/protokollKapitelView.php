@@ -162,6 +162,20 @@
                                                         </select>
 
                                                     <?php break ?> <!-- case "Note" -->
+                                                    
+                                                    <?php case "Textzeile": ?>
+    <!-- Textzeile -->
+                                                        <?php if($inputsDatenArray[$protokollInputID]['bezeichnung'] != "") : ?>
+                                                            <span class="input-group-text col-md-2"><div style="margin: 0; position:relative; left: 100%; -ms-transform: translateX(-100%); transform: translateX(-100%);"><b><?= $inputsDatenArray[$protokollInputID]['bezeichnung'] ?></b></div></span>
+                                                        <?php endif ?>
+
+                                                        <input type="text" class="form-control" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung]['Links'][0] ?? "" ) ?><?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][0] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+
+                                                        <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
+                                                            <span class="input-group-text col-md-1 text-center"><?= $inputsDatenArray[$protokollInputID]['einheit'] ?></span>
+                                                        <?php endif ?>
+
+                                                    <?php break ?> <!-- case "Textzeile" -->
 
                                                     <?php default: ?>
                                                         <?= esc($inputsDatenArray[$protokollInputID]['inputTyp']) ?>
@@ -279,8 +293,8 @@
 <!---------------------------------------->
                     <?php else : ?> <!-- if Multipel --> 
                         <?php if($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 0 OR ($eingabenDatenArray[$protokollEingabeID]['doppelsitzer'] == 1 AND isset($_SESSION['protokoll']['doppelsitzer']))) : ?>
-                            <div class="table-responsive-xxl multibelTabelle">
-                                <table class="table">
+                            <div class="table-responsive multibelTabelle">
+                                <table class="table table-sm">
                                 
                                     <?php foreach($eingabe as $protokollInputID => $input) : ?>
                                 
@@ -303,6 +317,10 @@
                                                     <?php case "Ganzzahl": ?>
                                                         <input type="number" class="form-control" style="-moz-appearance: textfield;" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" min="<?= esc($inputsDatenArray[$protokollInputID]['bereichVon']) ?>" max="<?= esc($inputsDatenArray[$protokollInputID]['bereichBis']) ?>" step="1" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
                                                     <?php break ?> <!-- case "Ganzzahl" -->
+                                                    
+                                                    <?php case "Textzeile": ?>
+                                                        <input type="text" class="form-control" name="wert[<?= esc($inputsDatenArray[$protokollInputID]['id']) ?>][<?= esc($woelbklappenStellung) ?>][<?= $eingabenDatenArray[$protokollEingabeID]['linksUndRechts'] == 1 ? "eineRichtung" : 0 ?>][]" value="<?= esc($_SESSION['protokoll']['eingegebeneWerte'][$inputsDatenArray[$protokollInputID]['id']][$woelbklappenStellung][0][$i] ?? "" ) ?>" <?= $inputsDatenArray[$protokollInputID]['benoetigt'] == 1 ? "required" : ""  ?>>
+                                                    <?php break ?> <!-- case "Textzeile" -->
 
                                                 <?php endswitch ?>
                                                     <?php if($inputsDatenArray[$protokollInputID]['einheit'] != "") : ?>
@@ -349,7 +367,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer voll gedrückt:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gedruecktHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gedruecktHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'] : "") ?>">
+                    <input type="number" class="form-control" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gedruecktHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gedruecktHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gedruecktHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>
@@ -357,7 +375,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer neutral:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][neutralHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['neutralHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'] : "") ?>">
+                    <input type="number" class="form-control" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][neutralHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['neutralHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['neutralHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>
@@ -365,7 +383,7 @@
             <div class="col-lg-12">   
                 <label class="form-label">Höhensteuer voll gezogen:</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" step="0.01" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gezogenHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gezogenHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'] : "") ?>">
+                    <input type="number" class="form-control" min="0" name="hStWeg[<?= $_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']] ?>][gezogenHSt]" value="<?= $_SESSION['protokoll']['hStWege'][$_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]]['gezogenHSt'] ?? ((isset($_SESSION['protokoll']['hStWege']) && isset(array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'])) ? array_values($_SESSION['protokoll']['hStWege'])[0]['gezogenHSt'] : "") ?>">
                     <span class="input-group-text col-md-1">mm</span>
                 </div>
             </div>

@@ -96,7 +96,6 @@ class Flugzeugcontroller extends Controller
             }
             else 
             {
-                echo "Jetzt wärst du zurückgeleitet worden";
                 return redirect()->back()->withInput();
             }
         }

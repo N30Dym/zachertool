@@ -194,6 +194,8 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
             
         }
         
+        isset($rueckgabeArray['neutral'])   ? null : $rueckgabeArray['neutral']     = 0;
+        isset($rueckgabeArray['kreisflug']) ? null : $rueckgabeArray['kreisflug']   = 0;
         return $rueckgabeArray;
     }
     

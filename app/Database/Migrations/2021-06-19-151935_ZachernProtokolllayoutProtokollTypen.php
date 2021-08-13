@@ -16,6 +16,11 @@ class ZachernProtokolllayoutProtokollTypen extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
+            'kategorieID' => [
+                'type'              => 'INT',
+                'constraint'        => '11',
+                'null'              => false,
+            ],
             'bezeichnung' => [
                 'type'              => 'VARCHAR',
                 'constraint'        => '255',

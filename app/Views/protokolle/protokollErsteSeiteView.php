@@ -42,23 +42,43 @@
 
             <div class="col-12">
                 <label for="bemerkung" class="form-label">Anmerkungen zum Protokoll (optional)</label>
-                <input name="protokollInformation[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll" value="<?= $_SESSION['protokoll']["protokollInformationen"]["bemerkung"] ?? "" ?>" >
+                <textarea name="protokollInformation[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll" value="<?= $_SESSION['protokoll']["protokollInformationen"]["bemerkung"] ?? "" ?>" ></textarea>
             </div>
             
+            
             <h4 class="m-4">Wähle aus was du eingeben möchtest</h4>
-            <?php foreach($protokollTypen as $protokollTyp): ?>
-                <div class="col-lg-1">
+            <div class="row">
+                <div class="col-sm-6"> 
+                    <?php foreach($protokollKategorien as $nummer => $kategorie) : ?>
+                        <?php if($nummer % 2 == 0) : ?>                           
+                            <div class="alert alert-secondary ps-4" role="alert">
+                                <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
+                                <?php foreach($protokollTypen as $protokollTyp): ?>
+                                    <?php if($protokollTyp['kategorieID'] == $kategorie['id']) : ?>
+                                        <p><input type="checkbox" class="form-check-input" name="protokollInformation[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
+                                            <label class="form-check-label" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label></p>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </div>
+                        <?php endif ?>
+                    <?php endforeach ?>                   
                 </div>
-
-                <div class="col-md-11">
-                
-                    <input type="checkbox" class="form-check-input" name="protokollInformation[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
-                    <label class="form-check-label" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label>
-
+                <div class="col-sm-6">
+                    <?php foreach($protokollKategorien as $nummer => $kategorie) : ?>
+                        <?php if($nummer % 2 != 0) : ?>                           
+                            <div class="alert alert-secondary ps-4" role="alert">
+                                <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
+                                <?php foreach($protokollTypen as $protokollTyp): ?>
+                                    <?php if($protokollTyp['kategorieID'] == $kategorie['id']) : ?>
+                                        <p><input type="checkbox" class="form-check-input" name="protokollInformation[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
+                                            <label class="form-check-label" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label></p>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </div>
+                        <?php endif ?>
+                    <?php endforeach ?>
                 </div>
-
-                
-            <?php endforeach ?>
+            </div>
         </div>
     </div>
         
@@ -72,31 +92,16 @@
             <div class="col-lg-3 d-grid gap-2 d-md-flex ">             
             </div>
             <div class="col-lg-6 d-grid gap-2 d-md-flex">
-                 <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>
 
-                    <div class="input-group JSsichtbar d-none">
-                        <select id="kapitelAuswahl" class="form-select">
-                            <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
-                                <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$kapitelNummer]])) ? 'style="background-color: #f8d7da"' : "" ?>><?= esc($kapitelNummer) . ". " . esc($_SESSION['protokoll']['kapitelBezeichnungen'][$kapitelNummer]) ?></option>
-                            <?php endforeach ?>
-                        </select>
-                        <button type="submit" id="kapitelGo" class="btn btn-secondary" formaction="">Go!</botton>
-                    </div>           
-    
-                <?php endif ?>
             </div>
             <div class="col-lg-3 d-grid gap-2 d-md-flex">  
-                <button type="submit" formaction="<?= base_url() ?>/protokolle/kapitel/2" class="btn btn-secondary col-12">Weiter ></button>
+                <input type="submit" formaction="<?= base_url() ?>/protokolle/kapitel/2" class="btn btn-secondary col-12" value="Weiter >">
             </div>
         </div>
     </div>
     <div class="col-lg-1">
-    </div>    
-    
-			
-</div>	
-<div class="col">
-</div>
+    </div>    			
+
 
 	
 

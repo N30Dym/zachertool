@@ -89,25 +89,26 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         if($protokollInformationen != null)
         {
-            if($protokollInformationen["bestaetigt"] == 1 && $this->adminOderZachereinweiser == false)
+            if($protokollInformationen['bestaetigt'] == 1 && $this->adminOderZachereinweiser == false)
             {
                 nachrichtAnzeigen("Dieses Protokoll ist bereits abgegeben und darf nicht mehr bearbeitet werden", base_url());
             }
             
-            $_SESSION['protokoll']['protokollInformationen']['datum']   = $protokollInformationen["datum"];          
+            $_SESSION['protokoll']['protokollInformationen']['datum']   = $protokollInformationen['datum'];          
             $_SESSION['protokoll']['protokollInformationen']['titel']   = "Vorhandenes Protokoll bearbeiten";
             
-            $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollInformationen["protokollIDs"]);
+            $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollInformationen['protokollIDs']);
             $this->setzeGewaehlteProtokollTypen();
             
-            empty($protokollInformationen["flugzeugID"])    ? null : $this->ladeFlugzeugDaten($protokollInformationen["flugzeugID"]);
-            empty($protokollInformationen["flugzeit"])      ? null : $_SESSION['protokoll']['protokollInformationen']['flugzeit'] = date('H:i', strtotime($protokollInformationen["flugzeit"]));           
-            empty($protokollInformationen["pilotID"])       ? null : $_SESSION['protokoll']['pilotID'] = $protokollInformationen["pilotID"];
-            empty($protokollInformationen["copilotID"])     ? null : $_SESSION['protokoll']['copilotID'] = $protokollInformationen["copilotID"]; 
-            empty($protokollInformationen["bemerkung"])     ? null : $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen["bemerkung"];
+            empty($protokollInformationen['flugzeugID'])            ? null : $this->ladeFlugzeugDaten($protokollInformationen['flugzeugID']);
+            empty($protokollInformationen['flugzeit'])              ? null : $_SESSION['protokoll']['protokollInformationen']['flugzeit'] = date('H:i', strtotime($protokollInformationen['flugzeit']));           
+            empty($protokollInformationen['pilotID'])               ? null : $_SESSION['protokoll']['pilotID'] = $protokollInformationen['pilotID'];
+            empty($protokollInformationen['copilotID'])             ? null : $_SESSION['protokoll']['copilotID'] = $protokollInformationen['copilotID']; 
+            empty($protokollInformationen['bemerkung'])             ? null : $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen['bemerkung'];
+            empty($protokollInformationen['stundenAufDemMuster'])   ? null : $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']    = $protokollInformationen['stundenAufDemMuster'];
 
-            $protokollInformationen["fertig"]       == 1 ? $_SESSION['protokoll']['fertig'] = [] : null;
-            $protokollInformationen["bestaetigt"]   == 1 ? $_SESSION['protokoll']['bestaetigt'] = [] : null;           
+            $protokollInformationen['fertig']       == 1 ? $_SESSION['protokoll']['fertig'] = [] : null;
+            $protokollInformationen['bestaetigt']   == 1 ? $_SESSION['protokoll']['bestaetigt'] = [] : null;           
         }
         else
         {
@@ -140,6 +141,6 @@ class Protokolldatenladecontroller extends Protokollcontroller
         $_SESSION['protokoll']['flugzeugID'] = $flugzeugID;
         
         $flugzeugDaten['istDoppelsitzer'] == 1          ? $_SESSION['protokoll']['doppelsitzer']            = [] : null;
-        $flugzeugDaten['istWoelbklappenFlugzeug'] == 1  ? $_SESSION['protokoll']['woelbklappenFlugzeug']    = ["Neutral", "Kreisflug"] : null;
+        $flugzeugDaten['istWoelbklappenFlugzeug'] == 1  ? $_SESSION['protokoll']['woelbklappenFlugzeug']    = ['Neutral', 'Kreisflug'] : null;
     }
 }

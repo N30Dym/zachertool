@@ -35,6 +35,6 @@ class pilotenDetailsModel extends Model
     
     public function getPilotDetailsNachPilotID($pilotID)
     {
-        return $this->where('pilotID', $pilotID)->findAll();
+        return $this->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
     }
 }

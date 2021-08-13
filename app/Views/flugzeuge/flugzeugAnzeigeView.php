@@ -1,5 +1,7 @@
 <div class="p-3 p-md-5 mb-4 text-white shadow rounded bg-secondary">
-    <h1><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h1>
+    <!-- <h1><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?>  &nbsp;-&nbsp;  <?= $flugzeug['kennung'] ?></h1> -->
+    <h1><?= $flugzeug['kennung'] ?></h1>
+    <p><?= $muster['musterSchreibweise'] ?><?= $muster['musterZusatz'] ?></p>
 </div>
 
 <form method="post">
@@ -19,7 +21,7 @@
             <a href="<?= base_url() ?>/flugzeuge/bearbeiten/<?= esc($flugzeugID) ?>">
                 <button type="button" class="btn btn-success col-12">Waegung hinzufügen</button>
             </a>
-            <button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>
+            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>-->
             <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/damin/flugzeuge/<?= $flugzeugID ?>">Bearbeiten</button>
         </div>
     </div>
@@ -217,6 +219,9 @@
                     <?php endforeach ?>
                 </table>
             </div>
+            
+            <h3 class="m-3 mt-5">Weitere Informationen</h3>
+            <textarea class="form-control" disabled><?= $flugzeugDetails['kommentar'] ?></textarea>
         </div>
     </div>  
      

@@ -9,7 +9,7 @@ use Config\Services;
 use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller, Protokolldateninhaltladecontroller };
 
 
-use App\Models\protokolllayout\protokollTypenModel;
+use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen']);
 
@@ -116,6 +116,7 @@ class Protokollcontroller extends Controller
      */
     public function kapitel($kapitelNummer = 0)
     {       
+        
         $protokollAnzeigeController = new Protokollanzeigecontroller;
         
             // Wenn die URL aufgerufen wurde, aber keine protokollTypen gewählt sind , erfolgt eine Umleitung zur erstenSeite
@@ -149,6 +150,7 @@ class Protokollcontroller extends Controller
         if(ENVIRONMENT === 'development')
         {
             echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
+            //echo $_SESSION['protokoll']['protokollInformationen']['datum'] ?? "";
         }
         
             // datenHeader mit Titel füttern
@@ -221,6 +223,7 @@ class Protokollcontroller extends Controller
     {
         $protokollTypenModel        = new protokollTypenModel();
         $protokollAnzeigeController = new Protokollanzeigecontroller();
+        $protokollKategorienModel   = new protokollKategorienModel();
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
@@ -230,7 +233,8 @@ class Protokollcontroller extends Controller
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
             'titel' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
-            'protokollTypen' 	=> $protokollTypenModel->getAlleVerfügbarenProtokollTypen()
+            'protokollTypen' 	=> $protokollTypenModel->getSichtbareProtokollTypen(),
+            'protokollKategorien' => $protokollKategorienModel->getSichtbareKategorien()
         ];
 
             // Laden der ersten Seite mit den oben geladenen Daten
@@ -305,7 +309,7 @@ class Protokollcontroller extends Controller
         $protokollLayoutController          = new Protokolllayoutcontroller;
         $protokollDatenInhaltLadeController = new Protokolldateninhaltladecontroller();
         
-        var_dump($this->adminOderZachereinweiser);
+        //var_dump($this->adminOderZachereinweiser);
         
         $datenInhalt = [
             'titel'                     => $_SESSION['protokoll']['protokollInformationen']['titel'],

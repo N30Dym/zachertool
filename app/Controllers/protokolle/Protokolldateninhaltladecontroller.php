@@ -71,9 +71,19 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
         
         $temporaeresPilotArray  = [];
 
-        foreach($pilotenModel->getSichtbarePiloten() as $pilot)
+        if(isset($_SESSION['protokoll']['fertig']))
         {
-            $temporaeresPilotArray[$pilot['id']] = $pilot;
+            foreach($pilotenModel->getAllePiloten() as $pilot)
+            {
+                $temporaeresPilotArray[$pilot['id']] = $pilot;
+            }
+        }
+        else
+        {
+            foreach($pilotenModel->getSichtbarePiloten() as $pilot)
+            {
+                $temporaeresPilotArray[$pilot['id']] = $pilot;
+            }
         }
          
         return $temporaeresPilotArray;
@@ -212,7 +222,19 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
             {                
                 $multipelFelderArray[$protokollEingabeID] = null;
                 
-                if(isset($_SESSION['protokoll']['protokollSpeicherID']))
+                //if(isset($_SESSION['protokoll']['protokollSpeicherID']))
+               // {
+                    $anzahlMultipelFelder = null;
+                    
+                    foreach($protokolleLayoutsModel->getInputIDsNachProtokollEingabeID($protokollEingabeID) as $protokollInputID)
+                    {
+                        $anzahlMultipelFelder = $this->ladeAnzahlMultipelInputs($protokollInputID['protokollInputID']);
+                        $anzahlMultipelFelder > $multipelFelderArray[$protokollEingabeID] ? $multipelFelderArray[$protokollEingabeID] = $anzahlMultipelFelder : null;
+                    }
+                    
+                    empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = 10 : null;
+               /* }
+                else
                 {
                     $anzahlMultipelFelder = null;
                     
@@ -223,11 +245,7 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
                     }
                     
                     empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = 10 : null;
-                }
-                else
-                {
-                    $multipelFelderArray[$protokollEingabeID] = 10;
-                }          
+                } */         
             }
         }
 

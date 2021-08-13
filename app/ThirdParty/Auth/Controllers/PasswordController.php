@@ -35,14 +35,23 @@ class PasswordController extends Controller
 
     //--------------------------------------------------------------------
 
-    /*public function forgotPassword()
-	{
-		if ($this->session->isLoggedIn) {
-			return redirect()->to('account');
-		}
+    public function forgotPassword()
+    {
+        if ($this->session->isLoggedIn) {
+                return redirect()->to('account');
+        }
 
-		return view($this->config->views['forgot-password'], ['config' => $this->config]);
-	}*/
+        return view($this->config->views['forgot-password'], ['config' => $this->config]);
+    }
+    
+    public function setPassword()
+    {
+        if ($this->session->isLoggedIn) {
+                return redirect()->to('account');
+        }
+
+        return view($this->config->views['set-password'], ['config' => $this->config]);
+    }
 
     //--------------------------------------------------------------------
 
@@ -81,7 +90,7 @@ class PasswordController extends Controller
 
     //--------------------------------------------------------------------
 
-	public function setPassword($username)
+	/*public function setPassword($username)
 	{
             // check reset hash and expiration
             $users = new UserModel();
@@ -93,7 +102,7 @@ class PasswordController extends Controller
             }
 
             return view($this->config->views['reset-password'], ['config' => $this->config]);
-	}
+	}*/
 
     //--------------------------------------------------------------------
 
@@ -147,5 +156,36 @@ class PasswordController extends Controller
         return redirect()->to('login')->with('success', lang('Auth.passwordUpdateSuccess'));
 
 	}*/
+    
+    public function attemptSetAdminPassword()
+    {
+        $users = new UserModel();
+        
+        if($users->istAdminAktiv())
+        {
+            return redirect()->to(base_url('setPassword'))->with('error', "Admin Passwort bereits vergeben");
+        }
+        
+        // validate request
+        $rules = [
+                'password' => 'required|min_length[5]',
+                'password_confirm' => 'matches[password]'
+        ];
+        
+        if (! $this->validate($rules)) 
+        {
+            return redirect()->back()->with('error', 'Passwörter stimmen nicht überein');
+        }    
+        
+        	// update user password
+        $updatedUser['id'] = 1;
+        $updatedUser['password'] = $this->request->getPost('password');
+        $updatedUser['active'] = 1;
+        $users->save($updatedUser);
+
+		// redirect to login
+        return redirect()->to('login')->with('success', lang('Auth.passwordUpdateSuccess'));
+
+    }
 
 }

@@ -8,19 +8,23 @@
     
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="<?= base_url() ?>/flugzeuge/liste" >
+            <a href="<?= base_url() ?>/piloten/liste" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
         </div>
         <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
-
+            <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && ($_SESSION['mitgliedsStatus'] == ADMINISTRATOR OR $_SESSION['mitgliedsStatus'] == ZACHEREINWEISER)) : ?>
+                <a href="<?= base_url() ?>/admin/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
+                    <button type="button" class="btn btn-danger col-12">Pilotendaten bearbeiten</button>
+                </a>
+            <?php endif ?>
+            <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/admin/piloten/<?= $pilot['id'] ?>">Bearbeiten</button>
             <input type="hidden" name="pilotID" value="<?= $pilot['id'] ?>"> 
             <button type="submit" class="btn btn-success" formaction="<?= base_url() ?>/protokolle/index">Protokoll mit diesem Piloten anlegen</button>
             <a href="<?= base_url() ?>/piloten/bearbeiten/<?= esc($pilot["id"]) ?>">
                 <button type="button" class="btn btn-success col-12">Daten hinzufügen</button>
             </a>
-            <button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>
-            <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/admin/piloten/<?= $pilot['id'] ?>">Bearbeiten</button>
+            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/piloten/druckansicht/<?= $pilot['id'] ?>">Drucken</button>-->
         </div>
     </div>
 
@@ -96,7 +100,7 @@
                                 <td><?= $protokollDaten['flugzeugDetails']['musterSchreibweise'].$protokollDaten['flugzeugDetails']['musterZusatz'] ?></td>
                                 <td><?= $protokollDaten['flugzeugDetails']['kennung'] ?></td>
                                 <td><?php if(isset($protokollDaten['copilotDetails'])) : ?><?= $protokollDaten['copilotDetails']['vorname'] ?><?= (isset($protokollDaten['copilotDetails']['spitzname']) && $protokollDaten['copilotDetails']['spitzname'] != "") ? ' "'. $protokollDaten['copilotDetails']['spitzname'] .'" ' : " " ?><?= $protokollDaten['copilotDetails']['nachname'] ?><?php endif ?></td>
-                                <td><a href="<?= base_url() ?>/protokolle/anzeigen/<?= $protokollDaten['id'] ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
+                                <td><!--<a href="<?= base_url() ?>/protokolle/anzeigen/<?= $protokollDaten['id'] ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a>--></td>
                             </tr>
                         <?php endforeach ?>
                     <?php else : ?>

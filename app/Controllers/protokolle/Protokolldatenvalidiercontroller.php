@@ -18,7 +18,10 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         
         $this->validereWerte($zuValidierendeDaten['eingegebeneWerte'], $validation);
         
-        $this->validereBeladung($zuValidierendeDaten['beladung'], $validation);
+        if(isset($zuValidierendeDaten['beladung']) && !empty($zuValidierendeDaten['beladung']))
+        {
+            $this->validereBeladung($zuValidierendeDaten['beladung'], $validation);
+        }
         
         if(!empty($zuValidierendeDaten['kommentare']))
         {

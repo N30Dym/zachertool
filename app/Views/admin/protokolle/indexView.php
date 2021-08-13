@@ -7,8 +7,10 @@
     <div class="col-lg-6">
         
         <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            <h3 class="m-2">Pilotenlisten</h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/admin/protokolle/liste/abgegebeneProtokolle">Liste der abgegebenen Protokolle</a></li> 
+            </ul>   
         </div>
         
         <div class="p-3 m-3 rounded shadow border">

@@ -82,11 +82,11 @@ $routes->get('admin/piloten/(:segment)', 'piloten\Pilotencontroller::adminFunkti
 
     // Admin-Flugzeuge
 $routes->get('admin/flugzeuge', 'flugzeuge\Flugzeugcontroller::uebersicht');
-$routes->get('admin/flugzeuge/index', 'flugzeuge\Flugzeugcontroller::uebersicht');
+$routes->get('admin/flugzeuge/index', 'flugzeuge\Flugzeugcontroller::uebersicht');*/
 
     // Admin-Protokolle
 $routes->get('admin/protokolle', 'protokolle\Protokollcontroller::uebersicht');
-$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');*/
+$routes->get('admin/protokolle/index', 'protokolle\Protokollcontroller::uebersicht');
 
 $routes->group('admin', function($routes)
 {

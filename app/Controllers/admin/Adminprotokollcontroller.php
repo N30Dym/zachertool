@@ -20,12 +20,17 @@ class Adminprotokollcontroller extends Controller
      */
     public function index()
     { 
-        $this->zeigeAdminProtokolleIndex();
-    }
-    
-    protected function zeigeAdminProtokolleIndex()
-    {
+        $datenHeader['titel'] = "Administrator-Panel für Protokolle"; 
         
+        $this->zeigeAdminProtokolleIndex($datenHeader);
     }
+
     
+    protected function zeigeAdminProtokolleIndex($datenHeader)
+    {        
+        echo view('templates/headerView', $datenHeader);
+        echo view('templates/navbarView');
+        echo view('admin/protokolle/indexView');
+        echo view('templates/footerView');
+    }    
 }

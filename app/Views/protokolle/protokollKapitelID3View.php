@@ -61,7 +61,7 @@
     <!-- Pilot dritte Zeile -->
     
                     <tr valign="middle">
-                        <td>Zusatzgewicht im Pilotensitz</td>
+                        <td>Zusatzgewicht im Pilotensitz (optional)</td>
                         <td><?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
@@ -101,7 +101,7 @@
     <!-- Begleiter dritte Zeile -->
         
                     <tr valign="middle">
-                        <td>Zusatzgewicht im Begleitersitz</td>
+                        <td>Zusatzgewicht im Begleitersitz (optional)</td>
                         <td><?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">

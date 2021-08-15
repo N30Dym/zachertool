@@ -3,7 +3,7 @@
 <!---------------------------------------->
 
     <?php if($kapitelDatenArray['zusatztext'] != ""): ?>
-        <div class="col-12 alert alert-secondary">
+        <div class="col-12 alert alert-danger">
             <small><?= $kapitelDatenArray['zusatztext'] ?></small>
         </div>
     <?php endif ?>
@@ -24,7 +24,7 @@
             <?php $unterkapitelNummer++ ?>
             <h4 class="ms-2"><?= $_SESSION['protokoll']['aktuellesKapitel'] . "." . $unterkapitelNummer . " " . $unterkapitelDatenArray[$protokollUnterkapitelID]['bezeichnung'] ?></h4>
             <?php if($unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] != "") : ?>
-                <div class="col-12 alert alert-secondary">
+                <div class="col-12 alert alert-danger">
                     <small><?= $unterkapitelDatenArray[$protokollUnterkapitelID]['zusatztext'] ?></small>
                 </div>
             <?php endif ?>

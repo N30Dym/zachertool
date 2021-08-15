@@ -9,6 +9,9 @@
                 <?php endforeach ?>
             </div>
         <?php endif ?>
+        <div class="alert alert-danger" role="alert">
+            ACHTUNG! Nur die Navigationselemente dieser Seite benutzen! Nicht auf Refresh-, Vor- oder Zurück-Button des Browsers klicken, da es sonst zu Datenverlust kommt!
+        </div>
     </div>
     <div class="col-lg-1">
     </div>
@@ -32,7 +35,7 @@
                 <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) && !empty($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) ? $_SESSION['protokoll']["protokollInformationen"]["flugzeit"] : "" ?>"> 
             </div>
 
-            <div class="col-12 alert alert-secondary">
+            <div class="col-12 alert alert-danger">
                 <small>Bitte nur das Datum des ersten Fluges angeben und die Gesamtzeit aller Flüge, die für das Protokoll geflogen wurden</small>
             </div>
             

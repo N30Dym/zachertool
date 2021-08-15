@@ -35,7 +35,7 @@
                 <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) && !empty($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) ? $_SESSION['protokoll']["protokollInformationen"]["flugzeit"] : "" ?>"> 
             </div>
 
-            <div class="col-12 alert alert-danger">
+            <div class="col-12 alert alert-secondary">
                 <small>Bitte nur das Datum des ersten Fluges angeben und die Gesamtzeit aller Flüge, die für das Protokoll geflogen wurden</small>
             </div>
             

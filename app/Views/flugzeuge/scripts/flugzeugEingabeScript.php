@@ -179,7 +179,7 @@ $(document).ready(function() {
         }
     });
     
-    if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+    /*if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         $('input[type=date], .datepicker').keydown(function() { return false });
         $('input[type=date], .datepicker').datepicker({
           dateFormat: 'dd.mm.yy',
@@ -187,7 +187,7 @@ $(document).ready(function() {
           changeYear: true,
           firstDay: 1,
         });
-    }
+    }*/
 
         // Diese Funktion sorgt dafür, dass die "Löschen"-Buttons bei den Hebelarmen funktionieren
     $( document ).on( 'click', '.loeschen', function()

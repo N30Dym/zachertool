@@ -9,6 +9,9 @@
                 <?php endforeach ?>
             </div>
         <?php endif ?>
+        <div class="alert alert-danger" role="alert">
+            ACHTUNG! Nur die Navigationselemente dieser Seite benutzen! Nicht auf Refresh-, Vor- oder Zurück-Button des Browsers klicken, da es sonst zu Datenverlust kommt!
+        </div>
     </div>
     <div class="col-lg-1">
     </div>

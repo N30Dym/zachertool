@@ -18,8 +18,8 @@
     <?php else: ?>
         
         <div class="col-12 alert alert-secondary">
-            <small>Bitte die gesamte Beladung angegeben. Das Feld für das Fallschirmsgewicht darf nicht leer bleiben, kann aber mit "0" angegeben werden.
-                Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein.</small>
+            <small>Die Felder für das Piloten- und Fallschirmgewicht dürfen nicht leer bleiben. Wenn ohne Fallschirm geflogen wird, kann '0' eingegeben werden. Andere Felder können leer bleiben
+                Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein. </small>
         </div>
         <div class="table-responsive-lg">
             <table class="table">
@@ -61,7 +61,7 @@
     <!-- Pilot dritte Zeile -->
     
                     <tr valign="middle">
-                        <td>Zusatzgewicht im Pilotensitz</td>
+                        <td>Zusatzgewicht im Pilotensitz (optional)</td>
                         <td><?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
@@ -101,7 +101,7 @@
     <!-- Begleiter dritte Zeile -->
         
                     <tr valign="middle">
-                        <td>Zusatzgewicht im Begleitersitz</td>
+                        <td>Zusatzgewicht im Begleitersitz (optional)</td>
                         <td><?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">

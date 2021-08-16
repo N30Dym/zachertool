@@ -19,7 +19,7 @@ $( document ).ready( function() {
        $( '#kapitelGo' ).attr('formaction', '<?= site_url('/protokolle/kapitel/') ?>' + $( this ).val());
     });
     
-    if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+    /*if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         $('input[type=date], .datepicker').keydown(function() { return false });
         $('input[type=date], .datepicker').datepicker({
           dateFormat: 'dd.mm.yy',
@@ -27,7 +27,7 @@ $( document ).ready( function() {
           changeYear: true,
           firstDay: 1,
         });
-    }
+    }*/
 
 });
 </script>

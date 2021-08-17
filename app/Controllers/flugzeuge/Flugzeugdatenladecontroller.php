@@ -5,6 +5,7 @@ namespace App\Controllers\flugzeuge;
 use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, musterKlappenModel };
 use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel,  flugzeugeMitMusterModel, flugzeugeModel };
 use App\Models\protokolle\protokolleModel;
+use \App\Models\piloten\pilotenMitAkafliegsModel;
 
 
 /**
@@ -53,11 +54,12 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         $protokolleModel            = new protokolleModel();
         
         $temporaeresFlugzeugDatenArray = [
-            'flugzeugID'        => $flugzeugID,
-            'anzahlProtokolle'  => $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeugID)['id'],
-            'flugzeugDetails'   => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
-            'hebelarm'          => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
-            'waegung'           => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID)
+            'flugzeugID'                => $flugzeugID,
+            'anzahlProtokolle'          => $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeugID)['id'],
+            'flugzeugDetails'           => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
+            'hebelarm'                  => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
+            'waegung'                   => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID),
+            'flugzeugProtokollArray'    => $this->ladeFlugzeugProtokollDaten($flugzeugID),
         ];
 
         $temporaeresFlugzeugDatenArray += $this->ladeFlugzeugUndMuster($flugzeugID);
@@ -245,5 +247,26 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         }
         
         return $temporaeresFlugzeugArray;       
+    }
+    
+    protected function ladeFlugzeugProtokollDaten($flugzeugID)
+    {
+        $protokolleModel = new protokolleModel();
+        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
+        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+        
+        $bestaetigteProtokolle = $protokolleModel->getAbgegebeneProtokolleNachFlugzeugID($flugzeugID);
+        
+        foreach($bestaetigteProtokolle as $protokollID => $protokollDaten)
+        {
+            if(!empty($protokollDaten['copilotID']))
+            {
+                $bestaetigteProtokolle[$protokollID]['copilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['copilotID']);
+            }
+            
+            $bestaetigteProtokolle[$protokollID]['pilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['pilotID']);
+        }
+        
+        return $bestaetigteProtokolle;
     }
 }

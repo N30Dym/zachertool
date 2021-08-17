@@ -151,6 +151,11 @@ class protokolleModel extends Model
         return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
     }
     
+    public function getAbgegebeneProtokolleNachFlugzeugID($flugzeugID)
+    {
+        return $this->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll();
+    }
+    
     public function updateGeaendertAmNachID($id)
     {
         $query = "UPDATE `protokolle` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `protokolle`.`id` = " . $id; 

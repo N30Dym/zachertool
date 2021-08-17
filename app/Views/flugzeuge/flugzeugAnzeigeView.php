@@ -222,11 +222,43 @@
             
             <h3 class="m-3 mt-5">Weitere Informationen</h3>
             <textarea class="form-control" disabled><?= $flugzeugDetails['kommentar'] ?></textarea>
+        
+    
+    
+            <h3 class="m-3 mt-5">Zacherprotokolle</h3>
+            <div class="table-responsive-xl">
+                <table class="table table-striped table-hover mt-3">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Datum</th>
+                            <th>Pilot</th>
+                            <?php if($muster['istWoelbklappenFlugzeug']) : ?><th>Copilot</th><?php endif ?>
+                            <th>Bemerkung</th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <?php if(isset($flugzeugProtokollArray) AND !empty($flugzeugProtokollArray)) : ?>
+                        <?php foreach($flugzeugProtokollArray as $protokollDaten) : ?>
+                            <tr class="text-center" valign="middle">
+                                <td><b><?= date('d.m.Y', strtotime($protokollDaten['datum'])) ?></b></td>
+                                <td><?= $protokollDaten['pilotDetails']['vorname'] ?><?= empty($protokollDaten['pilotDetails']['spitzname']) ? " " : " <b>\"" . $protokollDaten['pilotDetails']['spitzname'] . "\"</b> " ?><?= $protokollDaten['pilotDetails']['nachname'] ?? "" ?></td>
+                                <?php if($muster['istWoelbklappenFlugzeug']) : ?><td><?php if(isset($protokollDaten['copilotDetails'])) : ?><?= $protokollDaten['copilotDetails']['vorname'] ?><?= (isset($protokollDaten['copilotDetails']['spitzname']) && $protokollDaten['copilotDetails']['spitzname'] != "") ? ' "'. $protokollDaten['copilotDetails']['spitzname'] .'" ' : " " ?><?= $protokollDaten['copilotDetails']['nachname'] ?><?php endif ?></td><?php endif ?>
+                                <td><?= $protokollDaten['bemerkung'] ?></td>
+                                <td><a href="<?= base_url('/protokolle/anzeigen/' . $protokollDaten['id']) ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                            <tr>
+                                <td colspan="5">
+                                    Keine Protokolle vorhanden
+                                </td>
+                            </tr>
+                    <?php endif ?>
+                </table>
+            </div>
         </div>
     </div>  
-     
     <div class="col-sm-2">
     </div>
       
-
 </form>  

@@ -3,7 +3,8 @@ namespace App\Controllers\admin;
 
 use CodeIgniter\Controller;
 use App\Controllers\protokolle\Protokollcontroller;
-use App\Models\protokolle\{ protokolleModel };
+use App\Models\protokolle\{ protokolleModel, datenModel };
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
 
 class Adminprotokollcontroller extends Controller
@@ -32,6 +33,9 @@ class Adminprotokollcontroller extends Controller
         {
             case 'abgegebeneProtokolle':
                 $this->abgegebeneProtokolle();
+                break;
+            case 'trimmhebelBewertungenProFlugzeug':
+                $this->trimmhebelBewertungenProFlugzeug();
                 break;
             default:
                 nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/piloten')) ;
@@ -70,6 +74,44 @@ class Adminprotokollcontroller extends Controller
         return $datenArray;
     }
     
+    protected function trimmhebelBewertungenProFlugzeug()
+    {
+        $protokolleModel            = new protokolleModel();
+        $datenModel                 = new datenModel();
+        $bestaetigteProtokolle      = $protokolleModel->getBestaetigteProtokolle();
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $alleFlugzeuge              = $flugzeugeMitMusterModel->getAlleFlugzeugeMitMuster();
+        $outputDatenArray           = array();
+        
+        foreach($bestaetigteProtokolle as $protokoll)
+        {          
+            if($datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90))
+            {
+                foreach($alleFlugzeuge as $flugzeug)
+                {
+                    if($flugzeug['flugzeugID'] == $protokoll['flugzeugID'])
+                    {
+                        if(isset($outputDatenArray[$flugzeug['musterKlarname']]))
+                        {
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65)['wert'];
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90)['wert'];
+                        }
+                        else
+                        {
+                            $outputDatenArray[$flugzeug['musterKlarname']]['flugzeug'] = $flugzeug;
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65)['wert'];
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90)['wert'];
+                        }
+                    }
+                }
+            }            
+        }
+        
+        $titel                  = "Abgegebene Protokolle";     
+
+        $this->zeigeTrimmhebelBewertungenProFlugzeug($titel, $outputDatenArray);
+    }
+    
     protected function zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName)
     {        
         $datenInhalt = [
@@ -92,5 +134,17 @@ class Adminprotokollcontroller extends Controller
         echo view('templates/navbarView');
         echo view('admin/protokolle/indexView');
         echo view('templates/footerView');
-    }    
+    }
+
+    protected function zeigeTrimmhebelBewertungenProFlugzeug($titel, $datenArray)
+    {
+        $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
+        
+        $datenInhalt['protokollDaten'] = $datenArray;
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('templates/navbarView');
+        echo view('admin/protokolle/trimmhebelBewertungView', $datenInhalt);
+        echo view('templates/footerView');
+    }
 }

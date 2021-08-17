@@ -13,38 +13,19 @@
             </ul>   
         </div>
         
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-            
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3>TestiTest</h3>
-        </div>
         
     </div>
     <div class="col-lg-6 ">
         
         <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
+            <h3 class="m-2"></h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/admin/protokolle/liste/trimmhebelBewertungenProFlugzeug">Trimmhebelbewertungen pro Flugzeug</a></li> 
+            </ul>
+            
         </div>
         
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
+
     </div>
 </div>
     

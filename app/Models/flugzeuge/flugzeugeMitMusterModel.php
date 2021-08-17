@@ -27,6 +27,11 @@ class flugzeugeMitMusterModel extends Model {
         return $this->where('flugzeugID', $flugzeugID)->first();       
     }
     
+    public function getAlleFlugzeugeMitMuster()
+    {
+        return $this->orderBy('musterKlarname', 'ASC')->findAll();
+    }
+    
     public function getSichtbareFlugzeugeMitMuster() 
     {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();

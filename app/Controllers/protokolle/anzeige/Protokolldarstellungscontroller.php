@@ -73,7 +73,7 @@ class Protokolldarstellungscontroller extends Controller {
             'flugzeugMitMuster' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
             'flugzeugHebelarme' => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
             'flugzeugKlappen'   => $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID),
-            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum)))[0]
+            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum)))[0] ?? null
         ];
     }
     
@@ -197,6 +197,7 @@ class Protokolldarstellungscontroller extends Controller {
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['pilotDaten']) ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['beladungszustand']) ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : null;
+        echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : null;
         
         echo view('templates/footerView');
     }  

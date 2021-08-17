@@ -11,6 +11,14 @@
 </h2>
 
 <table class="table">
+    <tr>
+        <td>Zulässiger Schwerpunktbereich:</td>
+        <td>von: <b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['flugSPMin'] ?? "") ?></b> mm h. BP</td>
+        <td>bis: <b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['flugSPMax'] ?? "") ?></b> mm h. BP</td>
+    </tr>
+</table>
+
+<table class="table">
     <thead>
         <tr>
             <th>Hebelarmbezeichnung</th>
@@ -96,10 +104,3 @@
     </tbody>
 </table>
 
-<table class="table">
-    <tr>
-        <td>Zulässiger Schwerpunktbereich:</td>
-        <td>von: <b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['flugSPMin'] ?? "") ?></b> mm h. BP</td>
-        <td>bis: <b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['flugSPMax'] ?? "") ?></b> mm h. BP</td>
-    </tr>
-</table>

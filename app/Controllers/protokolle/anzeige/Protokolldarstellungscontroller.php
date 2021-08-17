@@ -22,7 +22,7 @@ class Protokolldarstellungscontroller extends Controller {
             nachrichtAnzeigen('Kein Protokoll mit dieser ID vorhanden.', base_url());
         }
         
-        $datenInhalt['protokollDaten'] = $this->ladeDatenAusDemProtokoll($protokollDaten);
+        $datenInhalt['protokollDaten']  = $this->ladeDatenAusDemProtokoll($protokollDaten);
         $datenInhalt['protokollLayout'] = array();
 
         foreach($protokollIDs as $protokollID)
@@ -47,13 +47,13 @@ class Protokolldarstellungscontroller extends Controller {
     {        
         $returnArray = array();
         
-        empty($protokollDaten['flugzeugID'])    ? null : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDaten['flugzeugID'], $protokollDaten['datum']);
-        empty($protokollDaten['pilotID'])       ? null : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDaten['pilotID'], $protokollDaten['datum']);
-        empty($protokollDaten['copilotID'])     ? null : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDaten['copilotID'], $protokollDaten['datum']);
-           
+        empty($protokollDaten['flugzeugID'])                ? null : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDaten['flugzeugID'], $protokollDaten['datum']);
+        empty($protokollDaten['pilotID'])                   ? null : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDaten['pilotID'], $protokollDaten['datum']);
+        empty($protokollDaten['copilotID'])                 ? null : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDaten['copilotID'], $protokollDaten['datum']);
+        $this->ladeBeladungszustand($protokollDaten['id'])  ? $returnArray['beladungszustand']      = $this->ladeBeladungszustand($protokollDaten['id']) : null;
+        
         $returnArray['ProtokollInformationen']  = $protokollDaten;
-        $returnArray['eingegebeneWerte']        = $this->ladeEingegebeneWerte($protokollDaten['id']);
-        $returnArray['beladungszustand']        = $this->ladeBeladungszustand($protokollDaten['id']);
+        $returnArray['eingegebeneWerte']        = $this->ladeEingegebeneWerte($protokollDaten['id']);   
         $returnArray['kommentare']              = $this->ladeKommentare($protokollDaten['id']);
         $returnArray['hStWege']                 = $this->ladeHStWege($protokollDaten['id']);
         
@@ -90,8 +90,8 @@ class Protokolldarstellungscontroller extends Controller {
     
     protected function ladeEingegebeneWerte($protokollSpeicherID)
     {
-        $datenModel = new datenModel();       
-        $datenReturnArray = array();
+        $datenModel         = new datenModel();       
+        $datenReturnArray   = array();
         
         foreach($datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID) as $wert)
         {
@@ -103,14 +103,30 @@ class Protokolldarstellungscontroller extends Controller {
     
     protected function ladeBeladungszustand($protokollSpeicherID)
     {
-        $beladungModel = new beladungModel();
-        return $beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID);
+        $beladungModel          = new beladungModel();       
+        $beladungReturnArray    = array();
+        
+        foreach($beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID) as $beladung)
+        {
+            if(!empty($beladung['flugzeugHebelarmID']))
+            {
+                $beladungReturnArray[$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == "" ? 0 : $beladung['bezeichnung']] = $beladung['gewicht'];
+            }
+            else
+            {
+                $beladungReturnArray['weiterer']['bezeichnung']    = $beladung['bezeichnung']; 
+                $beladungReturnArray['weiterer']['laenge']         = $beladung['hebelarm']; 
+                $beladungReturnArray['weiterer']['gewicht']        = $beladung['gewicht']; 
+            }
+        }
+        
+        return $beladungReturnArray;
     }
     
     protected function ladeKommentare($protokollSpeicherID)
     {
-        $kommentareModel = new kommentareModel();
-        $kommentareReturnArray = array();
+        $kommentareModel        = new kommentareModel();
+        $kommentareReturnArray  = array();
         
         foreach($kommentareModel->getKommentareNachProtokollSpeicherID($protokollSpeicherID) as $kommentar)
         {
@@ -122,7 +138,7 @@ class Protokolldarstellungscontroller extends Controller {
     
     protected function ladeHStWege($protokollSpeicherID)
     {
-        $hStWegeModel = new hStWegeModel();
+        $hStWegeModel       = new hStWegeModel();
         $hStWegeReturnArray = array();
         
         foreach($hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID) as $hStWeg)
@@ -167,8 +183,6 @@ class Protokolldarstellungscontroller extends Controller {
             {
                 $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
             }
-            
-            
         }
 
         return $layoutReturnArray;
@@ -182,6 +196,8 @@ class Protokolldarstellungscontroller extends Controller {
         echo view('protokolle/anzeige/protokollInformationenView', $datenInhalt);
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['pilotDaten']) ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : null;
+        echo isset($datenInhalt['protokollDaten']['beladungszustand']) ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : null;
+        
         echo view('templates/footerView');
     }  
 }

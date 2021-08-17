@@ -75,6 +75,9 @@ $routes->get('protokolle/protokollListe/fertig', 'protokolle\Protokolllistencont
 $routes->get('protokolle/protokollListe/offen', 'protokolle\Protokolllistencontroller::angefangeneProtokolle');
 $routes->get('protokolle/protokollListe/abgegeben', 'protokolle\Protokolllistencontroller::abgegebeneProtokolle');
 
+    // Protokolle anzeigen
+$routes->get('protokolle/anzeigen/(:num)', 'protokolle\anzeige\Protokolldarstellungscontroller::anzeigen/$1');
+
     // Admin-Piloten
 //$routes->get('admin/piloten', 'piloten\Pilotencontroller::uebersicht/index');
 /*$routes->get('admin/piloten/index', 'admin\Admincontroller::Piloten');

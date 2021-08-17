@@ -98,4 +98,10 @@ class flugzeugWaegungModel extends Model
     {
         return $this->distinct()->findColumn('bezugspunkt');
     }
+    
+    public function getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, $datum)
+    {
+        $query = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = $flugzeugID AND datum <= $datum ORDER BY datum DESC";
+        return $this->query($query)->getResultArray();
+    }
 }

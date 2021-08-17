@@ -21,6 +21,6 @@
         <div class="row g-3 mt-3">
             <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">
                 <a href="<?= previous_url() == current_url() ? base_url() : previous_url() ?>">
-                    <input type="button" class="btn btn-danger col-12" value="Abbrechen">
+                    <input type="button" class="btn btn-danger col-12" value="Zurück">
                 </a>
             </div>

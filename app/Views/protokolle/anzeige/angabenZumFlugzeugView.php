@@ -1,13 +1,68 @@
 <h2>
     <?php foreach($protokollLayout as $kapitelNummer => $layout)
         {
-        print_r($layout);
-        echo "<br><br>";
-        /*if($layout['protokollKapitelID'] == FLUGZEUG_EINGABE)
+            if($layout["protokollKapitelID"] == FLUGZEUG_EINGABE)
             {
                 echo $kapitelNummer . ". " . $layout['kapitelDetails']['bezeichnung'];
-                
-            }*/
-        } ?>
+                break;
+            }
+        } 
+    ?>
 </h2>
 
+<table class="table">
+    <tr>
+        <td>Flugzeugmuster:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugMitMuster']['musterSchreibweise'] . $protokollDaten['flugzeugDaten']['flugzeugMitMuster']['musterZusatz'] ?></b></td>
+        <td>Kennzeichen:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugMitMuster']['kennung'] ?></b></td>   
+    </tr>
+    <tr>
+        <td>Baujahr:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['baujahr'] ?? "" ?></b></td> 
+        <td>Werknummer:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['seriennummer'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>Kupplung F-Schlepp:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['kupplung'] ?? "" ?></b></td> 
+        <td>Differenzierte Querruder:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['diffQR'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>Hauptradgröße:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['radgroesse'] ?? "" ?></b></td> 
+        <td>Radbremse:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['radbremse'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>Hauptradfederung:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['radfederung'] ?? "" ?></b></td> 
+        <td>Flügelfläche:</td>
+        <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['fluegelflaeche'] ?? "") ?></b> m<sup>2</sup></td>   
+    </tr>
+    <tr>
+        <td>Spannweite:</td>
+        <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['spannweite'] ?? "") ?></b> m</td> 
+        <td>Variometer:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['variometer'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>TEK-Art:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['tekArt'] ?? "" ?></b></td> 
+        <td>TEK-Position:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['tekPosition'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>Pitot-Position:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['pitotPosition'] ?? "" ?></b></td> 
+        <td>Bremsklappen:</td>
+        <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['bremsklappen'] ?? "" ?></b></td>   
+    </tr>
+    <tr>
+        <td>Flugzeug Leermasse:</td>
+        <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['leermasse'] ?? "") ?></b> kg</td> 
+        <td>Leermassenschwerpunkt:</td>
+        <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['schwerpunkt'] ?? "") ?></b> mm h. BP</td>   
+    </tr>
+</table>

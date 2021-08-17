@@ -8,7 +8,7 @@ use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, protokolleLayoutProtokolleModel, auswahllistenModel };
 
 
-helper(['form', 'url', 'array', 'nachrichtAnzeigen']);
+helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren']);
 
 class Protokolldarstellungscontroller extends Controller {
     
@@ -23,11 +23,14 @@ class Protokolldarstellungscontroller extends Controller {
         }
         
         $datenInhalt['protokollDaten'] = $this->ladeDatenAusDemProtokoll($protokollDaten);
+        $datenInhalt['protokollLayout'] = array();
 
         foreach($protokollIDs as $protokollID)
         {
-            $datenInhalt['protokollLayout'] = $this->ladeProtokollLayout($protokollID);
+            $datenInhalt['protokollLayout'] += $this->ladeProtokollLayout($protokollID);
         }
+        
+        ksort($datenInhalt['protokollLayout']);
         
         $datenHeader['titel'] = $datenInhalt['titel'] = "Protokoll anzeigen";
         
@@ -70,7 +73,7 @@ class Protokolldarstellungscontroller extends Controller {
             'flugzeugMitMuster' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
             'flugzeugHebelarme' => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
             'flugzeugKlappen'   => $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID),
-            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum)))
+            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum)))[0]
         ];
     }
     
@@ -81,7 +84,7 @@ class Protokolldarstellungscontroller extends Controller {
         
         return [
             'pilotMitAkaflieg'  => $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($pilotID),
-            'pilotDetails'      => $pilotenDetailsModel->getPilotenDetailsNachPilotIDUndDatum($pilotID, date('Y-m-d', strtotime($datum)))
+            'pilotDetails'      => $pilotenDetailsModel->getPilotenDetailsNachPilotIDUndDatum($pilotID, date('Y-m-d', strtotime($datum)))[0] ?? array()
         ];
     }
     
@@ -144,25 +147,25 @@ class Protokolldarstellungscontroller extends Controller {
         {
             empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : null;
             
-            if( ! isset($layoutReturnArray[$layout['protokollKapitelID']]))
+            if( ! isset($layoutReturnArray[$layout['kapitelNummer']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layout['protokollKapitelID']);
                 $layoutReturnArray[$layout['kapitelNummer']]['protokollKapitelID']  = $layout['protokollKapitelID'];
+                $layoutReturnArray[$layout['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layout['protokollKapitelID']);
             }
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollKapitelID']);
+                $layoutReturnArray[$layout['kapitelNummer']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
             }
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollKapitelID']);
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
             }
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollKapitelID']);
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
             }
             
             
@@ -178,6 +181,7 @@ class Protokolldarstellungscontroller extends Controller {
         echo view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt);
         echo view('protokolle/anzeige/protokollInformationenView', $datenInhalt);
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt) : null;
+        echo isset($datenInhalt['protokollDaten']['pilotDaten']) ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : null;
         echo view('templates/footerView');
     }  
 }

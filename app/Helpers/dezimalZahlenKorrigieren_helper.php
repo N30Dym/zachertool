@@ -9,13 +9,8 @@ if (! function_exists('dezimalZahlenKorrigieren'))
      * @return string
      */
     function dezimalZahlenKorrigieren($zahl) 
-    {
-        if($zahl == null)
-        {
-            return null;
-        }
-        
-        if(gettype($zahl) == "string")
+    {       
+        if(is_numeric($zahl) && gettype($zahl) == "string")
         {
             $zahlOhneNullen = floatval($zahl);
             return str_replace(".", ",", $zahlOhneNullen);

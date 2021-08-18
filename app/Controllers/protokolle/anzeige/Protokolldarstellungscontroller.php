@@ -95,7 +95,12 @@ class Protokolldarstellungscontroller extends Controller {
         
         foreach($datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID) as $wert)
         {
-            isset($datenReturnArray[$wert['protokollInputID']]) ? $datenReturnArray[$wert['protokollInputID']] += $wert : $datenReturnArray[$wert['protokollInputID']] = $wert;
+            //isset($datenReturnArray[$wert['protokollInputID']]) ? $datenReturnArray[$wert['protokollInputID']] += $wert : $datenReturnArray[$wert['protokollInputID']] = $wert;
+            $woelbklappenStellung   = $wert['woelbklappenstellung'] == "" ? 0 : $wert['woelbklappenstellung'];
+            $linksUndRechts         = $wert['linksUndRechts'] == "" ? 0 : $wert['linksUndRechts'];
+            $multipelNr             = $wert['multipelNr'] == "" ? 0 : $wert['multipelNr'];
+               
+            $datenReturnArray[$wert['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $wert['wert'];
         }
         
         return $datenReturnArray;
@@ -156,6 +161,7 @@ class Protokolldarstellungscontroller extends Controller {
         $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
         $protokollKapitelModel              = new protokollKapitelModel(); 
         $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
+        $auswahllistenModel                 = new auswahllistenModel();
         
         $layoutReturnArray = array();
         
@@ -171,17 +177,17 @@ class Protokolldarstellungscontroller extends Controller {
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
             }
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
             }
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
             }
         }
 
@@ -198,7 +204,7 @@ class Protokolldarstellungscontroller extends Controller {
         echo isset($datenInhalt['protokollDaten']['pilotDaten']) ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['beladungszustand']) ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : null;
-        
+        echo view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
         echo view('templates/footerView');
     }  
 }

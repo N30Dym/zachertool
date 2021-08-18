@@ -3,9 +3,8 @@
 foreach($protokollLayout as $kapitelNummer => $kapitel)
 {
     if($kapitel['protokollKapitelID'] == FLUGZEUG_EINGABE || $kapitel['protokollKapitelID'] == PILOT_EINGABE || $kapitel['protokollKapitelID'] == BELADUNG_EINGABE){ continue; }
-    {
-        echo "<h2>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
-    }
+
+    echo "<h2>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
 
     foreach($kapitel as $protokollUnterkapitelID => $unterkapitel)
     {
@@ -40,7 +39,8 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                             {
                                 //case "Auswahloptionen":
                                     //echo "<td><b>" . ($protokollDaten['']$protokollDaten['eingegebeneWerte'][$input['inputDetails']['id']][$woelbklappenStellung][$richtung][0] ?? "") . "</b> " . ($input['inputDetails']['einheit'] ?? "") . "</td>";
-                                    //break; 
+                                    //break;
+                                case "Textzeile":
                                 case "Ganzzahl":
                                 case "Textfeld":
                                 case "Dezimalzahl":
@@ -49,7 +49,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                     echo "<b>" . dezimalZahlenKorrigieren($protokollDaten['eingegebeneWerte'][$input['inputDetails']['id']][$woelbklappenStellung][$richtung][0] ?? "") . "</b> " . ($input['inputDetails']['einheit'] ?? "") . "</td>";
                                     break;                                
                                 default:
-                                    echo "<b>" . $input['inputDetails']['inputTyp'] . "</b> fehlt noch</td>";
+                                    echo "<td><b>" . $input['inputDetails']['inputTyp'] . "</b> fehlt noch</td>";
 
                             }       
                         }

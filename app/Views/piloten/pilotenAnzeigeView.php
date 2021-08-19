@@ -39,11 +39,11 @@
                 <table class="table">
                     <tr>
                         <td>Akaflieg:</td>
-                        <td><?= $pilot['akaflieg'] ?></td>
+                        <td><b><?= $pilot['akaflieg'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Größe:</td>
-                        <td><?= $pilot['groesse'] ?> cm</td>
+                        <td><b><?= $pilot['groesse'] ?></b> cm</td>
                     </tr>
                 </table>
             </div>
@@ -70,11 +70,11 @@
                     <?php if(isset($pilotDetailsArray)) : ?>
                         <?php foreach($pilotDetailsArray as $pilotDetailAusDB) : ?>
                             <tr class="text-center">
-                                <td><?= date('d.m.Y', strtotime($pilotDetailAusDB['datum'])) ?></td>
-                                <td><?= $pilotDetailAusDB['stundenNachSchein'] ?></td>
-                                <td><?= $pilotDetailAusDB['geflogeneKm'] ?></td>
-                                <td><?= $pilotDetailAusDB['typenAnzahl'] ?></td>
-                                <td><?= $pilotDetailAusDB['gewicht'] ?></td>
+                                <td><b><?= date('d.m.Y', strtotime($pilotDetailAusDB['datum'])) ?></b></td>
+                                <td><b><?= $pilotDetailAusDB['stundenNachSchein'] ?></b></td>
+                                <td><b><?= $pilotDetailAusDB['geflogeneKm'] ?></b></td>
+                                <td><b><?= $pilotDetailAusDB['typenAnzahl'] ?></b></td>
+                                <td><b><?= $pilotDetailAusDB['gewicht'] ?></b></td>
                             </tr>
                         <?php endforeach ?>
                     <?php endif ?>

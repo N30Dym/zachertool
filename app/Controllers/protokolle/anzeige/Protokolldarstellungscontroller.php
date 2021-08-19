@@ -219,6 +219,7 @@ class Protokolldarstellungscontroller extends Controller {
         echo isset($datenInhalt['protokollDaten']['beladungszustand']) ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : null;
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : null;
         echo view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
+        echo view('protokolle/anzeige/seitenEndeMitButtonsView');
         echo view('templates/footerView');
     }  
 }

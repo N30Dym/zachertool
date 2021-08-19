@@ -15,7 +15,7 @@
         
     </div>
     <div class="col-sm-10">
-        <div class="table-responsive-lg">
+        <div class="table-responsive">
             <table class="table">
                 <tr>
                     <td>Name des Piloten:</td>

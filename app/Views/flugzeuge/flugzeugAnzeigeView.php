@@ -232,7 +232,7 @@
                         <tr class="text-center">
                             <th>Datum</th>
                             <th>Pilot</th>
-                            <?php if($muster['istWoelbklappenFlugzeug']) : ?><th>Copilot</th><?php endif ?>
+                            <?php if($muster['istDoppelsitzer']) : ?><th>Begleiter</th><?php endif ?>
                             <th>Bemerkung</th>
                             <td></td>
                         </tr>
@@ -242,7 +242,7 @@
                             <tr class="text-center" valign="middle">
                                 <td><b><?= date('d.m.Y', strtotime($protokollDaten['datum'])) ?></b></td>
                                 <td><?= $protokollDaten['pilotDetails']['vorname'] ?><?= empty($protokollDaten['pilotDetails']['spitzname']) ? " " : " <b>\"" . $protokollDaten['pilotDetails']['spitzname'] . "\"</b> " ?><?= $protokollDaten['pilotDetails']['nachname'] ?? "" ?></td>
-                                <?php if($muster['istWoelbklappenFlugzeug']) : ?><td><?php if(isset($protokollDaten['copilotDetails'])) : ?><?= $protokollDaten['copilotDetails']['vorname'] ?><?= (isset($protokollDaten['copilotDetails']['spitzname']) && $protokollDaten['copilotDetails']['spitzname'] != "") ? ' "'. $protokollDaten['copilotDetails']['spitzname'] .'" ' : " " ?><?= $protokollDaten['copilotDetails']['nachname'] ?><?php endif ?></td><?php endif ?>
+                                <?php if($muster['istDoppelsitzer']) : ?><td><?php if(isset($protokollDaten['copilotDetails'])) : ?><?= $protokollDaten['copilotDetails']['vorname'] ?><?= (isset($protokollDaten['copilotDetails']['spitzname']) && $protokollDaten['copilotDetails']['spitzname'] != "") ? ' "'. $protokollDaten['copilotDetails']['spitzname'] .'" ' : " " ?><?= $protokollDaten['copilotDetails']['nachname'] ?><?php endif ?></td><?php endif ?>
                                 <td><?= $protokollDaten['bemerkung'] ?></td>
                                 <td><a href="<?= base_url('/protokolle/anzeigen/' . $protokollDaten['id']) ?>"><button type="button" class="btn btn-sm btn-secondary">Anzeigen</button></a></td>
                             </tr>

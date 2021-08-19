@@ -2,7 +2,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\protokolllayout\{ auswahllistenModel, protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel };
-use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel };
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugWaegungModel, flugzeugDetailsModel };
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
 use App\Models\protokolle\{ datenModel };
 
@@ -25,11 +25,12 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
             case PILOT_EINGABE:
                 $inhaltZusatz['pilotenDatenArray'] = $this->getPilotenFuerAuswahl();
                 break;
-            case BELADUNG_EINGABE:
-                $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
-                if(isset($_SESSION['protokoll']['flugzeugID'])) //&& ! isset($_SESSION['protokoll']['protokollSpeicherID']))
+            case BELADUNG_EINGABE:               
+                if(isset($_SESSION['protokoll']['flugzeugID']))
                 {
-                    //$inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
+                    $inhaltZusatz['hebelarmDatenArray'] = $this->getFlugzeugHebelarme();
+                    $inhaltZusatz['waegungDatenArray'] = $this->getFlugzeugWaegung($_SESSION['protokoll']['flugzeugID'])[0];
+                    $inhaltZusatz['flugzeugDetailsDatenArray'] = $this->ladeFlugzeugDetails($_SESSION['protokoll']['flugzeugID']);
                     if(isset($_SESSION['protokoll']['pilotID']))
                     {
                         $inhaltZusatz['pilotGewicht'] = $this->getPilotGewichtNachPilotID($_SESSION['protokoll']['pilotID']);      
@@ -274,5 +275,17 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
 
         //$datenModel = new datenModel();       
         //return $datenModel->getAnzahlDatenNachProtokollSpeicherIDUndProtokollInputID($_SESSION['protokoll']['protokollSpeicherID'], $protokollInputID)['multipelNr'];
+    }
+    
+    protected function getFlugzeugWaegung($flugzeugID)
+    {
+        $flugzeugWaegungModel = new flugzeugWaegungModel();
+        return $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($_SESSION['protokoll']['protokollInformationen']['datum'])));
+    }
+    
+    protected function ladeFlugzeugDetails($flugzeugID)
+    {
+        $flugzeugDetailsModel = new flugzeugDetailsModel();
+        return $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID);
     }
 }

@@ -17,12 +17,33 @@
 
     <?php else: ?>
         
-        <div class="col-12 alert alert-secondary">
+        <div class="col-12 alert alert-danger">
             <small>Die Felder für das Piloten- und Fallschirmgewicht dürfen nicht leer bleiben. Wenn ohne Fallschirm geflogen wird, kann '0' eingegeben werden. Andere Felder können leer bleiben
-                Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein. </small>
+                <br>Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein. </small>
         </div>
+        
+        <div class="input-group">
+            <span class="input-group-text">Aktueller berechneter Schwerpunkt</span>
+            <input type="number" class="form-control form-control-lg" step="0.01" id="SPBerechnung" disabled>
+            <span class="input-group-text">mm h. BP</span>
+        </div>
+        
+        <div class="input-group">
+            <span class="input-group-text">Erlaubter Flugschwerpunktbereich</span>
+            <span class="input-group-text">von:</span>
+            <input type="number" class="form-control form-control-lg" id="flugSPMin" step="0.01" value="<?= $flugzeugDetailsDatenArray['flugSPMin'] ?>" disabled>
+            <span class="input-group-text">bis:</span>
+            <input type="number" class="form-control form-control-lg" id="flugSPMax" step="0.01" value="<?= $flugzeugDetailsDatenArray['flugSPMax'] ?>" disabled>
+            <span class="input-group-text">mm h. BP</span>
+        </div>
+        
+        <input type="range" id="SPAnzeige" min="<?= $flugzeugDetailsDatenArray['flugSPMin'] ?>" max="<?= $flugzeugDetailsDatenArray['flugSPMax'] ?>" step="0.02" disabled>
+        
+        <input type="hidden" id="flugzeugSchwerpunkt" value="<?= $waegungDatenArray['schwerpunkt'] ?? "" ?>">
+        <input type="hidden" id="flugzeugLeermasse" value="<?= $waegungDatenArray['leermasse'] ?? "" ?>">
+
         <div class="table-responsive-lg">
-            <table class="table">
+            <table class="table" id="hebelarmTabelle">
     <!-- Überschriften -->
                 <thead>
                     <tr class="text-center">
@@ -36,7 +57,7 @@
                 
                     <tr valign="middle">
                         <td>Pilot</td>
-                        <td><?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[0]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[0]['id']][0] ?? (esc($pilotGewicht) ?? "") ?>" required>
@@ -49,7 +70,7 @@
     
                     <tr valign="middle">
                         <td>Fallschirm Pilot</td>
-                        <td><?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[0]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Fallschirm]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[0]['id']]['Fallschirm'] ?? "" ?>" required>
@@ -62,7 +83,7 @@
     
                     <tr valign="middle">
                         <td>Zusatzgewicht im Pilotensitz (optional)</td>
-                        <td><?= esc($hebelarmDatenArray[0]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[0]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[0]['id'] ?>][Zusatz]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[0]['id']]['Zusatz'] ?? "" ?>">
@@ -76,7 +97,7 @@
     
                     <tr valign="middle">
                         <td>Begleiter</td>
-                        <td><?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[1]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[1]['id']][0] ?? ((isset($_SESSION['protokoll']['copilotID']) && isset($copilotGewicht) && $copilotGewicht != null) ? esc($copilotGewicht) : "") ?>" >
@@ -89,7 +110,7 @@
         
                     <tr valign="middle">
                         <td>Fallschirm Begleiter</td>
-                        <td><?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[1]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" min="0" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][Fallschirm]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[1]['id']]['Fallschirm'] ?? "" ?>">
@@ -102,7 +123,7 @@
         
                     <tr valign="middle">
                         <td>Zusatzgewicht im Begleitersitz (optional)</td>
-                        <td><?= esc($hebelarmDatenArray[1]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[1]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[1]['id'] ?>][Zusatz]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[1]['id']]['Zusatz'] ?? "" ?>">
@@ -119,7 +140,7 @@
     
                     <tr valign="middle">
                         <td><?= esc($hebelarmDatenArray[$i]['beschreibung']) ?></td>
-                        <td><?= esc($hebelarmDatenArray[$i]['hebelarm']) ?> mm h. BP</td>
+                        <td class="text-end hebelarm"><?= dezimalZahlenKorrigieren(esc($hebelarmDatenArray[$i]['hebelarm'])) ?> mm h. BP</td>
                         <td>
                             <div class="input-group">
                                 <input type="number" class="form-control" step="0.1" name="hebelarm[<?= $hebelarmDatenArray[$i]['id'] ?>][]" value="<?= $_SESSION['protokoll']['beladungszustand'][$hebelarmDatenArray[$i]['id']][0] ?? "" ?>">
@@ -139,19 +160,19 @@
         </div>
         <div class="col-sm-4">
             <label class="form-label">Hebelarmbezeichnung</label>
-            <input type="text" class="form-control" name="hebelarm[weiterer][bezeichnung]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['bezeichnung'] ?? "" ?>">
+            <input type="text" class="form-control" id="weitererBezeichnung" name="hebelarm[weiterer][bezeichnung]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['bezeichnung'] ?? "" ?>">
         </div>
         <div class="col-sm-4">
             <label class="form-label">Hebelarmlänge</label>
             <div class="input-group">
-                <input type="number" class="form-control" step="0.1" name="hebelarm[weiterer][laenge]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['laenge'] ?? "" ?>">
+                <input type="number" class="form-control" id="weitererHebelarm" step="0.1" name="hebelarm[weiterer][laenge]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['laenge'] ?? "" ?>">
                 <span class="input-group-text">mm h. BP</span>
             </div>
         </div>
         <div class="col-sm-4">
             <label class="form-label">Gewicht</label>
             <div class="input-group">
-                <input type="number" class="form-control" step="0.1" name="hebelarm[weiterer][gewicht]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['gewicht'] ?? "" ?>">
+                <input type="number" class="form-control" id="weitererGewicht" step="0.1" name="hebelarm[weiterer][gewicht]" value="<?= $_SESSION['protokoll']['beladungszustand']['weiterer']['gewicht'] ?? "" ?>">
                 <span class="input-group-text">kg</span>
             </div>
         </div>

@@ -11,7 +11,7 @@ use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecon
 
 use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
-helper(['form', 'url', 'array', 'nachrichtAnzeigen']);
+helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren']);
 
 class Protokollcontroller extends Controller
 {    

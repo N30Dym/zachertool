@@ -16,7 +16,6 @@ $( document ).ready( function() {
         }*/
 
     });
-
     
     var pilotenListe = $( '#pilotAuswahl option' );
     var copilotenListe = $( '#copilotAuswahl option' );
@@ -90,6 +89,65 @@ $( document ).ready( function() {
             default:
                 return "--";
         }
+    }
+    
+    if ($('#SPBerechnung').length)
+    {
+        schwerpunktDarstellung();
+    }
+    
+    $(window).keyup(function(){
+        if ($('#SPBerechnung').length)
+        {
+            schwerpunktDarstellung();
+        }
+    });
+    
+    function schwerpunktDarstellung()
+    {
+        var schwerpunkt = schwerpunktBerechnen();
+        $('#SPBerechnung').val(schwerpunkt);
+        $('#SPAnzeige').val(schwerpunkt);
+        if((parseFloat(schwerpunkt) > parseFloat($('#flugSPMax').val())) || (parseFloat(schwerpunkt) < parseFloat($('#flugSPMin').val())))
+        {
+            $( '#SPBerechnung' ).css('background-color', '#f8d7da');
+        }
+        else
+        {
+            $( '#SPBerechnung' ).css('background-color', '#e9ecef');
+        }
+    }
+    
+    function schwerpunktBerechnen()
+    {
+        var summeMomente = 0;
+        var summeMassen = 0;
+        
+        $( '#hebelarmTabelle tbody tr' ).each( function ( )
+        {
+            var hebelarmMitEinheit = $( this ).children( 'td.hebelarm' ).text();
+            var hebelarm = hebelarmMitEinheit.replace(' mm h. BP', '');
+            var masse = $( this ).find( 'input' ).val();
+            
+            if(masse > 0)
+            {
+                summeMomente += parseFloat(hebelarm) * parseFloat(masse);
+                summeMassen += parseFloat(masse);
+            }
+        });
+        
+        if($( '#weitererGewicht' ).val() > 0 && $( '#flugzeugSchwerpunkt' ).val() > 0)
+        {
+            summeMomente += parseFloat($( '#weitererHebelarm' ).val()) * parseFloat($( '#weitererGewicht' ).val());
+            summeMassen += parseFloat($( '#weitererGewicht' ).val())
+        }
+        
+        summeMomente += parseFloat($( '#flugzeugLeermasse' ).val()) * parseFloat($( '#flugzeugSchwerpunkt' ).val());
+        summeMassen += parseFloat($( '#flugzeugLeermasse' ).val());
+        
+        var flugschwerpunkt = summeMomente / summeMassen;
+        
+        return flugschwerpunkt.toFixed(1); 
     }
     
     $( document ).on( 'input', 'input.noteRange', function() {

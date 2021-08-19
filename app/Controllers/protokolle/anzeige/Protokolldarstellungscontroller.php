@@ -8,7 +8,7 @@ use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, protokolleLayoutProtokolleModel, auswahllistenModel };
 
 
-helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren']);
+helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren', 'konvertiereHStWegeInProzent', 'schwerpunktlageBerechnen']);
 
 class Protokolldarstellungscontroller extends Controller {
     

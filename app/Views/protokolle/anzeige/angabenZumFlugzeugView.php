@@ -45,11 +45,11 @@
                     <td>Hauptradfederung:</td>
                     <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['radfederung'] ?? "" ?></b></td> 
                     <td>Flügelfläche:</td>
-                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['fluegelflaeche'] ?? "") ?></b> m<sup>2</sup></td>   
+                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['fluegelflaeche'] ?? "") ?></b>&nbsp;m<sup>2</sup></td>   
                 </tr>
                 <tr>
                     <td>Spannweite:</td>
-                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['spannweite'] ?? "") ?></b> m</td> 
+                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugDetails']['spannweite'] ?? "") ?></b>&nbsp;m</td> 
                     <td>Variometer:</td>
                     <td><b><?= $protokollDaten['flugzeugDaten']['flugzeugDetails']['variometer'] ?? "" ?></b></td>   
                 </tr>
@@ -67,9 +67,9 @@
                 </tr>
                 <tr>
                     <td>Flugzeug Leermasse:</td>
-                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['leermasse'] ?? "") ?></b> kg</td> 
+                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['leermasse'] ?? "") ?></b>&nbsp;kg</td> 
                     <td>Leermassenschwerpunkt:</td>
-                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['schwerpunkt'] ?? "") ?></b> mm h. BP</td>   
+                    <td><b><?= dezimalZahlenKorrigieren($protokollDaten['flugzeugDaten']['flugzeugWaegung']['schwerpunkt'] ?? "") ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>   
                 </tr>
             </table>
         </div>

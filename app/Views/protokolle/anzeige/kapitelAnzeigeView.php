@@ -4,7 +4,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
 {
     if($kapitel['protokollKapitelID'] == FLUGZEUG_EINGABE || $kapitel['protokollKapitelID'] == PILOT_EINGABE || $kapitel['protokollKapitelID'] == BELADUNG_EINGABE){ continue; }
 
-    echo "<h2>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
+    echo "<h2 class='mt-5'>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
 
     foreach($kapitel as $protokollUnterkapitelID => $unterkapitel)
     {
@@ -18,10 +18,8 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
         echo "<div class='row'><div class='col-lg-1'></div><div class='col-sm-10'>";
         foreach($woelbklappen as $woelbklappenStellung)
         {
-            
-            
             echo $woelbklappenStellung == 0 ? "" : '<h5 class="ms-4 mt-4">Wölbklappenstellung: <b>' . $woelbklappenStellung . '</b></h5>';
-            echo "<div class='table-responsive-lg'><table class='table'>";
+            echo "<div class='table-responsive'><table class='table'>";
             
             foreach($unterkapitel as $protokollEingabeID => $eingabe)
             {
@@ -62,7 +60,10 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                     {
                                         echo '&nbsp;' . $input['inputDetails']['einheit'];
                                     }
-
+                                    if($input['inputDetails']['hStWeg'])
+                                    {
+                                        echo " (<b>" . konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']], $wert) . "</b>&nbsp;%&nbsp;gezogen)";
+                                    }
                                     echo "</td>";
 
                                 }
@@ -94,7 +95,6 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                                 $auswahlOptionID = $protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0];
                                                 echo "<b>" . $protokollDaten['auswahloptionen'][$auswahlOptionID]['option'] . "</b>";
                                             }
-                                            echo "</td>";
                                             break;
                                         case "Note":
                                             echo "<td><b>";
@@ -121,12 +121,12 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                                 default:
                                                     echo "";
                                             }
-                                            echo "</b></td>";
+                                            echo "</b>";
                                             break;
                                         case "Checkbox":
                                             if(isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0]))
                                             {
-                                                echo "<td><b>" . ($input['inputDetails']['bezeichnung'] ?? "") . "</b></td>";
+                                                echo "<td><b>" . ($input['inputDetails']['bezeichnung'] ?? "") . "</b>";
                                             }
                                             break;
                                         case "Textzeile":
@@ -134,13 +134,18 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                         case "Textfeld":
                                         case "Dezimalzahl":
                                             echo empty($input['inputDetails']['bezeichnung']) ? "<td>" : "<td>" . $input['inputDetails']['bezeichnung'] . "</td><td>";
-                                            echo $richtung == 0 ? "" : $richtung . ": ";
-                                            echo "<b>" . dezimalZahlenKorrigieren($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0] ?? "") . "</b>&nbsp;" . ($input['inputDetails']['einheit'] ?? "") . "</td>";
+                                            echo $richtung == 0 ? "" : $richtung . ":&nbsp;";
+                                            echo "<b>" . dezimalZahlenKorrigieren($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0] ?? "") . "</b>&nbsp;" . ($input['inputDetails']['einheit'] ?? "");
                                             break;                                
                                         default:
-                                            echo "<td><b>" . $input['inputDetails']['inputTyp'] . "</b> fehlt noch</td>";
+                                            echo "<td><b>" . $input['inputDetails']['inputTyp'] . "</b> fehlt noch";
 
-                                    }       
+                                    }
+                                    if($input['inputDetails']['hStWeg'] && isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0]))
+                                    {
+                                        echo " (<b>" . konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']], $protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0]) . "</b>&nbsp;%&nbsp;gezogen)";
+                                    }
+                                    echo "</td>";
                                 }
                             }
                         }
@@ -151,7 +156,51 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
             echo "</table></div>";
             
         }
-        echo "</div><div class='col-lg-1'></div></div>";
+        echo "</div><div class='col-lg-1'></div>";
+         
+        echo "</div>";
+    }
+    
+    if(isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]))
+    {
+        $hStInProzent = konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]);
+        ?>
+            <div class="row"> 
+                <div class="col-lg-2">
+                    
+                </div>
+                <div class="col-lg-8">
+                    <h5 class="mt-4">Höhensteuerwege</h5>
+                    <div class='table-responsive'>
+                        <table class='table'>
+                            <tr>
+                                <td>voll gedrückt</td>
+                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt'] ?? "" ?></b>&nbsp;mm</td>
+                                <td><b><?= $hStInProzent['gedruecktHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                            </tr>
+                            <tr>
+                                <td>neutral</td>
+                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt'] ?? "" ?></b>&nbsp;mm</td>
+                                <td><b><?= $hStInProzent['neutralHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                            </tr>
+                            <tr>
+                                <td>voll gezogen</td>
+                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gezogenHSt'] ?? "" ?></b>&nbsp;mm</td>
+                                <td><b><?= $hStInProzent['gezogenHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    
+                </div>
+            </div>
+        <?php
+    }
+
+    if(isset($protokollDaten['kommentare'][$kapitel['protokollKapitelID']]))
+    {
+        echo "<div class='col-lg-12'><label class='ms-2 mb-2'><b>Kommentar:</b></label><textarea class='form-control' disabled>" . $protokollDaten['kommentare'][$kapitel['protokollKapitelID']]["kommentar"] . "</textarea></div>";
     }
 }
 

@@ -19,6 +19,12 @@ if (! function_exists('dezimalZahlenKorrigieren'))
         {
             return $zahl;
         }
+        else if(gettype($zahl) == "float" OR gettype($zahl) == "double")
+        {
+            $zahlAlsString = (string)$zahl;
+            $zahlOhneNullen = floatval($zahlAlsString);
+            return str_replace(".", ",", $zahlOhneNullen);
+        }
         else
         {
             return $zahl;

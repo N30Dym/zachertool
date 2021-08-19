@@ -175,18 +175,18 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                         <table class='table'>
                             <tr>
                                 <td>voll gedrückt</td>
-                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt'] ?? "" ?></b>&nbsp;mm</td>
-                                <td><b><?= $hStInProzent['gedruecktHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                                <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt'] . "</b>&nbsp;mm" : "" ?></td>
+                                <td><?= isset($hStInProzent['gedruecktHSt']) ? "<b>" . $hStInProzent['gedruecktHSt'] . "</b>&nbsp;%&nbsp;gezogen" : "" ?></td>
                             </tr>
                             <tr>
                                 <td>neutral</td>
-                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt'] ?? "" ?></b>&nbsp;mm</td>
-                                <td><b><?= $hStInProzent['neutralHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                                <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutral'] . "</b>&nbsp;mm" : "" ?></td>
+                                <td><?= isset($hStInProzent['neutralHSt']) ? "<b>" . $hStInProzent['neutralHSt'] . "</b>&nbsp;%&nbsp;gezogen" : "" ?></td>
                             </tr>
                             <tr>
                                 <td>voll gezogen</td>
-                                <td><b><?= $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gezogenHSt'] ?? "" ?></b>&nbsp;mm</td>
-                                <td><b><?= $hStInProzent['gezogenHSt'] ?></b>&nbsp;%</b>&nbsp;gezogen</td>
+                                <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gezogenHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gezogenHSt'] . "</b>&nbsp;mm" : "" ?></td>
+                                <td><?= isset($hStInProzent['gezogenHSt']) ? "<b>" . $hStInProzent['gezogenHSt'] . "</b>&nbsp;%&nbsp;gezogen" : "" ?></td>
                             </tr>
                         </table>
                     </div>

@@ -13,10 +13,26 @@ if (! function_exists('konvertiereHStWegeInProzent'))
     {
         if($zukonvertierenderWert == null)
         {
+            if(empty($hStWeg["neutralHSt"]))
+            {
+                return[
+                    "protokollSpeicherID" => $hStWeg["protokollSpeicherID"], 
+                    "protokollKapitelID" => $hStWeg["protokollKapitelID"], 
+                    "gedruecktHSt" => "0", 
+                    "gezogenHSt" => "100"
+                ];
+            }
+            
             if($hStWeg["gedruecktHSt"] <= $hStWeg["neutralHSt"] && $hStWeg["neutralHSt"] <= $hStWeg["gezogenHSt"])
             {
                 $neutralHSt = round(100 * ((double)$hStWeg["neutralHSt"] - (double) $hStWeg["gedruecktHSt"]) / ((double) $hStWeg["gezogenHSt"] - (double) $hStWeg["gedruecktHSt"]), 0);
-                return ["protokollSpeicherID" => $hStWeg["protokollSpeicherID"], "protokollKapitelID" => $hStWeg["protokollKapitelID"], "gedruecktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
+                return [
+                    "protokollSpeicherID" => $hStWeg["protokollSpeicherID"], 
+                    "protokollKapitelID" => $hStWeg["protokollKapitelID"], 
+                    "gedruecktHSt" => "0", 
+                    "neutralHSt" => (string)$neutralHSt, 
+                    "gezogenHSt" => "100"
+                ];
             }                   
         }
         else

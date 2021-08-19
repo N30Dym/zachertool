@@ -17,7 +17,7 @@
                 <?php endforeach ?>   
             </ul>
             <?php foreach($flugzeuge as $jahrFlugzeuge=> $flugzeugeProJahr) : ?>
-                <div id="<?= $jahrFlugzeuge?>" class="table-responsive-lg tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>">
+                <div id="<?= $jahrFlugzeuge?>" class="table-responsive tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>">
                     <?php if($flugzeugeProJahr == null): ?>
                             <div class="text-center m-3">
                                    Für dieses Jahr liegen<?= date("Y") == $jahrFlugzeuge ? " noch " : " " ?>keine Protokolle vor
@@ -68,7 +68,7 @@
                 <?php endforeach ?>   
             </ul>
             <?php foreach($zacherkoenig as $jahrZacherkoenig => $zacherPilotenProJahr) : ?>
-                <div id="<?= $jahrZacherkoenig?>" class="table-responsive-lg tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>">
+                <div id="<?= $jahrZacherkoenig?>" class="table-responsive tabInhalt zacherkoenig <?= $jahrZacherkoenig == "Gesamt" ? "" : "d-none"?>">
                     <?php if($zacherPilotenProJahr == null): ?>
                         <div class="text-center m-3">
                             Für dieses Jahr liegen<?= date("Y") == $jahrZacherkoenig ? " noch " : " " ?>keine Protokolle vor

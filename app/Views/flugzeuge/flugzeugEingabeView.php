@@ -487,7 +487,7 @@
 <!-------------------------------->            
             <?php if(isset($flugzeugID)) : ?>
                 <h3 class="m-4">Vorherige Wägungen</h3>
-                <div class="table-responsive-lg">
+                <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr class="text-center">

@@ -32,78 +32,64 @@
         </div>
 
         <div class="col-lg-8 mt-4">
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <tr>
                         <td>Anzahl Protokolle</td>
-                        <td><?= $anzahlProtokolle ?></td>
+                        <td><b><?= $anzahlProtokolle ?></td>
                     </tr>
                 </table>
             </div>
             <h3 class="m-3 mt-5">Angaben zum Flugzeug</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <tr>
                         <td>Baujahr</td>
-                        <td><?= $flugzeugDetails['baujahr'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['baujahr'] ?></b></td>
                         <td>Seriennummer</td>
-                        <td><?= $flugzeugDetails['seriennummer'] ?></td>
+                        <td><b><?= $flugzeugDetails['seriennummer'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Ort der F-Schleppkupplung</td>
-                        <td><?= $flugzeugDetails['kupplung'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['kupplung'] ?></b></td>
                         <td>Querruder differenziert?</td>
-                        <td><?= $flugzeugDetails['diffQR'] ?></td>
+                        <td><b><?= $flugzeugDetails['diffQR'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Hauptradgröße</td>
-                        <td><?= $flugzeugDetails['radgroesse'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['radgroesse'] ?></b></td>
                         <td>Art der Hauptradbremse</td>
-                        <td><?= $flugzeugDetails['radbremse'] ?></td>
+                        <td><b><?= $flugzeugDetails['radbremse'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Hauptrad gefedert?</td>
-                        <td><?= $flugzeugDetails['radfederung'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['radfederung'] ?></b></td>
                         <td>Flügelfläche</td>
-                        <td><?= $flugzeugDetails['fluegelflaeche'] ?> m<sup>2</sup></td>
+                        <td><b><?= $flugzeugDetails['fluegelflaeche'] ?> m<sup>2</sup></td>
                     </tr>
                     <tr>
                         <td>Spannweite</td>
-                        <td><?= $flugzeugDetails['spannweite'] ?> m</td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['spannweite'] ?> m</td>
                         <td>Art des Variometers</td>
-                        <td><?= $flugzeugDetails['variometer'] ?></td>
+                        <td><b><?= $flugzeugDetails['variometer'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Art der TEK-Düse</td>
-                        <td><?= $flugzeugDetails['tekArt'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['tekArt'] ?></b></td>
                         <td>Position der TEK-Düse</td>
-                        <td><?= $flugzeugDetails['tekPosition'] ?></td>
+                        <td><b><?= $flugzeugDetails['tekPosition'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Lage der Gesamtdrucksonde</td>
-                        <td><?= $flugzeugDetails['pitotPosition'] ?></td>
-                    </tr>
-                    <tr>
+                        <td><b><?= $flugzeugDetails['pitotPosition'] ?></b></td>
                         <td>Bremsklappen</td>
-                        <td><?= $flugzeugDetails['bremsklappen'] ?></td>
+                        <td><b><?= $flugzeugDetails['bremsklappen'] ?></b></td>
                     </tr>
                 </table>
             </div>
             <?php if($muster['istWoelbklappenFlugzeug'] == "1") : ?>
             <h3 class="m-3 mt-5">Wölbklappen</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr class="text-center">
@@ -118,11 +104,11 @@
                     <?php foreach($woelbklappe as $index => $woelbklappenDetails) : ?>
                         <?php if(is_numeric($index)) : ?>
                             <tr class="text-center">
-                                <td><?= $woelbklappenDetails['stellungBezeichnung'] ?></td>
-                                <td><?= $woelbklappenDetails['stellungWinkel'] ?></td>
+                                <td><b><?= $woelbklappenDetails['stellungBezeichnung'] ?></b></td>
+                                <td><b><?= $woelbklappenDetails['stellungWinkel'] ?></b></td>
                                 <td><?php if($woelbklappe['neutral'] == $index) : ?><input type="radio" checked><?php endif ?></td>
                                 <td><?php if($woelbklappe['kreisflug'] == $index) : ?><input type="radio" checked><?php endif ?></td>
-                                <td><?= $woelbklappe['neutral'] == $index ? $woelbklappenDetails['iasVGNeutral'] . " km/h" : "" ?><?= $woelbklappe['kreisflug'] == $index ? $woelbklappenDetails['iasVGKreisflug'] . " km/h" : "" ?></td>
+                                <td><?= $woelbklappe['neutral'] == $index ? "<b>" . $woelbklappenDetails['iasVGNeutral'] . "</b> km/h" : "" ?><?= $woelbklappe['kreisflug'] == $index ? "<b>" . $woelbklappenDetails['iasVGKreisflug'] . "</b> km/h" : "" ?></td>
                             </tr>
                         <?php endif ?>
                     <?php endforeach ?>
@@ -135,7 +121,7 @@
                 <div class="table-responsive">           
                     <table class="table">
                         <tr>
-                            <td><?= $flugzeugDetails['iasVG'] ?> km/h</td>
+                            <td><b><?= $flugzeugDetails['iasVG'] ?></b> km/h</td>
                         </tr>
                     </table>
                 </div>
@@ -146,25 +132,25 @@
                 <table class="table">
                     <tr>
                         <td>Maximale Abflugmasse</td>
-                        <td colspan="2"><?= $flugzeugDetails['mtow'] ?> kg</td>
+                        <td colspan="2"><b><?= $flugzeugDetails['mtow'] ?></b> kg</td>
                     </tr>
                     <tr>
                         <td>Zulässiger Leermassenschwerpunktbereich</td>
-                        <td>von: <?= $flugzeugDetails['leermasseSPMin'] ?> mm h. BP</td>
-                        <td>bis: <?= $flugzeugDetails['leermasseSPMax'] ?> mm h. BP</td>
+                        <td>von: <b><?= $flugzeugDetails['leermasseSPMin'] ?></b> mm h. BP</td>
+                        <td>bis: <b><?= $flugzeugDetails['leermasseSPMax'] ?></b> mm h. BP</td>
                     </tr>
                     <tr>
                         <td>Zulässiger Flugschwerpunktbereich</td>
-                        <td>von: <?= $flugzeugDetails['flugSPMin'] ?> mm h. BP</td>
-                        <td>bis: <?= $flugzeugDetails['flugSPMax'] ?> mm h. BP</td>
+                        <td>von: <b><?= $flugzeugDetails['flugSPMin'] ?></b> mm h. BP</td>
+                        <td>bis: <b><?= $flugzeugDetails['flugSPMax'] ?></b> mm h. BP</td>
                     </tr>
                     <tr>
                         <td>Bezugspunkt</td>
-                        <td colspan="2"><?= $flugzeugDetails['bezugspunkt'] ?></td>
+                        <td colspan="2"><b><?= $flugzeugDetails['bezugspunkt'] ?></b></td>
                     </tr>
                     <tr>
                         <td>Längsneigung in Wägelage</td>
-                        <td colspan="2"><?= $flugzeugDetails['anstellwinkel'] ?></td>
+                        <td colspan="2"><b><?= $flugzeugDetails['anstellwinkel'] ?></b></td>
                     </tr>
                 </table>
             </div>
@@ -182,7 +168,7 @@
                     <?php foreach($hebelarm as $hebelarmDetails) : ?>
                         <tr class="text-center">
                             <td><?= $hebelarmDetails['beschreibung'] ?></td>
-                            <td><?= $hebelarmDetails['hebelarm'] ?> mm h. BP</td>
+                            <td><b><?= $hebelarmDetails['hebelarm'] ?></b> mm h. BP</td>
                         </tr>
                     <?php endforeach ?>
 
@@ -190,7 +176,7 @@
             </div>
 
             <h3 class="m-3 mt-5">Wägeberichte</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr class="text-center">
@@ -211,10 +197,10 @@
                     <?php foreach($waegung as $waegungDetails) : ?>
                         <tr class="text-center"> 
                             <td><b><?= date('d.m.Y', strtotime($waegungDetails['datum'])) ?></b></td>
-                            <td><?= $waegungDetails['leermasse'] ?> kg</td>
-                            <td><?= $waegungDetails['schwerpunkt'] ?> mm h. BP</td>
-                            <td><?= $waegungDetails['zuladungMin'] ?> kg</td>
-                            <td><?= $waegungDetails['zuladungMax'] ?> kg</td>
+                            <td><b><?= $waegungDetails['leermasse'] ?></b> kg</td>
+                            <td><b><?= $waegungDetails['schwerpunkt'] ?></b> mm h. BP</td>
+                            <td><b><?= $waegungDetails['zuladungMin'] ?></b> kg</td>
+                            <td><b><?= $waegungDetails['zuladungMax'] ?></b> kg</td>
                         </tr>
                     <?php endforeach ?>
                 </table>

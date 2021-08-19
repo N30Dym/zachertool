@@ -31,9 +31,9 @@
         <div class="input-group">
             <span class="input-group-text">Erlaubter Flugschwerpunktbereich</span>
             <span class="input-group-text">von:</span>
-            <input type="number" class="form-control form-control-lg" id="flugSPMin" step="0.01" value="<?= $flugzeugDetailsDatenArray['flugSPMin'] ?>" disabled>
+            <input type="number" class="form-control form-control-lg" id="flugSPMin" step="0.01" value="<?= dezimalZahlenKorrigieren($flugzeugDetailsDatenArray['flugSPMin']) ?>" disabled>
             <span class="input-group-text">bis:</span>
-            <input type="number" class="form-control form-control-lg" id="flugSPMax" step="0.01" value="<?= $flugzeugDetailsDatenArray['flugSPMax'] ?>" disabled>
+            <input type="number" class="form-control form-control-lg" id="flugSPMax" step="0.01" value="<?= dezimalZahlenKorrigieren($flugzeugDetailsDatenArray['flugSPMax']) ?>" disabled>
             <span class="input-group-text">mm h. BP</span>
         </div>
         

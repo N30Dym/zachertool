@@ -28,5 +28,8 @@ class auswahllistenModel extends Model
         return $this->where("protokollInputID", $protokollInputID)->findAll();
     }
     
-
+    public function getAlleOptionen()
+    {
+        return $this->findAll();
+    }
 }

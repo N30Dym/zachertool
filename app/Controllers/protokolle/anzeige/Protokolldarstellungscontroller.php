@@ -56,6 +56,7 @@ class Protokolldarstellungscontroller extends Controller {
         $returnArray['eingegebeneWerte']        = $this->ladeEingegebeneWerte($protokollDaten['id']);   
         $returnArray['kommentare']              = $this->ladeKommentare($protokollDaten['id']);
         $returnArray['hStWege']                 = $this->ladeHStWege($protokollDaten['id']);
+        $returnArray['auswahloptionen']         = $this->ladeAuswahloptionen();
         
         return $returnArray;
     }
@@ -152,6 +153,19 @@ class Protokolldarstellungscontroller extends Controller {
         }
         
         return $hStWegeReturnArray;
+    }
+    
+    protected function ladeAuswahloptionen()
+    {
+        $auswahllistenModel     = new auswahllistenModel();
+        $auswahloptionenArray   = array();
+        
+        foreach($auswahllistenModel->getAlleOptionen() as $option)
+        {
+            $auswahloptionenArray[$option['id']] = $option;
+        }
+        
+        return $auswahloptionenArray;
     }
     
     protected function ladeProtokollLayout($protokollID)

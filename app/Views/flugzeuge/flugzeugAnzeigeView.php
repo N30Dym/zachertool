@@ -32,7 +32,7 @@
         </div>
 
         <div class="col-lg-8 mt-4">
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <tr>
                         <td>Anzahl Protokolle</td>
@@ -41,61 +41,47 @@
                 </table>
             </div>
             <h3 class="m-3 mt-5">Angaben zum Flugzeug</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <tr>
                         <td>Baujahr</td>
                         <td><?= $flugzeugDetails['baujahr'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Seriennummer</td>
                         <td><?= $flugzeugDetails['seriennummer'] ?></td>
                     </tr>
                     <tr>
                         <td>Ort der F-Schleppkupplung</td>
                         <td><?= $flugzeugDetails['kupplung'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Querruder differenziert?</td>
                         <td><?= $flugzeugDetails['diffQR'] ?></td>
                     </tr>
                     <tr>
                         <td>Hauptradgröße</td>
                         <td><?= $flugzeugDetails['radgroesse'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Art der Hauptradbremse</td>
                         <td><?= $flugzeugDetails['radbremse'] ?></td>
                     </tr>
                     <tr>
                         <td>Hauptrad gefedert?</td>
                         <td><?= $flugzeugDetails['radfederung'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Flügelfläche</td>
                         <td><?= $flugzeugDetails['fluegelflaeche'] ?> m<sup>2</sup></td>
                     </tr>
                     <tr>
                         <td>Spannweite</td>
                         <td><?= $flugzeugDetails['spannweite'] ?> m</td>
-                    </tr>
-                    <tr>
                         <td>Art des Variometers</td>
                         <td><?= $flugzeugDetails['variometer'] ?></td>
                     </tr>
                     <tr>
                         <td>Art der TEK-Düse</td>
                         <td><?= $flugzeugDetails['tekArt'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Position der TEK-Düse</td>
                         <td><?= $flugzeugDetails['tekPosition'] ?></td>
                     </tr>
                     <tr>
                         <td>Lage der Gesamtdrucksonde</td>
                         <td><?= $flugzeugDetails['pitotPosition'] ?></td>
-                    </tr>
-                    <tr>
                         <td>Bremsklappen</td>
                         <td><?= $flugzeugDetails['bremsklappen'] ?></td>
                     </tr>
@@ -103,7 +89,7 @@
             </div>
             <?php if($muster['istWoelbklappenFlugzeug'] == "1") : ?>
             <h3 class="m-3 mt-5">Wölbklappen</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr class="text-center">
@@ -190,7 +176,7 @@
             </div>
 
             <h3 class="m-3 mt-5">Wägeberichte</h3>
-            <div class="table-responsive-lg">
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr class="text-center">

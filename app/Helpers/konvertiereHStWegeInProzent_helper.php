@@ -6,36 +6,30 @@ if (! function_exists('konvertiereHStWegeInProzent'))
 * und wandelt diese in Prozentangaben um. Wobei 0% = voll gedrückt und 100% = voll gezogen
 * 
 *
-* @param array containing objects or arrays $hStWege
+* @param array containing objects or arrays $hStWeg
 * @return array containing objects
 */
-	function konvertiereHStWegeInProzent($hStWege)
-	{
-		$hStWegeInProzent = [];
-		foreach($hStWege as $hStWeg)
-		{
-			
-			if(is_object($hStWeg))
-			{
-				if((double) $hStWeg->gedrücktHSt <= (double)$hStWeg->neutralHSt && (double)$hStWeg->neutralHSt <= (double) $hStWeg->gezogenHSt)
-				{
-					$neutralHSt = round(100 * ((double)$hStWeg->neutralHSt - (double) $hStWeg->gedrücktHSt) / ((double) $hStWeg->gezogenHSt - (double) $hStWeg->gedrücktHSt), 2);
-					$temporaeresArray = ["protokollSpeicherID" => $hStWeg->protokollSpeicherID, "protokollSektionID" => $hStWeg->protokollSektionID, "gedrücktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
-					array_push($hStWegeInProzent, $temporaeresArray);
-				}
-				
-			}
-			elseif(is_array($hStWeg))
-			{
-				if((double) $hStWeg["gedrücktHSt"] <= (double) $hStWeg["neutralHSt"] && (double) $hStWeg["neutralHSt"] <= (double) $hStWeg["gezogenHSt"])
-				{
-					$neutralHSt = round(100 * ((double)$hStWeg["neutralHSt"] - (double) $hStWeg["gedrücktHSt"]) / ((double) $hStWeg["gezogenHSt"] - (double) $hStWeg["gedrücktHSt"]), 2);
-					$temporaeresArray = ["protokollSpeicherID" => $hStWeg["protokollSpeicherID"], "protokollSektionID" => $hStWeg["protokollSektionID"], "gedrücktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
-					array_push($hStWegeInProzent, $temporaeresArray);
-				}
-			}
-		}
-		return $hStWegeInProzent;
-		
-	}
+    function konvertiereHStWegeInProzent(array $hStWeg, $zukonvertierenderWert = null)
+    {
+        if($zukonvertierenderWert == null)
+        {
+            if($hStWeg["gedruecktHSt"] <= $hStWeg["neutralHSt"] && $hStWeg["neutralHSt"] <= $hStWeg["gezogenHSt"])
+            {
+                $neutralHSt = round(100 * ((double)$hStWeg["neutralHSt"] - (double) $hStWeg["gedruecktHSt"]) / ((double) $hStWeg["gezogenHSt"] - (double) $hStWeg["gedruecktHSt"]), 0);
+                return ["protokollSpeicherID" => $hStWeg["protokollSpeicherID"], "protokollKapitelID" => $hStWeg["protokollKapitelID"], "gedruecktHSt" => "0", "neutralHSt" => (string)$neutralHSt, "gezogenHSt" => "100"];
+            }                   
+        }
+        else
+        {
+            $hStGedrueckt   = $hStWeg['gedruecktHSt'];
+            $hStGezogen     = (int)$hStWeg['gezogenHSt'];
+
+            $gezogenMinusGedrueckt                  = $hStGezogen - $hStGedrueckt;
+            $zuKonvertierenderWertMinusGedrueckt    = $zukonvertierenderWert - $hStGedrueckt;
+
+            return round(($zuKonvertierenderWertMinusGedrueckt / $gezogenMinusGedrueckt) * 100, 0);
+        }
+        
+
+    }
 }

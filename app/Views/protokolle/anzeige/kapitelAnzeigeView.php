@@ -180,7 +180,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                             </tr>
                             <tr>
                                 <td>neutral</td>
-                                <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutral'] . "</b>&nbsp;mm" : "" ?></td>
+                                <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['neutralHSt'] . "</b>&nbsp;mm" : "" ?></td>
                                 <td><?= isset($hStInProzent['neutralHSt']) ? "<b>" . $hStInProzent['neutralHSt'] . "</b>&nbsp;%&nbsp;gezogen" : "" ?></td>
                             </tr>
                             <tr>

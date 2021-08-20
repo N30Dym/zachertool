@@ -17,7 +17,7 @@
 
         <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">
             <a href="<?= base_url() ?>">
-                <button type="submit" class="btn btn-danger col-12" value="Abbrechen">Abbrechen</button>
+                <button type="button" class="btn btn-danger col-12" value="Abbrechen">Abbrechen</button>
             </a>
 
             <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>

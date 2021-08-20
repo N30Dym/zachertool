@@ -6,7 +6,7 @@ use CodeIgniter\Controller;
 
 use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
-helper(["array","form","text","url"]);
+helper(['array','form','text','url','dezimalZahlenKorrigieren']);
 
 class Flugzeugcontroller extends Controller
 {

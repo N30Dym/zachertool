@@ -10,19 +10,18 @@
     
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="<?= base_url() ?>/flugzeuge/liste" >
+            <a href="<?= base_url('/flugzeuge/liste') ?>" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
         </div>
         <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
 
             <input type="hidden" name="flugzeugID" value="<?= $flugzeugID ?>"> 
-            <button type="submit" class="btn btn-success" formaction="<?= base_url() ?>/protokolle/index">Protokoll mit diesem Flugzeug anlegen</button>
-            <a href="<?= base_url() ?>/flugzeuge/bearbeiten/<?= esc($flugzeugID) ?>">
+            <button type="submit" class="btn btn-success" formaction="<?= base_url('/protokolle/index') ?>">Protokoll mit diesem Flugzeug anlegen</button>
+            <a href="<?= base_url('/flugzeuge/bearbeiten/' . $flugzeugID) ?>">
                 <button type="button" class="btn btn-success col-12">Waegung hinzufügen</button>
             </a>
-            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url() ?>/flugzeuge/druckansicht/<?= $flugzeugID ?>">Drucken</button>-->
-            <button type="submit" class="btn btn-danger d-none" formaction="<?= base_url() ?>/damin/flugzeuge/<?= $flugzeugID ?>">Bearbeiten</button>
+            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url('/flugzeuge/druckansicht/' . $flugzeugID) ?>">Drucken</button>-->
         </div>
     </div>
 
@@ -40,7 +39,7 @@
                     </tr>
                 </table>
             </div>
-            <h3 class="m-3 mt-5">Angaben zum Flugzeug</h3>
+            <h3 class="m-3 mt-3">Angaben zum Flugzeug</h3>
             <div class="table-responsive">
                 <table class="table">
                     <tr>
@@ -65,11 +64,11 @@
                         <td>Hauptrad gefedert?</td>
                         <td><b><?= $flugzeugDetails['radfederung'] ?></b></td>
                         <td>Flügelfläche</td>
-                        <td><b><?= $flugzeugDetails['fluegelflaeche'] ?> m<sup>2</sup></td>
+                        <td><b><?= dezimalZahlenKorrigieren($flugzeugDetails['fluegelflaeche']) ?></b>&nbsp;m<sup>2</sup></td>
                     </tr>
                     <tr>
                         <td>Spannweite</td>
-                        <td><b><?= $flugzeugDetails['spannweite'] ?> m</td>
+                        <td><b><?= dezimalZahlenKorrigieren($flugzeugDetails['spannweite']) ?></b>&nbsp;m</td>
                         <td>Art des Variometers</td>
                         <td><b><?= $flugzeugDetails['variometer'] ?></b></td>
                     </tr>
@@ -105,10 +104,10 @@
                         <?php if(is_numeric($index)) : ?>
                             <tr class="text-center">
                                 <td><b><?= $woelbklappenDetails['stellungBezeichnung'] ?></b></td>
-                                <td><b><?= $woelbklappenDetails['stellungWinkel'] ?></b></td>
+                                <td><?= $woelbklappenDetails['stellungWinkel'] != "" ? "<b>" . dezimalZahlenKorrigieren($woelbklappenDetails['stellungWinkel']) . "</b>&nbsp;°" : "" ?></td>
                                 <td><?php if($woelbklappe['neutral'] == $index) : ?><input type="radio" checked><?php endif ?></td>
                                 <td><?php if($woelbklappe['kreisflug'] == $index) : ?><input type="radio" checked><?php endif ?></td>
-                                <td><?= $woelbklappe['neutral'] == $index ? "<b>" . $woelbklappenDetails['iasVGNeutral'] . "</b> km/h" : "" ?><?= $woelbklappe['kreisflug'] == $index ? "<b>" . $woelbklappenDetails['iasVGKreisflug'] . "</b> km/h" : "" ?></td>
+                                <td><?= $woelbklappe['neutral'] == $index ? "<b>" . $woelbklappenDetails['iasVGNeutral'] . "</b>&nbsp;km/h" : "" ?><?= $woelbklappe['kreisflug'] == $index ? "<b>" . $woelbklappenDetails['iasVGKreisflug'] . "</b>&nbsp;km/h" : "" ?></td>
                             </tr>
                         <?php endif ?>
                     <?php endforeach ?>
@@ -117,11 +116,12 @@
 
 
             <?php else : ?>
-                <h3 class="m-3 mt-5">Vergleichsfluggeschwindigkeit IAS<sub>VG</sub></h3> 
+                <h3 class="m-3 mt-5">Vergleichsfluggeschwindigkeit</h3> 
                 <div class="table-responsive">           
                     <table class="table">
                         <tr>
-                            <td><b><?= $flugzeugDetails['iasVG'] ?></b> km/h</td>
+                            <td>IAS<sub>VG</sub></td>
+                            <td><b><?= $flugzeugDetails['iasVG'] ?></b>&nbsp;km/h</td>
                         </tr>
                     </table>
                 </div>
@@ -132,17 +132,17 @@
                 <table class="table">
                     <tr>
                         <td>Maximale Abflugmasse</td>
-                        <td colspan="2"><b><?= $flugzeugDetails['mtow'] ?></b> kg</td>
+                        <td colspan="2"><b><?= $flugzeugDetails['mtow'] ?></b>&nbsp;kg</td>
                     </tr>
                     <tr>
                         <td>Zulässiger Leermassenschwerpunktbereich</td>
-                        <td>von: <b><?= $flugzeugDetails['leermasseSPMin'] ?></b> mm h. BP</td>
-                        <td>bis: <b><?= $flugzeugDetails['leermasseSPMax'] ?></b> mm h. BP</td>
+                        <td>von: <b><?= dezimalZahlenKorrigieren($flugzeugDetails['leermasseSPMin']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
+                        <td>bis: <b><?= dezimalZahlenKorrigieren($flugzeugDetails['leermasseSPMax']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
                     </tr>
                     <tr>
                         <td>Zulässiger Flugschwerpunktbereich</td>
-                        <td>von: <b><?= $flugzeugDetails['flugSPMin'] ?></b> mm h. BP</td>
-                        <td>bis: <b><?= $flugzeugDetails['flugSPMax'] ?></b> mm h. BP</td>
+                        <td>von: <b><?= dezimalZahlenKorrigieren($flugzeugDetails['flugSPMin']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
+                        <td>bis: <b><?= dezimalZahlenKorrigieren($flugzeugDetails['flugSPMax']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
                     </tr>
                     <tr>
                         <td>Bezugspunkt</td>
@@ -168,7 +168,7 @@
                     <?php foreach($hebelarm as $hebelarmDetails) : ?>
                         <tr class="text-center">
                             <td><?= $hebelarmDetails['beschreibung'] ?></td>
-                            <td><b><?= $hebelarmDetails['hebelarm'] ?></b> mm h. BP</td>
+                            <td><b><?= dezimalZahlenKorrigieren($hebelarmDetails['hebelarm']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
                         </tr>
                     <?php endforeach ?>
 
@@ -197,10 +197,10 @@
                     <?php foreach($waegung as $waegungDetails) : ?>
                         <tr class="text-center"> 
                             <td><b><?= date('d.m.Y', strtotime($waegungDetails['datum'])) ?></b></td>
-                            <td><b><?= $waegungDetails['leermasse'] ?></b> kg</td>
-                            <td><b><?= $waegungDetails['schwerpunkt'] ?></b> mm h. BP</td>
-                            <td><b><?= $waegungDetails['zuladungMin'] ?></b> kg</td>
-                            <td><b><?= $waegungDetails['zuladungMax'] ?></b> kg</td>
+                            <td><b><?= dezimalZahlenKorrigieren($waegungDetails['leermasse']) ?></b>&nbsp;kg</td>
+                            <td><b><?= dezimalZahlenKorrigieren($waegungDetails['schwerpunkt']) ?></b>&nbsp;mm&nbsp;h.&nbsp;BP</td>
+                            <td><b><?= dezimalZahlenKorrigieren($waegungDetails['zuladungMin']) ?></b>&nbsp;kg</td>
+                            <td><b><?= dezimalZahlenKorrigieren($waegungDetails['zuladungMax']) ?></b>&nbsp;kg</td>
                         </tr>
                     <?php endforeach ?>
                 </table>
@@ -235,7 +235,7 @@
                         <?php endforeach ?>
                     <?php else : ?>
                             <tr>
-                                <td colspan="5">
+                                <td colspan="4">
                                     Keine Protokolle vorhanden
                                 </td>
                             </tr>

@@ -55,7 +55,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         $temporaeresFlugzeugDatenArray = [
             'flugzeugID'                => $flugzeugID,
-            'anzahlProtokolle'          => $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeugID)['id'],
+            'anzahlProtokolle'          => $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)['id'],
             'flugzeugDetails'           => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
             'hebelarm'                  => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
             'waegung'                   => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID),
@@ -243,7 +243,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
          
         foreach($temporaeresFlugzeugArray as $index => $flugzeug)
         {
-            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
+            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
         }
         
         return $temporaeresFlugzeugArray;       

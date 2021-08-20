@@ -10,6 +10,8 @@ $(document).ready(function() {
         }
     });
     
+    var anzahlNeuerSpalten = 0
+    
     $( '.JSsichtbar' ).removeClass( 'd-none' );
     
         // Zusatzzeilen die ohne JS nötig sind entfernen
@@ -19,7 +21,8 @@ $(document).ready(function() {
         // Funktion um neue Zeilen beim Hebelarmmenü hinzuzufügen
     $( document ).on( 'click', '#neueZeileHebelarme', function()
     {
-        $( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[neu][][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[neu][][hebelarm]" class="form-control" value=""><span class="input-group-text">mm h. BP</span></div></td></tr>' );
+        $( '#hebelarmTabelle' ).append( '<tr valign="middle"><td class="text-center"><button type="button" class="btn btn-close btn-danger loeschen"></button></td><td><input type="text" name="hebelarm[neu][' + anzahlNeuerSpalten + '][beschreibung]" class="form-control" value=""></td><td><div class="input-group"><input type="number" name="hebelarm[neu][' + anzahlNeuerSpalten + '][hebelarm]" class="form-control" value=""><span class="input-group-text">mm h. BP</span></div></td></tr>' );
+        anzahlNeuerSpalten++;
     });	
     
 

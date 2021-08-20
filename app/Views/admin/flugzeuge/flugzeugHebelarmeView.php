@@ -3,11 +3,11 @@
 
 </div>
 
-<form method="post" action="<?= base_url('/admin/flugzeuge/speichern/flugzeugDetails') ?>">
+<form method="post" action="<?= base_url('/admin/flugzeuge/speichern/flugzeugHebelarme') ?>">
     
     <?= csrf_field() ?>
     
-    <input type="hidden" name="flugzeugID" value="<?= $hebelarme[0]['flugzeugID'] ?>">
+    <input type="hidden" name="flugzeugID" value="<?= $musterDetails['flugzeugID'] ?>">
     <div class="row g-3">
         <div class="col-sm-1">
         </div>
@@ -32,7 +32,7 @@
                                         <td class="text-center"></td>
                                         <td><input type="text" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][beschreibung]" value="Pilot" readonly></td>
                                         <td><div class="input-group">
-                                                <input type="number" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][beschreibung]" value="<?= $hebelarm['hebelarm'] ?>" step="0.01" required>
+                                                <input type="number" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][hebelarm]" value="<?= $hebelarm['hebelarm'] ?>" step="0.01" required>
                                                 <span class="input-group-text">mm h. BP</span>
                                             </div> 
                                         </td>
@@ -49,7 +49,7 @@
                                             <td class="text-center"></td>
                                             <td><input type="text" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][beschreibung]" value="Copilot" readonly></td>
                                             <td><div class="input-group">
-                                                    <input type="number" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][beschreibung]" value="<?= $hebelarm['hebelarm'] ?>" step="0.01" required>
+                                                    <input type="number" class="form-control" name="hebelarm[<?= $hebelarm['id'] ?>][hebelarm]" value="<?= $hebelarm['hebelarm'] ?>" step="0.01" required>
                                                     <span class="input-group-text">mm h. BP</span>
                                                 </div> 
                                             </td>

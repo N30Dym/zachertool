@@ -32,6 +32,11 @@ class flugzeugeMitMusterModel extends Model {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
     }
     
+    public function getWoelbklappenFlugzeugeMitMuster() 
+    {
+        return $this->where('istWoelbklappenFlugzeug', 1)->orderBy('geaendertAm', 'DESC')->findAll();
+    }
+    
     public function getUnsichtbareFlugzeugeMitMuster() 
     {
         return $this->where('sichtbar', null)->orderBy('geaendertAm', 'DESC')->findAll();

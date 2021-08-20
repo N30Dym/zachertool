@@ -52,7 +52,7 @@ class Adminflugzeugcontroller extends Controller
                 $this->musterLoeschenListe();
                 break;
             /*case 'muster':
-                $this->muster();
+                $this->musterListe();
                 break;*/
             default:
                 nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/flugzeuge')) ;
@@ -72,10 +72,10 @@ class Adminflugzeugcontroller extends Controller
             case 'flugzeugHebelarme':
                 $this->flugzeugHebelarmeListe();
                 break;
-            /*case 'flugzeugWoelbklappen':
-                $this->sichtbareMusterListe();
+            case 'flugzeugWoelbklappen':
+                $this->flugzeugWoelbklappenListe();
                 break;
-            case 'flugzeugWaegungen':
+            /*case 'flugzeugWaegungen':
                 $this->unsichtbareMusterListe();
                 break;*/
             default:
@@ -96,10 +96,10 @@ class Adminflugzeugcontroller extends Controller
             case 'flugzeugHebelarme':
                 $this->flugzeugHebelarmeBearbeiten($flugzeugOderMusterID);
                 break;
-            /*case 'flugzeugWoelbklappen':
-                $this->sichtbareMusterListe();
+            case 'flugzeugWoelbklappen':
+                $this->flugzeugWoelbklappenBearbeiten($flugzeugOderMusterID);
                 break;
-            case 'flugzeugWaegungen':
+            /*case 'flugzeugWaegungen':
                 $this->unsichtbareMusterListe();
                 break;*/
             default:
@@ -185,7 +185,7 @@ class Adminflugzeugcontroller extends Controller
         $musterDaten                        = $musterModel->getAlleMuster();
         $titel                              = "Muster löschen, die keinem Flugzeug zugeordnet sind";
         $musterDieGeloeschtWerdenKoennen    = [];
-        $ueberschriftArray                  = ['Muster', 'Zusatz / Konfiguration'];;
+        $ueberschriftArray                  = ['Muster', 'Zusatz / Konfiguration'];
         $switchSpaltenName                  = 'Löschen?';   
         
         foreach($musterDaten as $muster)
@@ -233,7 +233,17 @@ class Adminflugzeugcontroller extends Controller
 
         $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
     }
+    
+    protected function flugzeugWoelbklappenListe() 
+    {
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $flugzeugDaten              = $flugzeugeMitMusterModel->getWoelbklappenFlugzeugeMitMuster();
+        $titel                      = "Auswahl für Wölbklappen-Bearbeitung";
+        $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];   
 
+        $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
+    }
 
     protected function flugzeugBasisdatenBearbeiten($flugzeugID)
     {
@@ -291,12 +301,43 @@ class Adminflugzeugcontroller extends Controller
         
         $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
         
-        $datenInhalt['titel'] = $datenHeader['titel'] = "Details für das Flugzeug <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
+        $datenInhalt['titel'] = $datenHeader['titel'] = "Hebelarme des Flugzeugs <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
         
         echo view('templates/headerView', $datenHeader);
         echo view('admin/flugzeuge/scripts/flugzeugHebelarmeScript');
         echo view('templates/navbarView');
         echo view('admin/flugzeuge/flugzeugHebelarmeView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
+    protected function flugzeugWoelbklappenBearbeiten($flugzeugID) 
+    {
+        $flugzeugKlappenModel       = new flugzeugKlappenModel();
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        
+        $woelbklappen = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
+        
+        foreach($woelbklappen as $woelbklappe)
+        {
+            $woelbklappe['neutral'] ? $datenInhalt['WKneutral'] = $woelbklappe['id'] : null;
+            $woelbklappe['neutral'] ? $datenInhalt['iasVGneutral'] = $woelbklappe['iasVG'] : null;
+            $woelbklappe['kreisflug'] ? $datenInhalt['WKkreisflug'] = $woelbklappe['id'] : null;
+            $woelbklappe['kreisflug'] ? $datenInhalt['iasVGkreisflug'] = $woelbklappe['iasVG'] : null;          
+        }
+        
+        $datenInhalt += [
+            'woelbklappen'  => $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID),
+            'musterDetails' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
+        ];
+        
+        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
+        
+        $datenInhalt['titel'] = $datenHeader['titel'] = "Wölbklappen des Flugzeugs <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('admin/flugzeuge/scripts/flugzeugWoelbklappenScript');
+        echo view('templates/navbarView');
+        echo view('admin/flugzeuge/flugzeugWoelbklappenView', $datenInhalt);
         echo view('templates/footerView');
     }
     
@@ -337,7 +378,7 @@ class Adminflugzeugcontroller extends Controller
                 'musterSchreibweise'    => $muster['musterSchreibweise'],
                 'musterZusatz'          => $muster['musterZusatz'],
             ];
-            $switchStellung === null ? null : $temporaeresFlugzeugArray['checked'] = $switchStellung;
+            $switchStellung === null ? null : $temporaeresMusterArray['checked'] = $switchStellung;
             
             array_push($datenArray, $temporaeresMusterArray);
         }

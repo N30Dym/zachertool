@@ -243,10 +243,7 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
         $flugzeugKlappenModel   = new flugzeugKlappenModel();       
         $flugzeugKlappen        = $flugzeugKlappenModel->getKlappenNachFlugzeugID($zuSpeicherndeDaten['flugzeugID']);
         $zuLoeschendeKlappenIDs = array();
-        
-        //print_r($zuSpeicherndeDaten);
-        
-        
+
         foreach($flugzeugKlappen as $vorhandeneKlappe)
         {
             $zuLoeschendeKlappenIDs[$vorhandeneKlappe['id']] = $vorhandeneKlappe['id'];
@@ -258,11 +255,24 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             {
                 if($neueKlappe['stellungBezeichnung'] != "")
                 {            
-                    $neueKlappe['flugzeugID'] = $zuSpeicherndeDaten['flugzeugID'];
-                    $index == $zuSpeicherndeDaten['woelbklappe']['neutral']    ? $neueKlappe['iasVG']       = $neueKlappe['iasVGNeutral']   :  null;
-                    $index == $zuSpeicherndeDaten['woelbklappe']['neutral']    ? $neueKlappe['neutral']     = 1                             :  null;
-                    $index == $zuSpeicherndeDaten['woelbklappe']['kreisflug']  ? $neueKlappe['iasVG']       = $neueKlappe['iasVGKreisflug'] :  null;
-                    $index == $zuSpeicherndeDaten['woelbklappe']['kreisflug']  ? $neueKlappe['kreisflug']   = 1                             :  null;
+                    if($index == $zuSpeicherndeDaten['woelbklappe']['neutral'])
+                    {
+                        $neueKlappe['iasVG']        = $neueKlappe['iasVGNeutral'];
+                        $neueKlappe['neutral']      = 1;
+                        $neueKlappe['kreisflug']    = null;
+                    }
+                    else if($index == $zuSpeicherndeDaten['woelbklappe']['kreisflug'])
+                    {
+                        $neueKlappe['iasVG']        = $neueKlappe['iasVGKreisflug'];
+                        $neueKlappe['neutral']      = null;
+                        $neueKlappe['kreisflug']    = 1;
+                    }
+                    else 
+                    {
+                        $neueKlappe['iasVG']        = null;
+                        $neueKlappe['neutral']      = null;
+                        $neueKlappe['kreisflug']    = null; 
+                    }
                     
                     unset($neueKlappe['iasVGKreisflug']);
                     unset($neueKlappe['iasVGNeutral']);
@@ -284,19 +294,36 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
         foreach($zuSpeicherndeDaten['woelbklappe'] as $index => $alteKlappe)
         {           
             if(!is_numeric($index)) { continue; }
-            
+
             $alteKlappe['flugzeugID'] = $zuSpeicherndeDaten['flugzeugID'];
-            $alteKlappe['id'] == $zuSpeicherndeDaten['woelbklappe']['neutral']    ? $alteKlappe['iasVG']       = $alteKlappe['iasVGNeutral']   :  null;
-            $alteKlappe['id'] == $zuSpeicherndeDaten['woelbklappe']['neutral']    ? $alteKlappe['neutral']     = 1                             :  null;
-            $alteKlappe['id'] == $zuSpeicherndeDaten['woelbklappe']['kreisflug']  ? $alteKlappe['iasVG']       = $alteKlappe['iasVGKreisflug'] :  null;
-            $alteKlappe['id'] == $zuSpeicherndeDaten['woelbklappe']['kreisflug']  ? $alteKlappe['kreisflug']   = 1                             :  null;
+            
+            if($index == $zuSpeicherndeDaten['woelbklappe']['neutral'])
+            {
+                $alteKlappe['iasVG']        = $alteKlappe['iasVGNeutral'];
+                $alteKlappe['neutral']      = 1;
+                $alteKlappe['kreisflug']    = null;
+            }
+            else if($index == $zuSpeicherndeDaten['woelbklappe']['kreisflug'])
+            {
+                $alteKlappe['iasVG']        = $alteKlappe['iasVGKreisflug'];
+                $alteKlappe['neutral']      = null;
+                $alteKlappe['kreisflug']    = 1;
+            }
+            else 
+            {
+                $alteKlappe['iasVG']        = null;
+                $alteKlappe['neutral']      = null;
+                $alteKlappe['kreisflug']    = null; 
+            }
 
             unset($alteKlappe['iasVGKreisflug']);
             unset($alteKlappe['iasVGNeutral']);
+            print_r($alteKlappe);
+            echo "<br>";
             
             try
             {
-                $flugzeugKlappenModel->where('id', $alteKlappe['id'])->set($alteKlappe)->update();
+                $flugzeugKlappenModel->where('id', $index)->set($alteKlappe)->update();
             }
             catch(Exception $ex)
             {
@@ -306,6 +333,7 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             
             unset($zuLoeschendeKlappenIDs[$index]);
         }
+        print_r($zuLoeschendeKlappenIDs);
         
         if(!empty($zuLoeschendeKlappenIDs))
         {
@@ -322,5 +350,6 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
                 }
             }
         }
+        exit;
     }
 }

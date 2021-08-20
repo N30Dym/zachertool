@@ -32,6 +32,16 @@ class flugzeugeMitMusterModel extends Model {
         return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
     }
     
+    public function getUnsichtbareFlugzeugeMitMuster() 
+    {
+        return $this->where('sichtbar', null)->orderBy('geaendertAm', 'DESC')->findAll();
+    }
+    
+    public function getAlleFlugzeugeMitMuster() 
+    {
+        return $this->orderBy('musterKlarname', 'DESC')->findAll();
+    }
+    
     public function getFlugzeugIDNachKennungKlarnameUndZusatz($kennung, $musterKlarname, $musterZusatz)
     {
         return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();

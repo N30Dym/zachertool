@@ -7,41 +7,29 @@
     <div class="col-lg-6">
         
         <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            <h3 class="m-2">Flugzeuglisten</h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/flugzeuge/liste">Liste aller sichtbaren Flugzeuge</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/sichtbareFlugzeuge">Sichtbare Flugzeuge anzeigen und Sichtbarkeit ändern</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/unsichtbareFlugzeuge">Unsichtbare Flugzeuge anzeigen und Sichtbarkeit ändern</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/flugzeugeLoeschen">Flugzeuge löschen</a></li>
+            </ul>
         </div>
         
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-            
-        </div>
         
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3>TestiTest</h3>
-        </div>
         
     </div>
     <div class="col-lg-6 ">
-        
         <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
+            <h3 class="m-2">Musterlisten</h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/muster">Liste aller sichtbaren Muster</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/sichtbareMuster">Sichtbare Muster anzeigen und Sichtbarkeit ändern</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/unsichtbareMuster">Unsichtbare Muster anzeigen und Sichtbarkeit ändern</a></li>
+                <li><a href="<?= base_url() ?>/admin/flugzeuge/liste/musterLoeschen">Muster löschen</a></li>
+            </ul>
         </div>
         
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
-        
-        <div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2">TestiTest</h3>
-        </div>
         
     </div>
 </div>

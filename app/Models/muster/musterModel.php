@@ -16,7 +16,7 @@ class musterModel extends Model
     protected $primaryKey       = 'id';
     protected $validationRules 	= 'muster';
 
-    protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'istDoppelsitzer', 'istWoelbklappenFlugzeug'];
+    protected $allowedFields 	= ['musterSchreibweise', 'musterKlarname', 'musterZusatz', 'istDoppelsitzer', 'istWoelbklappenFlugzeug', 'sichtbar'];
 
         /*
         * Diese Funktion ruft nur das Muster mit
@@ -30,14 +30,19 @@ class musterModel extends Model
         return $this->where("id", $id)->first();
     }
 
-    public function getMusterAlle()
+    public function getAlleMuster()
     {
         return $this->findAll();
     }
     
     public function getSichtbareMuster()
     {
-        return $this->where('sichtbar', "1")->findAll();
+        return $this->where('sichtbar', 1)->findAll();
+    }
+    
+    public function getUnsichtbareMuster()
+    {
+        return $this->where('sichtbar', null)->findAll();
     }
     
     public function getDistinctSichtbareMusterSchreibweisen()

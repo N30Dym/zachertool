@@ -42,6 +42,11 @@ class flugzeugeModel extends Model
         return $this->select('musterID')->where("id", $id)->first();
     }
     
+    public function getFlugzeugeNachMusterID($musterID)
+    {
+        return $this->where('musterID', $musterID)->findAll();
+    }
+    
     public function updateGeaendertAmNachID($id)
     {
         $query = "UPDATE `flugzeuge` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `flugzeuge`.`id` = " . $id; 

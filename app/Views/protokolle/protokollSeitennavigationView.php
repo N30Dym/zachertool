@@ -21,8 +21,8 @@
                 <div class="col-lg-3 d-grid gap-2 d-md-flex">
                     <button type="submit" class="btn btn-secondary col-12" formaction="<?= array_search($_SESSION['protokoll']['aktuellesKapitel'], $_SESSION['protokoll']['kapitelNummern']) <= 0 ? base_url() . '/protokolle/kapitel/1' : base_url() . '/protokolle/kapitel/' . $_SESSION['protokoll']['kapitelNummern'][array_search($_SESSION['protokoll']['aktuellesKapitel'], $_SESSION['protokoll']['kapitelNummern']) - 1] ?>">< Zurück</button>
                 </div>
-                <div class="col-lg-6 d-grid gap-2 d-md-flex d-none JSsichtbar">
-                    <div class="input-group">
+                <div class="col-lg-6 d-grid gap-2 d-md-flex ">
+                    <div class="input-group d-none JSsichtbar">
                         <select id="kapitelAuswahl" class="form-select">
                             <?php foreach($_SESSION['protokoll']['kapitelNummern'] as $kapitelNummer) : ?>
                                 <option value="<?= esc($kapitelNummer) ?>" <?= (isset($_SESSION['protokoll']['fehlerArray'][$_SESSION['protokoll']['kapitelIDs'][$kapitelNummer]])) ? 'style="background-color: #f8d7da"' : "" ?> <?= $_SESSION['protokoll']['aktuellesKapitel'] == $kapitelNummer ? "selected" : "" ?>>

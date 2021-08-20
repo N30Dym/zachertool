@@ -22,13 +22,13 @@
                 <br>Zusatzgewicht im jeweiligen Sitz kann z.B. ein Bleikissen sein. </small>
         </div>
         
-        <div class="input-group">
+        <div class="input-group JSsichtbar d-none">
             <span class="input-group-text">Aktueller berechneter Schwerpunkt</span>
             <input type="number" class="form-control form-control-lg" step="0.01" id="SPBerechnung" disabled>
             <span class="input-group-text">mm h. BP</span>
         </div>
         
-        <div class="input-group">
+        <div class="input-group JSsichtbar d-none">
             <span class="input-group-text">Erlaubter Flugschwerpunktbereich</span>
             <span class="input-group-text">von:</span>
             <input type="number" class="form-control form-control-lg" id="flugSPMin" step="0.01" value="<?= dezimalZahlenKorrigieren($flugzeugDetailsDatenArray['flugSPMin']) ?>" disabled>
@@ -37,7 +37,7 @@
             <span class="input-group-text">mm h. BP</span>
         </div>
         
-        <input type="range" id="SPAnzeige" min="<?= $flugzeugDetailsDatenArray['flugSPMin'] ?>" max="<?= $flugzeugDetailsDatenArray['flugSPMax'] ?>" step="0.02" disabled>
+        <input type="range" class="JSsichtbar d-none" id="SPAnzeige" min="<?= $flugzeugDetailsDatenArray['flugSPMin'] ?>" max="<?= $flugzeugDetailsDatenArray['flugSPMax'] ?>" step="0.02" disabled>
         
         <input type="hidden" id="flugzeugSchwerpunkt" value="<?= $waegungDatenArray['schwerpunkt'] ?? "" ?>">
         <input type="hidden" id="flugzeugLeermasse" value="<?= $waegungDatenArray['leermasse'] ?? "" ?>">

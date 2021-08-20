@@ -206,7 +206,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         * als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
         * Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
         */
-    protected function ladeEingabeListen()
+    public function ladeEingabeListen()
     {
         $flugzeugDetailsModel   = new flugzeugDetailsModel();
         $musterModel            = new musterModel();

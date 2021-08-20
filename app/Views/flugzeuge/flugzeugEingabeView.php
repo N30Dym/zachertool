@@ -555,6 +555,11 @@
                 </div>
 
             </div>
+            
+<!-------------------------------->
+<!--       Kommentarfeld        -->
+<!-------------------------------->
+
             <h3 class="m-4">Kommentarfeld</h3>
             <div class="row g-3">
                 <label for="kommentar">Weitere Kommentare, wichtige Anmerkungen; Dinge, die keinen Platz gefunden haben:</label>

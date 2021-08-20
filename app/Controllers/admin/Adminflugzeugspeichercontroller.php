@@ -32,15 +32,12 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
                 case 'musterLoeschen':
                     $this->loescheMuster($zuSpeicherndeDaten);
                     break;
-                /*case 'einweiserAuswählen':
-                    $this->setzeZachereinweiser($zuSpeicherndeDaten);
+                case 'flugzeugBasisdaten':
+                    $this->speicherFlugzeugBasisDaten($zuSpeicherndeDaten);
                     break;
-                case 'akafliegsAnzeigen':
-                    $this->setzeAkafliegSichtbarkeit($zuSpeicherndeDaten);
+                case 'flugzeugDetails':
+                    $this->speicherFlugzeugDetails($zuSpeicherndeDaten);
                     break;
-                case 'akafliegHinzufügen':
-                    $this->hinzufuegenAkaflieg($zuSpeicherndeDaten['eingabe']);
-                    break;*/
                 default:
                     nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/flugzeuge"));
             }
@@ -51,20 +48,6 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             nachrichtAnzeigen("Keine Daten zum Speichern vorhanden", base_url("admin/flugzeuge"));
         }
     }
-    
-    /*public function ueberschreibePilotenDaten()
-    {
-        $pilotenSpeicherController = new Pilotenspeichercontroller();
-        
-        if(!$pilotenSpeicherController->pruefeDaten($this->request->getPost()))
-        {
-            return redirect()->back()->withInput();
-        }
-        
-        $this->speicherDaten($this->request->getPost());
-        
-        nachrichtAnzeigen("Pilotendaten erfolgreich geändert", base_url('admin/flugzeuge'));
-    }*/
     
     protected function setzeFlugzeugUnsichtbar($zuUeberschreibendeDaten)
     {
@@ -146,44 +129,7 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
         }
     }
     
-    /*protected function setzeZachereinweiser($zuUeberschreibendeDaten)
-    {
-        $pilotenModel = new pilotenModel();
-        
-        var_dump($zuUeberschreibendeDaten['switch']);
 
-        foreach($zuUeberschreibendeDaten['switch'] as $pilotID => $on)
-        {
-            $pilotenModel->builder()->set(['zachereinweiser' => 1])->where('id', $pilotID)->update();
-        }
-    }*/
-    
-    /*protected function setzeAkafliegSichtbarkeit($zuUeberschreibendeDaten)
-    {
-        $pilotenAkafliegsModel = new pilotenAkafliegsModel();
-        
-        foreach($zuUeberschreibendeDaten['id'] as $akafliegID)
-        {
-            if( ! isset($zuUeberschreibendeDaten['switch'][$akafliegID]))
-            {
-                $pilotenAkafliegsModel->where('id', $akafliegID)->set('sichtbar', null)->update();
-            }
-            else
-            {
-                $pilotenAkafliegsModel->where('id', $akafliegID)->set('sichtbar', 1)->update();
-            }
-        }
-    }*/
-    
-    /*protected function hinzufuegenAkaflieg($zuSpeicherndeEingabe)
-    {
-        $pilotenAkafliegsModel = new pilotenAkafliegsModel();
-        
-        if( ! $pilotenAkafliegsModel->builder()->set('akaflieg', $zuSpeicherndeEingabe)->insert())
-        {
-            nachrichtAnzeigen("Da ist was schiefgelaufen", base_url('admin/piloten/akafliegHinzufügen'));
-        }
-    }*/
     
     /*protected function speicherDaten($zuSpeicherndeDaten)
     {
@@ -216,4 +162,42 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             }
         }
     }*/
+    
+    protected function speicherFlugzeugBasisDaten($zuSpeicherndeDaten) 
+    {
+        $flugzeugeModel = new flugzeugeModel();
+
+        $zuSpeicherndeDaten['flugzeug']['sichtbar'] = isset($zuSpeicherndeDaten['flugzeug']['sichtbar']) ? 1 : null;
+
+        try
+        {
+            $flugzeugeModel->where('id', $zuSpeicherndeDaten['flugzeugID'])->set($zuSpeicherndeDaten['flugzeug'])->update();
+        }
+        catch(Exception $ex)
+        {
+            $this->showError($ex);
+            exit;
+        }
+    }
+    
+    protected function speicherFlugzeugDetails($zuSpeicherndeDaten) 
+    {
+        $flugzeugDetailsModel = new flugzeugDetailsModel();
+        
+        foreach($zuSpeicherndeDaten['flugzeugDetails'] as $key => $detail)
+        {
+            $zuSpeicherndeDaten['flugzeugDetails'][$key] = ($detail === null || $detail == "") ? null : $detail;
+        }
+        print_r($zuSpeicherndeDaten['flugzeugDetails']);
+        
+        try
+        {
+            $flugzeugDetailsModel->where('id', $zuSpeicherndeDaten['flugzeugID'])->set($zuSpeicherndeDaten['flugzeugDetails'])->update();
+        }
+        catch(Exception $ex)
+        {
+            $this->showError($ex);
+            exit;
+        }
+    }
 }

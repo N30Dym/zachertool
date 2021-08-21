@@ -11,9 +11,6 @@
             <button type="button" class="btn btn-danger col-12">Zurück</button>
         </a>
     </div>
-    <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
-        <button type="submit" class="btn btn-success">Speichern</button>
-    </div>
 </div>
 
 <div class="row mt-3">
@@ -54,9 +51,6 @@
             <a href="<?= $zurueckButton ?? base_url() ?>" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
-        </div>
-        <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
-            <button type="submit" class="btn btn-success">Speichern</button>
         </div>
     </div>
 <?php endif ?>

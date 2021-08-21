@@ -1,12 +1,13 @@
 <?php
 namespace App\Controllers\admin;
 
+use App\Controllers\flugzeuge\Flugzeugspeichercontroller;
 use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugeModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use App\Models\muster\{ musterDetailsModel, musterModel, musterKlappenModel, musterHebelarmeModel };
 
 helper('nachrichtAnzeigen');
 
-class Adminflugzeugspeichercontroller extends Adminpilotencontroller
+class Adminflugzeugspeichercontroller extends Adminflugzeugcontroller
 {
     public function speichern($speicherOrt)
     {
@@ -43,6 +44,12 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
                     break;
                 case 'flugzeugWoelbklappen':
                     $this->speicherFlugzeugWoelbklappen($zuSpeicherndeDaten);
+                    break;
+                case 'flugzeugWaegungen':
+                    $this->speicherFlugzeugWaegungen($zuSpeicherndeDaten);
+                    break;
+                case 'musterBasisdaten':
+                    $this->speicherMusterBasisDaten($zuSpeicherndeDaten);
                     break;
                 default:
                     nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/flugzeuge"));
@@ -160,7 +167,6 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
         {
             $zuSpeicherndeDaten['flugzeugDetails'][$key] = ($detail === null || $detail == "") ? null : $detail;
         }
-        print_r($zuSpeicherndeDaten['flugzeugDetails']);
         
         try
         {
@@ -184,29 +190,27 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             $zuLoeschendeHebelarmIDs[$vorhandenerHebelarm['id']] = $vorhandenerHebelarm['id'];
         }
         
-        if(isset($zuSpeicherndeDaten['hebelarm']['neu']))
+        foreach(($zuSpeicherndeDaten['hebelarm']['neu'] ?? array()) as $neuerHebelarm)
         {
-            foreach($zuSpeicherndeDaten['hebelarm']['neu'] as $neuerHebelarm)
-            {
-                if($neuerHebelarm['beschreibung'] != "" && $neuerHebelarm['hebelarm'] != "")
-                {            
-                    $neuerHebelarm['flugzeugID'] = $zuSpeicherndeDaten['flugzeugID'];
+            if($neuerHebelarm['beschreibung'] != "" && $neuerHebelarm['hebelarm'] != "")
+            {            
+                $neuerHebelarm['flugzeugID'] = $zuSpeicherndeDaten['flugzeugID'];
 
-                    try
-                    {
-                        $flugzeugHebelarmeModel->insert($neuerHebelarm);
-                    }
-                    catch(Exception $ex)
-                    {
-                        $this->showError($ex);
-                        exit;
-                    }
+                try
+                {
+                    $flugzeugHebelarmeModel->insert($neuerHebelarm);
+                }
+                catch(Exception $ex)
+                {
+                    $this->showError($ex);
+                    exit;
                 }
             }
-            unset($zuSpeicherndeDaten['hebelarm']['neu']);
         }
+        unset($zuSpeicherndeDaten['hebelarm']['neu']);
 
-        foreach($zuSpeicherndeDaten['hebelarm'] as $flugzeugHebelarmID => $alterHebelarm)
+
+        foreach(($zuSpeicherndeDaten['hebelarm'] ?? array()) as $flugzeugHebelarmID => $alterHebelarm)
         {           
             try
             {
@@ -243,59 +247,58 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
         $flugzeugKlappenModel   = new flugzeugKlappenModel();       
         $flugzeugKlappen        = $flugzeugKlappenModel->getKlappenNachFlugzeugID($zuSpeicherndeDaten['flugzeugID']);
         $zuLoeschendeKlappenIDs = array();
+                       
+        isset($zuSpeicherndeDaten['woelbklappe']['neutral'])    ? null : $zuSpeicherndeDaten['woelbklappe']['neutral']      = 0;
+        isset($zuSpeicherndeDaten['woelbklappe']['kreisflug'])  ? null : $zuSpeicherndeDaten['woelbklappe']['kreisflug']    = 0;
 
         foreach($flugzeugKlappen as $vorhandeneKlappe)
         {
             $zuLoeschendeKlappenIDs[$vorhandeneKlappe['id']] = $vorhandeneKlappe['id'];
         }
         
-        if(isset($zuSpeicherndeDaten['woelbklappe']['neu']))
+        foreach($zuSpeicherndeDaten['woelbklappe']['neu'] as $index => $neueKlappe)
         {
-            foreach($zuSpeicherndeDaten['woelbklappe']['neu'] as $index => $neueKlappe)
-            {
-                if($neueKlappe['stellungBezeichnung'] != "")
-                {            
-                    if($index == $zuSpeicherndeDaten['woelbklappe']['neutral'])
-                    {
-                        $neueKlappe['iasVG']        = $neueKlappe['iasVGNeutral'];
-                        $neueKlappe['neutral']      = 1;
-                        $neueKlappe['kreisflug']    = null;
-                    }
-                    else if($index == $zuSpeicherndeDaten['woelbklappe']['kreisflug'])
-                    {
-                        $neueKlappe['iasVG']        = $neueKlappe['iasVGKreisflug'];
-                        $neueKlappe['neutral']      = null;
-                        $neueKlappe['kreisflug']    = 1;
-                    }
-                    else 
-                    {
-                        $neueKlappe['iasVG']        = null;
-                        $neueKlappe['neutral']      = null;
-                        $neueKlappe['kreisflug']    = null; 
-                    }
-                    
-                    unset($neueKlappe['iasVGKreisflug']);
-                    unset($neueKlappe['iasVGNeutral']);
-                    
-                    try
-                    {
-                        $flugzeugKlappenModel->insert($neueKlappe);
-                    }
-                    catch(Exception $ex)
-                    {
-                        $this->showError($ex);
-                        exit;
-                    }
-                }
-            }
-            unset($zuSpeicherndeDaten['woelbklappe']['neu']);
-        }
+            if($neueKlappe['stellungBezeichnung'] != "")
+            {            
+                $neueKlappe['flugzeugID']       = $zuSpeicherndeDaten['flugzeugID'];
+                $neueKlappe['stellungWinkel']   = $neueKlappe['stellungWinkel'] == "" ? null : $neueKlappe['stellungWinkel'];
 
-        foreach($zuSpeicherndeDaten['woelbklappe'] as $index => $alteKlappe)
+                if($index == $zuSpeicherndeDaten['woelbklappe']['neutral'])
+                {
+                    $neueKlappe['iasVG']        = $neueKlappe['iasVGNeutral'];
+                    $neueKlappe['neutral']      = 1;
+                    $neueKlappe['kreisflug']    = null;
+                }
+                else if($index == $zuSpeicherndeDaten['woelbklappe']['kreisflug'])
+                {
+                    $neueKlappe['iasVG']        = $neueKlappe['iasVGKreisflug'];
+                    $neueKlappe['neutral']      = null;
+                    $neueKlappe['kreisflug']    = 1;
+                }
+                else 
+                {
+                    $neueKlappe['iasVG']        = null;
+                    $neueKlappe['neutral']      = null;
+                    $neueKlappe['kreisflug']    = null; 
+                }
+
+                unset($neueKlappe['iasVGKreisflug']);
+                unset($neueKlappe['iasVGNeutral']);
+
+
+                $flugzeugKlappenModel->builder()->set($neueKlappe)->insert();
+
+            }
+
+        }
+        unset($zuSpeicherndeDaten['woelbklappe']['neu']);
+
+        foreach(($zuSpeicherndeDaten['woelbklappe'] ?? array()) as $index => $alteKlappe)
         {           
             if(!is_numeric($index)) { continue; }
 
-            $alteKlappe['flugzeugID'] = $zuSpeicherndeDaten['flugzeugID'];
+            $alteKlappe['flugzeugID']       = $zuSpeicherndeDaten['flugzeugID'];
+            $alteKlappe['stellungWinkel']   = $alteKlappe['stellungWinkel'] == "" ? null : $alteKlappe['stellungWinkel'];
             
             if($index == $zuSpeicherndeDaten['woelbklappe']['neutral'])
             {
@@ -318,12 +321,14 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
 
             unset($alteKlappe['iasVGKreisflug']);
             unset($alteKlappe['iasVGNeutral']);
+            
+            echo $index . " ";
             print_r($alteKlappe);
             echo "<br>";
             
             try
             {
-                $flugzeugKlappenModel->where('id', $index)->set($alteKlappe)->update();
+                $flugzeugKlappenModel->builder()->where('id', $index)->set($alteKlappe)->update();
             }
             catch(Exception $ex)
             {
@@ -341,7 +346,7 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
             {
                 try
                 {
-                    $flugzeugKlappenModel->where('id', $klappenID)->delete();
+                    $flugzeugKlappenModel->builder()->where('id', $klappenID)->delete();
                 }
                 catch(Exception $ex)
                 {
@@ -350,6 +355,72 @@ class Adminflugzeugspeichercontroller extends Adminpilotencontroller
                 }
             }
         }
-        exit;
+    }
+    
+    protected function speicherFlugzeugWaegungen($zuSpeicherndeDaten) 
+    {
+        $flugzeugWaegungModel           = new flugzeugWaegungModel();       
+        $flugzeugWaegungen              = $flugzeugWaegungModel->getAlleWaegungenNachFlugzeugID($zuSpeicherndeDaten['flugzeugID']);
+        $zuLoeschendeWaegungIDs         = array();
+        
+        foreach($flugzeugWaegungen as $vorhandenerWaegung)
+        {
+            $zuLoeschendeWaegungIDs[$vorhandenerWaegung['id']] = $vorhandenerWaegung['id'];
+        }
+
+        foreach(($zuSpeicherndeDaten['waegung'] ?? array()) as $flugzeugWaegungID => $waegung)
+        {           
+            try
+            {
+                $flugzeugWaegungModel->where('id', $flugzeugWaegungID)->set($waegung)->update();
+            }
+            catch(Exception $ex)
+            {
+                $this->showError($ex);
+                exit;
+            }
+            
+            unset($zuLoeschendeWaegungIDs[$flugzeugWaegungID]);
+        }
+        
+        if(!empty($zuLoeschendeWaegungIDs))
+        {
+            foreach($zuLoeschendeWaegungIDs as $waegungID)
+            {
+                try
+                {
+                    $flugzeugWaegungModel->where('id', $waegungID)->delete();
+                }
+                catch(Exception $ex)
+                {
+                    $this->showError($ex);
+                    exit;
+                }
+            }
+        }
+    }
+    
+    protected function speicherMusterBasisDaten($zuSpeicherndeDaten) 
+    {
+        $musterModel = new musterModel();
+        $flugzeugSpeicherController = new Flugzeugspeichercontroller();
+
+        $zuSpeicherndeDaten['muster']['sichtbar']                   = isset($zuSpeicherndeDaten['muster']['sichtbar'])                  ? 1 : null;
+        $zuSpeicherndeDaten['muster']['istWoelbklappenFlugzeug']    = isset($zuSpeicherndeDaten['muster']['istWoelbklappenFlugzeug'])   ? 1 : null;
+        $zuSpeicherndeDaten['muster']['istDoppelsitzer']            = isset($zuSpeicherndeDaten['muster']['istDoppelsitzer'])           ? 1 : null;
+        
+        $zuSpeicherndeDaten['muster']['musterKlarname'] = $flugzeugSpeicherController->setzeMusterKlarname($zuSpeicherndeDaten['muster']['musterSchreibweise']);
+        
+        print_r($zuSpeicherndeDaten);
+        
+        try
+        {
+            $musterModel->builder()->where('id', $zuSpeicherndeDaten['musterID'])->set($zuSpeicherndeDaten['muster'])->update();
+        }
+        catch(Exception $ex)
+        {
+            $this->showError($ex);
+            exit;
+        }
     }
 }

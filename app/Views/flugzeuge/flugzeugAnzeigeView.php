@@ -180,15 +180,15 @@
                 <table class="table">
                     <thead>
                         <tr class="text-center">
-                            <th>Datum</th>
-                            <th>Leermasse</th>
-                            <th>Leermassenschwerpunkt</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                             <th colspan="2">Zuladung</th>
                         </tr>
                         <tr class="text-center">
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>Datum</th>
+                            <th>Leermasse</th>
+                            <th>Leermassenschwerpunkt</th>
                             <th>min</th>
                             <th>max</th>
                         </tr>

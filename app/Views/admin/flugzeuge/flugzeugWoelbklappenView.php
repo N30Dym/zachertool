@@ -36,7 +36,7 @@
                                     <td><input type="text" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][stellungBezeichnung]" class="form-control" value="<?= $woelbklappeDetails['stellungBezeichnung'] ?>"></td>
                                     <td>
                                         <div class="input-group">
-                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][stellungWinkel]" step="0.1" class="form-control" value="<?= $woelbklappeDetails['stellungWinkel'] ?>">
+                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][stellungWinkel]" step="0.1" class="form-control" value="<?= $woelbklappeDetails['stellungWinkel'] ?? "" ?>">
                                             <span class="input-group-text">°</span>
                                         </div>	
                                     </td>
@@ -45,7 +45,7 @@
                                             <div class="input-group-text">
                                                 <input type="radio" class="form-check-input" name="woelbklappe[neutral]" id="neutral" value="<?= $woelbklappeDetails['id'] ?>" <?= $WKneutral == $woelbklappeDetails['id'] ? "checked" : "" ?> >
                                             </div>
-                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="<?= $iasVGneutral ?>" >
+                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][iasVGNeutral]" min="0" step="1" class="form-control iasVGNeutral" value="<?= $iasVGneutral ?? "" ?>" >
                                             <span class="input-group-text">km/h</span>
                                         </div>
                                     </td>
@@ -54,7 +54,7 @@
                                             <div class="input-group-text">
                                                 <input type="radio" class="form-check-input" name="woelbklappe[kreisflug]" id="kreisflug" value="<?= $woelbklappeDetails['id'] ?>" <?= $WKkreisflug == $woelbklappeDetails['id'] ? "checked" : ""  ?> >
                                             </div>
-                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="<?= $iasVGkreisflug ?>" >
+                                            <input type="number" name="woelbklappe[<?= $woelbklappeDetails['id'] ?>][iasVGKreisflug]" min="0" step="1" class="form-control iasVGKreisflug" value="<?= $iasVGkreisflug ?? "" ?>" >
                                             <span class="input-group-text">km/h</span>
                                         </div>
                                     </td>
@@ -72,7 +72,7 @@
             </div>
             <div class="row g-2">
                 <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="<?= previous_url() == current_url() ? base_url('/admin/flugzeuge') : previous_url() ?>" >
+                    <a href="<?=  base_url('/admin/flugzeuge') ?>" >
                         <button type="button" class="btn btn-danger col-12">Zurück</button>
                     </a>
                 </div>

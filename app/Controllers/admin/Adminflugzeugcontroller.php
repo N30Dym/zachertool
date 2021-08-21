@@ -7,7 +7,7 @@ use App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeu
 use \App\Models\muster\{ musterDetailsModel, musterHebelarmeModel, musterKlappenModel, musterModel }; 
 use \App\Models\protokolle\ { protokolleModel };
 
-helper('nachrichtAnzeigen');
+helper('nachrichtAnzeigen','url','array');
 
 class Adminflugzeugcontroller extends Controller
 {
@@ -75,9 +75,12 @@ class Adminflugzeugcontroller extends Controller
             case 'flugzeugWoelbklappen':
                 $this->flugzeugWoelbklappenListe();
                 break;
-            /*case 'flugzeugWaegungen':
-                $this->unsichtbareMusterListe();
-                break;*/
+            case 'flugzeugWaegungen':
+                $this->flugzeugWaegungenListe();
+                break;
+            case 'musterBasisdaten':
+                $this->musterBasisdatenListe();
+                break;
             default:
                 nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/flugzeuge')) ;
         }
@@ -99,9 +102,12 @@ class Adminflugzeugcontroller extends Controller
             case 'flugzeugWoelbklappen':
                 $this->flugzeugWoelbklappenBearbeiten($flugzeugOderMusterID);
                 break;
-            /*case 'flugzeugWaegungen':
-                $this->unsichtbareMusterListe();
-                break;*/
+            case 'flugzeugWaegungen':
+                $this->flugzeugWaegungenBearbeiten($flugzeugOderMusterID);
+                break;
+            case 'musterBasisdaten':
+                $this->musterBasisdatenBearbeiten($flugzeugOderMusterID);
+                break;
             default:
                 nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/flugzeuge')) ;
         }
@@ -114,7 +120,7 @@ class Adminflugzeugcontroller extends Controller
         $titel                      = "Sichtbare Flugzeuge";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten, 1);
         $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName          = 'Sichtbar';      
+        $switchSpaltenName          = 'Sichtbar';   
 
         $this->zeigeAdminFlugzeugeListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
@@ -126,7 +132,7 @@ class Adminflugzeugcontroller extends Controller
         $titel                      = "Unsichtbare Flugzeuge";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten, 0);
         $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName          = 'Sichtbar';   
+        $switchSpaltenName          = 'Sichtbar';
 
         $this->zeigeAdminFlugzeugeListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
@@ -139,7 +145,7 @@ class Adminflugzeugcontroller extends Controller
         $titel                              = "Flugzeuge löschen, die in keinem Protokoll angegeben wurden";
         $flugzeugeDieGeloeschtWerdenKoennen = [];
         $ueberschriftArray                  = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName                  = 'Löschen?';   
+        $switchSpaltenName                  = 'Löschen?';
         
         foreach($flugzeugDaten as $flugzeug)
         {
@@ -161,7 +167,7 @@ class Adminflugzeugcontroller extends Controller
         $titel              = "Sichtbare Muster";
         $datenArray         = $this->setzeMusterDatenArray($musterDaten, 1);
         $ueberschriftArray  = ['Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName  = 'Sichtbar';      
+        $switchSpaltenName  = 'Sichtbar';
 
         $this->zeigeAdminFlugzeugeListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
@@ -173,7 +179,7 @@ class Adminflugzeugcontroller extends Controller
         $titel              = "Unsichtbare Muster";
         $datenArray         = $this->setzeMusterDatenArray($musterDaten, 0);
         $ueberschriftArray  = ['Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName  = 'Sichtbar';   
+        $switchSpaltenName  = 'Sichtbar'; 
 
         $this->zeigeAdminFlugzeugeListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
@@ -186,7 +192,7 @@ class Adminflugzeugcontroller extends Controller
         $titel                              = "Muster löschen, die keinem Flugzeug zugeordnet sind";
         $musterDieGeloeschtWerdenKoennen    = [];
         $ueberschriftArray                  = ['Muster', 'Zusatz / Konfiguration'];
-        $switchSpaltenName                  = 'Löschen?';   
+        $switchSpaltenName                  = 'Löschen?';
         
         foreach($musterDaten as $muster)
         {
@@ -207,7 +213,7 @@ class Adminflugzeugcontroller extends Controller
         $flugzeugDaten              = $flugzeugeMitMusterModel->getAlleFlugzeugeMitMuster();
         $titel                      = "Auswahl für Flugzeugbasisdaten-Bearbeitung";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
-        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];   
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
 
         $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
     }
@@ -218,7 +224,7 @@ class Adminflugzeugcontroller extends Controller
         $flugzeugDaten              = $flugzeugeMitMusterModel->getAlleFlugzeugeMitMuster();
         $titel                      = "Auswahl für Flugzeugdeails-Bearbeitung";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
-        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];   
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
 
         $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
     }
@@ -229,7 +235,7 @@ class Adminflugzeugcontroller extends Controller
         $flugzeugDaten              = $flugzeugeMitMusterModel->getAlleFlugzeugeMitMuster();
         $titel                      = "Auswahl für Hebelarm-Bearbeitung";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
-        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];   
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration']; 
 
         $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
     }
@@ -240,7 +246,30 @@ class Adminflugzeugcontroller extends Controller
         $flugzeugDaten              = $flugzeugeMitMusterModel->getWoelbklappenFlugzeugeMitMuster();
         $titel                      = "Auswahl für Wölbklappen-Bearbeitung";
         $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
-        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];   
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
+
+        $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
+    }
+    
+    protected function flugzeugWaegungenListe()
+    {
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $flugzeugDaten              = $flugzeugeMitMusterModel->getAlleFlugzeugeMitMuster();
+        $titel                      = "Auswahl für Wägungen-Bearbeitung";
+        $datenArray                 = $this->setzeFlugzeugeDatenArray($flugzeugDaten);
+        $ueberschriftArray          = ['Kennzeichen', 'Muster', 'Zusatz / Konfiguration'];
+
+        $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
+    }
+    
+    protected function musterBasisdatenListe()
+    {
+        $musterModel        = new musterModel();
+        $musterDaten        = $musterModel->getAlleMuster();
+        array_sort_by_multiple_keys($musterDaten, ['musterKlarname' => SORT_ASC]);
+        $titel              = "Auswahl für Musterbasisdaten-Bearbeitung";
+        $datenArray         = $this->setzeMusterDatenArray($musterDaten);
+        $ueberschriftArray  = ['Muster', 'Zusatz / Konfiguration'];
 
         $this->zeigeAdminFlugzeugeBearbeitenListenView($titel, $datenArray, $ueberschriftArray);
     }
@@ -249,15 +278,15 @@ class Adminflugzeugcontroller extends Controller
     {
         $flugzeugeModel = new flugzeugeModel();
         $musterModel    = new musterModel();
+        $flugzeugDaten  = $this->ladeFlugzeugDaten($flugzeugID);
         
         $datenInhalt = [
             'flugzeugBasisDaten'    => $flugzeugeModel->getFlugzeugNachID($flugzeugID),
             'musterDaten'           => $musterModel->getAlleMuster(),
         ];
         
-        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
         
-        $datenInhalt['titel'] = $datenHeader['titel'] = "Basisdaten für das Flugzeug <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
+        $datenInhalt['titel']   = $datenHeader['titel'] = "Basisdaten für das Flugzeug <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
         
         echo view('templates/headerView', $datenHeader);
         echo view('admin/templates/scripts/listeMitSwitchSpalteScript');
@@ -270,17 +299,16 @@ class Adminflugzeugcontroller extends Controller
     {
         $flugzeugDetailsModel           = new flugzeugDetailsModel();
         $flugzeugdatenladecontroller    = new Flugzeugdatenladecontroller();
-        $flugzeugeMitMusterModel        = new flugzeugeMitMusterModel();
+        $flugzeugDaten                  = $this->ladeFlugzeugDaten($flugzeugID);
         
         $datenInhalt = [
             'flugzeugDetails'   => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
-            'musterDetails'     => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
+            'musterDetails'     => $flugzeugDaten,
         ];
-        $datenInhalt += $flugzeugdatenladecontroller->ladeEingabeListen();
         
-        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
+        $datenInhalt            += $flugzeugdatenladecontroller->ladeEingabeListen();       
         
-        $datenInhalt['titel'] = $datenHeader['titel'] = "Details für das Flugzeug <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
+        $datenInhalt['titel']   = $datenHeader['titel'] = "Details für das Flugzeug <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
         
         echo view('templates/headerView', $datenHeader);
         echo view('admin/templates/scripts/listeMitSwitchSpalteScript');
@@ -292,15 +320,13 @@ class Adminflugzeugcontroller extends Controller
     protected function flugzeugHebelarmeBearbeiten($flugzeugID)
     {
         $flugzeugHebelarmeModel     = new flugzeugHebelarmeModel();
-        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $flugzeugDaten              = $this->ladeFlugzeugDaten($flugzeugID);
         
         $datenInhalt = [
             'hebelarme'     => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
-            'musterDetails' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
+            'musterDetails' => $flugzeugDaten,
         ];
-        
-        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
-        
+
         $datenInhalt['titel'] = $datenHeader['titel'] = "Hebelarme des Flugzeugs <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
         
         echo view('templates/headerView', $datenHeader);
@@ -313,24 +339,23 @@ class Adminflugzeugcontroller extends Controller
     protected function flugzeugWoelbklappenBearbeiten($flugzeugID) 
     {
         $flugzeugKlappenModel       = new flugzeugKlappenModel();
-        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
-        
-        $woelbklappen = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
+        $datenInhalt                = array();
+        $datenInhalt['WKneutral']   = $datenInhalt['iasVGneutral'] = $datenInhalt['iasVGkreisflug'] = $datenInhalt['WKkreisflug'] = null;
+        $flugzeugDaten              = $this->ladeFlugzeugDaten($flugzeugID);       
+        $woelbklappen               = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
         
         foreach($woelbklappen as $woelbklappe)
         {
-            $woelbklappe['neutral'] ? $datenInhalt['WKneutral'] = $woelbklappe['id'] : null;
-            $woelbklappe['neutral'] ? $datenInhalt['iasVGneutral'] = $woelbklappe['iasVG'] : null;
-            $woelbklappe['kreisflug'] ? $datenInhalt['WKkreisflug'] = $woelbklappe['id'] : null;
-            $woelbklappe['kreisflug'] ? $datenInhalt['iasVGkreisflug'] = $woelbklappe['iasVG'] : null;          
+            $woelbklappe['neutral']     ? $datenInhalt['WKneutral']         = $woelbklappe['id'] : null;
+            $woelbklappe['neutral']     ? $datenInhalt['iasVGneutral']      = $woelbklappe['iasVG'] : null;
+            $woelbklappe['kreisflug']   ? $datenInhalt['WKkreisflug']       = $woelbklappe['id'] : null;
+            $woelbklappe['kreisflug']   ? $datenInhalt['iasVGkreisflug']    = $woelbklappe['iasVG'] : null;          
         }
         
         $datenInhalt += [
-            'woelbklappen'  => $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID),
-            'musterDetails' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
+            'woelbklappen'  => $woelbklappen,
+            'musterDetails' => $flugzeugDaten,
         ];
-        
-        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
         
         $datenInhalt['titel'] = $datenHeader['titel'] = "Wölbklappen des Flugzeugs <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
         
@@ -338,6 +363,45 @@ class Adminflugzeugcontroller extends Controller
         echo view('admin/flugzeuge/scripts/flugzeugWoelbklappenScript');
         echo view('templates/navbarView');
         echo view('admin/flugzeuge/flugzeugWoelbklappenView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
+    protected function flugzeugWaegungenBearbeiten($flugzeugID)
+    {
+        $flugzeugWaegungModel     = new flugzeugWaegungModel();
+        
+        $flugzeugDaten = $this->ladeFlugzeugDaten($flugzeugID);
+        
+        $datenInhalt = [
+            'waegungen'     => $flugzeugWaegungModel->getAlleWaegungenNachFlugzeugID($flugzeugID),
+            'musterDetails' => $flugzeugDaten,
+        ];
+
+        $datenInhalt['titel'] = $datenHeader['titel'] = "Hebelarme des Flugzeugs <b>" . $flugzeugDaten['musterSchreibweise'] . $flugzeugDaten['musterZusatz'] . "</b> mit dem Kennzeichen <b>" . $flugzeugDaten['kennung'] . "</b> ändern";
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('admin/flugzeuge/scripts/flugzeugHebelarmeScript');
+        echo view('templates/navbarView');
+        echo view('admin/flugzeuge/flugzeugWaegungenView', $datenInhalt);
+        echo view('templates/footerView');
+    }
+    
+    protected function musterBasisdatenBearbeiten($musterID)
+    {
+        $musterModel = new musterModel();
+        $musterDaten = $musterModel->getMusterNachID($musterID);
+        
+        $datenInhalt = [
+            'musterBasisDaten'  => $musterDaten,
+            'musterEingaben'    => $musterModel->getAlleMuster(),
+        ];
+
+        $datenInhalt['titel']   = $datenHeader['titel'] = "Basisdaten für das Muster <b>" . $musterDaten['musterSchreibweise'] . $musterDaten['musterZusatz'] . "</b> ändern";
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('admin/templates/scripts/listeMitSwitchSpalteScript');
+        echo view('templates/navbarView');
+        echo view('admin/flugzeuge/musterBasisdatenView', $datenInhalt);
         echo view('templates/footerView');
     }
     
@@ -400,6 +464,7 @@ class Adminflugzeugcontroller extends Controller
             'datenArray'        => $datenArray,
             'ueberschriftArray' => $ueberschriftArray,
             'switchSpaltenName' => $switchSpaltenName,
+            'zurueckButton'     => base_url('/admin/flugzeuge')
         ];
         $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
         
@@ -415,6 +480,7 @@ class Adminflugzeugcontroller extends Controller
         $datenInhalt = [
             'datenArray'        => $datenArray,
             'ueberschriftArray' => $ueberschriftArray,
+            'zurueckButton'     => base_url('/admin/flugzeuge')
         ];
         $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
         

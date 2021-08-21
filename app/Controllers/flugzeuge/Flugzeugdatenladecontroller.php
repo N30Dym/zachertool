@@ -58,7 +58,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
             'anzahlProtokolle'          => $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)['id'],
             'flugzeugDetails'           => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
             'hebelarm'                  => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
-            'waegung'                   => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID),
+            'waegung'                   => $flugzeugWaegungModel->getAlleWaegungenNachFlugzeugID($flugzeugID),
             'flugzeugProtokollArray'    => $this->ladeFlugzeugProtokollDaten($flugzeugID),
         ];
 

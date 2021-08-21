@@ -26,7 +26,7 @@ class flugzeugWaegungModel extends Model
         * @param  mix $id int oder string
         * @return array
         */
-    public function getFlugzeugWaegungNachFlugzeugID($flugzeugID)
+    public function getFlugzeugWaegungenNachFlugzeugID($flugzeugID)
     {			
         return($this->where('flugzeugID', $flugzeugID)->first());
     }
@@ -38,7 +38,7 @@ class flugzeugWaegungModel extends Model
         * @param  mix $id int oder string
         * @return array
         */
-    public function getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID)
+    public function getAlleWaegungenNachFlugzeugID($flugzeugID)
     {			
         return($this->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll());
     }

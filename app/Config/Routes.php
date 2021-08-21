@@ -96,6 +96,8 @@ $routes->group('admin', function($routes)
         $routes->add('', 'admin\Adminflugzeugcontroller::index');
         $routes->add('index', 'admin\Adminflugzeugcontroller::index');
         $routes->add('liste/(:segment)', 'admin\Adminflugzeugcontroller::liste/$1');
+        $routes->add('bearbeitenListe/(:segment)', 'admin\Adminflugzeugcontroller::bearbeitenListe/$1');
+        $routes->add('bearbeiten/(:segment)/(:num)', 'admin\Adminflugzeugcontroller::bearbeiten/$1/$2');
         $routes->add('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
         $routes->post('speichern/(:segment)', 'admin\Adminflugzeugspeichercontroller::speichern/$1');
     });

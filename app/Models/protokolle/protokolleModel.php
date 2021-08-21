@@ -147,9 +147,14 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();
     }
     
-    public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
+    public function getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)
     {
         return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first();
+    }
+    
+    public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
+    {
+        return $this->selectCount("id")->where("flugzeugID", $flugzeugID)->first();
     }
     
     public function getAbgegebeneProtokolleNachPilotID($pilotID)

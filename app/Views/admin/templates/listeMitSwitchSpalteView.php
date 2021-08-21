@@ -5,11 +5,11 @@
 
 <form method="post" action="<?= str_replace('liste', 'speichern', current_url()) ?>">
 
-     <?= csrf_field() ?>
+    <?= csrf_field() ?>
     
     <div class="row g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="<?= previous_url() ?>" >
+            <a href="<?= $zurueckButton ?? base_url() ?>" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
         </div>
@@ -46,8 +46,21 @@
                 <?php endforeach ?>
 
             </table>
-        </div>
+            
+        </div>        
         <div class="col-lg-2"></div>
     </div>
+    <?php if(sizeof($datenArray) > 10) : ?>
+        <div class="row g-2">
+            <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="<?= $zurueckButton ?? base_url() ?>" >
+                    <button type="button" class="btn btn-danger col-12">Zurück</button>
+                </a>
+            </div>
+            <div class="col-lg-11 d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-success">Speichern</button>
+            </div>
+        </div>
+    <?php endif ?>
     
 </form>

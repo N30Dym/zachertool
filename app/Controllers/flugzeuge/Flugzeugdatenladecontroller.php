@@ -55,10 +55,10 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         $temporaeresFlugzeugDatenArray = [
             'flugzeugID'                => $flugzeugID,
-            'anzahlProtokolle'          => $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeugID)['id'],
+            'anzahlProtokolle'          => $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)['id'],
             'flugzeugDetails'           => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
             'hebelarm'                  => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
-            'waegung'                   => $flugzeugWaegungModel->getAlleFlugzeugWaegungenNachFlugzeugID($flugzeugID),
+            'waegung'                   => $flugzeugWaegungModel->getAlleWaegungenNachFlugzeugID($flugzeugID),
             'flugzeugProtokollArray'    => $this->ladeFlugzeugProtokollDaten($flugzeugID),
         ];
 
@@ -206,7 +206,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         * als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
         * Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
         */
-    protected function ladeEingabeListen()
+    public function ladeEingabeListen()
     {
         $flugzeugDetailsModel   = new flugzeugDetailsModel();
         $musterModel            = new musterModel();
@@ -243,7 +243,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
          
         foreach($temporaeresFlugzeugArray as $index => $flugzeug)
         {
-            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
+            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'];
         }
         
         return $temporaeresFlugzeugArray;       

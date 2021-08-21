@@ -185,7 +185,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $gesetzteWoelbklappen;
     }
     
-    protected function setzeMusterKlarname($musterSchreibweise)
+    public function setzeMusterKlarname($musterSchreibweise)
     {
         $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($musterSchreibweise)));
         $musterKlarnameOhneAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);

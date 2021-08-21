@@ -45,5 +45,10 @@ class datenModel extends Model
     {
         return $this->selectMax('multipelNr')->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first();
     }
+    
+    public function getDatenNachProtokollSpeicherIDUndProtokollInputID($protokollSpeicherID, $protokollInputID)
+    {
+        return $this->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first();
+    }
 	
 }

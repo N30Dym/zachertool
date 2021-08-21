@@ -64,6 +64,12 @@ class protokolleModel extends Model
         
         return $protokolleNachJahrenSortiert;
     }
+    
+    public function getBestaetigteProtokolle()
+    {			
+        $protokolleNachJahrenSortiert = [];
+        return $this->where("bestaetigt", 1)->orderBy('datum', 'ASC')->findAll();
+    }
 
 
         /**

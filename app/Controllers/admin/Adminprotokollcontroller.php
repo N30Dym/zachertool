@@ -5,6 +5,7 @@ use CodeIgniter\Controller;
 use App\Controllers\protokolle\Protokollcontroller;
 use App\Models\protokolle\{ protokolleModel, datenModel };
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
+use \App\Models\piloten\pilotenModel;
 
 
 class Adminprotokollcontroller extends Controller
@@ -44,28 +45,37 @@ class Adminprotokollcontroller extends Controller
     
     protected function abgegebeneProtokolle()
     {
-        $protokolleModel       = new protokolleModel();
-        $protokollDaten       = $protokolleModel->getBestaetigteProtokolle();
-        $titel              = "Abgegebene Protokolle";
-        $datenArray         = $this->setzeProtokollDatenArray($protokollDaten, 1);
-        $ueberschriftArray  = ['Datum', 'PilotID', 'FlugzeugID'];
-        $switchSpaltenName  = 'Abgegeben';      
+        $protokolleModel            = new protokolleModel();
+        $protokollDaten             = $protokolleModel->getBestaetigteProtokolle();
+        $titel                      = "Abgegebene Protokolle";
+        $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 1);
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $switchSpaltenName          = 'Abgegeben';      
 
         $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }
     
     protected function setzeProtokollDatenArray($protokollDaten, $switchStellung)
     {
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
+        $pilotenModel               = new pilotenModel();
+        
         $datenArray = [];
         
         foreach($protokollDaten as $protokoll)
         {
+            $pilotenDaten   = $protokoll['pilotID']     != "" ? $pilotenModel->getPilotNachID($protokoll['pilotID'])    : null;
+            $copilotenDaten = $protokoll['copilotID']   != "" ? $pilotenModel->getPilotNachID($protokoll['copilotID'])  : null;
+            
             $temporaeresProtokollArray = [
-                'id'            => $protokoll['id'],
-                'datum'         => $protokoll['datum'],
-                'pilotID'       => $protokoll['pilotID'] ?? "",
-                'flugzeugID'    => $protokoll['flugzeugID'] ?? "",
-                'checked'       => $switchStellung,
+                'id'                    => $protokoll['id'],
+                'protokollSpeicherID'   => $protokoll['id'],
+                'datum'                 => date('d.m.Y', strtotime($protokoll['datum'])),
+                'kennung'               => $protokoll['flugzeugID'] != "" ? $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID'])['musterSchreibweise'].$flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID'])['musterZusatz'] : null,
+                'muster'                => $protokoll['flugzeugID'] != "" ? $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID'])['kennung'] : null,
+                'pilot'                 => $protokoll['pilotID'] != "" ? $pilotenDaten['vorname'] . (empty($pilotenDaten['spitzname']) ? " " : " \"<b>" . $pilotenDaten['spitzname'] . "</b>\" ") . $pilotenDaten['nachname'] : null,
+                'begleiter'             => $protokoll['copilotID'] != "" ? $copilotenDaten['vorname'] . (empty($copilotenDaten['spitzname']) ? " " : " \"<b>" . $copilotenDaten['spitzname'] . "</b>\" ") . $copilotenDaten['nachname'] : null,
+                'checked'               => $switchStellung,
             ];
             
             array_push($datenArray, $temporaeresProtokollArray);

@@ -179,8 +179,9 @@ class Adminpilotencontroller extends Controller
         $datenInhalt['eingabeArray'] = [
             'label'         => "Akaflieg hinzufügen",
             'type'          => 'text',
-            'zurueckButton' => base_url('/admin/piloten'),
         ];
+        
+        $datenInhalt['zurueckButton'] = base_url('/admin/piloten');
         
         echo view('templates/headerView', $datenHeader);
         echo view('templates/navbarView');

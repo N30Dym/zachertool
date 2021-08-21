@@ -8,7 +8,7 @@
         
     <div class="row mb-4 g-2">
         <div class="col-lg-1 d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="<?= previous_url() ?>" >
+            <a href="<?= $zurueckButton ?? base_url() ?>" >
                 <button type="button" class="btn btn-danger col-12">Zurück</button>
             </a>
         </div>

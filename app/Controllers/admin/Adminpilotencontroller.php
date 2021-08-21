@@ -177,8 +177,9 @@ class Adminpilotencontroller extends Controller
     {
         $datenHeader['titel'] = $datenInhalt['titel'] = "Neue Akaflieg anlegen";
         $datenInhalt['eingabeArray'] = [
-            'label' => "Akaflieg hinzufügen",
-            'type'  => 'text',
+            'label'         => "Akaflieg hinzufügen",
+            'type'          => 'text',
+            'zurueckButton' => base_url('/admin/piloten'),
         ];
         
         echo view('templates/headerView', $datenHeader);
@@ -221,6 +222,7 @@ class Adminpilotencontroller extends Controller
             'datenArray'        => $datenArray,
             'ueberschriftArray' => $ueberschriftArray,
             'switchSpaltenName' => $switchSpaltenName,
+            'zurueckButton'     => base_url('admin/piloten'),
         ];
         $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
         

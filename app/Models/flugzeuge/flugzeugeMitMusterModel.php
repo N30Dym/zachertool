@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 /**
  * flugzeuge_mit_muster ist keine eigene Datenbanktabelle,
  * sondern ein "View". Es werden also immer die aktuellen Daten aus den Tabellen
- * flugzeuge und muster verwendet. Es kann dort auch nichts gespeichert werden.
+ * flugzeuge und muster verwendet. Es kann hier auch nichts gespeichert werden.
  *
  * @author Lars
  */
@@ -47,10 +47,10 @@ class flugzeugeMitMusterModel extends Model {
         return $this->where('sichtbar', null)->orderBy('geaendertAm', 'DESC')->findAll();
     }
     
-    public function getAlleFlugzeugeMitMuster() 
+    /*public function getAlleFlugzeugeMitMuster() 
     {
         return $this->orderBy('musterKlarname', 'DESC')->findAll();
-    }
+    }*/
     
     public function getFlugzeugIDNachKennungKlarnameUndZusatz($kennung, $musterKlarname, $musterZusatz)
     {

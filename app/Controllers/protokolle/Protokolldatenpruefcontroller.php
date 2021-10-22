@@ -146,11 +146,11 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         {           
             if(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Pilot")
             {
-                ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : null;
+                ($hebelarm[0] >= 0 AND $hebelarm['Fallschirm'] >= 0) ? $hebelarmeKorrekt = true : null;
             }
             elseif(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Copilot")
             {
-                ($hebelarm[0] > 0 AND $hebelarm['Fallschirm'] > 0) ? $hebelarmeKorrekt = true : (($hebelarm[0] == "" AND $hebelarm['Fallschirm'] == "") ? true : null);
+                ($hebelarm[0] >= 0 AND $hebelarm['Fallschirm'] >= 0) ? $hebelarmeKorrekt = true : (($hebelarm[0] == "" AND $hebelarm['Fallschirm'] == "") ? true : null);
             }
         }
         

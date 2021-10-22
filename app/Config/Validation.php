@@ -1212,7 +1212,7 @@ class Validation
     
     public $beladung =  [ 
         'protokollSpeicherID' => [
-            'rules'  => 'permit_empty|is_natural',
+            'rules'  => 'required|is_natural',
             'errors' => [
                 'required'      => 'Es wurde keine ProtokollSpeicherID gegeben.',
                 'is_natural'    => 'Die ProtokollSpeicherID ist ungültig.'

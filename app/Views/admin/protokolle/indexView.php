@@ -17,13 +17,13 @@
     </div>
     <div class="col-lg-6 ">
         
-        <!--<div class="p-3 m-3 rounded shadow border">
-            <h3 class="m-2"></h3>
+        <div class="p-3 m-3 rounded shadow border">
+            <h3 class="m-2">Protokolllisten</h3>
             <ul style="list-style-type:none">
-                <li><a href="<?= base_url() ?>/admin/protokolle/liste/trimmhebelBewertungenProFlugzeug">Trimmhebelbewertungen pro Flugzeug</a></li> 
-            </ul>
-            
-        </div>-->
+                <li><a href="<?= base_url('/admin/protokolle/liste/angefangeneProtokolleLoeschen') ?>">Gespeicherte Protokolle löschen</a></li>
+                <li><a href="<?= base_url('/admin/protokolle/liste/fertigeProtokolleLoeschen') ?>">Fertige Protokolle löschen</a></li>
+            </ul>   
+        </div>
         
 
     </div>

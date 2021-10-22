@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\admin;
 
-use App\Models\protokolle\{ protokolleModel };
+use App\Models\protokolle\{ protokolleModel, datenModel, kommentareModel, hStWegeModel, beladungModel };
 use App\Controllers\protokolle\{ Protokollspeichercontroller };
 
 helper('nachrichtAnzeigen');
@@ -17,14 +17,18 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
                 case 'abgegebeneProtokolle':
                     $this->setzeNichtAbgegeben($zuSpeicherndeDaten);
                     break;
+                case 'angefangeneProtokolleLoeschen':
+                case 'fertigeProtokolleLoeschen':
+                    $this->loescheProtokolleNachProtokollSpeicherID($zuSpeicherndeDaten);
+                    break;
                 default:
-                    nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/piloten"));
+                    nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/protokolle"));
             }
-            nachrichtAnzeigen("Daten erfolgreich geändert", base_url("admin/piloten"));
+            nachrichtAnzeigen("Daten erfolgreich geändert", base_url("admin/protokolle"));
         }
         else 
         {
-            nachrichtAnzeigen("Keine Daten zum Speichern vorhanden", base_url("admin/piloten"));
+            nachrichtAnzeigen("Keine Daten zum Speichern vorhanden", base_url("admin/protokolle"));
         }
     }
     
@@ -41,34 +45,31 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
         }
     }
     
-    protected function speicherDaten($zuSpeicherndeDaten)
+    protected function loescheProtokolleNachProtokollSpeicherID($zuLoeschendeDaten) 
     {
-        $pilotenModel           = new pilotenModel(); 
-        $pilotenDetailsModel    = new pilotenDetailsModel();       
-
-        echo $zuSpeicherndeDaten['pilotID'];
-
-        try
-        {
-            $pilotenModel->where('id', $zuSpeicherndeDaten['pilotID'])->set($zuSpeicherndeDaten['pilot'])->update();
-        }
-        catch(Exception $ex)
-        {
-            $this->showError($ex);
-            exit;
-        }
+        $protokolleModel    = new protokolleModel();
+        $datenModel         = new datenModel();
+        $beladungModel      = new beladungModel();
+        $kommentareModel    = new kommentareModel();
+        $hStWegeModel       = new hStWegeModel();
         
-        foreach($zuSpeicherndeDaten['pilotDetails'] as $pilotDetailID => $pilotDetails)
-        {
-            $pilotDetails['datum'] = date('Y-m-d', strtotime($pilotDetails['datum']));
-            try
+        foreach($zuLoeschendeDaten['id'] as $protokollSpeicherID)
+        {            
+            if(isset($zuLoeschendeDaten['switch'][$protokollSpeicherID]))
             {
-                $pilotenDetailsModel->where('id', $pilotDetailID)->set($pilotDetails)->update();
-            }
-            catch(Exception $ex)
-            {
-                $this->showError($ex);
-                exit;
+                try
+                {
+                    $kommentareModel->where('protokollSpeicherID', $protokollSpeicherID)->delete();
+                    $beladungModel->where('protokollSpeicherID', $protokollSpeicherID)->delete();
+                    $datenModel->where('protokollSpeicherID', $protokollSpeicherID)->delete();
+                    $hStWegeModel->where('protokollSpeicherID', $protokollSpeicherID)->delete();
+                    $protokolleModel->where('id', $protokollSpeicherID)->delete();
+                } 
+                catch (Exception $ex) 
+                {
+                    $this->showError($ex);
+                    exit;
+                }
             }
         }
     }

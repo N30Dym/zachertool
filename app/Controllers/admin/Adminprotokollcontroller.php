@@ -35,6 +35,12 @@ class Adminprotokollcontroller extends Controller
             case 'abgegebeneProtokolle':
                 $this->abgegebeneProtokolle();
                 break;
+            case 'angefangeneProtokolleLoeschen':
+                $this->angefangeneProtokolleLoeschen();
+                break;
+            case 'fertigeProtokolleLoeschen':
+                $this->fertigeProtokolleLoeschen();
+                break;
             case 'trimmhebelBewertungenProFlugzeug':
                 $this->trimmhebelBewertungenProFlugzeug();
                 break;
@@ -51,6 +57,30 @@ class Adminprotokollcontroller extends Controller
         $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 1);
         $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
         $switchSpaltenName          = 'Abgegeben';      
+
+        $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+    }
+    
+    protected function angefangeneProtokolleLoeschen()
+    {
+        $protokolleModel            = new protokolleModel();
+        $protokollDaten             = $protokolleModel->getAngefangeneProtokolle();
+        $titel                      = "Angefangene Protokolle";
+        $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 0);
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $switchSpaltenName          = 'Löschen';      
+
+        $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+    }
+    
+    protected function fertigeProtokolleLoeschen()
+    {
+        $protokolleModel            = new protokolleModel();
+        $protokollDaten             = $protokolleModel->getFertigeProtokolle();
+        $titel                      = "Fertige Protokolle";
+        $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 0);
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $switchSpaltenName          = 'Löschen';      
 
         $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
     }

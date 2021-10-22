@@ -34,7 +34,7 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><?= $protokoll['bemerkung'] ?></td>
+                                    <td style="max-width: 40vh"><?= $protokoll['bemerkung'] ?></td>
                                     <td><a href="<?= base_url('/protokolle/anzeigen/' . $protokoll['id']) ?>"><button class="btn btn-sm btn-secondary">Anzeigen<?= ENVIRONMENT == 'development' ? "&nbsp" . $protokoll['id'] : "&nbsp;" ?>&nbsp;&raquo;</button></a></td>
                                     <td><a href="<?= base_url('/protokolle/index/' . $protokoll['id']) ?>"><button class="btn btn-sm btn-success">Bearbeiten<?= ENVIRONMENT == 'development' ? "&nbsp" . $protokoll['id'] : "&nbsp;" ?>&nbsp;&raquo;</button></a></td>
                                 </tr>
@@ -79,7 +79,7 @@
                                         <?= $pilotenArray[$protokoll['copilotID']]['vorname'] . " "?><?= $pilotenArray[$protokoll['copilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['copilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['copilotID']]['nachname'] ?>
                                     <?php endif ?>
                                     </td>
-                                    <td><?= $protokoll['bemerkung'] ?></td>
+                                    <td style="max-width: 40vh"><?= $protokoll['bemerkung'] ?></td>
                                     <td><a href="<?= base_url('/protokolle/anzeigen/' . $protokoll['id']) ?>"><button class="btn btn-sm btn-secondary">Anzeigen<?= ENVIRONMENT == 'development' ? "&nbsp;" . $protokoll['id'] : "&nbsp;" ?>&nbsp;&raquo;</button></a></td>
                                 </tr>
 

@@ -107,7 +107,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         if(array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) AND !$this->pruefeBeladungsZustand())
         {
             $protokollDetailsVorhanden = false;
-            $this->setzeFehlerCode(BELADUNG_EINGABE, "Du musst Angaben zur Beladung machen auswählen");
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Du musst Angaben zur Beladung machen");
         }
         
         return $protokollDetailsVorhanden;

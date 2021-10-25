@@ -81,16 +81,15 @@ class Protokollcontroller extends Controller
             // Wenn das Protokoll als "fertig" markiert ist, wird direkt zur Eingabe umgeleitet
         if(isset($_SESSION['protokoll']['fertig']))
         {
-            //echo "Hallo";
-            //print_r($_SESSION['protokoll']);
             return redirect()->to(base_url('/protokolle/kapitel/2'));
         }
+        
             // Wenn das Protokoll noch nicht als "fertig" markiert ist (neues Protokoll, angefangenes Protokoll)
             // kann die Bearbeitung, auch der ersten, Seite fortgesetzt werden
         else
         {
             $this->ersteSeiteAnzeigen();            
-            $this->loescheLayoutDaten();          
+            $this->loescheLayoutDatenUndProtokollInformationen();          
         }
     }
     
@@ -150,7 +149,7 @@ class Protokollcontroller extends Controller
         if(ENVIRONMENT === 'development')
         {
             echo $_SESSION['protokoll']['protokollSpeicherID'] ?? "";
-            //echo $_SESSION['protokoll']['protokollInformationen']['datum'] ?? "";
+            //echo $_SESSION['protokoll']['protokollInformationen']['bemerkung'] ?? "";
         }
         
             // datenHeader mit Titel füttern
@@ -227,14 +226,14 @@ class Protokollcontroller extends Controller
         
             // datenHeader mit Titel bestücken
         $datenHeader = [
-            'titel'             => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'titel'                 => $_SESSION['protokoll']['protokollInformationen']['titel'],
         ];
 
             // datenInhalt enthält den Titel und alle verfügbaren ProtokollTypen
         $datenInhalt = [
-            'titel' 		=> $_SESSION['protokoll']['protokollInformationen']['titel'],
-            'protokollTypen' 	=> $protokollTypenModel->getSichtbareProtokollTypen(),
-            'protokollKategorien' => $protokollKategorienModel->getSichtbareKategorien()
+            'titel'                 => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'protokollTypen'        => $protokollTypenModel->getSichtbareProtokollTypen(),
+            'protokollKategorien'   => $protokollKategorienModel->getSichtbareKategorien()
         ];
 
             // Laden der ersten Seite mit den oben geladenen Daten
@@ -258,21 +257,28 @@ class Protokollcontroller extends Controller
     
     /**
      * Diese Funktion wird am Ende der erstenSeite (index) aufgerufen, um bei Änderungen
-     * der gewähltenProtokolle das entsprechende Layout laden zu können. Die geschieht
+     * der gewähltenProtokolle das entsprechende Layout laden zu können. Dies geschieht
      * aber auch, wenn die ersteSeite aufgerufen wird und keine Änderung vorgenommen wurde 
      * 
      * @return void
      */
-    protected function loescheLayoutDaten()
+    protected function loescheLayoutDatenUndProtokollInformationen()
     {
         unset(
             $_SESSION['protokoll']['gewaehlteProtokollTypen'],
-            $_SESSION['protokoll']['protokollInformationen'],
             $_SESSION['protokoll']['protokollLayout'],
             $_SESSION['protokoll']['kapitelNummern'],
             $_SESSION['protokoll']['kapitelBezeichnungen'],
             $_SESSION['protokoll']['protokollIDs'],
             $_SESSION['protokoll']['kapitelIDs']
+        );
+        
+        unset
+        (
+            $_SESSION['protokoll']['protokollInformationen']['datum'],
+            $_SESSION['protokoll']['protokollInformationen']['flugzeit'], 
+            $_SESSION['protokoll']['protokollInformationen']['bemerkung'], 
+            $_SESSION['protokoll']['protokollInformationen']['titel'], 
         );
     }
     

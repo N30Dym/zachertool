@@ -132,11 +132,12 @@ class Protokollspeichercontroller extends Protokollcontroller
         else
         {           
             $loescheEintraege = [
-                'flugzeugID'    => null,
-                'pilotID'       => null,
-                'copilotID'     => null,
-                'flugzeit'      => null,
-                'bemerkung'     => null,
+                'flugzeugID'            => null,
+                'pilotID'               => null,
+                'copilotID'             => null,
+                'flugzeit'              => null,
+                'bemerkung'             => null,
+                'stundenAufDemMuster'   => null
             ];
             
             $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);

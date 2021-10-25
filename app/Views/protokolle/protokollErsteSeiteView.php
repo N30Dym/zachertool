@@ -32,7 +32,7 @@
 
             <div class="col-sm-3">
                 <label for="flugzeit" class="form-label">Gesamtflugzeit</label>
-                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) && !empty($_SESSION['protokoll']["protokollInformationen"]["flugzeit"]) ? $_SESSION['protokoll']["protokollInformationen"]["flugzeit"] : "" ?>"> 
+                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']['protokollInformationen']['flugzeit']) && !empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) ? $_SESSION['protokoll']['protokollInformationen']['flugzeit'] : "" ?>"> 
             </div>
 
             <div class="col-12 alert alert-secondary">
@@ -45,7 +45,7 @@
 
             <div class="col-12">
                 <label for="bemerkung" class="form-label">Anmerkungen zum Protokoll (optional)</label>
-                <textarea name="protokollInformation[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll" value="<?= $_SESSION['protokoll']["protokollInformationen"]["bemerkung"] ?? "" ?>" ></textarea>
+                <textarea name="protokollInformation[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll"><?= $_SESSION['protokoll']['protokollInformationen']['bemerkung'] ?? "" ?></textarea>
             </div>
             
             

@@ -34,14 +34,9 @@ class Protokollanzeigecontroller extends Protokollcontroller
         {
             case FLUGZEUG_EINGABE:
                 echo view('protokolle/protokollKapitelID1View', $datenInhalt);
-                //unset($_SESSION['protokoll']['doppelsitzer']);
-                //unset($_SESSION['protokoll']['WoelbklappenFlugzeug']);
-                //unset($_SESSION['protokoll']['flugzeugID']);
             break;
             case PILOT_EINGABE:    
                 echo view('protokolle/protokollKapitelID2View', $datenInhalt);
-                //unset($_SESSION['protokoll']['pilotID']);
-                //unset($_SESSION['protokoll']['copilotID']);
             break;
             case BELADUNG_EINGABE:
                 echo view('protokolle/protokollKapitelID3View', $datenInhalt);

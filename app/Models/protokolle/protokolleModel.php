@@ -196,6 +196,7 @@ class protokolleModel extends Model
     {
         return $this->selectCount("id")->where('pilotID', $pilotID)->first();
     }
+    
     public function getAnzahlProtokolleAlsCopilotNachPilotID($copilotID) 
     {
         return $this->selectCount("id")->where('copilotID', $copilotID)->first();

@@ -20,6 +20,11 @@ class protokollEingabenModel extends Model
 
     public function getProtokollEingabeNachID($id)
     {
-        return($this->where("id", $id)->first());
+        return $this->where("id", $id)->first();
+    }
+    
+    public function getProtokollEingabeBezeichnungNachID($id)
+    {
+        return $this->select('bezeichnung')->where("id", $id)->first();
     }
 }

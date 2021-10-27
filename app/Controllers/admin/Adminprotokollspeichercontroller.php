@@ -3,6 +3,7 @@ namespace App\Controllers\admin;
 
 use App\Models\protokolle\{ protokolleModel, datenModel, kommentareModel, hStWegeModel, beladungModel };
 use App\Controllers\protokolle\{ Protokollspeichercontroller };
+use \App\Controllers\admin\Adminprotokollausgabecontroller;
 
 helper('nachrichtAnzeigen');
 
@@ -21,6 +22,9 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
                 case 'fertigeProtokolleLoeschen':
                     $this->loescheProtokolleNachProtokollSpeicherID($zuSpeicherndeDaten);
                     break;
+                case 'csvAlleDownload':
+                    $this->downloadAlleAlsCSV($zuSpeicherndeDaten);
+                    exit;
                 default:
                     nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/protokolle"));
             }
@@ -72,5 +76,14 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
                 }
             }
         }
+    }
+    
+    protected function downloadAlleAlsCSV($seperatorArray) 
+    {
+        $adminProtokollAusgabeController = new Adminprotokollausgabecontroller();
+        
+        $csvArray = $adminProtokollAusgabeController->bereiteProtokollDatenVor($seperatorArray['eingabe']); 
+        
+        
     }
 }

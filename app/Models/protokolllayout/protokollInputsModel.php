@@ -27,4 +27,9 @@ class protokollInputsModel extends Model
     {
         return $this->select('hStWeg')->where('id', $id)->first();
     }
+    
+    public function getProtokollInputBezeichnungNachID($id)
+    {
+        return $this->select('bezeichnung')->where('id', $id)->first();
+    }
 }

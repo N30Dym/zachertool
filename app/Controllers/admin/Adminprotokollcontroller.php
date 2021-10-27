@@ -10,8 +10,6 @@ use \App\Models\piloten\pilotenModel;
 
 class Adminprotokollcontroller extends Controller
 {	
-    
-    
     /**
      * Übersicht über die Funktionen, die ausgewählt werden können
      * 
@@ -44,6 +42,9 @@ class Adminprotokollcontroller extends Controller
             case 'trimmhebelBewertungenProFlugzeug':
                 $this->trimmhebelBewertungenProFlugzeug();
                 break;
+            case 'csvAlleDownload':
+                $this->csvAlleDownload();
+                break;
             default:
                 nachrichtAnzeigen("Nicht die richtige URL erwischt", base_url('admin/piloten')) ;
         }
@@ -55,7 +56,7 @@ class Adminprotokollcontroller extends Controller
         $protokollDaten             = $protokolleModel->getBestaetigteProtokolle();
         $titel                      = "Abgegebene Protokolle";
         $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 1);
-        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennzeichen', 'Pilot', 'Begleiter'];
         $switchSpaltenName          = 'Abgegeben';      
 
         $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
@@ -67,7 +68,7 @@ class Adminprotokollcontroller extends Controller
         $protokollDaten             = $protokolleModel->getAngefangeneProtokolle();
         $titel                      = "Angefangene Protokolle";
         $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 0);
-        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennzeichen', 'Pilot', 'Begleiter'];
         $switchSpaltenName          = 'Löschen';      
 
         $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
@@ -79,10 +80,26 @@ class Adminprotokollcontroller extends Controller
         $protokollDaten             = $protokolleModel->getFertigeProtokolle();
         $titel                      = "Fertige Protokolle";
         $datenArray                 = $this->setzeProtokollDatenArray($protokollDaten, 0);
-        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennezichen', 'Pilot', 'Begleiter'];
+        $ueberschriftArray          = ['ProtokollID', 'Datum', 'Muster', 'Kennzeichen', 'Pilot', 'Begleiter'];
         $switchSpaltenName          = 'Löschen';      
 
         $this->zeigeAdminProtokollListenView($titel, $datenArray, $ueberschriftArray, $switchSpaltenName);
+    }
+    
+    protected function csvAlleDownload() 
+    {
+        $datenHeader['titel'] = $datenInhalt['titel'] = "Alle Protokolle als CSV-Datei herunterladen";
+        $datenInhalt['eingabeArray'] = [
+            'label'         => "Wähle den Seperator für die CSV-Ausgabe (\",\", \";\", ...)",
+            'type'          => 'text',
+        ];
+        
+        $datenInhalt['zurueckButton'] = base_url('/admin/protokolle');
+        
+        echo view('templates/headerView', $datenHeader);
+        echo view('templates/navbarView');
+        echo view('admin/templates/einzelneEingabeView', $datenInhalt);
+        echo view('templates/footerView');
     }
     
     protected function setzeProtokollDatenArray($protokollDaten, $switchStellung)

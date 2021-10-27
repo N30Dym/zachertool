@@ -20,6 +20,16 @@ class protokollUnterkapitelModel extends Model
 
     public function getProtokollUnterkapitelNachID($id)
     {
-        return($this->where("id", $id)->first());
+        return $this->where("id", $id)->first();
+    }
+    
+    public function getProtokollUnterkapitelBezeichnungNachID($id)
+    {
+        return $this->select('bezeichnung')->where("id", $id)->first();
+    }
+    
+    public function getProtokollUnterkapitelNummerNachID($id) 
+    {
+        return $this->select('unterkapitelNummer')->where("id", $id)->first();
     }
 }

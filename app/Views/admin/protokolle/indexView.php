@@ -1,6 +1,6 @@
 <div class="p-3 p-md-5 mb-4 text-white rounded bg-secondary">
-    <h1>Administrator-Panel</h1>
-    <p>Protokolldaten</p>
+    <h1>Protokolldaten</h1>
+    <p>Administrator-Panel</p>
 </div>
 
 <div class="row g-2">    
@@ -13,6 +13,12 @@
             </ul>   
         </div>
         
+        <div class="p-3 m-3 rounded shadow border">
+            <h3 class="m-2">Protokolle ausgeben</h3>
+            <ul style="list-style-type:none">
+                <li><a href="<?= base_url('/admin/protokolle/liste/csvAlleDownload') ?>">Alle Protokolle als CSV-Datei downloaden</a></li> 
+            </ul>   
+        </div>        
         
     </div>
     <div class="col-lg-6 ">

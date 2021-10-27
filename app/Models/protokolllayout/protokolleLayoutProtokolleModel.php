@@ -35,4 +35,9 @@ class protokolleLayoutProtokolleModel extends Model
         $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < '" . $protokollDatum . "' AND datumBis > '" . $protokollDatum . "') OR (datumVon < '" . $protokollDatum . "' AND datumBis IS NULL))";     
         return $this->query($query)->getResultArray();
     }
+    
+    public function getAlleProtokolleSoriertNachProtokollTypID()
+    {
+        return $this->orderBy('protokollTypID', 'ASC')->findAll();
+    }
 }

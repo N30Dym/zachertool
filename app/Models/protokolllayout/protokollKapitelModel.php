@@ -21,21 +21,21 @@ class protokollKapitelModel extends Model
 
     public function getProtokollKapitelNachProtokollID($protokollID)
     {
-        return($this->where("protokollID", $protokollID)->findAll());
+        return $this->where("protokollID", $protokollID)->findAll();
     }
 
     public function getProtokollKapitelNachID($id)
     {	
-        return($this->where("id", $id)->first());
+        return $this->where("id", $id)->first();
     }
 
     public function getProtokollKapitelNummerNachID($id)
     {
-        return($this->select("kapitelNummer")->where("id", $id)->first());
+        return $this->select("kapitelNummer")->where("id", $id)->first();
     }
 
     public function getProtokollKapitelBezeichnungNachID($id)
     {	
-        return($this->select("bezeichnung")->where("id", $id)->first());
+        return $this->select("bezeichnung")->where("id", $id)->first();
     }
 }

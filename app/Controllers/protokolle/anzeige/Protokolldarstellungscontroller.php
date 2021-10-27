@@ -37,13 +37,13 @@ class Protokolldarstellungscontroller extends Controller {
         $this->zeigeProtokollAn($datenHeader, $datenInhalt);
     }
     
-    protected function ladeProtokollDaten($protokollSpeicherID)
+    public function ladeProtokollDaten($protokollSpeicherID)
     {
         $protokolleModel = new protokolleModel();       
         return $protokolleModel->getProtokollNachID($protokollSpeicherID);
     }
     
-    protected function ladeDatenAusDemProtokoll($protokollDaten)
+    public function ladeDatenAusDemProtokoll($protokollDaten)
     {        
         $returnArray = array();
         
@@ -59,6 +59,46 @@ class Protokolldarstellungscontroller extends Controller {
         $returnArray['auswahloptionen']         = $this->ladeAuswahloptionen();
         
         return $returnArray;
+    }
+    
+    public function ladeProtokollLayout($protokollID)
+    {
+        $protokollLayoutsModel              = new protokollLayoutsModel();
+        $protokollEingabenModel             = new protokollEingabenModel();
+        $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
+        $protokollKapitelModel              = new protokollKapitelModel(); 
+        $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
+        $auswahllistenModel                 = new auswahllistenModel();
+        
+        $layoutReturnArray = array();
+        
+        foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $layout)
+        {
+            empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : null;
+            
+            if( ! isset($layoutReturnArray[$layout['kapitelNummer']]))
+            {
+                $layoutReturnArray[$layout['kapitelNummer']]['protokollKapitelID']  = $layout['protokollKapitelID'];
+                $layoutReturnArray[$layout['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layout['protokollKapitelID']);
+            }
+            
+            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]))
+            {
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
+            }
+            
+            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]))
+            {
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
+            }
+            
+            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]))
+            {
+                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
+            }
+        }
+
+        return $layoutReturnArray;
     }
     
     protected function ladeFlugzeugDaten($flugzeugID, $datum)
@@ -166,46 +206,6 @@ class Protokolldarstellungscontroller extends Controller {
         }
         
         return $auswahloptionenArray;
-    }
-    
-    protected function ladeProtokollLayout($protokollID)
-    {
-        $protokollLayoutsModel              = new protokollLayoutsModel();
-        $protokollEingabenModel             = new protokollEingabenModel();
-        $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
-        $protokollKapitelModel              = new protokollKapitelModel(); 
-        $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
-        $auswahllistenModel                 = new auswahllistenModel();
-        
-        $layoutReturnArray = array();
-        
-        foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $layout)
-        {
-            empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : null;
-            
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']]))
-            {
-                $layoutReturnArray[$layout['kapitelNummer']]['protokollKapitelID']  = $layout['protokollKapitelID'];
-                $layoutReturnArray[$layout['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layout['protokollKapitelID']);
-            }
-            
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]))
-            {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
-            }
-            
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]))
-            {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
-            }
-            
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]))
-            {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
-            }
-        }
-
-        return $layoutReturnArray;
     }
     
     protected function zeigeProtokollAn($datenHeader, $datenInhalt)

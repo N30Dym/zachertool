@@ -201,4 +201,16 @@ class protokolleModel extends Model
     {
         return $this->selectCount("id")->where('copilotID', $copilotID)->first();
     }
+    
+    public function getProtokolleNachProtokollID($protokollID)
+    {
+        $query = "SELECT * FROM `protokolle` WHERE JSON_EXTRACT(`protokollIDs`, '$[0]') = " . $protokollID;
+        
+        for($i = 1; $i <= $protokollID; $i++)
+        {
+            $query = $query . " OR JSON_EXTRACT(`protokollIDs`, '$[" . $i . "]') = " . $protokollID;
+        }
+        
+        return $this->query($query)->getResultArray();             
+    }
 }	

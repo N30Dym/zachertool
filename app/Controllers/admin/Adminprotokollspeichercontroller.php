@@ -82,7 +82,7 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
     {
         $adminProtokollAusgabeController = new Adminprotokollausgabecontroller();
         
-        $csvArray = $adminProtokollAusgabeController->bereiteProtokollDatenVor($seperatorArray['eingabe']); 
+        $csvArray = $adminProtokollAusgabeController->bereiteAlleProtokollDatenVor($seperatorArray['eingabe']); 
         
         
     }

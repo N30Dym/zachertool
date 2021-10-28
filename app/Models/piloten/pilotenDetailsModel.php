@@ -37,4 +37,10 @@ class pilotenDetailsModel extends Model
     {
         return $this->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
     }
+    
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

@@ -29,9 +29,9 @@ class beladungModel extends Model
         $this->query($query);
     }
     
-    /*public function ueberschreibeBeladung($beladung)
-    {
-        $query = $this->builder()->set($beladung)->getCompiledUpdate();
-        $this->query($query);
-    }*/
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

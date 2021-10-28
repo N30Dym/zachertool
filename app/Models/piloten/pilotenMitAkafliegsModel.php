@@ -30,4 +30,10 @@ class pilotenMitAkafliegsModel extends Model {
     {
         return $this->where('sichtbar', null)->orWhere('sichtbar', 0)->orderBy('geaendertAm', 'DESC')->findAll();
     }
+    
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

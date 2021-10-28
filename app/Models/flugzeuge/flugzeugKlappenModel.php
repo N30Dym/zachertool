@@ -22,4 +22,10 @@ class flugzeugKlappenModel extends Model
     {
         return $this->where('flugzeugID', $flugzeugID)->findAll();
     }
+    
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

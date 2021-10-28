@@ -97,4 +97,10 @@ class flugzeugDetailsModel extends Model
     {
         return $this->distinct()->findColumn("bezugspunkt");
     }
+    
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

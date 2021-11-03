@@ -23,7 +23,7 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
                     $this->loescheProtokolleNachProtokollSpeicherID($zuSpeicherndeDaten);
                     break;
                 case 'csvAlleDownload':
-                    $this->downloadAlleAlsCSV($zuSpeicherndeDaten);
+                    return $this->downloadAlleAlsCSV($zuSpeicherndeDaten);
                     exit;
                 default:
                     nachrichtAnzeigen("Das ist nicht zum speichern vorgesehen", base_url("admin/protokolle"));
@@ -82,8 +82,6 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
     {
         $adminProtokollAusgabeController = new Adminprotokollausgabecontroller();
         
-        $csvArray = $adminProtokollAusgabeController->bereiteAlleProtokollDatenVor($seperatorArray['eingabe']); 
-        
-        
+        return $this->response->download("alleProtokolle.csv", $adminProtokollAusgabeController->bereiteAlleProtokollDatenVor($seperatorArray['eingabe']));  
     }
 }

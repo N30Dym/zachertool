@@ -38,4 +38,14 @@ class protokollKapitelModel extends Model
     {	
         return $this->select("bezeichnung")->where("id", $id)->first();
     }
+    
+    public function getProtokollKapitelWoelbklappenNachID($id) 
+    {
+        return $this->select('woelbklappen')->where("id", $id)->first()['woelbklappen'];
+    }
+    
+    public function getProtokollKapitelKommentarNachID($id) 
+    {
+        return $this->select('kommentar')->where("id", $id)->first()['kommentar'];
+    }
 }

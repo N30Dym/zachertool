@@ -27,4 +27,14 @@ class protokollEingabenModel extends Model
     {
         return $this->select('bezeichnung')->where("id", $id)->first();
     }
+    
+    public function getProtokollEingabeLinksUndRechtsNachID($id)
+    {
+        return $this->select('linksUndRechts')->where("id", $id)->first()['linksUndRechts'];
+    }
+    
+    public function getProtokollEingabeMultipelNachID($id)
+    {
+        return $this->select('multipel')->where("id", $id)->first()['multipel'];
+    }
 }

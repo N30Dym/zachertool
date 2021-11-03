@@ -21,11 +21,16 @@ class protokollTypenModel extends Model
 
     public function getAlleProtokollTypen()
     {		
-        return($this->findAll());
+        return $this->findAll();
     }
 
     public function getSichtbareProtokollTypen()
     {		
-        return($this->where("sichtbar",1)->findAll());
+        return $this->where("sichtbar",1)->findAll();
+    }
+    
+    public function getProtokollTypBezeichnungNachID($id) 
+    {
+        return $this->select('bezeichnung')->where('id', $id)->first();
     }
 }

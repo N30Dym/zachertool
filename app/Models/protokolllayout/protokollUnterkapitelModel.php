@@ -32,4 +32,9 @@ class protokollUnterkapitelModel extends Model
     {
         return $this->select('unterkapitelNummer')->where("id", $id)->first();
     }
+    
+    public function getProtokollUnterkapitelWoelbklappenNachID($id) 
+    {
+        return $this->select('woelbklappen')->where("id", $id)->first()['woelbklappen'];
+    }
 }

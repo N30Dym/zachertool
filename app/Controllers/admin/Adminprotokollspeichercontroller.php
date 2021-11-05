@@ -81,7 +81,8 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
     protected function downloadAlleAlsCSV($seperatorArray) 
     {
         $adminProtokollAusgabeController = new Adminprotokollausgabecontroller();
-        
+
         return $this->response->download("alleProtokolle.csv", $adminProtokollAusgabeController->bereiteAlleProtokollDatenVor($seperatorArray['eingabe']));  
     }
+
 }

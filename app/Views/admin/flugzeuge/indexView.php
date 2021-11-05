@@ -1,6 +1,6 @@
 <div class="p-3 p-md-5 mb-4 text-white rounded shadow bg-secondary">
-    <h1>Administrator-Panel</h1>
-    <p>Flugzeugdaten</p>
+    <h1>Flugzeugdaten</h1>
+    <p>Administrator-Panel</p>
 </div>
 
 <div class="row g-2"> 

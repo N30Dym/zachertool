@@ -32,4 +32,9 @@ class auswahllistenModel extends Model
     {
         return $this->findAll();
     }
+    
+    public function getAuswahlOptionNachID($id)
+    {
+        return $this->select('option')->where('id', $id)->first()['option'];
+    }
 }

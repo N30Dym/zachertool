@@ -5,7 +5,7 @@ use \App\Controllers\protokolle\anzeige\Protokolldarstellungscontroller;
 use \App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolle\{ protokolleModel, beladungModel };
-use \App\Models\protokolllayout\{ protokollTypenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollKapitelModel, protokollUnterkapitelModel, protokollInputsModel, protokollEingabenModel };
+use \App\Models\protokolllayout\{ auswahllistenModel, protokollInputsMitInputTypModel, protokollTypenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollKapitelModel, protokollUnterkapitelModel, protokollInputsModel, protokollEingabenModel };
 
 helper('nachrichtAnzeigen');
 
@@ -106,7 +106,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                     $csvReturnArray = $csvReturnArray . $this->erstelleCSVZeile($protokollDatenVorbereitet["beladungszustand"], $protokollLayoutArray, $seperator);
                     break;
                 case "datenUeberschriftenArray":
-                    $csvReturnArray = $csvReturnArray . $this->erstelleProtokollDatenZeile($protokollDatenVorbereitet["eingegebeneWerte"], $protokollLayoutArray, $seperator);
+                    $csvReturnArray = $csvReturnArray . $this->erstelleProtokollDatenZeile($protokollDatenVorbereitet["protokollWerte"], $protokollLayoutArray, $seperator);
                     break;
                 
             }
@@ -338,7 +338,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                         $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - ohne Richtung" . $seperator;
                         $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Links" . $seperator;
                         $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Rechts" . $seperator;
-                        $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => ['Kreisflug' => [0, 'Links', 'Rechts'], 'Neutral' => [0, 'Links', 'Rechts'], 'Kreisflug' => [0, 'Links', 'Rechts']]]]);
+                        $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => [0 => [0, 'Links', 'Rechts'], 'Neutral' => [0, 'Links', 'Rechts'], 'Kreisflug' => [0, 'Links', 'Rechts']]]]);
                     }
                     elseif($layoutDatensatz['woelbklappen'] && !$layoutDatensatz['linksUndRechts'])
                     {
@@ -393,7 +393,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                 continue;
             }
             
-            $ueberschriften['ueberschriftenString'] = $ueberschriften['ueberschriftenString'] . $prefix . $spaltenInfo['Field'] . $seperator;
+            $ueberschriften['ueberschriftenString'] = $ueberschriften['ueberschriftenString'] . $prefix . esc($spaltenInfo['Field']) . $seperator;
             array_push($ueberschriften['ueberschriftenArray'], $spaltenInfo['Field']);
         }
         
@@ -409,6 +409,11 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $beschreibung = $hebelarm = "";
         $stellungBezeichnung = $stellungWinkel = $neutral = $kreisflug = $iasVG = "";
         $bezeichnung = $gewicht = $hebelarmBeladung = "";
+        
+        $protokollDaten['protokollWerte']['kommentare']         = isset($protokollDaten['kommentare']) ?? array();
+        $protokollDaten['protokollWerte']['eingegebeneWerte']   = $protokollDaten['eingegebeneWerte'];
+        $protokollDaten['protokollWerte']['hStWege']            = isset($protokollDaten['hStWege']) ?? array();
+        
         
         $protokollTypID = $protokolleLayoutProtokolleModel->getProtokollTypIDNachID($protokollID);
         
@@ -595,6 +600,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
     
     protected function erstelleProtokollDatenZeile($protokollDaten, $protokollLayoutArray, $seperator) 
     {
+        $protokollInputsMitInputTypModel = new protokollInputsMitInputTypModel();
+        
         $protokollDatenCSVReturnString = "";
         
         foreach($protokollLayoutArray as $protokollInputArray)
@@ -603,24 +610,59 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             {
                 if($protokollInputID == "kommentar")
                 {
-                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "hStWeg" . $seperator;   
+                    //var_dump($protokollDaten['kommentare']);
+                    //exit;
+                    
+                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "kommentar" . $seperator;   
                 }
                 elseif($protokollInputID == "hStWeg")
                 {
-                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "hStWeg" . $seperator . $seperator . $seperator;
+                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "hStgedrückt" . $seperator . "hStneutral" . $seperator . "hStgezogen" . $seperator;
                 }
                 else
                 {
+                    $protokollInputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'];
+                    
                     foreach($woelbklappenUndRichtung as $woelbklappenStellung => $richtungen)
                     {
                         foreach($richtungen as $richtung)
                         {
-                            if(isset($protokollDaten[$protokollInputID][$woelbklappenStellung][$richtung][0]))
+                            if(isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) && sizeof($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) == 1)
                             {
-                                is_numeric($protokollDaten[$protokollInputID][$woelbklappenStellung][$richtung][0]) ? : $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"";
-                                $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . trim(esc($protokollDaten[$protokollInputID][$woelbklappenStellung][$richtung][0]));
-                                is_numeric($protokollDaten[$protokollInputID][$woelbklappenStellung][$richtung][0]) ? : $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"";
-                                $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . $seperator;
+                                switch($protokollInputTyp)
+                                {
+                                    case "Ganzzahl":
+                                    case "Dezimalzahl":
+                                    case "Checkbox":
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . trim(esc(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0])) . $seperator;
+                                        break;
+                                    case "Textzeile":
+                                    case "Textfeld":
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . trim(esc(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0])) . "\"" . $seperator;
+                                        break;
+                                    case "Auswahloptionen":
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . $this->ladeAuswahlOption(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0]) . "\"" . $seperator;
+                                        break;
+                                    case "Note":
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . $this->rechneNoteUm(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0]) . "\"" . $seperator;
+                                        break;
+                                    default:
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"Dieser ProtokollTyp ist noch nicht unterstützt\"" . $seperator;
+                                    
+                                }
+                            }
+                            elseif(isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) && sizeof($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) > 1)
+                            {
+                                $multipelString = "";
+                                
+                                foreach($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung] as $wert)
+                                {
+                                    $multipelString = $multipelString . $wert . ",";
+                                }
+                                
+                                $multipelString = substr($multipelString, 0, -1);
+                                
+                                $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . $multipelString . "\"" . $seperator;
                             }
                             else
                             {
@@ -632,5 +674,30 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             }
         }
         return $protokollDatenCSVReturnString;
+    }
+    
+    protected function ladeAuswahlOption($auswahlOptionID)
+    {
+        $auswahllistenModel = new auswahllistenModel();       
+        return $auswahllistenModel->getAuswahlOptionNachID($auswahlOptionID);
+    }
+    
+    protected function rechneNoteUm($note)
+    {
+        switch($note)
+        {
+            case "1":
+                return "5";
+            case "2":
+                return "4";
+            case "3":
+                return "3";
+            case "4":
+                return "2";
+            case "5":
+                return "1";
+            case "6":
+                return "1+";
+        }
     }
 }

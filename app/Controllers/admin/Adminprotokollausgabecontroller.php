@@ -309,7 +309,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         foreach($spaltenInfosArray as $spaltenInfos)
         {
             $neueUeberschriften = $this->erstelleUeberschriftAusSpaltenInfos($spaltenInfos, $seperator, "beladung_");
-            $beladungUeberschriften['ueberschriftenString'] = $beladungUeberschriften['ueberschriftenString'] . $neueUeberschriften['ueberschriftenString'];
+            $beladungUeberschriften['ueberschriftenString'] = $beladungUeberschriften['ueberschriftenString'] . "\"" . $neueUeberschriften['ueberschriftenString'];
             $beladungUeberschriften['ueberschriftenArray']  = array_merge($beladungUeberschriften['ueberschriftenArray'], $neueUeberschriften['ueberschriftenArray']);
         }
         
@@ -393,7 +393,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                 continue;
             }
             
-            $ueberschriften['ueberschriftenString'] = $ueberschriften['ueberschriftenString'] . $prefix . esc($spaltenInfo['Field']) . $seperator;
+            $ueberschriften['ueberschriftenString'] = $ueberschriften['ueberschriftenString'] . "\"" . $prefix . esc($spaltenInfo['Field']) . "\"" .  $seperator;
             array_push($ueberschriften['ueberschriftenArray'], $spaltenInfo['Field']);
         }
         

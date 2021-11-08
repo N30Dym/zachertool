@@ -2,14 +2,14 @@
 namespace App\Controllers\admin;
 
 use App\Models\protokolle\{ protokolleModel, datenModel, kommentareModel, hStWegeModel, beladungModel };
-use App\Controllers\protokolle\{ Protokollspeichercontroller };
+//use App\Controllers\protokolle\{ Protokollspeichercontroller };
 use \App\Controllers\admin\Adminprotokollausgabecontroller;
 
 helper('nachrichtAnzeigen');
 
 class Adminprotokollspeichercontroller extends Adminprotokollcontroller
 {
-    public function speichern($speicherOrt)
+    public function speichern(string $speicherOrt)
     {
         if(!empty($zuSpeicherndeDaten = $this->request->getPost()))
         {       
@@ -36,7 +36,7 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
         }
     }
     
-    protected function setzeNichtAbgegeben($zuUeberschreibendeDaten)
+    protected function setzeNichtAbgegeben(array $zuUeberschreibendeDaten)
     {
         $protokolleModel = new protokolleModel();
         
@@ -49,7 +49,7 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
         }
     }
     
-    protected function loescheProtokolleNachProtokollSpeicherID($zuLoeschendeDaten) 
+    protected function loescheProtokolleNachProtokollSpeicherID(array $zuLoeschendeDaten) 
     {
         $protokolleModel    = new protokolleModel();
         $datenModel         = new datenModel();
@@ -78,10 +78,9 @@ class Adminprotokollspeichercontroller extends Adminprotokollcontroller
         }
     }
     
-    protected function downloadAlleAlsCSV($seperatorArray) 
+    protected function downloadAlleAlsCSV(array $seperatorArray) 
     {
         $adminProtokollAusgabeController = new Adminprotokollausgabecontroller();
-
         return $this->response->download(date('Y-m-d_H-i-s') . "_alleProtokolle.csv", $adminProtokollAusgabeController->bereiteAlleProtokollDatenVor($seperatorArray['eingabe']));  
     }
 

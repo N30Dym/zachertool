@@ -2,7 +2,7 @@
 namespace App\Controllers\admin;
 
 use \App\Controllers\protokolle\anzeige\Protokolldarstellungscontroller;
-use \App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel };
+use \App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolle\{ protokolleModel, beladungModel };
 use \App\Models\protokolllayout\{ auswahllistenModel, protokollInputsMitInputTypModel, protokollTypenModel, protokolleLayoutProtokolleModel, protokollLayoutsModel, protokollKapitelModel, protokollUnterkapitelModel, protokollInputsModel, protokollEingabenModel };
@@ -24,7 +24,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
         
         $protokolleLayoutsProtokolleModel   = $protokolleLayoutProtokolleModel->getAlleProtokolleSoriertNachProtokollTypID();
-        $csvDatenString                      = "";
+        $csvDatenString                     = "";
 
         foreach($protokolleLayoutsProtokolleModel as $protokollLayoutsProtokoll)
         {
@@ -58,8 +58,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         foreach($protokollDetailsArray as $protokollDetails)
         {
-            $protokollDaten = $protokollDarstellungsController->ladeDatenAusDemProtokoll($protokollDetails);
-            $csvReturnString = $csvReturnString . $this->erstelleCSVDatenZeile($protokollDaten, $ueberschriften['ueberschriftenArray'], $protokolleLayoutsProtokollDaten['id'], $seperator);           
+            $protokollDaten     = $protokollDarstellungsController->ladeDatenAusDemProtokoll($protokollDetails);
+            $csvReturnString    = $csvReturnString . $this->erstelleCSVDatenZeile($protokollDaten, $ueberschriften['ueberschriftenArray'], $protokolleLayoutsProtokollDaten['id'], $seperator);           
         }       
         
         $csvReturnString = $csvReturnString . "\r\n";
@@ -107,17 +107,13 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                     break;
                 case "datenUeberschriftenArray":
                     $csvReturnArray = $csvReturnArray . $this->erstelleProtokollDatenZeile($protokollDatenVorbereitet["protokollWerte"], $protokollLayoutArray, $seperator);
-                    break;
-                
-            }
-            
+                    break;               
+            }            
         }     
        
         $csvReturnArray = substr($csvReturnArray, 0, -strlen($seperator));
         $csvReturnArray = $csvReturnArray . "\r\n";
-        
-        echo $csvReturnArray;
-        //exit;
+
         return $csvReturnArray;
     }
     
@@ -129,8 +125,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
      */  
     protected function erstelleUeberschrift($protokollLayoutDaten, $seperator)
     {
-        $ueberschriften['ueberschriftenString']                                         = "id" . $seperator . "protokollID" . $seperator . "protokollTyp" . $seperator . "datum" . $seperator . "flugzeit" . $seperator . "bemerkung" . $seperator;
-        $ueberschriften['ueberschriftenArray']['protokollDetailsUeberschriftenArray']   = ['id', 'protokollID', 'protokollTyp', 'datum', 'flugzeit', 'bemerkung'];
+        $ueberschriften['ueberschriftenString']                                         = "protokollID" . $seperator . "protokollLayoutID" . $seperator . "protokollTyp" . $seperator . "datum" . $seperator . "flugzeit" . $seperator . "flugstunden auf dem Muster" . $seperator . "bemerkung" . $seperator;
+        $ueberschriften['ueberschriftenArray']['protokollDetailsUeberschriftenArray']   = ['id', 'protokollID', 'protokollTyp', 'datum', 'flugzeit', 'stundenAufDemMuster', 'bemerkung'];
         
         if(isset($protokollLayoutDaten['flags']['flugzeugFlag']))
         {
@@ -141,8 +137,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         if(isset($protokollLayoutDaten['flags']['pilotFlag']))
         {
             $pilotUeberschriften = $this->erstellePilotUeberschrift($seperator);
-            $ueberschriften['ueberschriftenString']                             = $ueberschriften['ueberschriftenString'] . $pilotUeberschriften['ueberschriftenString'];
-            $ueberschriften['ueberschriftenArray']['pilotUeberschriftenArray']  = $pilotUeberschriften['ueberschriftenArray'];
+            $ueberschriften['ueberschriftenString']                                 = $ueberschriften['ueberschriftenString'] . $pilotUeberschriften['ueberschriftenString'];
+            $ueberschriften['ueberschriftenArray']['pilotUeberschriftenArray']      = $pilotUeberschriften['ueberschriftenArray'];
             
             $copilotUeberschriften = $this->erstelleCopilotUeberschrift($seperator);
             $ueberschriften['ueberschriftenString']                                 = $ueberschriften['ueberschriftenString'] . $copilotUeberschriften['ueberschriftenString'];
@@ -218,7 +214,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $returnArray[$layoutZeile['protokollKapitelID']]['kapitelBezeichnung']                                                          = $layoutZeile['kapitelNummer'] . ". " . $protokollKapitelModel->getProtokollKapitelBezeichnungNachID($layoutZeile['protokollKapitelID'])['bezeichnung']; 
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['unterkapitelBezeichnung']   = empty($layoutZeile['protokollUnterkapitelID']) ? null : $layoutZeile['kapitelNummer'] . "." . $protokollUnterkapitelModel->getProtokollUnterkapitelNummerNachID($layoutZeile['protokollUnterkapitelID'])['unterkapitelNummer'] . " " . $protokollUnterkapitelModel->getProtokollUnterkapitelBezeichnungNachID($layoutZeile['protokollUnterkapitelID'])['bezeichnung'];
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['eingabeBezeichnung']        = $protokollEingabeModel->getProtokollEingabeBezeichnungNachID($layoutZeile['protokollEingabeID'])['bezeichnung'];
-        $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['inputBezeichnung']          = $protokollInputsModel->getProtokollInputBezeichnungNachID($layoutZeile['protokollInputID'])['bezeichnung'];
+        $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['inputBezeichnung']          = $protokollInputsModel->getProtokollInputBezeichnungNachID($layoutZeile['protokollInputID']);
+        $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['inputEinheit']              = $protokollInputsModel->getProtokollInputEinheitNachID($layoutZeile['protokollInputID']);
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['woelbklappen']              = ($protokollKapitelModel->getProtokollKapitelWoelbklappenNachID($layoutZeile['protokollKapitelID']) || (empty($layoutZeile['protokollUnterkapitelID']) ? false : $protokollUnterkapitelModel->getProtokollUnterkapitelWoelbklappenNachID($layoutZeile['protokollUnterkapitelID']))) ? true : false;
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['linksUndRechts']            = $protokollEingabeModel->getProtokollEingabeLinksUndRechtsNachID($layoutZeile['protokollEingabeID']) ? true : false;
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['multipel']                  = $protokollEingabeModel->getProtokollEingabeMultipelNachID($layoutZeile['protokollEingabeID']) ? true : false;
@@ -234,6 +231,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $flugzeugDetailsModel                           = new flugzeugDetailsModel();
         $flugzeugHebelarmeModel                         = new flugzeugHebelarmeModel();
         $flugzeugKlappenModel                           = new flugzeugKlappenModel();
+        $flugzeugWaegungModel                           = new flugzeugWaegungModel();
         
         $flugzeugUeberschriften['ueberschriftenString'] = "";
         $flugzeugUeberschriften['ueberschriftenArray']  = array();        
@@ -241,8 +239,10 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         array_push($spaltenInfosArray, $flugzeugeMitMusterModel->getSpaltenInformationen());
         array_push($spaltenInfosArray, $flugzeugDetailsModel->getSpaltenInformationen());
+        array_push($spaltenInfosArray, $flugzeugWaegungModel->getSpaltenInformationen());
         array_push($spaltenInfosArray, $flugzeugHebelarmeModel->getSpaltenInformationen());
         array_push($spaltenInfosArray, $flugzeugKlappenModel->getSpaltenInformationen());
+        
         
         foreach($spaltenInfosArray as $spaltenInfos)
         {
@@ -329,34 +329,34 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                 {                    
                     if($layoutDatensatz['woelbklappen'] && $layoutDatensatz['linksUndRechts'])
                     {
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - ohne Richtung" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - Links" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - Rechts" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - ohne Richtung" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - Links" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - Rechts" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - ohne Richtung" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Links" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Rechts" . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - ohne Richtung" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - Links" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe - Rechts" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - ohne Richtung" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - Links" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral - Rechts" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - ohne Richtung" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Links" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug - Rechts" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
                         $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => [0 => [0, 'Links', 'Rechts'], 'Neutral' => [0, 'Links', 'Rechts'], 'Kreisflug' => [0, 'Links', 'Rechts']]]]);
                     }
                     elseif($layoutDatensatz['woelbklappen'] && !$layoutDatensatz['linksUndRechts'])
                     {
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug" . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - keine Wölbklappe" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Neutral" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Kreisflug" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
                         $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => [0 => [0], 'Neutral' => [0], 'Kreisflug' => [0]]]]);
                     }
                     elseif(!$layoutDatensatz['woelbklappen'] && $layoutDatensatz['linksUndRechts'])
                     {
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - ohne Richtung" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Links" . $seperator;
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Rechts" . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - ohne Richtung" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Links" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . " - Rechts" . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
                         $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => [0 => [0, 'Links', 'Rechts']]]]);
                     }
                     else
                     {
-                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . $seperator;
+                        $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - " . $layoutDatensatz['unterkapitelBezeichnung'] . " - " . $layoutDatensatz['eingabeBezeichnung'] . " - " . $layoutDatensatz['inputBezeichnung'] . (empty($layoutDatensatz['inputEinheit']) ? null : " [". $layoutDatensatz['inputEinheit'] . "]") . $seperator;
                         $ueberschriften['inputUeberschriftenArray']     = array_merge($ueberschriften['inputUeberschriftenArray'], [[$protokollInputID => [0 => [0]]]]);
                     }
                 }
@@ -372,7 +372,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                 $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - HSt voll gedrückt" . $seperator;
                 $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - HSt neutral" . $seperator;
                 $ueberschriften['inputUeberschriftenString']    = $ueberschriften['inputUeberschriftenString'] . $kapitel['kapitelBezeichnung'] . " - HSt voll gezogen" . $seperator;
-                array_push($ueberschriften['inputUeberschriftenArray'], ['hStWeg' => ['protokollKapitelID' => $protokollKapitelID, 'gedruecktHSt', 'neutralHSt', 'gezogenHSt']]);
+                array_push($ueberschriften['inputUeberschriftenArray'], ['hStWeg' => [$protokollKapitelID => ['gedruecktHSt' => "", 'neutralHSt' => "", 'gezogenHSt' => ""]]]);
             }
         }
         
@@ -410,9 +410,9 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $stellungBezeichnung = $stellungWinkel = $neutral = $kreisflug = $iasVG = "";
         $bezeichnung = $gewicht = $hebelarmBeladung = "";
         
-        $protokollDaten['protokollWerte']['kommentare']         = isset($protokollDaten['kommentare']) ?? array();
+        $protokollDaten['protokollWerte']['kommentare']         = $protokollDaten['kommentare'] ?? array();
         $protokollDaten['protokollWerte']['eingegebeneWerte']   = $protokollDaten['eingegebeneWerte'];
-        $protokollDaten['protokollWerte']['hStWege']            = isset($protokollDaten['hStWege']) ?? array();
+        $protokollDaten['protokollWerte']['hStWege']            = $protokollDaten['hStWege'] ?? array();
         
         
         $protokollTypID = $protokolleLayoutProtokolleModel->getProtokollTypIDNachID($protokollID);
@@ -526,9 +526,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
     protected function erstelleCSVZeile($protokollDaten, $protokollLayoutArray, $seperator) 
     {
         $datenCSVReturnString = "";
-        
-       
-        
+ 
         foreach($protokollLayoutArray as $spaltenName)
         {
             $gefunden = false;
@@ -570,8 +568,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             $gefunden = false;
             
             foreach($protokollDaten as $arrayName => $inhalt)
-            {
-                
+            {                
                 if(isset($protokollDaten[$arrayName][$spaltenName]) && !empty($protokollDaten[$arrayName][$spaltenName]))
                 {
                     is_numeric($protokollDaten[$arrayName][$spaltenName]) ? : $beladungDatenCSVReturnString = $beladungDatenCSVReturnString . "\"";
@@ -609,15 +606,34 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             foreach($protokollInputArray as $protokollInputID => $woelbklappenUndRichtung)
             {
                 if($protokollInputID == "kommentar")
-                {
-                    //var_dump($protokollDaten['kommentare']);
-                    //exit;
-                    
-                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "kommentar" . $seperator;   
+                {                    
+                    if(isset($protokollDaten['kommentare'][$protokollInputArray['kommentar']]) && !empty($protokollDaten['kommentare'][$protokollInputArray['kommentar']]))
+                    {
+                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . esc($protokollDaten['kommentare'][$protokollInputArray['kommentar']]['kommentar']) . "\"";   
+                    }
+                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . $seperator;
                 }
                 elseif($protokollInputID == "hStWeg")
                 {
-                    $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "hStgedrückt" . $seperator . "hStneutral" . $seperator . "hStgezogen" . $seperator;
+                    $hStWegVorhanden = false;
+                    
+                    foreach($protokollInputArray['hStWeg'] as $protokollKapitelID => $reihenfolgeDerHStAusschlaege)
+                    {
+                        if(isset($protokollDaten['hStWege'][$protokollKapitelID]))
+                        {
+                            foreach($reihenfolgeDerHStAusschlaege as $hStAusschlag => $leererString)
+                            {
+                                $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . esc($protokollDaten['hStWege'][$protokollKapitelID][$hStAusschlag]) . $seperator; 
+                            }
+                            $hStWegVorhanden = true;
+                            break;
+                        }
+                    }
+                   
+                    if(! $hStWegVorhanden)
+                    {
+                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . $seperator . $seperator . $seperator;
+                    }             
                 }
                 else
                 {
@@ -632,9 +648,11 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                                 switch($protokollInputTyp)
                                 {
                                     case "Ganzzahl":
-                                    case "Dezimalzahl":
                                     case "Checkbox":
                                         $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . trim(esc(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0])) . $seperator;
+                                        break;
+                                    case "Dezimalzahl":
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . str_replace(".", ",", esc(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0])) . "\"" . $seperator;
                                         break;
                                     case "Textzeile":
                                     case "Textfeld":
@@ -647,8 +665,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                                         $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"" . $this->rechneNoteUm(array_values($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung])[0]) . "\"" . $seperator;
                                         break;
                                     default:
-                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"Dieser ProtokollTyp ist noch nicht unterstützt\"" . $seperator;
-                                    
+                                        $protokollDatenCSVReturnString = $protokollDatenCSVReturnString . "\"Dieser ProtokollTyp ist noch nicht unterstützt\"" . $seperator;  
                                 }
                             }
                             elseif(isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) && sizeof($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung]) > 1)
@@ -697,7 +714,9 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             case "5":
                 return "1";
             case "6":
-                return "1+";
+                return "1&plus;";
+            default:
+                return "";
         }
     }
 }

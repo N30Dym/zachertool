@@ -104,4 +104,10 @@ class flugzeugWaegungModel extends Model
         $query = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = " . $flugzeugID . " AND datum <= '" . $datum . "' ORDER BY datum DESC";
         return $this->query($query)->getResultArray();
     }
+    
+    public function getSpaltenInformationen()
+    {    
+        $query = "SHOW COLUMNS FROM " . $this->table;
+        return $this->query($query)->getResultArray();
+    }
 }

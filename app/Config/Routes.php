@@ -47,7 +47,6 @@ $routes->match(['get', 'post'], 'piloten/speichern', 'piloten\Pilotencontroller:
 $routes->get('piloten/speichern', 'piloten\Pilotencontroller::pilotSpeichern');
 
     // Flugzeuge
-$routes->get('flugzeuge/', 'flugzeuge\Flugzeugcontroller::index');
 $routes->get('flugzeuge/neu/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugNeu/$1');
 $routes->get('flugzeuge/neu', 'flugzeuge\Flugzeugcontroller::flugzeugNeu');
 $routes->get('flugzeuge/bearbeiten/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugBearbeiten/$1');

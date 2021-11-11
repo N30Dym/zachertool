@@ -3,25 +3,12 @@
 namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
-
 use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
 helper(['array','form','text','url','dezimalZahlenKorrigieren']);
 
 class Flugzeugcontroller extends Controller
-{
-        /**
-        * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /flugzeuge/flugzeugNeu
-        *
-        * Sie lädt das View: flugzeuge/musterAuswahl.php, lädt alle verfügbaren Muster und
-        * stellt diese zur Auswahl zur Verfügung.
-        */
-    public function index()
-    {	
-
-    }
-    
+{   
     public function musterListe()
     {
         $titel = 'Musterauswahl';		
@@ -38,15 +25,14 @@ class Flugzeugcontroller extends Controller
         $this->zeigeMusterListe($datenHeader, $datenInhalt);
     }
 
-
         /**
         * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /flugzeuge/flugzeugNeu/<zahl> bzw. -> /flugzeuge/neu
+        * -> /flugzeuge/flugzeugNeu/<musterID> bzw. -> /flugzeuge/neu
         *
         * Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
         * bzw. ein neues Flugzeug sammt neuem Muster zu erstellen.
         * 
-        * @param $musterID wird automatisch aus der URL entnommen
+        * @param int $musterID wird automatisch aus der URL entnommen
         */	
     public function flugzeugNeu($musterID = null)
     {
@@ -84,9 +70,6 @@ class Flugzeugcontroller extends Controller
     {
         if($this->request->getPost() != null)
         {
-            
-            $this->zeigeWarteSeite();
-
             if($this->speicherFlugzeugDaten($this->request->getPost()))
             {
                 $session = session();
@@ -166,13 +149,13 @@ class Flugzeugcontroller extends Controller
         return $musterArray;
     }
     
-    protected function zeigeMusterListe($datenHeader, $datenInhalt)
+    protected function zeigeMusterListe(array $datenHeader, array $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeMusterListe($datenHeader, $datenInhalt);
     }
     
-    protected function zeigeFlugzeugListe($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugListe(array $datenHeader, array $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeFlugzeugListe($datenHeader, $datenInhalt);
@@ -194,12 +177,6 @@ class Flugzeugcontroller extends Controller
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeFlugzeugBearbeitenView($datenHeader, $datenInhalt);
-    }
-    
-    protected function zeigeWarteSeite()
-    {
-        $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
-        $flugzeugAnzeigeController->zeigeWarteView();
     }
     
     protected function ladeEingabeListen()

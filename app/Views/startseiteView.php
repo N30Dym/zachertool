@@ -1,5 +1,5 @@
 <div class="p-4 p-md-5 mb-4 text-white rounded shadow bg-secondary">
-  <h1><?php echo $title ?></h1>
+  <h1><?php echo $titel ?></h1>
   <p>Startseite</p>
 </div>
 
@@ -12,12 +12,12 @@
             <ul class="nav nav-tabs">
                 <?php foreach($flugzeuge as $jahrFlugzeuge => $flugzeugeProJahr) : ?>
                     <li class="nav-item">
-                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "active" : "d-none JSsichtbar" ?>" id="<?= $jahrFlugzeuge?>"><b><?= $jahrFlugzeuge?></b></button>
+                        <button class="nav-link flugzeuge <?= $jahrFlugzeuge == $neuestesJahrInDemProtokolleExistieren ? "active" : "d-none JSsichtbar" ?>" id="<?= $jahrFlugzeuge?>"><b><?= $jahrFlugzeuge?></b></button>
                     </li>
                 <?php endforeach ?>   
             </ul>
             <?php foreach($flugzeuge as $jahrFlugzeuge=> $flugzeugeProJahr) : ?>
-                <div id="<?= $jahrFlugzeuge?>" class="table-responsive tabInhalt flugzeuge <?= $jahrFlugzeuge == $letztesJahrInDemProtokolleExistieren ? "" : "d-none" ?>">
+                <div id="<?= $jahrFlugzeuge?>" class="table-responsive tabInhalt flugzeuge <?= $jahrFlugzeuge == $neuestesJahrInDemProtokolleExistieren ? "" : "d-none" ?>">
                     <?php if($flugzeugeProJahr == null): ?>
                             <div class="text-center m-3">
                                    Für dieses Jahr liegen<?= date("Y") == $jahrFlugzeuge ? " noch " : " " ?>keine Protokolle vor

@@ -5,10 +5,22 @@ namespace App\Controllers\flugzeuge;
 use CodeIgniter\Controller;
 use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
 
-helper(['array','form','text','url','dezimalZahlenKorrigieren']);
+helper(['array','form','text','url','nachrichtAnzeigen','dezimalZahlenKorrigieren']);
 
+/**
+ * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, die sich mit den Flugzeugen befassen.
+ * 
+ * @author Lars Kastner
+ */
 class Flugzeugcontroller extends Controller
 {   
+    /**
+     * Wird aufgerufen wenn die URL <base_url>/muster/liste aufgerufen wird und lädt alle sichtbaren Muster in eine Tabelle.
+     * 
+     * Wenn ein neues Flugzeug angelegt wird, kann ein vorhandenes Muster gewählt werden. Diese Funtkion setzt zunächst die
+     * Überschrift für diese Seite, dann lädt sie die Funktion ladeSichtbareMuster aus dem FlugzeugdatenLadeController.
+     * Die geladenen Muster werden dann in einer MusterListe angezeigt.
+     */
     public function musterListe()
     {
         $titel = 'Musterauswahl';		
@@ -25,20 +37,20 @@ class Flugzeugcontroller extends Controller
         $this->zeigeMusterListe($datenHeader, $datenInhalt);
     }
 
-        /**
-        * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-        * -> /flugzeuge/flugzeugNeu/<musterID> bzw. -> /flugzeuge/neu
-        *
-        * Sie lädt das View: flugzeuge/flugzeugAngabenView.php und übergibt die Daten, um ein neues Flugzeug
-        * bzw. ein neues Flugzeug sammt neuem Muster zu erstellen.
-        * 
-        * @param int $musterID wird automatisch aus der URL entnommen
-        */	
-    public function flugzeugNeu($musterID = null)
+    /**
+     * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
+     * <base_url>/flugzeuge/flugzeugNeu/<musterID> bzw. <base_url>/flugzeuge/neu
+     *
+     * Wenn eine MusterID in der URL gegeben ist, wird geprüft, ob die MusterID in der Datenbank vorhanden ist.
+     * 
+     * 
+     * @param int $musterID wird automatisch aus der URL entnommen
+     */	
+    public function flugzeugNeu(int $musterID = null)
     {
-        if($musterID != null)
+        if( ! empty($musterID))
         {
-            if(!$this->musterIDVorhanden($musterID))
+            if( ! $this->musterIDVorhanden($musterID))
             {
                 return redirect()->to(base_url());
             }
@@ -48,7 +60,7 @@ class Flugzeugcontroller extends Controller
         
         $titel = "Neues Flugzeug anlegen";      
         
-        if(old("flugzeug") !== null)
+        if(old('flugzeug') !== null)
         {
             $datenInhalt += $this->ladeAlteDaten();
         }
@@ -68,14 +80,11 @@ class Flugzeugcontroller extends Controller
     
     public function flugzeugSpeichern()
     {
-        if($this->request->getPost() != null)
+        if(! empty($this->request->getPost()))
         {
             if($this->speicherFlugzeugDaten($this->request->getPost()))
             {
-                $session = session();
-                $session->setFlashdata('nachricht', "Flugzeugdaten erfolgreich gespeichert");
-                $session->setFlashdata('link', base_url());
-                return redirect()->to(base_url() . '/nachricht');
+                nachrichtAnzeigen("Flugzeugdaten erfolgreich gespeichert", base_url());
             }
             else 
             {
@@ -88,7 +97,7 @@ class Flugzeugcontroller extends Controller
         }
     }
     
-    public function flugzeugBearbeiten($flugzeugID)
+    public function flugzeugBearbeiten(int $flugzeugID)
     {
         if(!$this->flugzeugIDVorhanden($flugzeugID))
         {
@@ -103,10 +112,10 @@ class Flugzeugcontroller extends Controller
                 
         $datenHeader['titel'] = $titel;
         
-        $this->zeigeFlugzeugBearbeiten($datenHeader, $datenInhalt);
+        $this->zeigeFlugzeugEingabe($datenHeader, $datenInhalt);
     }
     
-    public function flugzeugAnzeigen($flugzeugID)
+    public function flugzeugAnzeigen(int $flugzeugID)
     {
         if(!$this->flugzeugIDVorhanden($flugzeugID))
         {
@@ -161,23 +170,23 @@ class Flugzeugcontroller extends Controller
         $flugzeugAnzeigeController->zeigeFlugzeugListe($datenHeader, $datenInhalt);
     }
     
-    protected function zeigeFlugzeugAnzeige($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugAnzeige(array $datenHeader, array $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeFlugzeugAnzeigeView($datenHeader, $datenInhalt);
     }
     
-    protected function zeigeFlugzeugEingabe($datenHeader, $datenInhalt)
+    protected function zeigeFlugzeugEingabe(array $datenHeader, array $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeFlugzeugEingabeView($datenHeader, $datenInhalt);
     }
     
-    protected function zeigeFlugzeugBearbeiten($datenHeader, $datenInhalt)
+    /*protected function zeigeFlugzeugBearbeiten($datenHeader, $datenInhalt)
     {
         $flugzeugAnzeigeController = new Flugzeuganzeigecontroller();
         $flugzeugAnzeigeController->zeigeFlugzeugBearbeitenView($datenHeader, $datenInhalt);
-    }
+    }*/
     
     protected function ladeEingabeListen()
     {
@@ -209,30 +218,30 @@ class Flugzeugcontroller extends Controller
         return $alteDaten;
     }
     
-    protected function ladeMusterDaten($musterID)
+    protected function ladeMusterDaten(int $musterID)
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->ladeMusterDaten($musterID);
     }
     
-    protected function ladeFlugzeugDaten($flugzeugID){
+    protected function ladeFlugzeugDaten(int $flugzeugID){
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->ladeFlugzeugDaten($flugzeugID);
     }
     
-    protected function musterIDVorhanden($musterID) 
+    protected function musterIDVorhanden(int $musterID) 
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->pruefeMusterVorhanden($musterID);
     }
     
-    protected function flugzeugIDVorhanden($flugzeugID)
+    protected function flugzeugIDVorhanden(int $flugzeugID)
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();
         return $flugzeugDatenLadeController->pruefeFlugzeugVorhanden($flugzeugID);
     }
     
-    protected function ladeMusterDetails($musterID) 
+    protected function ladeMusterDetails(int $musterID) 
     {
         $flugzeugDatenLadeController = new Flugzeugdatenladecontroller();       
         return $flugzeugDatenLadeController->ladeMusterDaten($musterID); 
@@ -244,7 +253,7 @@ class Flugzeugcontroller extends Controller
         return $flugzeugDatenLadeController->ladeSichtbareFlugzeugeMitProtokollAnzahl();
     }
     
-    protected function speicherFlugzeugDaten($postDaten)
+    protected function speicherFlugzeugDaten(array $postDaten)
     {            
         $flugzeugSpeicherController = new Flugzeugspeichercontroller();
         return $flugzeugSpeicherController->speicherFlugzeugDaten($postDaten);

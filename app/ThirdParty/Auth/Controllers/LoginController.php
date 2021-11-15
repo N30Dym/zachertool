@@ -6,6 +6,8 @@ use Config\Email;
 use Config\Services;
 use Auth\Models\UserModel;
 
+helper('nachrichtAnzeigen');
+
 class LoginController extends Controller
 {
 	/**
@@ -121,9 +123,10 @@ class LoginController extends Controller
 		]);
                 
                 //$session = session();
-                $this->session->setFlashdata('nachricht', 'Erfolgreich angemeldet');
+                /*$this->session->setFlashdata('nachricht', 'Erfolgreich angemeldet');
                 $this->session->setFlashdata('link', base_url());
-                return redirect()->to(base_url('nachricht'));
+                return redirect()->to(base_url('nachricht'));*/
+             nachrichtAnzeigen("Erfolgreich angemeldet", base_url());
 	}
 
     //--------------------------------------------------------------------
@@ -135,9 +138,10 @@ class LoginController extends Controller
 	{
 		$this->session->remove(['isLoggedIn', 'mitgliedsStatus', 'userData']);
 
-		$this->session->setFlashdata('nachricht', 'Erfolgreich abgemeldet');
+		/*$this->session->setFlashdata('nachricht', 'Erfolgreich abgemeldet');
                 $this->session->setFlashdata('link', base_url());
-                return redirect()->to(base_url('nachricht'));
+                return redirect()->to(base_url('nachricht'));*/
+                nachrichtAnzeigen("Erfolgreich abgemeldet", base_url());
 	}
 
 }

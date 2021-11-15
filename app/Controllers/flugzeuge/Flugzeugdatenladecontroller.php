@@ -202,23 +202,25 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     }
     
         /**
-        * Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
-        * als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
-        * Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
-        */
+         * Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
+         * als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
+         * Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
+         * 
+         * @return array<array>
+         */
     public function ladeEingabeListen()
     {
         $flugzeugDetailsModel   = new flugzeugDetailsModel();
         $musterModel            = new musterModel();
         
         return [
-            "musterEingaben"        => $musterModel->getDistinctSichtbareMusterSchreibweisen() ?? array(),
-            "variometerEingaben"    => $flugzeugDetailsModel->getDistinctVariometerEingaben() ?? array(),
-            "tekArtEingaben"        => $flugzeugDetailsModel->getDistinctTekArtEingaben() ?? array(),
-            "tekPositionEingaben"   => $flugzeugDetailsModel->getDistinctTekPositionEingaben() ?? array(),
-            "pitotPositionEingaben" => $flugzeugDetailsModel->getDistinctPitotPositionEingaben() ?? array(),
-            "bremsklappenEingaben"  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben() ?? array(),
-            "bezugspunktEingaben"   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben() ?? array(),            
+            'musterEingaben'        => $musterModel->getDistinctSichtbareMusterSchreibweisen() ?? array(),
+            'variometerEingaben'    => $flugzeugDetailsModel->getDistinctVariometerEingaben() ?? array(),
+            'tekArtEingaben'        => $flugzeugDetailsModel->getDistinctTekArtEingaben() ?? array(),
+            'tekPositionEingaben'   => $flugzeugDetailsModel->getDistinctTekPositionEingaben() ?? array(),
+            'pitotPositionEingaben' => $flugzeugDetailsModel->getDistinctPitotPositionEingaben() ?? array(),
+            'bremsklappenEingaben'  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben() ?? array(),
+            'bezugspunktEingaben'   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben() ?? array(),            
         ];
     
     }   

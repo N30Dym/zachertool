@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('nachrichtAnzeigen'))
+if ( ! function_exists('nachrichtAnzeigen'))
 {
     /**
      * Funktion um eine Nachricht anzuzeigen und danach weiterzuleiten
@@ -11,16 +11,18 @@ if (! function_exists('nachrichtAnzeigen'))
      * Die URL die aufgerufen wird greift auf den Nachrichtencontroller zu und übermittelt die $nachricht, die dann angezeigt wird und den $link.
      * Beim klicken des Zurück-Buttons wird auf diesen Link verwiesen.
      *
-     * @param str $nachricht
-     * @param str $link
-     * @return void
+     * @param string $nachricht
+     * @param string $link
      */
-    function nachrichtAnzeigen($nachricht, $link) 
-    {
-        $session = session();
-        $session->setFlashdata('nachricht', $nachricht);
-        $session->setFlashdata('link',$link);
-        header('Location: '. base_url() .'/nachricht');
-        exit;
+    function nachrichtAnzeigen(string $nachricht, string $link) 
+    {        
+        $datenNachricht = [
+            'nachricht' => $nachricht,
+            'link'      => $link
+        ];
+
+        echo view('templates/headerView');
+        echo view('templates/nachrichtView', $datenNachricht);
+        echo view('templates/footerView');
     }   
 }

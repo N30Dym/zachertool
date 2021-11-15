@@ -54,7 +54,14 @@ class flugzeugeMitMusterModel extends Model {
     
     public function getFlugzeugIDNachKennungKlarnameUndZusatz($kennung, $musterKlarname, $musterZusatz)
     {
-        return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();
+        if(empty($musterZusatz))
+        {
+            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname])->where('musterZusatz IS NULL')->first();
+        }
+        else
+        {
+            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first();
+        }
     }
     
     public function getMusterIDNachKlarnameUndZusatz($musterKlarname, $musterZusatz)

@@ -56,7 +56,7 @@ $routes->match(['get', 'post'], 'flugzeuge/speichern', 'flugzeuge\Flugzeugcontro
 $routes->get('flugzeuge/anzeigen/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugAnzeigen/$1');
 
     // Nachrichten
-$routes->get('nachricht', 'Nachrichtencontroller::nachricht');
+//$routes->get('nachricht', 'Nachrichtencontroller::nachricht');
 
     // Protokolle
 $routes->get('protokolle/index', 'protokolle\Protokollcontroller::index/');

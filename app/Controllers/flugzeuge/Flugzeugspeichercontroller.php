@@ -8,7 +8,7 @@ use App\Models\flugzeuge\{ flugzeugeModel, flugzeugeMitMusterModel, flugzeugDeta
 /**
  * Description of Flugzeugspeichercontroller
  *
- * @author Lars
+ * @author Lars Kastner
  */
 class Flugzeugspeichercontroller extends Flugzeugcontroller 
 {
@@ -24,7 +24,8 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             // checken ob Flugzeug oder Muster schon vorhanden       
         if($this->flugzeugVorhanden($postDaten))
         {    
-            $this->meldeFlugzeugVorhanden();
+            nachrichtAnzeigen("Flugzeug schon vorhanden", base_url());
+            exit;
         }       
         else if($musterID == null)
         {
@@ -74,7 +75,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();       
         $musterKlarname             = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
 
-        return  $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($postDaten['flugzeug']['kennung'], $musterKlarname, $postDaten['muster']['musterZusatz']) ? true : false;
+        return $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($postDaten['flugzeug']['kennung'], $musterKlarname, $postDaten['muster']['musterZusatz']) ? true : false;
     }
     
     protected function musterIDVorhanden($postDaten)
@@ -325,14 +326,4 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
         return $erfolg;
     }
-
-    protected function meldeFlugzeugVorhanden()
-    {
-            // Flugzeug bereits vorhanden
-        $session = session();
-        $session->setFlashdata('nachricht', 'Flugzeug schon vorhanden');
-        $session->setFlashdata('link', base_url());
-        header('Location: '. base_url() .'/nachricht');
-        exit;
-    }     
 }

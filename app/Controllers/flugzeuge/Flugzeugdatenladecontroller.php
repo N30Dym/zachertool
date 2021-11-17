@@ -16,7 +16,7 @@ use \App\Models\piloten\pilotenMitAkafliegsModel;
 class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     //put your code here
     
-    protected function getSichtbareMuster()
+    protected function ladeSichtbareMuster()
     {
         $musterModel = new musterModel();
         return $musterModel->getSichtbareMuster();
@@ -225,16 +225,16 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     
     }   
     
-    protected function pruefeMusterVorhanden($musterID)
+    protected function pruefeMusterIDVorhanden($musterID)
     {
         $musterModel = new musterModel();
-        return $musterModel->getMusterNachID($musterID);
+        return $musterModel->getMusterNachID($musterID) ? true : false;
     }
     
-    protected function pruefeFlugzeugVorhanden($flugzeugID)
+    protected function pruefeFlugzeugIDVorhanden($flugzeugID)
     {
         $flugzeugeModel = new flugzeugeModel();
-        return $flugzeugeModel->getFlugzeugNachID($flugzeugID);
+        return $flugzeugeModel->getFlugzeugNachID($flugzeugID) ? true : false;
     }
     
     protected function ladeSichtbareFlugzeugeMitProtokollAnzahl()

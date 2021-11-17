@@ -6,13 +6,28 @@ use App\Models\muster\{ musterModel, musterDetailsModel, musterHebelarmeModel, m
 use App\Models\flugzeuge\{ flugzeugeModel, flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 
 /**
- * Description of Flugzeugspeichercontroller
+ * Child-Klasse vom FlugzeugController. Übernimmt das Speichern der eingegebenen Flugzeugdaten. Sowohl bei neuen Flugzeugen und Mustern,
+ * als auch bei neu eingegebenen Wägungen
  *
  * @author Lars Kastner
  */
 class Flugzeugspeichercontroller extends Flugzeugcontroller 
 {
-    protected function speicherFlugzeugDaten($postDaten) 
+    /**
+     * Koordination des Speicherns der Flugzeugdaten
+     * 
+     * Speichere neue Wägungsdaten, wenn eine FlugzeugID gegeben ist und gib das Ergebnis zurück.
+     * Wenn eine MusterID übergeben wurde, dann setze $musterID zu dieser MusterID.
+     * Wenn das Flugzeug schon vorhanden ist, melde "Flugzeug schon vorhanden". Wenn keine MusterID gegeben ist, prüfe, ob das Muster 
+     * schon vorhanden ist und setze $musterID zu dieser ID.
+     * Wenn eine musterID gegeben ist, aber sich der MusterZusatz geändert hat (andere Spannweite, WL, ...) dann setze $musterID zu null.
+     * Bereite die zu speichernden Daten vor und validiere sie. Wenn $musterID null, dann speichere zunächst das Muster, danach gib zurück,
+     * ob das speichern erfolgreich war
+     * 
+     * @param array<array> $postDaten enthält mindestens die Wägungsdaten, ggf. auch Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Flugzeugklappen
+     * @return boolean
+     */
+    protected function speicherFlugzeugDaten(array $postDaten) 
     {
         if(isset($postDaten['flugzeugID']))
         {
@@ -20,57 +35,69 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         }
         
         $musterID = $postDaten['musterID'] ?? null;
-        
-            // checken ob Flugzeug oder Muster schon vorhanden       
-        if($this->flugzeugVorhanden($postDaten))
+             
+        if($this->pruefeFlugzeugVorhanden($postDaten))
         {    
             nachrichtAnzeigen("Flugzeug schon vorhanden", base_url());
             exit;
         }       
-        else if($musterID == null)
+        else if(empty($musterID))
         {
-            $musterID = $this->musterIDVorhanden($postDaten);                                  
+            $musterID = $this->sucheMusterID($postDaten);                                  
         }
-            //Wenn sich der Musterzusatz ändert, muss ein neues Muster angelegt werden
-        else if($musterID != null && !$this->musterMitMusterZusatzVorhanden($postDaten))
+        // Wenn sich der MusterZusatz ändert, muss ein neues Muster angelegt werden
+        else if( ! empty($musterID) && empty($this->sucheMusterID($postDaten)))
         {
             $musterID = null;
         }
         
-            // Daten aufbereiten
         $zuSpeicherndeDaten = $this->bereiteFlugzeugDatenVor($postDaten);
         
-            // Daten validieren in If-Schleife mit return back->withINput
-        if(!$this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
+        if( ! $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
             return false;
         }
         
-            // Wenn noch keine musterID vorhanden, dann erst Muster anlegen und musterID setzen
         if($musterID == null)
         {
             $musterID = $this->speicherMusterDaten($zuSpeicherndeDaten);
         }
-        
-            // Flugzeug mit musterID speichern
+
         return $this->speicherFlugzeug($zuSpeicherndeDaten, $musterID);  
     }
     
-    protected function speicherWaegungDaten($postDaten)
+    /**
+     * Speichert die neue Wägung und gibt eine Meldung über Erfolg oder Misserfolg zurück.
+     * 
+     * Das Array $zuSpeicherndeDaten wird vorbereitet, damit die Funktion validiereZuSpeicherndeDaten, damit arbeiten kann.
+     * Wenn ein Fehler beim Validieren auftritt, melde Misserfolg.
+     * Übergib die validierten Daten und die FlugzeugID an die Funktion speicherFlugzeugWaegung und gib das Ergbnis zurück.
+     * 
+     * @param array<array> $postDaten enthält die Wägungsdaten
+     * @return boolean
+     */
+    protected function speicherWaegungDaten(array $postDaten)
     {
         $zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'] = $postDaten['waegung'];
         
-        if(!$this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
+        if( ! $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
             return false;
         }
         
-        $flugzeugWaegungOhneFlugzeugID = $zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'];
-        
-        return $this->speicherFlugzeugWaegung($flugzeugWaegungOhneFlugzeugID, $postDaten['flugzeugID']);
+        return $this->speicherFlugzeugWaegung($zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'], $postDaten['flugzeugID']);
     }
     
-    protected function flugzeugVorhanden($postDaten)
+    /**
+     * Prüft, ob das Flugzeug bereits vorhanden ist und gibt ein Boolean zurück.
+     * 
+     * Lade den MusterKlarnamen aus der MusterSchreibweise mit der Funktion setzeMusterKlarname in die Variable $musterKlarname.
+     * Wenn ein Flugzeug mit der gegebenen Kennung, dem MusterKlarnamen und MusterZusatz vorhanden ist, dann gib TRUE zurück, sonst FALSE.
+     * 
+     * @param array<array> $postDaten enthält Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Wägungsdaten und ggf. Flugzeugklappen 
+     * @return boolean
+     */
+    protected function pruefeFlugzeugVorhanden(array $postDaten)
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();       
         $musterKlarname             = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
@@ -78,7 +105,15 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($postDaten['flugzeug']['kennung'], $musterKlarname, $postDaten['muster']['musterZusatz']) ? true : false;
     }
     
-    protected function musterIDVorhanden($postDaten)
+    /**
+     * Prüft, ob das Muster bereits vorhanden ist und gibt entweder die MusterID oder NULL zurück
+     * Lade den MusterKlarnamen aus der MusterSchreibweise mit der Funktion setzeMusterKlarname in die Variable $musterKlarname.
+     * Wenn ein Muster mit dem gegebenen MusterKlarnamen und MusterZusatz vorhanden ist, dann gib die MusterID zurück, sonst NULL.
+     * 
+     * @param array<array> $postDaten enthält Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Wägungsdaten und ggf. Flugzeugklappen 
+     * @return int|null
+     */
+    protected function sucheMusterID(array $postDaten)
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();       
         $musterKlarname             = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
@@ -93,15 +128,22 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $musterIDVorhanden;
     }
     
-    protected function musterMitMusterZusatzVorhanden($postDaten)
-    {
-        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
-        
-        return $flugzeugeMitMusterModel->getMusterIDNachMusterIDUndZusatz($postDaten['musterID'], $postDaten['muster']['musterZusatz']) ? true : false;
-    }
-    
-    protected function bereiteFlugzeugDatenVor($postDaten)
-    {
+    /**
+     * Bereitet die eingegebenen Daten so vor, dass sie validiert und gespeichert werden können.
+     * 
+     * Setze $vorbereiteteDaten mit den Musterdaten, Flugzeugdaten, Flugzeugdetails und der Waegung und füge den MusterKlarnamen zu den
+     * Musterdaten hinzu.
+     * Wenn der MusterZusatz in den übergebenen Daten leer ist, dann lösche den MusterZusatz aus $vorbereiteteDaten.
+     * Für "istWoelbklappenFlugzeug" und "istDoppelsitzer" überschreibe "on" mit einer 1, wenn "on" oder 1 vorhanden.
+     * Setze die Flugzeughebelarme zum Speichern mit der Funktion setzeFlugzeugHebelarmeZumSpeichern.
+     * Wenn WölbklappenFlugzeug, dann setze die Wölbklappen zum Speichern mit der Funktion setzeFlugzeugKlappenZumSpeichern.
+     * Gib die vorbereiteten Daten zurück.
+     * 
+     * @param array<array> $postDaten enthält Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Wägungsdaten und ggf. Flugzeugklappen  
+     * @return array
+     */
+    protected function bereiteFlugzeugDatenVor(array $postDaten)
+    {        
         $vorbereiteteDaten = [
             'muster'                        => $postDaten['muster'],
             'flugzeugeOhneMusterID'         => $postDaten['flugzeug'],
@@ -136,26 +178,51 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $vorbereiteteDaten;
     }
     
-    protected function setzeFlugzeugHebelarmeZumSpeichern($hebelarmDaten)
+    /**
+     * Ordnet die einzelnen Heblarmdaten zum Speichern neu an.
+     * 
+     * Jeder Hebelarm, bei dem weder die Beschreibung noch der Hebelarm leer ist wird in ein $temporäresHebelarmArray gespeichert
+     * und dieses dann dem $gesetzteHebelarme-Array angehängt. Wenn die Option "vorOderHinter" auf "vor" gesetzt ist, wird das
+     * Vorzeichen des Hebelarms umgekehrt.
+     * Am Ende wird das $gesetzteHebelarme-Array zurückgegeben.
+     * 
+     * $hebelarmDaten[aufsteigendeNummer][beschreibung, hebelarm, vorOderHinter] -> $gesetzteHebelarme[neueAufsteigendeNummer][beschreibung, hebelarm]
+     * 
+     * @param array<array> $hebelarmDaten enthält für jeden Hebelarm ein Array mit "Beschreibung" und "Hebelarm"
+     * @return array<array> $gesetzteHebelarme
+     */
+    protected function setzeFlugzeugHebelarmeZumSpeichern(array $hebelarmDaten)
     {
         $gesetzteHebelarme = [];
-        
+
         foreach($hebelarmDaten as $hebelarm)
         {
-            if($hebelarm['beschreibung'] != "" AND $hebelarm['hebelarm'] != "")
+            if(empty($hebelarm['beschreibung']) OR empty($hebelarm['hebelarm']))
             {
-                $temporaeresHebelarmArray['beschreibung']   = $hebelarm['beschreibung'];
-                $temporaeresHebelarmArray['hebelarm']       = $hebelarm['vorOderHinter'] == "vor" ? -$hebelarm['hebelarm'] : $hebelarm['hebelarm'];
-                array_push($gesetzteHebelarme, $temporaeresHebelarmArray);
+                continue;
             }
+            
+            $temporaeresHebelarmArray['beschreibung']   = $hebelarm['beschreibung'];
+            $temporaeresHebelarmArray['hebelarm']       = $hebelarm['vorOderHinter'] == "vor" ? -$hebelarm['hebelarm'] : $hebelarm['hebelarm'];
+            array_push($gesetzteHebelarme, $temporaeresHebelarmArray);
         }
-        
+
         return $gesetzteHebelarme;
     }
     
-    protected function setzeFlugzeugKlappenZumSpeichern($woelbklappenDaten)
+    /**
+     * Ordnet die einzelnen Wölbklappenstellungen zum Speichern neu an.
+     * 
+     * 
+     * 
+     * @param array $woelbklappenDaten
+     * @return array
+     */
+    protected function setzeFlugzeugKlappenZumSpeichern(array $woelbklappenDaten)
     {
         $gesetzteWoelbklappen = [];
+        var_dump($woelbklappenDaten);
+        echo "<br><br>";
         
         foreach($woelbklappenDaten as $index => $woelbklappe)
         {
@@ -183,10 +250,12 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             }
         }
         
+        var_dump($gesetzteWoelbklappen);
+        exit;
         return $gesetzteWoelbklappen;
     }
     
-    public function setzeMusterKlarname($musterSchreibweise)
+    public function setzeMusterKlarname(string $musterSchreibweise)
     {
         $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($musterSchreibweise)));
         $musterKlarnameOhneAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
@@ -197,7 +266,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $musterKlarnameOhneSZ;
     }
     
-    protected function validiereZuSpeicherndeDaten($zuValidierendeDaten)
+    protected function validiereZuSpeicherndeDaten(array $zuValidierendeDaten)
     {
         $validation             = \Config\Services::validation();
         $validierungErfolgreich = true;
@@ -227,7 +296,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $validierungErfolgreich;
     }
     
-    protected function speicherMusterDaten($zuSpeicherndeDaten)
+    protected function speicherMusterDaten(array $zuSpeicherndeDaten)
     {
         $musterModel            = new musterModel();
         $musterDetailsModel     = new musterDetailsModel();
@@ -264,7 +333,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $musterID;
     }
    
-    protected function speicherFlugzeug($zuSpeicherndeDaten, $musterID)
+    protected function speicherFlugzeug(array $zuSpeicherndeDaten, int $musterID)
     {
         $flugzeugeModel         = new flugzeugeModel();
         $flugzeugDetailsModel 	= new flugzeugDetailsModel();
@@ -309,7 +378,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return true;
     }
     
-    protected function speicherFlugzeugWaegung($flugzeugWaegungOhneFlugzeugID, $flugzeugID)
+    protected function speicherFlugzeugWaegung(array $flugzeugWaegungOhneFlugzeugID, int $flugzeugID)
     {
         $flugzeugWaegungModel                       = new flugzeugWaegungModel();  
         $flugzeugeModel                             = new flugzeugeModel();

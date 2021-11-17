@@ -8,8 +8,7 @@
         <button type="button" class="btn btn-success col-12">Neues Flugzeug anlegen</button>
     </a>
 </div>
-
-<!--<h2 class="text-center m-4"><?= esc($titel) ?></h2>-->	
+	
 <div class="row">
     <div class="col-lg-2">
     </div>

@@ -66,12 +66,12 @@
                 <div class="col-sm-1">
                 </div>
                 <div class="col-sm-4 form-check">
-                    <input name="muster[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($muster['istDoppelsitzer']) AND ($muster['istDoppelsitzer'] == "1" OR $muster['istDoppelsitzer'] == "on")) ? "checked" : "" ?> <?= (isset($musterID) OR isset($flugzeugID)) ? "disabled" : "" ?> >
+                    <input name="muster[istDoppelsitzer]" type="checkbox" class="form-check-input" id="istDoppelsitzer" <?= (isset($muster['istDoppelsitzer']) AND ($muster['istDoppelsitzer'] == "1" OR $muster['istDoppelsitzer'] == "on")) ? "checked" : "" ?> <?= isset($musterID) ? 'onclick="return false;"' : (isset($flugzeugID) ? "disabled" : "") ?> >
                     <label class="form-check-label">Doppelsitzer</label>
                 </div>
 
                 <div class="col-sm-5 form-check">
-                    <input name="muster[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($muster['istWoelbklappenFlugzeug']) AND ($muster['istWoelbklappenFlugzeug'] == "1" OR $muster['istWoelbklappenFlugzeug'] == "on")) ? "checked" : "" ?> <?= (isset($musterID) OR isset($flugzeugID)) ? "disabled" : "" ?> >
+                    <input name="muster[istWoelbklappenFlugzeug]" type="checkbox" class="form-check-input" id="istWoelbklappenFlugzeug" <?= (isset($muster['istWoelbklappenFlugzeug']) AND ($muster['istWoelbklappenFlugzeug'] == "1" OR $muster['istWoelbklappenFlugzeug'] == "on")) ? "checked" : "" ?> <?= isset($musterID) ? 'onclick="return false;"' : (isset($flugzeugID) ? "disabled" : "") ?> >
                     <label class="form-check-label">Wölbklappenflugzeug</label>
                 </div>
 

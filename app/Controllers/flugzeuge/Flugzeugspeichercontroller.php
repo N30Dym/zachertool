@@ -179,9 +179,9 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     }
     
     /**
-     * Ordnet die einzelnen Heblarmdaten zum Speichern neu an.
+     * Ordnet die einzelnen Heblarmdaten zum Validieren und Speichern neu an.
      * 
-     * Jeder Hebelarm, bei dem weder die Beschreibung noch der Hebelarm leer ist wird in ein $temporäresHebelarmArray gespeichert
+     * Jeder Hebelarm, bei dem weder die Beschreibung noch der Hebelarm leer ist, wird in ein $temporäresHebelarmArray gespeichert
      * und dieses dann dem $gesetzteHebelarme-Array angehängt. Wenn die Option "vorOderHinter" auf "vor" gesetzt ist, wird das
      * Vorzeichen des Hebelarms umgekehrt.
      * Am Ende wird das $gesetzteHebelarme-Array zurückgegeben.
@@ -211,9 +211,16 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     }
     
     /**
-     * Ordnet die einzelnen Wölbklappenstellungen zum Speichern neu an.
+     * Ordnet die einzelnen Wölbklappenstellungen zum Validieren und Speichern neu an.
      * 
+     * Jede Wölbklappenstellung, bei dem die Bezeichnung gegeben ist, wird in ein $temporaeresWoelbklappenArray gespeichert
+     * und dieses dann dem $temporaeresWoelbklappenArray-Array angehängt. Wenn "neutral" oder "kreisflug" die fortlaufende Nummer
+     * des Wölbklappen-Arrays enthält, dann wird zusätzlich "neutral" mit einer "1" und die "iasVGNeutral", bzw. "iasVGKreisflug" im 
+     * $temporaeresWoelbklappenArray gespeichert. Das $temporaeresWoelbklappenArray wird dann in das $gesetzteWoelbklappen-Array gepusht.
+     * Am Ende wird das $gesetzteWoelbklappen-Array zurückgegeben.
      * 
+     * $woelbklappenDaten[aufsteigendeNummer][stellungBezeichnung, stellungWinkel, iasVGNeutral, iasVGKreisflug] 
+     * -> $gesetzteWoelbklappen[neueAufsteigendeNummer][stellungBezeichnung, stellungWinkel(, neutral, kreisflug, iasVG)]
      * 
      * @param array $woelbklappenDaten
      * @return array
@@ -221,13 +228,12 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     protected function setzeFlugzeugKlappenZumSpeichern(array $woelbklappenDaten)
     {
         $gesetzteWoelbklappen = [];
-        var_dump($woelbklappenDaten);
-        echo "<br><br>";
         
         foreach($woelbklappenDaten as $index => $woelbklappe)
         {
-                // Nur Stellungen, bei denen bei denen mindestens die Bezeichnung gegeben ist speichern
-            if(isset($woelbklappe['stellungBezeichnung']) AND $woelbklappe['stellungBezeichnung'] != "")
+            $temporaeresWoelbklappenArray = array();
+            
+            if(isset($woelbklappe['stellungBezeichnung']) AND ! empty($woelbklappe['stellungBezeichnung']))
             {
                 $temporaeresWoelbklappenArray['stellungBezeichnung']  = $woelbklappe['stellungBezeichnung'];
                 $temporaeresWoelbklappenArray['stellungWinkel']       = $woelbklappe['stellungWinkel'];
@@ -245,27 +251,41 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
                 }
 
                 array_push($gesetzteWoelbklappen, $temporaeresWoelbklappenArray);
-                
-                unset($temporaeresWoelbklappenArray['iasVG'], $temporaeresWoelbklappenArray['kreisflug'], $temporaeresWoelbklappenArray['neutral']);
             }
         }
-        
-        var_dump($gesetzteWoelbklappen);
-        exit;
+
         return $gesetzteWoelbklappen;
     }
     
+    /**
+     * Übersetzt die MusterSchreibweise in einen besser zu vergleichenden String.
+     * 
+     * Entferne zuerst überflüssige Leerzeichen am Anfang oder Ende, entferne dann ausgewählte Sonderzeichen und setze Groß-
+     * zu Kleinbuchstaben. Ersetze ä mit ae, ö mit oe, ü mit ue und ß mit ss.
+     * Gib den bearbeiteten String zurück.
+     * 
+     * @param string $musterSchreibweise
+     * @return string
+     */
     public function setzeMusterKlarname(string $musterSchreibweise)
     {
-        $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\"], "", trim($musterSchreibweise)));
-        $musterKlarnameOhneAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
-        $musterKlarnameOhneOE                           = str_replace("ö", "oe", $musterKlarnameOhneAE);
-        $musterKlarnameOhneUE                           = str_replace("ü", "ue", $musterKlarnameOhneOE);
-        $musterKlarnameOhneSZ                           = str_replace("ß", "ss", $musterKlarnameOhneUE);
+        $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\", ",", "."], "", trim($musterSchreibweise)));
+        $musterKlarnameMitAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
+        $musterKlarnameMitOE                           = str_replace("ö", "oe", $musterKlarnameMitAE);
+        $musterKlarnameMitUE                           = str_replace("ü", "ue", $musterKlarnameMitOE);
+        $musterKlarnameMitSZ                           = str_replace("ß", "ss", $musterKlarnameMitUE);
         
-        return $musterKlarnameOhneSZ;
+        return $musterKlarnameMitSZ;
     }
     
+    /**
+     * Validieren der zu speichernden Daten.
+     * 
+     * 
+     * 
+     * @param array $zuValidierendeDaten
+     * @return boolean $validierungErfolgreich
+     */
     protected function validiereZuSpeicherndeDaten(array $zuValidierendeDaten)
     {
         $validation             = \Config\Services::validation();

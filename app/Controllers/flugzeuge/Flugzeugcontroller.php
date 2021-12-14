@@ -41,7 +41,7 @@ class Flugzeugcontroller extends Controller
      * 
      * @param int $musterID wird automatisch aus der URL entnommen
      */	
-    public function flugzeugNeu(int $musterID = null)
+    public function flugzeugNeu(int $musterID = NULL)
     {
         if( ! empty($musterID))
         {
@@ -56,7 +56,7 @@ class Flugzeugcontroller extends Controller
         $titel = "Neues Flugzeug anlegen";      
         
         // old() beinhaltet die eingegebenen Daten, wenn mit redirect->back->withInput zurück zu der Ursprungsseite geleitet wird
-        if(old('flugzeug') !== null)
+        if(old('flugzeug') !== NULL)
         {
             $datenInhalt += $this->ladeAlteDaten();
         }

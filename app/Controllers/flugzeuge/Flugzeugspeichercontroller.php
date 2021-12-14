@@ -7,22 +7,22 @@ use App\Models\flugzeuge\{ flugzeugeModel, flugzeugeMitMusterModel, flugzeugDeta
 
 /**
  * Child-Klasse vom FlugzeugController. Übernimmt das Speichern der eingegebenen Flugzeugdaten. Sowohl bei neuen Flugzeugen und Mustern,
- * als auch bei neu eingegebenen Wägungen
+ * als auch bei neu eingegebenen Wägungen.
  *
  * @author Lars Kastner
  */
 class Flugzeugspeichercontroller extends Flugzeugcontroller 
 {
     /**
-     * Koordination des Speicherns der Flugzeugdaten
+     * Koordination des Speicherns der Flugzeugdaten.
      * 
      * Speichere neue Wägungsdaten, wenn eine FlugzeugID gegeben ist und gib das Ergebnis zurück.
      * Wenn eine MusterID übergeben wurde, dann setze $musterID zu dieser MusterID.
      * Wenn das Flugzeug schon vorhanden ist, melde "Flugzeug schon vorhanden". Wenn keine MusterID gegeben ist, prüfe, ob das Muster 
      * schon vorhanden ist und setze $musterID zu dieser ID.
-     * Wenn eine musterID gegeben ist, aber sich der MusterZusatz geändert hat (andere Spannweite, WL, ...) dann setze $musterID zu null.
-     * Bereite die zu speichernden Daten vor und validiere sie. Wenn $musterID null, dann speichere zunächst das Muster, danach gib zurück,
-     * ob das speichern erfolgreich war
+     * Wenn eine musterID gegeben ist, aber sich der MusterZusatz geändert hat (andere Spannweite, WL, ...) dann setze $musterID zu NULL.
+     * Bereite die zu speichernden Daten vor und validiere sie. Wenn $musterID NULL, dann speichere zunächst das Muster, danach gib zurück,
+     * ob das speichern erfolgreich war.
      * 
      * @param array<array> $postDaten enthält mindestens die Wägungsdaten, ggf. auch Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Flugzeugklappen
      * @return boolean
@@ -34,7 +34,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             return $this->speicherWaegungDaten($postDaten);
         }
         
-        $musterID = $postDaten['musterID'] ?? null;
+        $musterID = $postDaten['musterID'] ?? NULL;
              
         if($this->pruefeFlugzeugVorhanden($postDaten))
         {    
@@ -45,20 +45,21 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         {
             $musterID = $this->sucheMusterID($postDaten);                                  
         }
+        
         // Wenn sich der MusterZusatz ändert, muss ein neues Muster angelegt werden
         else if( ! empty($musterID) && empty($this->sucheMusterID($postDaten)))
         {
-            $musterID = null;
+            $musterID = NULL;
         }
         
         $zuSpeicherndeDaten = $this->bereiteFlugzeugDatenVor($postDaten);
         
         if( ! $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-            return false;
+            return FALSE;
         }
         
-        if($musterID == null)
+        if($musterID == NULL)
         {
             $musterID = $this->speicherMusterDaten($zuSpeicherndeDaten);
         }
@@ -82,7 +83,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
         if( ! $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-            return false;
+            return FALSE;
         }
         
         return $this->speicherFlugzeugWaegung($zuSpeicherndeDaten['flugzeugWaegungOhneFlugzeugID'], $postDaten['flugzeugID']);
@@ -102,23 +103,24 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();       
         $musterKlarname             = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
 
-        return $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($postDaten['flugzeug']['kennung'], $musterKlarname, $postDaten['muster']['musterZusatz']) ? true : false;
+        return $flugzeugeMitMusterModel->getFlugzeugIDNachKennungKlarnameUndZusatz($postDaten['flugzeug']['kennung'], $musterKlarname, $postDaten['muster']['musterZusatz']) ? TRUE : FALSE;
     }
     
     /**
-     * Prüft, ob das Muster bereits vorhanden ist und gibt entweder die MusterID oder NULL zurück
+     * Prüft, ob das Muster bereits vorhanden ist und gibt entweder die MusterID oder NULL zurück.
+     * 
      * Lade den MusterKlarnamen aus der MusterSchreibweise mit der Funktion setzeMusterKlarname in die Variable $musterKlarname.
      * Wenn ein Muster mit dem gegebenen MusterKlarnamen und MusterZusatz vorhanden ist, dann gib die MusterID zurück, sonst NULL.
      * 
      * @param array<array> $postDaten enthält Flugzeugdaten, Musterdaten, Flugzeugdetails, Flugzeughebelarme, Wägungsdaten und ggf. Flugzeugklappen 
-     * @return int|null
+     * @return int|NULL
      */
     protected function sucheMusterID(array $postDaten)
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();       
         $musterKlarname             = $this->setzeMusterKlarname($postDaten['muster']['musterSchreibweise']);
         
-        $musterIDVorhanden = null;
+        $musterIDVorhanden = NULL;
         
         if($flugzeugeMitMusterModel->getMusterIDNachKlarnameUndZusatz($musterKlarname, $postDaten['muster']['musterZusatz']))
         {
@@ -193,7 +195,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
      */
     protected function setzeFlugzeugHebelarmeZumSpeichern(array $hebelarmDaten)
     {
-        $gesetzteHebelarme = [];
+        $gesetzteHebelarme = array();
 
         foreach($hebelarmDaten as $hebelarm)
         {
@@ -270,10 +272,10 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     public function setzeMusterKlarname(string $musterSchreibweise)
     {
         $musterKlarnameKleinbuchstabenOhneSonderzeichen = strtolower(str_replace([" ", "_", "-", "/", "\\", ",", "."], "", trim($musterSchreibweise)));
-        $musterKlarnameMitAE                           = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
-        $musterKlarnameMitOE                           = str_replace("ö", "oe", $musterKlarnameMitAE);
-        $musterKlarnameMitUE                           = str_replace("ü", "ue", $musterKlarnameMitOE);
-        $musterKlarnameMitSZ                           = str_replace("ß", "ss", $musterKlarnameMitUE);
+        $musterKlarnameMitAE                            = str_replace("ä", "ae", $musterKlarnameKleinbuchstabenOhneSonderzeichen);
+        $musterKlarnameMitOE                            = str_replace("ö", "oe", $musterKlarnameMitAE);
+        $musterKlarnameMitUE                            = str_replace("ü", "ue", $musterKlarnameMitOE);
+        $musterKlarnameMitSZ                            = str_replace("ß", "ss", $musterKlarnameMitUE);
         
         return $musterKlarnameMitSZ;
     }
@@ -281,7 +283,10 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     /**
      * Validieren der zu speichernden Daten.
      * 
-     * 
+     * Lade den den Framework-Internen Validierungsservice. 
+     * Verifiziere jedes Datenarray mit den jeweiligen Validierungsregeln (siehe app/Config/Validation).
+     * Da noch keine musterID vorhanden ist, werden alle Validierungen ohne diese vorgenommen.
+     * Bei Misserfolg setze $validierungErfolgreich zu FALSE. Gib am Ende $validierungErfolgreich zurück.
      * 
      * @param array $zuValidierendeDaten
      * @return boolean $validierungErfolgreich
@@ -289,7 +294,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
     protected function validiereZuSpeicherndeDaten(array $zuValidierendeDaten)
     {
         $validation             = \Config\Services::validation();
-        $validierungErfolgreich = true;
+        $validierungErfolgreich = TRUE;
         
         foreach($zuValidierendeDaten as $validierungsName => $datenArray)
         {
@@ -297,25 +302,38 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             {
                 foreach($datenArray as $hebelarm)
                 {
-                    $validierungErfolgreich = $validation->run($hebelarm, $validierungsName) ?  : false;
+                    $validation->run($hebelarm, $validierungsName) ? NULL : $validierungErfolgreich = FALSE;
                 }
             }
             else if ($validierungsName == "flugzeugKlappenOhneFlugzeugID")
             {
                 foreach($datenArray as $woelbklappe)
                 {
-                    $validierungErfolgreich = $validation->run($woelbklappe, $validierungsName) ?  : false;
+                    $validation->run($woelbklappe, $validierungsName) ? NULL : $validierungErfolgreich = FALSE;
                 }
             }
             else
             {
-                $validierungErfolgreich = $validation->run($datenArray, $validierungsName) ?  : false;
+                $validation->run($datenArray, $validierungsName) ? NULL : $validierungErfolgreich = FALSE;
             }
         }
         
         return $validierungErfolgreich;
     }
     
+    /**
+     * Speichert ein neues Muster und gibt die MusterID zurück.
+     * 
+     * Lade alle benötigten Muster-Modelle.
+     * Speichere die valdierten Musterdaten in der Datenbank und setze $musterID zu der 
+     * zurückgegeben neuen ID.
+     * Speichere jeden weiteren validierten Datensatz mithilfe des entsprechenden Models in der 
+     * Datenbank. Füge jeweils vorher die MusterID hinzu.
+     * Gib die MusterID zurück.
+     * 
+     * @param array $zuSpeicherndeDaten
+     * @return int $musterID
+     */
     protected function speicherMusterDaten(array $zuSpeicherndeDaten)
     {
         $musterModel            = new musterModel();
@@ -353,6 +371,20 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         return $musterID;
     }
    
+    /**
+     * Speichert ein neues Flugzeug und gibt ein Boolean zurück.
+     * 
+     * Lade alle benötigten Flugzeug-Models.
+     * Füge die MusterID zu den validierten Flugzeugdaten hinzu und speichere diese in der Datenbank und
+     * setze $flugzeugID zu der zurückgegebenen neuen ID.
+     * Speichere jeden weiteren validierten Datensatz mithilfe des entsprechenden Models in der 
+     * Datenbank. Füge jeweils vorher die FlugzeugID hinzu.
+     * Gib Erfolg oder Misserfolg zurück.
+     *  
+     * @param array $zuSpeicherndeDaten
+     * @param int $musterID
+     * @return boolean
+     */
     protected function speicherFlugzeug(array $zuSpeicherndeDaten, int $musterID)
     {
         $flugzeugeModel         = new flugzeugeModel();
@@ -361,8 +393,8 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         $flugzeugKlappenModel	= new flugzeugKlappenModel();
         $flugzeugWaegungModel	= new flugzeugWaegungModel();
         
-        $flugzeug = $zuSpeicherndeDaten['flugzeugeOhneMusterID'];
-        $flugzeug['musterID'] = $musterID;
+        $flugzeug               = $zuSpeicherndeDaten['flugzeugeOhneMusterID'];
+        $flugzeug['musterID']   = $musterID;
         
         $flugzeugID = $flugzeugeModel->insert($flugzeug);
         
@@ -395,20 +427,32 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
             }
         }
         
-        return true;
+        return TRUE;
     }
     
-    protected function speicherFlugzeugWaegung(array $flugzeugWaegungOhneFlugzeugID, int $flugzeugID)
+    /**
+     * Speichert einen Wägungsdatensatz mit einer bestimmte FlugzeugID in der Datenbank.
+     * 
+     * Lade das Flugzeug-Model und Wägungs-Model. Füge $waegungOhneFlugzeugID die FlugzeugID in $flugzeugID hinzu, in $flugzeugWaegungMitFlugzeugID.
+     * Wenn das Speichern des Datensatzes in $flugzeugWaegungMitFlugzeugID in die Datenbank erfolgreich war, update geaeandertAm des Flugzeugs mit der 
+     * entsprechenden FlugzeugID.
+     * Gib TRUE für Erfolg und FALSE für Misserfolg zurück.
+     * 
+     * @param array $waegungOhneFlugzeugID
+     * @param int $flugzeugID
+     * @return boolean
+     */
+    protected function speicherFlugzeugWaegung(array $waegungOhneFlugzeugID, int $flugzeugID)
     {
-        $flugzeugWaegungModel                       = new flugzeugWaegungModel();  
-        $flugzeugeModel                             = new flugzeugeModel();
+        $flugzeugWaegungModel               = new flugzeugWaegungModel();  
+        $flugzeugeModel                     = new flugzeugeModel();
         
-        $flugzeugWaegungMitFlugzeugID               = $flugzeugWaegungOhneFlugzeugID; 
-        $flugzeugWaegungMitFlugzeugID['flugzeugID'] = $flugzeugID;
+        $waegungMitFlugzeugID               = $waegungOhneFlugzeugID; 
+        $waegungMitFlugzeugID['flugzeugID'] = $flugzeugID;
         
-        $erfolg = false;
+        $erfolg = FALSE;
         
-        if($flugzeugWaegungModel->insert($flugzeugWaegungMitFlugzeugID))
+        if($flugzeugWaegungModel->insert($waegungMitFlugzeugID))
         {
             $erfolg = $flugzeugeModel->updateGeaendertAmNachID($flugzeugID);
         }

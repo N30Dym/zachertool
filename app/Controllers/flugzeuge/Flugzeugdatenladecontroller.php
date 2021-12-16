@@ -9,7 +9,7 @@ use \App\Models\piloten\pilotenMitAkafliegsModel;
 
 
 /**
- * Child-Klasse vom FlugzeugController. Übernimmt das Laden der Flugzeugdaten aus der Datenbank.
+ * Child-Klasse vom FlugzeugController. Übernimmt das Laden der Flugzeug- und Musterdaten aus der Datenbank.
  *
  * @author Lars Kastner
  */
@@ -55,10 +55,10 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         if($musterDatenArray['muster']['istWoelbklappenFlugzeug'] == 1)
         {
-            $musterKlappenModel = new musterKlappenModel();
-            $musterKlappen      = $musterKlappenModel->getMusterKlappenNachMusterID($musterID);
+            $musterKlappenModel                 = new musterKlappenModel();
+            $musterKlappen                      = $musterKlappenModel->getMusterKlappenNachMusterID($musterID);
 
-            $musterDatenArray['woelbklappe'] = $this->sortiereWoelbklappenDaten($musterKlappen);
+            $musterDatenArray['woelbklappe']    = $this->sortiereWoelbklappenDaten($musterKlappen);
         }
  
         return $musterDatenArray;
@@ -98,10 +98,10 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         if($flugzeugDatenArray['muster']['istWoelbklappenFlugzeug'] == 1)
         {
-            $flugzeugKlappenModel   = new flugzeugKlappenModel();
-            $flugzeugKlappen        = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
+            $flugzeugKlappenModel               = new flugzeugKlappenModel();
+            $flugzeugKlappen                    = $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID);
             
-            $flugzeugDatenArray['woelbklappe'] = $this->sortiereWoelbklappenDaten($flugzeugKlappen);
+            $flugzeugDatenArray['woelbklappe']  = $this->sortiereWoelbklappenDaten($flugzeugKlappen);
         }
  
         return $flugzeugDatenArray;
@@ -119,8 +119,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     protected function ladeFlugzeugUndMusterDaten(int $flugzeugID)
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();      
-        $flugzeugMitMuster          = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
-        
+        $flugzeugMitMuster          = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);       
         $rueckgabeArray             = array();
         
         $rueckgabeArray['muster'] = [
@@ -148,8 +147,8 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
      * Wenn alle Bezeichnungen numerisch sind, sortiere $woelbklappenDaten aufsteigend nach der Bezeichnung, sonst, wenn alle Ausschlagswinkel gegeben sind,
      * sortiere $woelbklappenDaten aufsteigend nach den Winkeln.
      * Suche in den $woelbklappenDaten nach der Neutral- und der Kreisflugstellung. Wenn die jeweilige Klappenstellung Neutral oder Kreisflugstellung ist,
-     * setze $woelbklappenDaten['neutral'] bzw. $woelbklappenDaten['kreisflug'] zu der Indexnummer der Stellung und setze iasVGNeutral, bzw. iasVGKreisflug zu
-     * der jeweiligen Vergleichsfluggeschwindigkeit.
+     * setze $woelbklappenDaten['neutral'] bzw. $woelbklappenDaten['kreisflug'] zu der Indexnummer der Stellung und setze $woelbklappenDaten['iasVGNeutral'], 
+     * bzw. $woelbklappenDaten['iasVGKreisflug'] zu der jeweiligen Vergleichsfluggeschwindigkeit.
      * Gib $woelbklappenDaten zurück.
      * 
      * @param array $woelbklappenDaten
@@ -207,74 +206,115 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         return $rueckgabeArray;
     }
     
-        /**
-         * Die folgenden Variablen sind Arrays mit den vorhanden Eingaben der jeweiligen Datenbankfelder. Sie werden
-         * als Vorschlagliste im View geladen. Es gibt dabei keine Dopplungen innerhalb einer Liste.
-         * Dies ist notwendig bei vorhanden UND neuen Mustern, deswegen werden diese Werte erst jetzt $datenInhalt hinzugefügt
-         * 
-         * @return array<array>
-         */
+    /**
+     * Lädt für diverse Datenbankspalten die vorhandenen Einträge.
+     * 
+     * Lade das FlugzeugDetails- und Muster-Model. 
+     * Gib ein Array zurück, in dem für die Spalten muster->musterSchreibweise und flugzeug_details->variometer, tekArt, tekPosition, pitotPosition, bremsklappen, bezugspunkt
+     * jeweils die einzelnen Einträge gesetzt werden, wobei keine Doppplungen vorkommen. 
+     * 
+     * @return array
+     */
     public function ladeEingabeListen()
     {
         $flugzeugDetailsModel   = new flugzeugDetailsModel();
         $musterModel            = new musterModel();
         
         return [
-            'musterEingaben'        => $musterModel->getDistinctSichtbareMusterSchreibweisen()      ?? array(),
+            'musterEingaben'        => $musterModel->getDistinctMusterSchreibweisen()               ?? array(),
             'variometerEingaben'    => $flugzeugDetailsModel->getDistinctVariometerEingaben()       ?? array(),
             'tekArtEingaben'        => $flugzeugDetailsModel->getDistinctTekArtEingaben()           ?? array(),
             'tekPositionEingaben'   => $flugzeugDetailsModel->getDistinctTekPositionEingaben()      ?? array(),
             'pitotPositionEingaben' => $flugzeugDetailsModel->getDistinctPitotPositionEingaben()    ?? array(),
             'bremsklappenEingaben'  => $flugzeugDetailsModel->getDistinctBremsklappenEingaben()     ?? array(),
             'bezugspunktEingaben'   => $flugzeugDetailsModel->getDistinctBezugspunktEingaben()      ?? array(),            
-        ];
-    
+        ];   
     }   
     
+    /**
+     * Prüft, ob eine MusterID in der Datenbank vorhanden ist.
+     * 
+     * Lade das Muster-Modell. Wenn die Funktion getMusterNachID mit der übergebenen MusterID ein Resultat liefert, dass nicht "NULL" ist,
+     * dann gib TRUE zurück, sonst FALSE.
+     * 
+     * @param int $musterID
+     * @return boolean
+     */
     protected function pruefeMusterIDVorhanden(int $musterID)
     {
         $musterModel = new musterModel();
         return $musterModel->getMusterNachID($musterID) ? TRUE : FALSE;
     }
     
+    /**
+     * Prüft, ob eine FlugzeugID in der Datenbank vorhanden ist.
+     * 
+     * Lade das Flugzeug-Modell. Wenn die Funktion getFlugzeugNachID mit der übergebenen FlugzeugID ein Resultat liefert, dass nicht "NULL" ist,
+     * dann gib TRUE zurück, sonst FALSE.
+     *  
+     * @param int $flugzeugID
+     * @return boolean
+     */
     protected function pruefeFlugzeugIDVorhanden(int $flugzeugID)
     {
         $flugzeugeModel = new flugzeugeModel();
         return $flugzeugeModel->getFlugzeugNachID($flugzeugID) ? TRUE : FALSE;
     }
     
+    /**
+     * Lädt alle sichtbaren Flugzeuge und jeweils die Anzahl der bestätigten Protokolle dazu.
+     * 
+     * Lade das Protokolle-Model und den FlugzeugeMitMuster-View. Lade alle sichtbaren Flugzeuge mit den jeweiligen 
+     * MusterDaten in das $flugzeugeArray. Für jedes Flugzeug im $flugzeugeArray setze 'protokollAnzahl' zu der
+     * jeweiligen Anzahl der bestätigten Protokolle, mit der Funktion getAnzahlBestaetigteProtokolleNachFlugzeugID des
+     * FlugzeugeMitMuster-Views.
+     * Gib das $flugzeugeArray zurück.
+     * 
+     * @return array $flugzeugeArray
+     */
     protected function ladeSichtbareFlugzeugeMitProtokollAnzahl()
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
         $protokolleModel            = new protokolleModel();
-        $temporaeresFlugzeugArray   = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
+        $flugzeugeArray             = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
          
-        foreach($temporaeresFlugzeugArray as $index => $flugzeug)
+        foreach($flugzeugeArray as $index => $flugzeug)
         {
-            $temporaeresFlugzeugArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeug['flugzeugID']);
+            $flugzeugeArray[$index]['protokollAnzahl'] = $protokolleModel->getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeug['flugzeugID']);
         }
         
-        return $temporaeresFlugzeugArray;       
+        return $flugzeugeArray;       
     }
     
+    /**
+     * Lädt für die übergebene FlugzeugID alle bestätigten ProtokollDaten in denen diese FlugzeugID vorkommt.
+     * 
+     * Lade das Protokolle-Model und den PilotenMitAkafliegs-View. Lade alle bestätigten Protokolle bei denen die FlugzeugID mit der übergebenen FlugzeugID
+     * übereinstimmt in das $bestaetigteProtokolleDatenArray. Für jedes dieser Protokolle prüfe, ob eine CopilotenID vorhanden ist. Wenn ja, setze copilotDetails
+     * für diesen Protokollindex mit den PilotenDaten und dem Akafliegnamen des Copiloten. Setze pilotDetails für diesen Protokollindex mit den PilotenDaten und 
+     * dem Akafliegnamen des Piloten.
+     * Gib das $bestaetigteProtokolleDatenArray zurück.
+     * 
+     * @param int $flugzeugID
+     * @return array $bestaetigteProtokolleDatenArray
+     */
     protected function ladeFlugzeugProtokollDaten(int $flugzeugID)
     {
-        $protokolleModel = new protokolleModel();
-        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
-        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+        $protokolleModel            = new protokolleModel();
+        $pilotenMitAkafliegsModel   = new pilotenMitAkafliegsModel();
         
-        $bestaetigteProtokolle = $protokolleModel->getAbgegebeneProtokolleNachFlugzeugID($flugzeugID);
+        $bestaetigteProtokolleDatenArray = $protokolleModel->getBestaetigteProtokolleNachFlugzeugID($flugzeugID);
         
-        foreach($bestaetigteProtokolle as $protokollID => $protokollDaten)
+        foreach($bestaetigteProtokolleDatenArray as $index => $protokollDaten)
         {
-            if(!empty($protokollDaten['copilotID']))
+            if( ! empty($protokollDaten['copilotID']))
             {
-                $bestaetigteProtokolle[$protokollID]['copilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['copilotID']);
+                $bestaetigteProtokolleDatenArray[$index]['copilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['copilotID']);
             }
             
-            $bestaetigteProtokolle[$protokollID]['pilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['pilotID']);
+            $bestaetigteProtokolleDatenArray[$index]['pilotDetails'] = $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($protokollDaten['pilotID']);
         }
         
-        return $bestaetigteProtokolle;
+        return $bestaetigteProtokolleDatenArray;
     }
 }

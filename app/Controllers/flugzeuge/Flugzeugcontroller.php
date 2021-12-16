@@ -25,15 +25,14 @@ class Flugzeugcontroller extends Controller
     {
         $titel = 'Musterauswahl';		
 
-        $datenHeader['titel'] = $datenInhalt['titel'] = $titel;
-
-        $datenInhalt['muster'] = $this->sichtbareMusterLaden();
+        $datenHeader['titel']   = $datenInhalt['titel'] = $titel;
+        $datenInhalt['muster']  = $this->sichtbareMusterLaden();
         
         $this->musterListeAnzeigen($datenHeader, $datenInhalt);
     }
 
     /**
-     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/neu bzw. <base_url>/flugzeuge/neu/<musterID> aufgerufen wird
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/neu bzw. <base_url>/flugzeuge/neu/<musterID> aufgerufen wird.
      *
      * Wenn eine MusterID in der URL gegeben ist, prüfe, ob die MusterID existiert.
      * Falls alte Daten (old()) vorhanden sind, lade diese in $datenInhalt, sonst wenn eine MusterID in der URL gegeben ist, lade 
@@ -51,9 +50,8 @@ class Flugzeugcontroller extends Controller
             }
         }
         
-        $datenInhalt = $this->eingabeListenLaden();
-        
-        $titel = "Neues Flugzeug anlegen";      
+        $datenInhalt    = $this->eingabeListenLaden();        
+        $titel          = "Neues Flugzeug anlegen";      
         
         // old() beinhaltet die eingegebenen Daten, wenn mit redirect->back->withInput zurück zu der Ursprungsseite geleitet wird
         if(old('flugzeug') !== NULL)
@@ -72,7 +70,7 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
-     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/speichern aufgerufen wird 
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/speichern aufgerufen wird. 
      * 
      * Wenn übermittelte Daten vorliegen, dann speichere die Flugzeugdaten. Bei Erfolg zeige eine Erfolgsnachricht, sonst leite auf die
      * Eingabeseite zurück (flugzeugNeu()) und übergib die eingegebenen Daten.
@@ -100,7 +98,7 @@ class Flugzeugcontroller extends Controller
     
     
     /**
-     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/bearbeiten/<flugzeugID> aufgerufen wird
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/bearbeiten/<flugzeugID> aufgerufen wird.
      * 
      * Prüfe, ob die FlugzeugID vorhanden ist, sonst leite zur Startseite um.
      * Lade die Flugzeugdaten in $datenInhalt und zeige die Flugzeugeingabeseite an.
@@ -114,17 +112,15 @@ class Flugzeugcontroller extends Controller
             return redirect()->to(base_url());
         }
         
-        $datenInhalt = $this->flugzeugDatenLaden($flugzeugID); 
-        
-        $titel = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
-        
-        $datenInhalt['titel'] = $datenHeader['titel'] = $titel;
+        $datenInhalt            = $this->flugzeugDatenLaden($flugzeugID);  
+        $titel                  = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
+        $datenInhalt['titel']   = $datenHeader['titel'] = $titel;
         
         $this->flugzeugEingabeAnzeigen($datenHeader, $datenInhalt);
     }
     
     /**
-     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/anzeigen/<flugzeugID> aufgerufen wird 
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/anzeigen/<flugzeugID> aufgerufen wird. 
      * 
      * Prüfe, ob die FlugzeugID existiert, sonst leite zur Startseite um.
      * Lade die Flugzeugdaten in $datenInhalt und zeige die Flugzeuganzeigeseite an.
@@ -138,33 +134,28 @@ class Flugzeugcontroller extends Controller
             return redirect()->to(base_url());
         }
         
-        $datenInhalt = $this->flugzeugDatenLaden($flugzeugID); 
-        
-        $titel = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];
-        
-        $datenInhalt['titel'] = $datenHeader['titel'] = $titel;
+        $datenInhalt            = $this->flugzeugDatenLaden($flugzeugID);        
+        $titel                  = $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz'] . " - " . $datenInhalt['flugzeug']['kennung'];       
+        $datenInhalt['titel']   = $datenHeader['titel'] = $titel;
 
         $this->flugzeugAnzeigeAnzeigen($datenHeader, $datenInhalt);
     }
     
     /**
-     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/liste aufgerufen wird 
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/liste aufgerufen wird.
      * 
      * Lade alle sichtbaren Flugzeuge in $datenInhalt['flugzeugArray'] und zeige die Flugzeugliste an.
      */
     public function flugzeugListe()
-    {
-        $titel = "Flugzeug zum Anzeigen auswählen";
-        
-        $datenHeader['titel'] = $titel;
-        
-        $datenInhalt['flugzeugeArray'] = $this->sichtbareFlugzeugeUndProtokollAnzahlLaden();
+    {      
+        $datenHeader['titel']           = "Flugzeug zum Anzeigen auswählen";        
+        $datenInhalt['flugzeugeArray']  = $this->sichtbareFlugzeugeUndProtokollAnzahlLaden();
         
         $this->flugzeugListeAnzeigen($datenHeader, $datenInhalt);
     }
 
     /**
-     * Lädt alle sichtbaren Muster
+     * Lädt alle sichtbaren Muster.
      * 
      * Rufe die Funktion ladeSichtbareMuster der Child-Klasse FlugzeugDatenLadeController auf und speichere die Musterdaten im $musterArray.
      * Sortiere die Musterdaten nach musterKlarnamen (Musterschreibweise ohne Sonder- und Leerzeichen) und gib das sortierte Array zurück.
@@ -182,7 +173,7 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
-     * Zeigt die Musterliste an
+     * Zeigt die Musterliste an.
      * 
      * Rufe die Funktion zeigeMusterListe der Child-Klasse FlugzeugDatenLadeController auf.
      * 
@@ -196,7 +187,7 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
-     * Zeigt die Flugzeugliste an
+     * Zeigt die Flugzeugliste an.
      * 
      * Rufe die Funktion zeigeFlugzeugListe der Child-Klasse FlugzeugDatenLadeController auf.
      * 
@@ -210,7 +201,7 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
-     * Zeigt die Flugzeuganzeigeseite an
+     * Zeigt die Flugzeuganzeigeseite an.
      * 
      * Rufe die Funktion zeigeFlugzeugAnzeige der Child-Klasse FlugzeugDatenLadeController auf.
      *  
@@ -225,7 +216,7 @@ class Flugzeugcontroller extends Controller
     
     
     /**
-     * Zeigt die Flugzeugeingabeseite an
+     * Zeigt die Flugzeugeingabeseite an.
      * 
      * Rufe die Funktion zeigeFlugzeugEingabe der Child-Klasse FlugzeugDatenLadeController auf.
      *  
@@ -254,11 +245,15 @@ class Flugzeugcontroller extends Controller
     /**
      * Lädt alle Daten die bereits eingegeben wurden und im old()-Zwischenspeicher übergeben wurden und gibt diese zurück.
      * 
+     * Setze in das $alteDatenArray die Daten die im old()-Zwischenspeicher übergeben wurden. Wenn eine MusterID übergeben wurde, füge sie zum $alteDatenArray hinzu.
+     * Wenn das Flugzeug im old()-Zwischenspeicher ein Wölbklappenflugzeug ist, füge die WölbklappenDaten aus den übergebenen Daten zum $alteDatenArray hinzu.
+     * Gib das $alteDatenArray zurück
+     * 
      * @return array<array> enthält Arrays mit den Daten der Oberkategorien Titel, Muster, Flugzeug, Flugzeugdetails, Wägung, Hebelarm, ggf. MusterID, ggf. Wölbklappen
      */
     protected function ladeAlteDaten()
     {
-        $alteDaten = [
+        $alteDatenArray = [
             'titel'             => old('titel'),
             'muster'            => old('muster'),
             'flugzeug'          => old('flugzeug'),
@@ -269,19 +264,19 @@ class Flugzeugcontroller extends Controller
         
         if( ! empty(old('musterID')))
         {
-            $alteDaten['musterID'] = old('musterID');
+            $alteDatenArray['musterID'] = old('musterID');
         }
         
         if(isset(old('muster')['istWoelbklappenFlugzeug']))
         {
-            $alteDaten['woelbklappe'] = old('woelbklappe');
+            $alteDatenArray['woelbklappe'] = old('woelbklappe');
         }  
 
-        return $alteDaten;
+        return $alteDatenArray;
     }
     
     /**
-     * Lädt die Musterdaten
+     * Lädt die Musterdaten.
      * 
      * Rufe die Funktion ladeMusterDaten der Child-Klasse FlugzeugDatenLadeController auf und gib die Daten zurück.
      * 

@@ -49,7 +49,7 @@ class Pilotendatenladecontroller extends Pilotencontroller
         $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
         $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
         
-        $bestaetigteProtokolle = $protokolleModel->getAbgegebeneProtokolleNachPilotID($pilotID);
+        $bestaetigteProtokolle = $protokolleModel->geBestaetigteProtokolleNachPilotID($pilotID);
         
         foreach($bestaetigteProtokolle as $protokollID => $protokollDaten)
         {

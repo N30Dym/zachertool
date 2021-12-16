@@ -201,12 +201,12 @@ class protokolleModel extends Model
         return $this->selectCount("id")->where("flugzeugID", $flugzeugID)->first();
     }
     
-    public function getAbgegebeneProtokolleNachPilotID($pilotID)
+    public function geBestaetigteProtokolleNachPilotID($pilotID)
     {
         return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
     }
     
-    public function getAbgegebeneProtokolleNachFlugzeugID($flugzeugID)
+    public function getBestaetigteProtokolleNachFlugzeugID($flugzeugID)
     {
         return $this->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll();
     }

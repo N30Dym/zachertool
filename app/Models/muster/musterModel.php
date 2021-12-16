@@ -45,9 +45,9 @@ class musterModel extends Model
         return $this->where('sichtbar', null)->findAll();
     }
     
-    public function getDistinctSichtbareMusterSchreibweisen()
+    public function getDistinctMusterSchreibweisen()
     {
-        return $this->distinct()->where('sichtbar', 1)->findColumn("musterSchreibweise");
+        return $this->distinct()->findColumn("musterSchreibweise");
     }
     
     public function getMusterIDNachKlarnameUndZusatz($musterKlarname, $musterZusatz)

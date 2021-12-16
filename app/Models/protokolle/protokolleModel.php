@@ -6,20 +6,65 @@ use CodeIgniter\Model;
 
 class protokolleModel extends Model
 {
-        /*
-         * Verbindungsvariablen für den Zugriff zur
-         * Datenbank zachern_protokolle auf die 
-         * Tabelle protokolle
-         */
+    /**
+     * Verbindung zur Datenbank `zachern_protokolle`.
+     * (siehe app/Config/Database.php -> $protokolleDB).
+     * 
+     * @var string $DBGroup
+     */
     protected $DBGroup          = 'protokolleDB';
+    
+    /**
+     * Definiert die zu benutzende Tabelle der Datenabank `zachern_protokolle`.
+     * 
+     * @var string $table 
+     */
     protected $table            = 'protokolle';
+    
+    /**
+     * Definiert den PrimaryKey der Datenbanktabelle `protokolle`.
+     * 
+     * @var string $primaryKey
+     */
     protected $primaryKey       = 'id';
+    
+    /**
+     * Definiert das Feld der Datenbanktabelle `zachern_protokolle`.`protokolle`, welches automatisch den aktuellen Zeitstempel
+     * beim Erstellen des Datensatzes speichert.
+     * 
+     * @var string $createdField
+     */
     protected $createdField  	= 'erstelltAm';
+    
+    /**
+     * Definiert das Feld der Datenbanktabelle `zachern_protokolle`.`protokolle`, welches automatisch den aktuellen Zeitstempel
+     * beim Updaten des Datensatzes speichert.
+     * 
+     * @var string $updatedField
+     */
+    protected $updatedField     = 'geaendertAm';
+    
+    /**
+     * Definiert den Regelsatz, der für das Speichern eines Datensatzes für die einzelnen Spalten gilt.
+     * (siehe app/Config/Validation.php -> $protokolle)
+     * 
+     * @var string $validationRules
+     */
     protected $validationRules 	= 'protokolle';
     
+    /**
+     * Definiert den Typ der zurückgegebenen Daten (Array oder Objekt).
+     * 
+     * @var string $returnType
+     */
     protected $returnType     = 'array';
 
-    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit','stundenAufDemMuster', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
+    /**
+     * Definiert die Spalten der Tabelle `zachern_protokolle`.`protokolle`, die bearbeitet werden dürfen.
+     * 
+     * @var string[] $allowedFields 
+     */
+    protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit', 'stundenAufDemMuster', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
 
         /**
@@ -29,29 +74,28 @@ class protokolleModel extends Model
         */
     public function getAlleProtokolle()
     {			
-        $query = "SELECT * FROM protokolle;";
-        return $this->query($query)->getResultArray();	
+        return $this->findAll();	
     }
 
-        /**
-        * Diese Funktion ruft nur das Protokoll mit
-        * der jeweiligen ID auf
-        *
-        * @param  mix $id int oder string
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur das Protokoll mit
+     * der jeweiligen ID auf
+     *
+     * @param  mix $id int oder string
+     * @return array
+     */
     public function getProtokollNachID($id)
     {			
         return $this->where("id", $id)->first();	
     }
 
 
-        /**
-        * Diese Funktion ruft nur Protokolle auf die
-        * bestätigt wurden (Nach Abgabegespräch)
-        *
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur Protokolle auf die
+     * bestätigt wurden (Nach Abgabegespräch)
+     *
+     * @return array
+     */
     public function getBestaetigteProtokolleNachJahrenSoriert()
     {			
         $protokolleNachJahrenSortiert = [];
@@ -72,53 +116,53 @@ class protokolleModel extends Model
     }
 
 
-        /**
-        * Diese Funktion ruft nur Protokolle auf die
-        * fertig sind, aber noch nicht abgegeben wurden 
-        * (vor Abgabegespräch, aber abgesendet)
-        *
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur Protokolle auf die
+     * fertig sind, aber noch nicht abgegeben wurden 
+     * (vor Abgabegespräch, aber abgesendet)
+     *
+     * @return array
+     */
     public function getFertigeProtokolle()
     {			
         return $this->where("bestaetigt", null)->where("fertig", 1)->orderBy('datum')->findAll();
     }
 
 
-        /**
-        * Diese Funktion ruft nur Protokolle auf die
-        * NICHT fertig sind (Zwischenspeicher ggf. abgebrochen)
-        *
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur Protokolle auf die
+     * NICHT fertig sind (Zwischenspeicher ggf. abgebrochen)
+     *
+     * @return array
+     */
     public function getAngefangeneProtokolle()
     {			
         return $this->where("bestaetigt", null)->where("fertig", null)->orderBy('datum')->findAll();
     }
 
 
-        /**
-        * Diese Funktion ruft nur alle Protokolle auf
-        * der im jeweiligen Jahr geflogen wurden. Das
-        * Erstelldatum wird NICHT berücksichtigt
-        *
-        * @param  int $jahr
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur alle Protokolle auf
+     * der im jeweiligen Jahr geflogen wurden. Das
+     * Erstelldatum wird NICHT berücksichtigt
+     *
+     * @param  int $jahr
+     * @return array
+     */
     public function getDistinctFlugzeugIDNachJahr($jahr)
     {		
         $query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
     }
 
-        /**
-        * Diese Funktion ruft nur alle Protokolle auf
-        * der im jeweiligen Jahr geflogen wurden. Das
-        * Erstelldatum wird NICHT berücksichtigt
-        *
-        * @param  int $jahr
-        * @return array
-        */
+    /**
+     * Diese Funktion ruft nur alle Protokolle auf
+     * der im jeweiligen Jahr geflogen wurden. Das
+     * Erstelldatum wird NICHT berücksichtigt
+     *
+     * @param  int $jahr
+     * @return array
+     */
     public function getDistinctPilotIDNachJahr($jahr)
     {		
         $query = "SELECT DISTINCT pilotID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
@@ -149,7 +193,7 @@ class protokolleModel extends Model
     
     public function getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)
     {
-        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first();
+        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first()['id'];
     }
     
     public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)

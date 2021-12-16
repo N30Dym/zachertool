@@ -553,7 +553,7 @@ class Protokollspeichercontroller extends Protokollcontroller
     }
     
     /**
-     * Updatet den Wert für 'geandertAm' für die id, die in der $_SESSION['protokoll']['protokollSpeicherID'] gespeichert ist.
+     * Updatet den Wert für 'geaendertAm' für die ID, die in der $_SESSION['protokoll']['protokollSpeicherID'] gespeichert ist.
      * 
      * @return void
      */

@@ -20,6 +20,6 @@ if ( ! function_exists('nachrichtAnzeigen'))
 
         echo view('templates/headerView');
         echo view('templates/nachrichtView', $datenNachricht);
-        echo view('templates/footerView');
+        exit;
     }   
 }

@@ -10,7 +10,7 @@ namespace App\Controllers\flugzeuge;
 class Flugzeuganzeigecontroller extends Flugzeugcontroller 
 {
     /**
-     * Gib alle benötigten Views aus, um eine Liste aller sichtbaren Muster anzuzeigen.
+     * Gibt alle benötigten Views aus, um eine Liste aller sichtbaren Muster anzuzeigen.
      * 
      * Diese Seite wird aufgerufen, wenn ein neues Flugzeug mit vorhandenem Muster angelegt werden soll.
      * 
@@ -27,7 +27,7 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller
     }
     
     /**
-     * Gib alle benötigten Views aus, um eine Liste aller sichtbaren Flugzeuge anzuzeigen.
+     * Gibt alle benötigten Views aus, um eine Liste aller sichtbaren Flugzeuge anzuzeigen.
      * 
      * Diese Seite wird angezeigt, um die Details eines der Flugzeuge anzeigen zu lassen.
      * 
@@ -44,7 +44,7 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller
     }
     
     /**
-     * Gib alle benötigten Views aus, um ein neues Flugzeug eingeben zu können.
+     * Gibt alle benötigten Views aus, um ein neues Flugzeug eingeben zu können.
      * 
      * Diese Seite wird aufgerufen, wenn ein neues Flugzeug angelegt werden soll. Wenn im $datenInhalt-Array eine MusterID vorhanden ist
      * werden die musterbezogenen Daten vorausgefüllt. 
@@ -65,7 +65,7 @@ class Flugzeuganzeigecontroller extends Flugzeugcontroller
     }
     
     /**
-     * Gib alle benötigten Views aus, um die Daten für ein Flugzeug anzuzeigen.
+     * Gibt alle benötigten Views aus, um die Daten für ein Flugzeug anzuzeigen.
      * 
      * Diese Seite wird angezeigt, wenn in der Flugzeugliste bei einem Flugzeug auf "Anzeigen" geklickt wird.
      * Es werden die Flugzeugdaten angezeigt, ohne sie bearbeiten zu können.

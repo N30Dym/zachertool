@@ -7,59 +7,67 @@ use App\Controllers\piloten\{Pilotendatenladecontroller, Pilotenspeichercontroll
 
 helper(['url', 'nachrichtAnzeigen']);
 
+/**
+ * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, die sich mit den Piloten befassen.
+ * 
+ * @author Lars Kastner
+ */
 class Pilotencontroller extends Controller 
 {
-    public function index()
-    {
-        // Für wenn kein JS aktiv ist
-    }
-    
+    /**
+     * Wird ausgeführt, wenn die URL <base_url>/piloten/neu aufgerufen wird.
+     *
+     * Lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade alle Akafliegs in das $datenInhalt['akafliegDatenArray'].
+     * Wenn im old()-Zwischenspeicher PilotenDaten oder -Details sind, dann füge sie dem $datenInhalt hinzu.
+     * Zeige den PilotenEingabeView an und fülle ggf. die alten Daten wieder ein.
+     */	
     public function pilotAnlegen()
     {
-        $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
-        $titel                      = "Neuen Piloten anlegen";
+        $pilotenAnzeigeController           = new Pilotenanzeigecontroller();
         
-        $datenHeader = [
-            'titel' => $titel
-        ];
-        
-        $datenInhalt = [
-            'akafliegDatenArray' => $this->ladeSichtbareAkafliegs()
-        ];
+        $datenHeader['titel']               = "Neuen Piloten anlegen";        
+        $datenInhalt['akafliegDatenArray']  = $this->sichtbareAkafliegsLaden();
         
         if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
                 'pilot'                 => old('pilot'),
                 'pilotDetail'           => old('pilotDetail'),
-                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
+                'akafliegDatenArray'    => $this->sichtbareAkafliegsLaden()
             ];
         }
         
         $pilotenAnzeigeController->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
     
+    /**
+     * Wird ausgeführt, wenn die URL <base_url>/piloten/liste aufgerufen wird.
+     * 
+     * Lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade alle sichtbaren Piloten in $datenInhalt['pilotenArray'].
+     * Zeige eine Liste mit allen sichtbaren Piloten an 
+     */
     public function pilotenListe()
     {
-        $pilotenAnzeigeController   = new Pilotenanzeigecontroller();       
-        $titel                      = "Piloten zum Anzeigen oder Bearbeiten auswählen";
+        $pilotenAnzeigeController       = new Pilotenanzeigecontroller();       
         
-        $datenHeader = [
-            'titel' => $titel
-        ];
-
-        $datenInhalt = [
-            'pilotenArray' => $this->ladePilotenDaten()
-        ];
+        $datenHeader['titel']           = "Piloten zum Anzeigen oder Bearbeiten auswählen";
+        $datenInhalt['pilotenArray']    = $this->sichtbarePilotenDatenLaden();
         
         $pilotenAnzeigeController->zeigePilotenListe($datenHeader, $datenInhalt);
     }
     
-    public function pilotBearbeiten($pilotID)
+    /**
+     * Wird ausgeführt, wenn die URL <base_url>/piloten/bearbeiten/<pilotID> aufgerufen wird.
+     * 
+     * 
+     * 
+     * @param int $pilotID
+     */
+    public function pilotBearbeiten(int $pilotID)
     {
-        if(empty($this->pruefeObPilotIDVergeben($pilotID)))
+        if($this->pruefeObPilotIDVergeben($pilotID))
         {
-            nachrichtAnzeigen("Kein Pilot mit dieser ID gefunden", base_url());
+            nachrichtAnzeigen("Kein Pilot mit dieser ID gefunden", base_url()); 
         }
         
         $pilotenAnzeigeController   = new Pilotenanzeigecontroller();
@@ -74,7 +82,7 @@ class Pilotencontroller extends Controller
         $pilotenAnzeigeController->zeigePilotenEingabeView($datenHeader, $datenInhalt);
     }
     
-    public function pilotAnzeigen($pilotID)
+    public function pilotAnzeigen(int $pilotID)
     {
         if(empty($this->pruefeObPilotIDVergeben($pilotID)))
         {
@@ -97,9 +105,7 @@ class Pilotencontroller extends Controller
     {
         if($this->request->getPost() != null)
         {
-            //$this->zeigeWarteSeite();
-
-            if($this->speicherPilotenDaten($this->request->getPost()))
+            if($this->pilotenDatenSpeichern($this->request->getPost()))
             {               
                 $session = session();
                 $session->setFlashdata('nachricht', "Pilotendaten erfolgreich gespeichert");
@@ -117,97 +123,89 @@ class Pilotencontroller extends Controller
         }
     }
     
-    public function pruefeObPilotIDVergeben($pilotID)
+    public function pruefeObPilotIDVergeben(int $pilotID)
     {
         $pilotenDatenLadeController = new Pilotendatenladecontroller();
-        return $pilotenDatenLadeController->ladePilotDaten($pilotID);
+        return $pilotenDatenLadeController->ladePilotDaten($pilotID) ? TRUE : FALSE ;
     }
     
-    protected function ladePilotenDaten()
+    protected function sichtbarePilotenDatenLaden()
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladeSichtbarePilotenDaten();
     }
     
-    protected function ladePilotDaten($pilotID) 
+    protected function pilotenDatenNachPilotIDLaden(int $pilotID) 
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotDaten($pilotID);
     }
     
-    protected function ladePilotDetails($pilotID) 
+    protected function pilotDetailsNachPilotIDLaden(int $pilotID) 
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotDetails($pilotID);
     }
     
-    protected function speicherPilotenDaten($postDaten)
+    protected function pilotenDatenSpeichern(array $postDaten)
     {
         $pilotenSpeicherController = new Pilotenspeichercontroller();       
         return $pilotenSpeicherController->speicherPilotenDaten($postDaten);
     }
     
-    protected function zeigeWarteSeite()
-    {
-        $pilotenAnzeigeController = new Pilotenanzeigecontroller();       
-        $pilotenAnzeigeController->zeigeWarteSeite();
-    }
-    
-    protected function ladeSichtbareAkafliegs() 
+    protected function sichtbareAkafliegsLaden() 
     {
         $pilotenDatenLadeController = new Pilotendatenladecontroller();
         return $pilotenDatenLadeController->ladeSichtbareAkafliegs();       
     }
     
-    public function setzeDatenInhaltFuerPilotBearbeiten($pilotID)
-    {
-        $pilotenLadeController = new Pilotendatenladecontroller();
-        
-        $datenInhalt = [];
+    public function setzeDatenInhaltFuerPilotBearbeiten(int $pilotID)
+    {        
+        $datenInhalt = array();
         
         if(old('pilot') !== null OR old('pilotDetail') !== null)
         {
             $datenInhalt = [
                 'pilotID'               => old('pilotID'),
-                'pilot'                 => old('pilot') !== null ? old('pilot') : $pilotenLadeController->ladePilotDaten($pilotID),
+                'pilot'                 => old('pilot') !== null ? old('pilot') : $this->pilotenDatenNachPilotIDLaden($pilotID),
                 'pilotDetail'           => old('pilotDetail'),
-                'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
-                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
+                'pilotDetailsArray'     => $this->pilotDetailsNachPilotIDLaden($pilotID),
+                'akafliegDatenArray'    => $this->sichtbareAkafliegsLaden()
             ];
         }
         else
         {        
             $datenInhalt = [
                 'pilotID'               => $pilotID,
-                'pilot'                 => $pilotenLadeController->ladePilotDaten($pilotID),
-                'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
-                'akafliegDatenArray'    => $this->ladeSichtbareAkafliegs()
+                'pilot'                 => $this->pilotenDatenNachPilotIDLaden($pilotID),
+                'pilotDetailsArray'     => $this->pilotDetailsNachPilotIDLaden($pilotID),
+                'akafliegDatenArray'    => $this->sichtbareAkafliegsLaden()
             ];
         }
         
         return $datenInhalt;
     }
     
-    protected function ladePilotZachernachweis($pilotID)
+    protected function ladePilotZachernachweis(int $pilotID)
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotZachernachweis($pilotID);
     }
     
-    protected function ladePilotenProtokollDaten($pilotID)
+    protected function ladePilotenProtokollDaten(int $pilotID)
     {
         $pilotenLadeController = new Pilotendatenladecontroller();       
         return $pilotenLadeController->ladePilotZachernachweis($pilotID);
     }
     
-    protected function ladePilotenAnzeigeDaten($pilotID)
+    protected function ladePilotenAnzeigeDaten(int $pilotID)
     {
         $pilotenLadeController = new Pilotendatenladecontroller();
         
         return [
             'pilotID'               => $pilotID,
-            'pilot'                 => $pilotenLadeController->ladePilotDaten($pilotID),
-            'pilotDetailsArray'     => $pilotenLadeController->ladePilotDetails($pilotID),
+            'pilot'                 => $this->pilotenDatenNachPilotIDLaden($pilotID),
+            'pilotDetailsArray'     => $this->pilotDetailsNachPilotIDLaden($pilotID),
             'pilotProtokollArray'   => $pilotenLadeController->ladePilotenProtokollDaten($pilotID),
             'pilotZachernachweis'   => $pilotenLadeController->ladePilotZachernachweis($pilotID)
         ]; 

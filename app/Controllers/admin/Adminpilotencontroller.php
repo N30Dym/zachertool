@@ -68,7 +68,7 @@ class Adminpilotencontroller extends Controller
         
         $datenHeader['titel'] = $datenInhalt['titel'] = "Pilotendaten bearbeiten";
         
-        $datenInhalt = $pilotenController->setzeDatenInhaltFuerPilotBearbeiten($pilotID);
+        $datenInhalt = $pilotenController->datenInhaltFuerPilotBearbeitenSetzen($pilotID);
         if(null !== old('pilotDetails'))
         {
             $datenInhalt['pilotDetailsArray'] = old('pilotDetails');

@@ -6,6 +6,6 @@
 - if ( ! ...)
 - in Controller Funktionen mit get->lade und auch sonst die Aktion beschreiben
 - unnötige Leerzeilen löschen
-- ausgeklammerte Code-Zeilen löschen
+- auskommentierte Code-Zeilen löschen
 - = auf gleicher Höhe
 - TRUE / FALSE / NULL

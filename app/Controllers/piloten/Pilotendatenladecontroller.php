@@ -76,18 +76,20 @@ class Pilotendatenladecontroller extends Pilotencontroller
      * Lädt die Protokolldaten, die mit dem Piloten mit der ID <pilotID>, verknüpft sind.
      * 
      * Lade je eine Instanz des protokolleModels, pilotenMitAkafliegsModels und des flugzeugeMitMusterModels.
-     * 
+     * Lade alle bestätigten Protokolle des Piloten mit der ID <pilotID> in die Variable $bestaetigteProtokolle. Für jedes bestätigte Protokolle prüfe, ob
+     * eine copilotID vorhanden ist. Wenn ja lade die zugehörigen Pilotendaten zum Copilot. Lade die Flugzeugdetails zu jedem bestätigten Protokoll.
+     * Gib das Array zurück.
      * 
      * @param int $pilotID
      * @return array<array>
      */
     protected function ladePilotenProtokollDaten(int $pilotID)
     {
-        $protokolleModel = new protokolleModel();
-        $pilotenMitAkafliegsModel = new pilotenMitAkafliegsModel();
-        $flugzeugeMitMusterModel = new flugzeugeMitMusterModel();
+        $protokolleModel            = new protokolleModel();
+        $pilotenMitAkafliegsModel   = new pilotenMitAkafliegsModel();
+        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
         
-        $bestaetigteProtokolle = $protokolleModel->geBestaetigteProtokolleNachPilotID($pilotID);
+        $bestaetigteProtokolle      = $protokolleModel->geBestaetigteProtokolleNachPilotID($pilotID);
         
         foreach($bestaetigteProtokolle as $protokollID => $protokollDaten)
         {
@@ -100,6 +102,5 @@ class Pilotendatenladecontroller extends Pilotencontroller
         }
         
         return $bestaetigteProtokolle;
-    }
-    
+    }   
 }

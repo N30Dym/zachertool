@@ -5,23 +5,41 @@ namespace App\Controllers\piloten;
 use App\Controllers\piloten\Pilotencontroller;
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
 
+helper('nachrichtAnzeigen');
+
+/**
+ * Child-Klasse vom PilotenController. Übernimmt das Speichern der eingegebenen Pilotendaten. Sowohl bei neuen Piloten,
+ * als auch bei neu eingegebenen Pilotendetails.
+ *
+ * @author Lars Kastner
+ */
 class Pilotenspeichercontroller extends Pilotencontroller 
 {
-    protected function speicherPilotenDaten($postDaten)
+    /**
+     * Prüft und speichert die Pilotendaten.
+     * 
+     * Initialisiere das Array $zuSpeicherndeDaten. Wenn eine <pilotID> in den übermittelten $postDaten vorhanden ist, speicher diese in $pilotID.
+     * Wenn es sich um einen neuen Pilot handelt ($pilotID == ''), prüfe zunächst, ob der Pilot bereits vorhanden ist. Wenn ja, leite auf die NachrichtAnzeigen-Seite 
+     * weiter, wenn nein bestücke $zuSpeicherndeDaten mit den zu speichernden Pilotendaten und Pilotendetails.
+     * Wenn $pilotID bereits vorhanden, dann bestücke $zuSpeicherndeDaten nur mit den zu speichernden Pilotendetails und der $pilotID.
+     * Bei erfolgreicher Prüfung der zu speichernden Daten, speicher die Daten und gib TRUE zurück. Schlägt einer der Vorgänge fehl, gib FALSE zurück.
+     * 
+     * @param array $postDaten
+     * @return boolean
+     */
+    protected function speicherPilotenDaten(array $postDaten)
     {
-            // Wenn pilotID vorhanden, dann diese in Variable $pilotID speichern, sonst null
-        $pilotID = $postDaten['pilotID'] === "" ? null : $postDaten['pilotID'];
-        
-        $zuSpeicherndeDaten                 = [];
+        $zuSpeicherndeDaten = array();
+        $pilotID = empty($postDaten['pilotID']) ? NULL : $postDaten['pilotID'];
             
-        if($pilotID === null)
+        if(empty($pilotID))
         {     
-            if($this->pruefePilotNochNichtVorhanden($postDaten['pilot']))
+            if($this->pruefePilotSchonVorhanden($postDaten['pilot']))
             {             
-                $this->meldePilotVorhanden();
+                nachrichtAnzeigen("Pilot bereits vorhanden", base_url());
             }
             
-            $zuSpeicherndeDaten             = $this->setzeDatenPilotUndPilotDetails($postDaten);
+            $zuSpeicherndeDaten = $this->formatierePilotDatenUndPilotDetails($postDaten);
         }
         else
         {
@@ -29,34 +47,42 @@ class Pilotenspeichercontroller extends Pilotencontroller
             $zuSpeicherndeDaten['pilotID']  = $pilotID;
         }
         
-        if($this->pruefeDaten($zuSpeicherndeDaten))
+        if($this->validereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-            if(! $this->speicherDaten($zuSpeicherndeDaten))
-            {
-                return false;
-            }
+            return $this->speicherDaten($zuSpeicherndeDaten) ? TRUE : FALSE;
         }
         else 
         {
-            return false;
-        }
-        
-        return true;       
+            return FALSE;
+        }     
     }  
     
-    public function pruefeDaten($pilotenDaten)
+    /**
+     * Validiert die zu speichernden Daten.
+     * 
+     * Initialisiere den Validation-Service. 
+     * Wenn Pilotendaten vorhanden sind, versuche diese zu validieren (siehe \Config\Validation.php -> $pilot). Bei Misserfolg gib FALSE zurück.
+     * Für jede Zeile Pilotendetails, prüfe, ob ein Datum vorhanden ist und es validierbar ist. Wenn ja, ersetze das Datum durch das validierte Datum,
+     * andernfalls gib FALSE zurück. Validiere die aktuelle Zeile Pilotendetails (siehe \Config\Validation.php -> $pilotDetailsOhnePilotID) und 
+     * gib bei Misserfolg FALSE zurück.
+     * Gib TRUE zurück, wenn alle Validierungen erfolgreich waren.
+     * 
+     * @param array $zuValidierendeDaten
+     * @return boolean
+     */
+    public function validereZuSpeicherndeDaten(array $zuValidierendeDaten)
     {
         $validation = \Config\Services::validation(); 
         
-        if(isset($pilotenDaten['pilot']))
+        if(isset($zuValidierendeDaten['pilot']))
         {           
-            if( ! $validation->run($pilotenDaten['pilot'], 'pilot'))
+            if( ! $validation->run($zuValidierendeDaten['pilot'], 'pilot'))
             {
-                return false;
+                return FALSE;
             }
         }
 
-        foreach($pilotenDaten['pilotDetails'] as $pilotDetails)
+        foreach($zuValidierendeDaten['pilotDetails'] as $pilotDetails)
         {            
             if(isset($pilotDetails['datum']) && $this->validiereDatum($pilotDetails['datum']))
             {
@@ -64,37 +90,43 @@ class Pilotenspeichercontroller extends Pilotencontroller
             }
             else
             {
-                return false;
+                return FALSE;
             }
 
             if( ! $validation->run($pilotDetails, 'pilotDetailsOhnePilotID'))
             {
-                return false;
+                return FALSE;
             }
         }
         
-        return true;
+        return TRUE;
     }
-    
-        /*
-         * Diese Funktion gibt ein Array zurück, dass zwei Arrays enthält.
-         * 
-         * Das Array "pilot" beinhaltet alle Daten, die in der Datenbanktabelle piloten gespeichert werden, richtig formatiert.
-         * Das Array "pilotDetails" beinhaltet alle Daten, die in der Datenbanktabelle piloten_details gespeichert werden, richtig formatiert.
-         */
-    
-    public function setzeDatenPilotUndPilotDetails($uebergebeneDaten)
+
+    /**
+     * Formatiert das 'pilot'- und die 'pilotDetails'-Arrays, um sie für das Speichern vorzubereiten.
+     * 
+     * <!!Wichtig!!> Die Namen der in der Eingabemaske enthaltenen Inputs, müssen identisch mit den Datenbank-Spaltennamen sein!
+     * Initialisiere das $rueckgabeArray.
+     * Für jedes übergebene Inputfeld mit Pilotendaten, erzeuge ein Index mit dem Inputfeldnamen und dem Inhalt des Inputs als Wert 
+     * im $rueckgabeArray['pilot']. Für jedes übergebene Inputfeld mit Pilotendetails, erzeuge ein Index mit dem Inputfeldnamen und 
+     * dem Inhalt des Inputs als Wert im $rueckgabeArray['pilotDetails'].
+     * Überprüfe alle Zeilen des $rueckgabeArray['pilotDetails'], ob ein Datum vorhanden ist, wenn nicht, setze das heutige Datum.
+     * 
+     * @param array $uebergebeneDaten
+     * @return array $rueckgabeArray['pilot', 'pilotDetails']
+     */
+    public function formatierePilotDatenUndPilotDetails(array $uebergebeneDaten)
     {               
-        $rueckgabeArray = [];
+        $rueckgabeArray = array();
         
-        foreach($uebergebeneDaten['pilot'] as $feldName => $feldInhalt)
+        foreach($uebergebeneDaten['pilot'] as $inputName => $inputInhalt)
         {
-            $rueckgabeArray['pilot'][$feldName] = $feldInhalt;
+            $rueckgabeArray['pilot'][$inputName] = $inputInhalt;
         }
         
-        foreach($uebergebeneDaten['pilotDetail'] as $feldName => $feldInhalt)
+        foreach($uebergebeneDaten['pilotDetail'] as $inputName => $inputInhalt)
         {
-            $rueckgabeArray['pilotDetails'][$feldName] = $feldInhalt;
+            $rueckgabeArray['pilotDetails'][$inputName] = $inputInhalt;
         } 
         
         foreach($rueckgabeArray['pilotDetails'] as $nummer => $pilotDetails)
@@ -105,37 +137,65 @@ class Pilotenspeichercontroller extends Pilotencontroller
         return $rueckgabeArray;
     }
     
-        /*
-         * Diese Funktion gibt ein Array zurück, dass ein Arrays enthält.
-         * 
-         * Das Array "pilot" beinhaltet alle Daten, die in der Datenbanktabelle piloten gespeichert werden, richtig formatiert.
-         */
-    public function setzeDatenPilotDetails($uebergebeneDaten)
+    /**
+     * Formatiert die 'pilotDetails'-Arrays, um sie für das Speichern vorzubereiten.
+     * 
+     * <!!Wichtig!!> Die Namen der in der Eingabemaske enthaltenen Inputs, müssen identisch mit den Datenbank-Spaltennamen sein!
+     * Für jedes übergebene Inputfeld mit Pilotendetails, erzeuge ein Index mit dem Inputfeldnamen und dem Inhalt des Inputs als Wert 
+     * im $rueckgabeArray['pilotDetails'].
+     * Überprüfe alle Zeilen des $rueckgabeArray['pilotDetails'], ob ein Datum vorhanden ist, wenn nicht, setze das heutige Datum.
+     * 
+     * @param array $uebergebeneDaten
+     * @return array $rueckgabeArray['pilotDetails']
+     */
+    public function setzeDatenPilotDetails(array $uebergebeneDaten)
     {
         $rueckgabeArray = [];
         
-        foreach($uebergebeneDaten['pilotDetail'] as $feldName => $feldInhalt)
+        foreach($uebergebeneDaten['pilotDetail'] as $inputName => $inputInhalt)
         {
-            $rueckgabeArray['pilotDetails'][$feldName] = $feldInhalt;
+            $rueckgabeArray['pilotDetails'][$inputName] = $inputInhalt;
         } 
         
-        foreach($rueckgabeArray['pilotDetails'] as $nummer => $pilotDetails)
+        foreach($rueckgabeArray['pilotDetails'] as $index => $pilotDetails)
         {
-            $pilotDetails['datum'] = $rueckgabeArray['pilotDetails'][$nummer]['datum'] ?? date('Y-m-d');
+            if(empty($rueckgabeArray['pilotDetails'][$index]['datum']))
+            {
+                $rueckgabeArray['pilotDetails'][$index]['datum'] = date('Y-m-d');
+            }
         }
         
         return $rueckgabeArray;
     }
     
-    protected function speicherDaten($zuSpeicherndeDaten)
+    /**
+     * Speichert die PilotenDaten und PilotenDetails in die jeweilige Datenbanktabellen.
+     * 
+     * Lade je eine Instanz des pilotenModels und des pilotenDetailsModels.
+     * Falls es sich um einen neuen Piloten handelt ($zuSpeicherndeDaten['pilotID'] == ""), speichere zunächst die PilotenDaten mit dem $pilotenModel.
+     * Speichere die automatisch zurückgegebene ID des neuen Datensatzes (<pilotID>) in den $zuSpeicherndeDaten. 
+     * Sollte $zuSpeicherndeDaten['pilotID'] == FALSE sein, gib FALSE zurück.
+     * Füge den ersten Datensatz des $zuSpeicherndeDaten['pilotDetails']-Arrays und die $zuSpeicherndeDaten['pilotID'] in dem 
+     * neuen Array $zuSpeicherndePilotDetails zusammen.
+     * Aktualisiere den geändertAm-Zeitstempel, des Pilotendatensatzes.
+     * Speichere den Pilotendetails-Datensatz und gib das Ergebnis zurück.
+     * 
+     * @param array $zuSpeicherndeDaten
+     * @return int|FALSE
+     */
+    protected function speicherDaten(array $zuSpeicherndeDaten)
     {
         $pilotenModel           = new pilotenModel(); 
         $pilotenDetailsModel    = new pilotenDetailsModel();       
         
-        if( ! isset($zuSpeicherndeDaten['pilotID']))
+        if(empty($zuSpeicherndeDaten['pilotID']))
         {
-                // Eintragen des Pilotennamen in die DB. Es wird automatisch die pilotID zurückgegeben
             $zuSpeicherndeDaten['pilotID'] = $pilotenModel->insert($zuSpeicherndeDaten['pilot']);
+            
+            if( ! $zuSpeicherndeDaten['pilotID'])
+            {
+                return FALSE;
+            }
         }
         
         $zuSpeicherndePilotDetails             = $zuSpeicherndeDaten['pilotDetails'][0];
@@ -146,37 +206,44 @@ class Pilotenspeichercontroller extends Pilotencontroller
         return $pilotenDetailsModel->insert($zuSpeicherndePilotDetails);
     }
     
-    protected function pruefePilotNochNichtVorhanden($namenArray) 
+    /**
+     * Prüft mit dem Vor- und Spitznamen, ob der Pilot bereits in der Datenbank vorhanden ist.
+     * 
+     * Lade eine Instanz des pilotenModels.
+     * Gib TRUE zurück, wenn ein Pilot mit dem übergebenen Vor- und Spitznamen vorhanden ist. Anderfalls FALSE.
+     * 
+     * @param array $pilotenDaten
+     * @return boolean
+     */
+    protected function pruefePilotSchonVorhanden(array $pilotenDaten) 
     {
         $pilotenModel = new pilotenModel();
         
-        $pilotVorhanden = $pilotenModel->getPilotNachVornameUndSpitzname($namenArray['vorname'], $namenArray['spitzname']);
-
-        return $pilotVorhanden == null ? false : true;
+        return $pilotenModel->getPilotNachVornameUndSpitzname($pilotenDaten['vorname'], $pilotenDaten['spitzname']) ? TRUE : FALSE;
     }
     
-    protected function validiereDatum($datum) 
+    /**
+     * Validiert das eingegebene Datum auf eine sinnvolle Jahresangabe (einige Browser geben ein seltsames Datum ab).
+     * 
+     * Initialisiere den Validation-Service. 
+     * Speichere das $datum im Format 'Y-m-d' in der Variable $zuSpeicherndesDatum.
+     * Wenn die Jahresangabe des Datums eine Ganzzahl zwischen 1980 und dem heutigen Jahr ist, gib das $zuSpeicherndesDatum zurück,
+     * sonst FALSE.
+     * 
+     * @param string $datum
+     * @return string $zuSpeicherndesDatum|FALSE
+     */
+    protected function validiereDatum(string $datum) 
     {
         $validation =  \Config\Services::validation();
-        $jahr = date('Y');
         
         $zuSpeicherndesDatum = date('Y-m-d', strtotime($datum));
 
-        if($validation->check(date('Y', strtotime($zuSpeicherndesDatum)), 'required|is_natural|greater_than[1950]|less_than_equal_to[' . $jahr . ']'))
+        if($validation->check(date('Y', strtotime($zuSpeicherndesDatum)), 'required|is_natural|greater_than[1980]|less_than_equal_to[' . date('Y') . ']'))
         {
             return $zuSpeicherndesDatum;
         }
         
-        return false;
-    }
-    
-    protected function meldePilotVorhanden()
-    {
-            // Pilot bereits vorhanden
-        $session = session();
-        $session->setFlashdata('nachricht', 'Pilot schon vorhanden');
-        $session->setFlashdata('link', base_url());
-        header('Location: '. base_url() .'/nachricht');
-        exit;
-    }        
+        return FALSE;
+    } 
 }

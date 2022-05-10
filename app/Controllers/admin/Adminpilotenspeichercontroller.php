@@ -10,7 +10,7 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
 {
     public function speichern($speicherOrt)
     {
-        if(!empty($zuSpeicherndeDaten = $this->request->getPost()))
+        if( ! empty($zuSpeicherndeDaten = $this->request->getPost()))
         {       
             switch($speicherOrt)
             {
@@ -47,7 +47,7 @@ class Adminpilotenspeichercontroller extends Adminpilotencontroller
     {
         $pilotenSpeicherController = new Pilotenspeichercontroller();
         
-        if(!$pilotenSpeicherController->pruefeDaten($this->request->getPost()))
+        if(!$pilotenSpeicherController->validereZuSpeicherndeDaten($this->request->getPost()))
         {
             return redirect()->back()->withInput();
         }

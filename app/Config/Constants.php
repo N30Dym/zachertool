@@ -83,15 +83,15 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 
 /*
  * Beim Erstellen des Protokolllayouts gibt nehmen die Kapitel "Angaben zum Flugzeug", "Angaben zum Piloten / zu den Piloten" und "Angaben zum Beladungszustand"
- * eine besondere Rolle ein. Diese können bei allen ProtokollTypen aufgerufen werden und sind fest programmierte Seiten.
+ * eine besondere Rolle ein. Diese können bei allen ProtokollTypen aufgerufen werden und sind statische Seiten.
  * Um diese drei Seiten aufrufen zu können werden ihre IDs in Konstanten gespeichert, die dann von überall aufgerufen werden können.
  * So kommt es zu keinen Verwechslungen
  * 
  */
-defined('PROTOKOLL_AUSWAHL')    || define('PROTOKOLL_AUSWAHL', 0); // "Angaben zum Protokoll"
-defined('FLUGZEUG_EINGABE')     || define('FLUGZEUG_EINGABE', 1); // "Angaben zum Flugzeug"
-defined('PILOT_EINGABE')        || define('PILOT_EINGABE', 2); // "Angaben zum Piloten / zu den Piloten"
-defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // "Angaben zur Beladung"
+defined('PROTOKOLL_AUSWAHL')    || define('PROTOKOLL_AUSWAHL', 0); // protokollKapitelID für das Kapitel "Angaben zum Protokoll"
+defined('FLUGZEUG_EINGABE')     || define('FLUGZEUG_EINGABE', 1); // protokollKapitelID für das Kapitel "Angaben zum Flugzeug"
+defined('PILOT_EINGABE')        || define('PILOT_EINGABE', 2); // protokollKapitelID für das Kapitel "Angaben zum Piloten / zu den Piloten"
+defined('BELADUNG_EINGABE')     || define('BELADUNG_EINGABE', 3); // protokollKapitelID für das Kapitel "Angaben zur Beladung"
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 

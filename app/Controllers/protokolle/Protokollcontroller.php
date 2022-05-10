@@ -3,30 +3,29 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-
 use Config\Services;
-
 use App\Controllers\protokolle\{ Protokolleingabecontroller, Protokollanzeigecontroller, Protokollspeichercontroller, Protokolldatenladecontroller, Protokolllayoutcontroller, Protokolldatenpruefcontroller, Protokolldateninhaltladecontroller };
-
-
 use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren']);
 
+/**
+ * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, der Protokolleingabe und -anzeige befassen.
+ * 
+ * @author Lars Kastner
+ */
 class Protokollcontroller extends Controller
 {    
     /**
-     *  Wenn der Benutzer eingeloggt ist und eine Admin- oder Zachereinweiserberechtigung hat, ist diese Variable true, sonst false
+     * Initialisiert die Variable, die angibt, ob ein Benutzer mit Admin- oder Zacherinweiserrechten angemeldet ist, mit dem Wert FALSE.
      * 
      * @var boolean 
      */
-    protected $adminOderZachereinweiser = false;
+    protected $adminOderZachereinweiser = FALSE;
     
     /**
-     * Diese Funktion startet die Session und checkt, ob der Benutzer eingeloggt ist und eine Admin- oder Zachereinweiserberechtigung hat.
-     * Wenn ja, wird $adminOderZachereinweiser true gesetzt.
-     * 
-     * @return void
+     * Diese Funktion startet die Session und checkt, ob ein Benutzer eingeloggt ist und eine Admin- oder Zachereinweiserberechtigung hat.
+     * Wenn ja, wird $adminOderZachereinweiser TRUE gesetzt.
      */
     public function __construct()
     {
@@ -35,7 +34,7 @@ class Protokollcontroller extends Controller
                
         if($session->isLoggedIn AND ($session->mitgliedsStatus == ADMINISTRATOR OR $session->mitgliedsStatus == ZACHEREINWEISER))
         {
-            $this->adminOderZachereinweiser = true;
+            $this->adminOderZachereinweiser = TRUE;
         }
     }
     
@@ -49,18 +48,23 @@ class Protokollcontroller extends Controller
      * Wenn die protokollSpeicherID einmal gesetzt ist, wird diese nicht mehr geändert und ist somit als Referenz gültig
      * ob es sich um ein neues oder ein bereits gespeichertes Protokoll handelt
      * 
-     * @param int|null   Die protokollSpeicherID zeigt, dass das Protokoll schon eingegeben wurde und nun geladen wird
-     *          
-     * @return void    
+     * @param int|NULL   Die protokollSpeicherID zeigt, dass das Protokoll schon eingegeben wurde und nun geladen wird   
      */
-    public function index($protokollSpeicherID = null) // Leeres Protokoll
+    
+    /**
+     * Wird ausgeführt, wenn die URL <base_url>/piloten/neu aufgerufen wird.
+     * 
+     * 
+     * @param int $protokollSpeicherID
+     */
+    public function index(int $protokollSpeicherID = NULL) // Leeres Protokoll
     {
         $_SESSION['protokoll']['aktuellesKapitel']                   = 1;
-        $_SESSION['protokoll']['protokollInformationen']['titel']    = $protokollSpeicherID != null ? "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        $_SESSION['protokoll']['protokollInformationen']['titel']    = empty($protokollSpeicherID) ? "Neues Protokoll eingeben" : "Vorhandenes Protokoll bearbeiten";
         
             // Wenn bereits Werte eingegeben wurden und auf die ersteSeite zurückgekehrt wird, werden die 
             // übergebenen Werte normal zwischengespeichert
-        if($this->request->getPost() != null)
+        if( ! empty($this->request->getPost()))
         {					
             $this->neueEingabenVerarbeiten($this->request->getPost());
         }
@@ -113,7 +117,7 @@ class Protokollcontroller extends Controller
      * 
      * @return void
      */
-    public function kapitel($kapitelNummer = 0)
+    public function kapitel(int $kapitelNummer = 0)
     {       
         
         $protokollAnzeigeController = new Protokollanzeigecontroller;
@@ -166,14 +170,14 @@ class Protokollcontroller extends Controller
     {
         $this->zeigeWarteSeite();
         
-        if($this->request->getPost() != null)
+        if($this->request->getPost() != NULL)
         {            
             $this->neueEingabenVerarbeiten($this->request->getPost());
         }
             
         $zuSpeicherndeDaten = $this->pruefeZuSpeicherndeDaten();
         
-        if($zuSpeicherndeDaten !== false && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
+        if($zuSpeicherndeDaten !== FALSE && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
             if($this->speicherProtokollDaten($zuSpeicherndeDaten, $this->request->getPost('bestaetigt')))
             {
@@ -248,7 +252,7 @@ class Protokollcontroller extends Controller
          * 
          * @return void
          */
-    protected function protokollDatenLaden($protokollSpeicherID)
+    protected function protokollDatenLaden(int $protokollSpeicherID)
     {
         $protokollDatenLadeController = new Protokolldatenladecontroller();
 
@@ -286,7 +290,7 @@ class Protokollcontroller extends Controller
      * 
      * @param type $postDaten
      */
-    protected function neueEingabenVerarbeiten($postDaten)
+    protected function neueEingabenVerarbeiten(array $postDaten)
     {
         $protokollEingabeController = new Protokolleingabecontroller;
         $protokollEingabeController->uebergebeneWerteVerarbeiten($postDaten);
@@ -298,13 +302,13 @@ class Protokollcontroller extends Controller
         return $protokollDatenPruefController->pruefeDatenZumSpeichern();
     }
     
-    protected function validiereZuSpeicherndeDaten($zuValidierendeDaten)
+    protected function validiereZuSpeicherndeDaten(array $zuValidierendeDaten)
     {
         $protokollDatenValidierController = new Protokolldatenvalidiercontroller();
         return $protokollDatenValidierController->validiereDatenZumSpeichern($zuValidierendeDaten);
     }
     
-    protected function speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt)
+    protected function speicherProtokollDaten(array $zuSpeicherndeDaten, bool $bestaetigt)
     {
         $protokollSpeicherController = new Protokollspeichercontroller();
         return $protokollSpeicherController->speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt);

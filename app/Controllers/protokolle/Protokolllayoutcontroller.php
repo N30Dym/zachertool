@@ -76,20 +76,19 @@ class Protokolllayoutcontroller extends Protokollcontroller
        sort($_SESSION['protokoll']['kapitelNummern']);
     }
     
-    protected function getKapitelNachKapitelID()
+    protected function ladeKapitelNachKapitelID(int $kapitelID)
     {
-        $protokollKapitelModel = new protokollKapitelModel();
-        
-        return $protokollKapitelModel->getProtokollKapitelNachID($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]);     
+        $protokollKapitelModel = new protokollKapitelModel();        
+        return $protokollKapitelModel->getProtokollKapitelNachID($kapitelID);     
     }
     
-    protected function getUnterkapitel()
+    protected function ladeProtokollUnterkapitelLayoutDaten(array $kapitelLayout)
     {
         $protokollUnterkapitelModel = new protokollUnterkapitelModel();
         
-        $temporaeresUnterkapitelArray = [];
+        $temporaeresUnterkapitelArray = array();
                 
-        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
+        foreach($kapitelLayout as $protokollKapitelID => $unterkapitel)
         {
             $temporaeresUnterkapitelArray[$protokollKapitelID] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($protokollKapitelID);   
         }

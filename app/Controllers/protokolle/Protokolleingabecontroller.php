@@ -13,7 +13,7 @@ class Protokolleingabecontroller extends Protokollcontroller
      * Die Daten haben jeweils eine Art Prefix, wonach sie sortiert und den jweieligen Funktionen 
      * zugeführt werden können. Der Aufbau hier sollte selbsterklärend sein
      */
-    protected function uebergebeneWerteVerarbeiten($postDaten)
+    protected function verarbeitenUebergebeneWerte($postDaten)
     {
         if(isset($postDaten['protokollInformation']))
         {

@@ -181,22 +181,27 @@ class Protokolldateninhaltladecontroller extends Protokollcontroller
     }
     
     /**
-     * Lädt die 
+     * Lädt die protokollEingaben des aktuellen Kapitels und/oder Unterkapitels aus der Datenbank.
      * 
+     * Lade eine Instanz des protokollEingabenModels.
+     * Initialisiere das $temporaereEingabeArray.
+     * Für jedes Unterkapitel, des aktuellen Kapitels (wenn kein Unterkapitel vorhanden dann $protokollUnterkapitelID == 0) lade für
+     * jede protokollEingabe des aktuellen Unterkapitels die protokollEingabeDaten nach der protokollEingabeID.
+     * Speichere die protokollEingaben jeweils mit der protokollEingabenID als Index im $temporaeresEingabeArray.
+     * Gib das $temporaereEingabeArray zurück, wenn alle protokollEingaben erfasst wurden.
      * 
      * @return array $temporaeresEingabeArray
      */
     protected function ladeProtokollEingaben() 
     {
-        $protokollEingabenModel = new protokollEingabenModel();
-        
-        $temporaeresEingabeArray = array();
+        $protokollEingabenModel     = new protokollEingabenModel();       
+        $temporaeresEingabeArray    = array();
 
-        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollKapitelID => $unterkapitel)
+        foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']] as $protokollUnterkapitelID => $unterkapitel)
         {
-            foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']][$protokollKapitelID] as $protokollUnterkapitelID => $eingaben)
+            foreach($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']][$protokollUnterkapitelID] as $protokollEingabeID => $eingaben)
             {
-                $temporaeresEingabeArray[$protokollUnterkapitelID] = $protokollEingabenModel->getProtokollEingabeNachID($protokollUnterkapitelID);
+                $temporaeresEingabeArray[$protokollEingabeID] = $protokollEingabenModel->getProtokollEingabeNachID($protokollEingabeID);
             }
         }
         

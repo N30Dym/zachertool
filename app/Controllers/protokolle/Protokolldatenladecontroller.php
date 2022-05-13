@@ -8,21 +8,39 @@ use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
 helper('nachrichtAnzeigen');
 
+/**
+ * Child-Klasse vom ProtokollController. Übernimmt das Laden der Protokolldaten aus der Datenbank in den Zwischenspeicher ($_SESSION['protokoll']).
+ *
+ * @author Lars Kastner
+ */
 class Protokolldatenladecontroller extends Protokollcontroller
 {	
     protected function ladeProtokollDaten($protokollSpeicherID)
     {
-        $this->ladeProtokollDetails($protokollSpeicherID);
-        
-        $this->ladeBeladungszustand($protokollSpeicherID);
-        
-        $this->ladeWerte($protokollSpeicherID);
-        
-        $this->ladeHStWege($protokollSpeicherID);
-        
-        $this->ladeKommentare($protokollSpeicherID);
-    }
+        if($this->pruefeProtokollSpeicherIDVorhanden($protokollSpeicherID))
+        {       
+            $this->ladeProtokollDetails($protokollSpeicherID);
 
+            $this->ladeBeladungszustand($protokollSpeicherID);
+
+            $this->ladeWerte($protokollSpeicherID);
+
+            $this->ladeHStWege($protokollSpeicherID);
+
+            $this->ladeKommentare($protokollSpeicherID);
+        }
+        else
+        {
+            nachrichtAnzeigen("Kein Protokoll mit dieser ID vorhanden", base_url());
+        }
+    }
+    
+    protected function pruefeProtokollSpeicherIDVorhanden($protokollSpeicherID) 
+    {
+        $protokolleModel = new protokolleModel();
+        return empty($protokolleModel->getProtokollNachID($protokollSpeicherID)) ? FALSE : TRUE;
+    }
+    
     protected function ladeBeladungszustand($protokollSpeicherID)
     {
         $beladungModel  = new beladungModel();       
@@ -50,9 +68,9 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($protokollDaten as $datenSatz)
         {
-            $woelbklappenStellung   = $datenSatz['woelbklappenstellung'] == "" ? 0 : $datenSatz['woelbklappenstellung'];
-            $linksUndRechts         = $datenSatz['linksUndRechts'] == "" ? 0 : $datenSatz['linksUndRechts'];
-            $multipelNr             = $datenSatz['multipelNr'] == "" ? 0 : $datenSatz['multipelNr'];
+            $woelbklappenStellung   = $datenSatz['woelbklappenstellung']    == "" ? 0 : $datenSatz['woelbklappenstellung'];
+            $linksUndRechts         = $datenSatz['linksUndRechts']          == "" ? 0 : $datenSatz['linksUndRechts'];
+            $multipelNr             = $datenSatz['multipelNr']              == "" ? 0 : $datenSatz['multipelNr'];
                
             $_SESSION['protokoll']['eingegebeneWerte'][$datenSatz['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $datenSatz['wert'];
         }
@@ -60,9 +78,8 @@ class Protokolldatenladecontroller extends Protokollcontroller
             
     protected function ladeHStWege($protokollSpeicherID)
     {
-        $hStWegeModel = new hStWegeModel();
-        
-        $hStWege = $hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID);
+        $hStWegeModel   = new hStWegeModel();        
+        $hStWege        = $hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID);
         
         foreach($hStWege as $hStWeg)
         {
@@ -72,9 +89,8 @@ class Protokolldatenladecontroller extends Protokollcontroller
             
     protected function ladeKommentare($protokollSpeicherID)
     {
-        $kommentareModel = new kommentareModel();
-        
-        $kommentare = $kommentareModel->getKommentareNachProtokollSpeicherID($protokollSpeicherID);
+        $kommentareModel    = new kommentareModel();
+        $kommentare         = $kommentareModel->getKommentareNachProtokollSpeicherID($protokollSpeicherID);
         
         foreach($kommentare as $kommentar)
         {
@@ -107,8 +123,8 @@ class Protokolldatenladecontroller extends Protokollcontroller
             empty($protokollInformationen['bemerkung'])             ? null : $_SESSION['protokoll']['protokollInformationen']['bemerkung']    = $protokollInformationen['bemerkung'];
             empty($protokollInformationen['stundenAufDemMuster'])   ? null : $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']    = $protokollInformationen['stundenAufDemMuster'];
 
-            $protokollInformationen['fertig']       == 1 ? $_SESSION['protokoll']['fertig'] = [] : null;
-            $protokollInformationen['bestaetigt']   == 1 ? $_SESSION['protokoll']['bestaetigt'] = [] : null;           
+            $protokollInformationen['fertig']       == 1 ? $_SESSION['protokoll']['fertig'] = array() : null;
+            $protokollInformationen['bestaetigt']   == 1 ? $_SESSION['protokoll']['bestaetigt'] = array() : null;           
         }
         else
         {
@@ -116,16 +132,10 @@ class Protokolldatenladecontroller extends Protokollcontroller
         }
     }
     
-    /**
-     * 
-     * @param array $protokollIDs
-     * @return void
-     */
     protected function setzeGewaehlteProtokollTypen()
     {
-        $protokollLayoutProtokolleModel = new protokolleLayoutProtokolleModel();
-        
-        $_SESSION['protokoll']['gewaehlteProtokollTypen'] = array();
+        $protokollLayoutProtokolleModel                     = new protokolleLayoutProtokolleModel();       
+        $_SESSION['protokoll']['gewaehlteProtokollTypen']   = array();
         
         foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
         {
@@ -135,12 +145,11 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
     protected function ladeFlugzeugDaten($flugzeugID)
     {
-        $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
-        $flugzeugDaten              = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
+        $flugzeugeMitMusterModel                = new flugzeugeMitMusterModel();
+        $flugzeugDaten                          = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);        
+        $_SESSION['protokoll']['flugzeugID']    = $flugzeugID;
         
-        $_SESSION['protokoll']['flugzeugID'] = $flugzeugID;
-        
-        $flugzeugDaten['istDoppelsitzer'] == 1          ? $_SESSION['protokoll']['doppelsitzer']            = [] : null;
+        $flugzeugDaten['istDoppelsitzer'] == 1          ? $_SESSION['protokoll']['doppelsitzer']            = array() : null;
         $flugzeugDaten['istWoelbklappenFlugzeug'] == 1  ? $_SESSION['protokoll']['woelbklappenFlugzeug']    = ['Neutral', 'Kreisflug'] : null;
     }
 }

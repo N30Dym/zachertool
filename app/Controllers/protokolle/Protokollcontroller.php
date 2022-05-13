@@ -140,24 +140,18 @@ class Protokollcontroller extends Controller
             $this->protokollLayoutLaden();
         }
         
-            // Wenn noch keine kapitelNummern gesetzt sind oder die Nummer in der URL nicht zu den kapitelNummern passt, zurückleiten
         if( ! isset($_SESSION['protokoll']['kapitelNummern']) OR ! in_array($kapitelNummer, $_SESSION['protokoll']['kapitelNummern']))
         {
             return redirect()->back();
         }
         else 
         {      
-                // aktuellesKapitel ist die in der URL angegebene kapitelNummer 
             $_SESSION['protokoll']['aktuellesKapitel'] = $kapitelNummer;
         }
-        
-            // datenHeader mit Titel füttern
-        $datenHeader['titel']   = $_SESSION['protokoll']['protokollInformationen']['titel'];
 
-            // datenInhalt bestücken. kapitelDatenArray und unterkapitelDatenArray werden immer gebraucht
+        $datenHeader['titel']   = $_SESSION['protokoll']['protokollInformationen']['titel'];
         $datenInhalt            = $this->ladeDatenInhalt();        
         
-            // Schließlich wird die Seite geladen (siehe Protokollanzeigecontroller)
         $this->protokollEingabeViewLaden($datenHeader, $datenInhalt);
     }
 	
@@ -180,7 +174,7 @@ class Protokollcontroller extends Controller
         
         if($zuSpeicherndeDaten !== FALSE && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
         {
-            if($this->speicherProtokollDaten($zuSpeicherndeDaten, $this->request->getPost('bestaetigt')))
+            if($this->speicherProtokollDaten($zuSpeicherndeDaten, empty($this->request->getPost('bestaetigt')) ? FALSE : TRUE))
             {
                 nachrichtAnzeigen("Protokolldaten erfolgreich gespeichert", base_url());
             }

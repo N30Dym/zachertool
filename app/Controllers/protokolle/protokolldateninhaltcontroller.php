@@ -11,7 +11,7 @@ use App\Models\protokolle\{ datenModel };
  *
  * @author Lars
  */
-class Protokolldateninhaltladecontroller extends Protokollcontroller 
+class Protokolldateninhaltcontroller extends Protokollcontroller 
 {
     /**
      * Gibt die Anzahl der Dateneingabefelder bei einem Multiplen Inputfeld an, wenn in der Datenbank kein anderer Wert vorhanden ist.

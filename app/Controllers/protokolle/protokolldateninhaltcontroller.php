@@ -4,12 +4,11 @@ namespace App\Controllers\protokolle;
 use App\Models\protokolllayout\{ auswahllistenModel, protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel };
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugWaegungModel, flugzeugDetailsModel };
 use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
-use App\Models\protokolle\{ datenModel };
 
 /**
- * Diese Klasse lädt die Daten, die der Variable $datenInhalt zur Verfügung gestellt werden, um dynamisch das richtige Kapitel anzuzeigen.
+ * Diese Klasse lädt die Daten, die der Variable $datenInhalt zur Verfügung gestellt werden, um dynamisch das Kapitel richtig anzuzeigen.
  *
- * @author Lars
+ * @author Lars Kastner
  */
 class Protokolldateninhaltcontroller extends Protokollcontroller 
 {
@@ -19,12 +18,12 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
     const STANDARDANZAHL_MULTIPELFELDER = 10;
     
     /**
-     * Entscheidet, welche zusätzlichen Informationen geladen werden müssen.
+     * Entscheidet, welche zusätzlichen Daten in das Array $datenInhalt geladen werden müssen.
      * 
      * Initilaisiere das Array $inhaltZusatz.
      * Falls es sich bei der protokollKapitelID des aktuellenKapitels um eine statische Seite handelt, lade die jeweiligen
      * zuätzlichen Inhalte.
-     * Wenn es sich um eine dynamische Seite handelt, lade die
+     * Wenn es sich um eine dynamische Seite handelt, lade die entsprechenden zuätzlichen Inhalte aus der Sektion 'default'.
      * 
      * @return array $inhaltZusatz
      */
@@ -44,7 +43,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
                 if(isset($_SESSION['protokoll']['flugzeugID']))
                 {
                     $inhaltZusatz['hebelarmDatenArray']         = $this->ladeFlugzeugHebelarme();
-                    $inhaltZusatz['waegungDatenArray']          = $this->ladeFlugzeugWaegung($_SESSION['protokoll']['flugzeugID']);
+                    $inhaltZusatz['waegungDatenArray']          = $this->ladeLetzteFlugzeugWaegung($_SESSION['protokoll']['flugzeugID']);
                     $inhaltZusatz['flugzeugDetailsDatenArray']  = $this->ladeFlugzeugDetails($_SESSION['protokoll']['flugzeugID']);
                     if(isset($_SESSION['protokoll']['pilotID']))
                     {
@@ -85,7 +84,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
         $flugzeugeMitMusterModel        = new flugzeugeMitMusterModel();
         $sichtbareFlugzeugeMitMuster    = $flugzeugeMitMusterModel->getSichtbareFlugzeugeMitMuster();
               
-        array_sort_by_multiple_keys($sichtbareFlugzeugeMitMuster, ["musterKlarname" => SORT_ASC]);
+        array_sort_by_multiple_keys($sichtbareFlugzeugeMitMuster, ['musterKlarname' => SORT_ASC]);
         
         return $sichtbareFlugzeugeMitMuster;
     }
@@ -131,7 +130,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
      * Lade eine Instanz des flugzeugHebelarmeModels.
      * Initialisiere das $flugzeugHebelarmeSortiert-Array und die Variablen $indexPilot und $indexCopilot.
      * Speichere die Hebelarme des Flugzeugs mit der im Zwischenspeicher gespeichterten flugzeugID in der Variable $flugzeugHebelarme
-     * Durchsuche die hebelarme des $flugzeugHebelarme-Arrays auf die Hebelarmbezeichnungen "Pilot" und "Copilot". Wenn diese gefunden wurden, 
+     * Durchsuche die hebelarme des $flugzeugHebelarme-Arrays auf die Hebelarmbezeichnungen 'Pilot' und 'Copilot'. Wenn diese gefunden wurden, 
      * speichere den Index des jeweiligen Hebelarms in der entsprechenden Index-Variable.
      * Speichere nun an erster Stelle des $flugzeugHebelarmeSortiert-Arrays den Pilotenhebelarm und falls vorhanden an zweiter Stelle den 
      * Copilotenhebelarm.
@@ -148,16 +147,13 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
         
         foreach($flugzeugHebelarme as $index => $flugzeugHebelarm)			
         {  
-            array_search("Pilot",   $flugzeugHebelarme[$index]) ?  $indexPilot      = $index : "";
-            array_search("Copilot", $flugzeugHebelarme[$index]) ?  $indexCopilot    = $index : "";
+            array_search('Pilot',   $flugzeugHebelarme[$index]) ?  $indexPilot      = $index : "";
+            array_search('Copilot', $flugzeugHebelarme[$index]) ?  $indexCopilot    = $index : "";
         }
 
-            // Den ersten Platz der sortierten Variable mit dem Piloten-Array belegen und falls "Copilot" vorhanden, kommt dieser an die zweite Stelle 
         $flugzeugHebelarmeSortiert[0] = $flugzeugHebelarme[$indexPilot];
         $flugzeugHebelarmeSortiert[1] = $indexCopilot ? $flugzeugHebelarme[$indexCopilot] : array();
 
-
-            // Nun die restlichen Hebelarme in der Reihenfolge, in der sie in der DB stehen zum Array hinzufügen. Pilot und Copilot werden ausgelassen
         foreach($flugzeugHebelarme as $index => $flugzeugHebelarm)
         {
             if($index !== $indexPilot AND $index !== $indexCopilot)
@@ -263,9 +259,9 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
         
         foreach($protokollInputArray as $protokollInput)
         {            
-            if($protokollInput["inputTyp"] === "Auswahloptionen")
+            if($protokollInput['inputTyp'] === "Auswahloptionen")
             {
-                $auswahllistenArray[$protokollInput["id"]] = $auswahllistenModel->getAuswahllisteNachProtokollInputID($protokollInput["id"]);
+                $auswahllistenArray[$protokollInput['id']] = $auswahllistenModel->getAuswahllisteNachProtokollInputID($protokollInput['id']);
             }   
         }
         
@@ -276,8 +272,8 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
      * Prüft, ob das aktuelle Kapitel ein Kommentarfeld erhält.
      * 
      * Lade eine Instanz des protokollKapitelModels.
-     * Wenn der Eintrag des Kapitels mit der aktuellen <protokollKapitelID> in der Datenbanktabelle protokoll_Kapitel eine "1" 
-     * in der Spalte "kommentar" besitzt, dann gib TRUE zurück. Sonst FALSE. 
+     * Wenn der Eintrag des Kapitels mit der aktuellen <protokollKapitelID> in der Datenbanktabelle protokoll_Kapitel eine '1' 
+     * in der Spalte 'kommentar' besitzt, dann gib TRUE zurück. Sonst FALSE. 
      * 
      * @return boolean
      */
@@ -353,7 +349,9 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
      * Prüft, ob für die übermittelte $protokollInputID Werte im Zwischenspeicher vorhanden sind und gibt die Anzahl zurück.
      * 
      * Wenn im Zwischenspeicher keine eingegebenen Werte mit der übermittelten protokollInputID vorhanden sind, gib sofort NULL zurück.
-     * Andernfalls initialisiere die Variable $anzahlMultipelFelder und setze sie zu NULL.
+     * Andernfalls initialisiere die Variable $anzahlMultipelFelder und setze sie zu NULL. 
+     * Für jeden eingegebenen Wert des protokollInputs prüfe ob die Zahl im Index 'multipelNr' größer ist, als die in $anzahlMultipelFelder.
+     * Am Ende gib die größte 'multipelNr' zurück.
      * 
      * @param int $protokollInputID
      * @return int $anzahlMultipelFelder
@@ -378,12 +376,30 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
         return $anzahlMultipelFelder;
     }
     
-    protected function ladeFlugzeugWaegung(int $flugzeugID)
+    /**
+     * Lädt die Daten der letzten Wägung vor dem Protokolldatum.
+     * 
+     * Lade eine Instanz des flugzeugWaegungModels.
+     * Gib die Daten der letzten Wägung vor dem Protokolldatum zurück. Falls es keinen Wägebericht davor gibt, nimm den nächst neueren.
+     * 
+     * @param int $flugzeugID
+     * @return array
+     */
+    protected function ladeLetzteFlugzeugWaegung(int $flugzeugID)
     {
         $flugzeugWaegungModel = new flugzeugWaegungModel();
         return $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($_SESSION['protokoll']['protokollInformationen']['datum'])));
     }
     
+    /**
+     * Lädt die FlugzeugDetails des Flugzeugs mit der ID <flugzeugID>
+     * 
+     * Lade eine Instanz des flugzeugDetailsModels.
+     * Gib die Details des Flugzeugs mit der ID zurück, die in der $flugzeugID übergebenen wurde.
+     * 
+     * @param int $flugzeugID
+     * @return array
+     */
     protected function ladeFlugzeugDetails(int $flugzeugID)
     {
         $flugzeugDetailsModel = new flugzeugDetailsModel();

@@ -101,7 +101,7 @@ class flugzeugWaegungModel extends Model
     
     public function getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, $datum)
     {
-        $query = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = " . $flugzeugID . " AND datum <= '" . $datum . "' ORDER BY datum DESC";
+        $query = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = " . $flugzeugID . " AND datum <= '" . $datum . "' ORDER BY datum DESC LIMIT 1";
         $ergebnis = $this->query($query)->getResultArray();
         
         if(empty($ergebnis))
@@ -110,7 +110,7 @@ class flugzeugWaegungModel extends Model
             $ergebnis =  $this->query($queryNeu)->getResultArray();
         }
         
-        return $ergebnis ?? NULL;
+        return $ergebnis[0] ?? NULL;
     }
     
     public function getSpaltenInformationen()

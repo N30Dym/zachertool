@@ -3,15 +3,36 @@
 namespace App\Controllers\protokolle;
 
 use CodeIgniter\Controller;
-use App\Models\protokolle\protokolleModel;
-use App\Models\piloten\pilotenModel;
-use App\Models\flugzeuge\flugzeugeMitMusterModel;
+use Config\Services;
+use App\Models\protokolle\{ protokolleModel };
+use App\Models\piloten\{ pilotenModel };
+use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
 class Protokolllistencontroller extends Controller
 {    
-    public function index()
+    /**
+     * Initialisiert die Variable, die angibt, ob ein Benutzer mit Admin- oder Zacherinweiserrechten angemeldet ist, mit dem Wert FALSE.
+     * 
+     * @var boolean 
+     */
+    protected $adminOderZachereinweiser = FALSE;
+    
+    /**
+     * Initialisiert eine Session und prüft, ob ein User mit admin oder zachereinweiser-Rechten angemeldet ist.
+     * 
+     * Starte eine Session.
+     * Wenn ein User angemeldet ist und der Mitgliedsstatus <ADMINISTRATOR> oder <ZACHEREINWEISER> ist, dann setze adminOderZachereinweiser
+     * zu TRUE.
+     */
+    public function __construct()
     {
-         // GEdacht für kein JS aktiv. Seite mit Links zu den jeweiligen Listen   
+        // start session
+        $session = Services::session();
+               
+        if($session->isLoggedIn AND ($session->mitgliedsStatus == ADMINISTRATOR OR $session->mitgliedsStatus == ZACHEREINWEISER))
+        {
+            $this->adminOderZachereinweiser = TRUE;
+        }
     }
     
     public function angefangeneProtokolle()
@@ -106,10 +127,11 @@ class Protokolllistencontroller extends Controller
         ];
 
         $datenInhalt = [
-            'title'             => $titel,
-            'protokolleArray'   => $protokolleArray,
-            'pilotenArray'      => $this->ladeAllePiloten(),
-            'flugzeugeArray'     => $this->ladeFlugzeugeUndMuster($protokolleArray)
+            'title'                     => $titel,
+            'protokolleArray'           => $protokolleArray,
+            'pilotenArray'              => $this->ladeAllePiloten(),
+            'flugzeugeArray'            => $this->ladeFlugzeugeUndMuster($protokolleArray),
+            'adminOderZachereinweiser'  => $this->adminOderZachereinweiser,
         ];
 
         $this->ladeListenView($datenInhalt, $datenHeader);

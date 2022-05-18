@@ -66,6 +66,7 @@
                                     <th>Begleiter</th>
                                     <th>Bemerkungen</th>
                                     <td></td>
+                                    <?php echo $adminOderZachereinweiser ? "<td></td>" : NULL ?> 
                                 </tr>
                             </thead>
                             <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
@@ -81,6 +82,9 @@
                                     </td>
                                     <td style="max-width: 30vw"><?= $protokoll['bemerkung'] ?></td>
                                     <td><a href="<?= base_url('/protokolle/anzeigen/' . $protokoll['id']) ?>"><button class="btn btn-sm btn-secondary">Anzeigen<?= ENVIRONMENT == 'development' ? "&nbsp;" . $protokoll['id'] : "&nbsp;" ?>&nbsp;&raquo;</button></a></td>
+                                    <?php if($adminOderZachereinweiser) : ?>
+                                        <td><a href="<?= base_url('/protokolle/index/' . $protokoll['id']) ?>"><button class="btn btn-sm btn-success">Bearbeiten<?= ENVIRONMENT == 'development' ? "&nbsp;" . $protokoll['id'] : "&nbsp;" ?> &nbsp;&raquo;</button></a></td>
+                                    <?php endif ?>    
                                 </tr>
 
                             <?php endforeach ?>  

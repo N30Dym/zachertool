@@ -131,7 +131,7 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         {
             $validation->run($beladung, 'beladungOhneProtokollSpeicherID');
             
-            if(!empty($validation->getErrors()))
+            if( ! empty($validation->getErrors()))
             {
                 foreach($validation->getErrors() as $fehlerBeschreibung)
                 {

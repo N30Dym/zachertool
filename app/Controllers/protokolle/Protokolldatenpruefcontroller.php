@@ -2,17 +2,37 @@
 
 namespace App\Controllers\protokolle;
 
-use App\Models\flugzeuge\flugzeugHebelarmeModel;
+use App\Models\flugzeuge\{ flugzeugHebelarmeModel };
 use App\Models\protokolllayout\{ protokollInputsModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
 
-//helper('array');
+helper('nachrichtAnzeigen');
+
+/**
+ * Child-Klasse vom ProtokollController. Prüft, ob im Zwischenspeicher alle Daten vorhanden sind, die zum Speichern in der Datenbank benötigt werden.
+ * Außerdem werden die Daten in das Format gebracht, das zum Speichern in der Datenbank benötigt wird.
+ *
+ * @author Lars Kastner
+ */
 class Protokolldatenpruefcontroller extends Protokollcontroller
 {	
+    
+    /**
+     * Prüft, ob Werte zum Speichern vorhanden sind und ob die Daten vollständig sind, um sie in der Datenbank zu speichern.
+     * 
+     * Wenn das Array 'eingegebeneWerte' im Zwischenspeicher und mindest ein zu speichernder Wert (von einer dynamisch
+     * geladenen Seite) vorhanden ist, initialisiere das 'fehlerArray' im Zwischenspeicher. Prüfe danach, ob alle ProtokollDetails
+     * vorhanden sind und speicher die sortierten Daten im Array $zuSpeicherndeDatenSortiert. Wenn dann keine Fehler im 'fehlerArray'
+     * vorhanden sind, gib das $zuSpeicherndeDatenSortiert-Array zurück. Falls mindestens ein Fehler gefunden wurde springe auf die 
+     * der Kapitelreihenfolge nach ersten Seite mit Fehlern zurück.
+     * Falls keine zu speichernden Werte vorhanden sind, leite zur nachrichtAnzeigen-Seite um.
+     * 
+     * @return array $zuSpeicherndeDatenSortiert
+     */
     protected function pruefeDatenZumSpeichern()
     {        
-        if(isset($_SESSION['protokoll']['eingegebeneWerte']) AND $this->zuSpeicherndeWerteVorhanden())
+        if(isset($_SESSION['protokoll']['eingegebeneWerte']) AND $this->prüfeZuSpeicherndeWerteVorhanden())
         {           
-            $_SESSION['protokoll']['fehlerArray'] = [];
+            $_SESSION['protokoll']['fehlerArray'] = array();
             
             $this->pruefeAlleProtokollDetailsVorhanden();
             
@@ -24,96 +44,136 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             }
             else
             {
-                header('Location: '. base_url() .'/protokolle/kapitel/'. array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
+                header("Location: ". base_url() . "/protokolle/kapitel/" . array_search(array_key_first($_SESSION['protokoll']['fehlerArray']), $_SESSION['protokoll']['kapitelIDs']));
                 exit;
             }
         }
         else
         {
-            echo "Keine Werte zum speichern vorhanden<br>";
-            $this->meldeKeineWerteEingegeben();
-            exit;
+            nachrichtAnzeigen("Keine Werte zum speichern vorhanden", base_url());
         }
     }
     
-    protected function zuSpeicherndeWerteVorhanden()
+    /**
+     * Prüft, ob zu speichernde Werte im Zwischenspeicher vorhanden sind ($_SESSION['protokoll']['eingegebeneWerte']).
+     * 
+     * Lade eine Instanz des protokollInputsMitInputTypModels.
+     * Prüfe jeden eingegebenen Wert, ob dieser nicht leer ist und der Index eine Zahl (protokollInputID) ist. Wenn ja,
+     * prüfe, ob es sich bei dem Input um den Inputtyp "Note" handelt. Wenn nein, gib TRUE zurück. Wenn es eine Note ist,
+     * prüfe ob die Note gesetzt ist. Wenn ja, gib TRUE zurück.
+     * Wenn kein eingegebener Wert gefunden wurde, gib FALSE zurück.
+     * 
+     * @return boolean
+     */
+    protected function prüfeZuSpeicherndeWerteVorhanden()
     {
         $protokollInputsMitInputTypModel = new protokollInputsMitInputTypModel();
 
-            //var_dump($_SESSION['protokoll']['eingegebeneWerte']);
         foreach($_SESSION['protokoll']['eingegebeneWerte'] as $protokollInputID => $wert)
         {
-            if(!empty($wert))
+            if( ! empty($wert) AND is_numeric($protokollInputID))
             {
-                if(is_numeric($protokollInputID) AND $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'] == "Note")
+                if($protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'] == "Note")
                 {
                     if($this->pruefeNoteGesetzt($protokollInputID))
                     {
-                        return true;
+                        return TRUE;
                     }
                 }
                 else
                 {
-                    return true;     
+                    return TRUE;     
                 }
             }
         }
         
-        return false;
+        return FALSE;
     }
     
+    /**
+     * Ruft Funktionen auf, um die Daten und Werte im Zwischenspeicher zu sorteiern, sodass sie in der Datenbank gespeichert werden können.
+     * 
+     * Gib ein Array zurück, in dem die ProtokollDaten, eingebenenWerte, Kommentare, HSt-Wege und ggf. Beladungen korrekt
+     * zum Speichern formatiert sind. Lade Beladung nur, wenn die ID des statischen BELADUNG_EINGABE-Kapitels in den kapitelIDs
+     * enthalten ist.
+     * 
+     * @return array['protokoll', 'eingegebeneWerte', 'kommentare', 'hStWege'(, 'beladung')]
+     */
     protected function zuSpeicherndeDatenSortieren()
     {
         return [
             'protokoll'         => $this->setzeProtokollDetails(),
             'eingegebeneWerte'  => $this->setzeEingegebeneWerte(),
             'kommentare'        => $this->setzeKommentare(),
-            'hStWege'           => $this->setzeHStWege(),
-            
-                // Beladung nur setzen, wenn Beladungseingabe vom Protokoll gefordert ist (KapitelID in SESSION['protokoll']['KapitelIDs'])
-            'beladung'          => array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) ? $this->setzeBeladung() : null               
+            'hStWege'           => $this->setzeHStWege(),            
+            'beladung'          => array_search(BELADUNG_EINGABE, $_SESSION['protokoll']['kapitelIDs']) ? $this->setzeBeladung() : NULL,               
         ];
     }
     
+    /**
+     * Prüft, ob alle ProtokollInformationen, die benötigt werden, vorhanden sind.
+     * 
+     * Initialisiere die Variable $protokollDetailsVorhanden und setze sie zu TRUE.
+     * Was geprüft wird, steht jeweils kommentiert bei den if-Bedingungen. 
+     * Wenn eine protokollInformation fehlt, setze $protokollDetailsVorhanden zu FALSE und setze den FehlerCode entsprechend.
+     * Gib am Ende $protokollDetailsVorhanden zurück.
+     * 
+     * @return boolean
+     */
     protected function pruefeAlleProtokollDetailsVorhanden()
     {
-        $protokollDetailsVorhanden = true;
+        $protokollDetailsVorhanden = TRUE;
         
-        if(!isset($_SESSION['protokoll']['protokollInformationen']) OR empty($_SESSION['protokoll']['protokollInformationen']['datum']))
+        // Array 'protokollInformationen' ist nicht im Zwischenspeicher vorhanden oder das Datum fehlt
+        if(empty($_SESSION['protokoll']['protokollInformationen']) OR empty($_SESSION['protokoll']['protokollInformationen']['datum']))
         {
-            $protokollDetailsVorhanden = false;
+            $protokollDetailsVorhanden = FALSE;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst das Datum angeben");
         }
+        // Es wurden kein protokollTyp gewählt oder es sind keine entsprechenden protokollIDs vorhanden
         if(empty($_SESSION['protokoll']['gewaehlteProtokollTypen']) OR empty($_SESSION['protokoll']['protokollIDs']))
         {
-            $protokollDetailsVorhanden = false;
-            $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst mindestens ein Protokoll auswählen");
+            $protokollDetailsVorhanden = FALSE;
+            $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst mindestens eine Protokollart auswählen");
         }
-        if(!isset($_SESSION['protokoll']['flugzeugID']) AND array_search(FLUGZEUG_EINGABE,$_SESSION['protokoll']['kapitelIDs']))
+        // Die ID der statischen FLUGZEUG_EINGABE-Seite ist in den kapitelIDs, es wurde aber keine flugzeugID gefunden
+        if(empty($_SESSION['protokoll']['flugzeugID']) AND array_search(FLUGZEUG_EINGABE,$_SESSION['protokoll']['kapitelIDs']))
         {
-            $protokollDetailsVorhanden = false;
-            $this->setzeFehlerCode(FLUGZEUG_EINGABE, "Du musst das Flugzeug auswählen");
+            $protokollDetailsVorhanden = FALSE;
+            $this->setzeFehlerCode(FLUGZEUG_EINGABE, "Du musst ein Flugzeug auswählen");
         }
-        if(!isset($_SESSION['protokoll']['pilotID']) AND array_search(PILOT_EINGABE,$_SESSION['protokoll']['kapitelIDs']))
+        // Die ID der statischen PILOT_EINGABE-Seite ist in den kapitelIDs, es wurde aber keine pilotID gefunden
+        if(empty($_SESSION['protokoll']['pilotID']) AND array_search(PILOT_EINGABE,$_SESSION['protokoll']['kapitelIDs']))
         {
-            $protokollDetailsVorhanden = false;
+            $protokollDetailsVorhanden = FALSE;
             $this->setzeFehlerCode(PILOT_EINGABE, "Du musst den Pilot auswählen");
         }
+        // Es exisitert eine pilotID und eine copilotID und beide sind identisch
         if(isset($_SESSION['protokoll']['pilotID']) AND isset($_SESSION['protokoll']['copilotID']) AND $_SESSION['protokoll']['copilotID'] == $_SESSION['protokoll']['pilotID'])
         {
-            $protokollDetailsVorhanden = false;
+            $protokollDetailsVorhanden = FALSE;
             $this->setzeFehlerCode(PILOT_EINGABE, "Der Begleiter darf nicht gleichzeitig Pilot sein");
         }
-        if(array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) AND !$this->pruefeBeladungsZustand())
+        // Die ID der statischen BELADUNG_EINGABE-Seite ist in den kapitelIDs, aber die Prüfung des Beladungszustandes war fehlerhaft
+        if(array_search(BELADUNG_EINGABE,$_SESSION['protokoll']['kapitelIDs']) AND ! $this->pruefeBeladungVorhanden())
         {
-            $protokollDetailsVorhanden = false;
-            $this->setzeFehlerCode(BELADUNG_EINGABE, "Du musst Angaben zur Beladung machen");
+            $protokollDetailsVorhanden = FALSE;
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Du musst korrekte Angaben zur Beladung machen");
         }
         
         return $protokollDetailsVorhanden;
     }
     
-    protected function pruefeNoteGesetzt($protokollInputID)
+    /**
+     * Prüft, ob eine Note in den eingegebenen Werten mit der ID <protokollInputID> einen Wert =! 0 hat.
+     * 
+     * Für jeden eingebenenWert mit dem Index <protokollInputID> prüfe für jede WölbklappenStellung, jede Kurvenrichtung und jede MultipelNr,
+     * ob es einen Wert ungleich 0 gibt. Wenn ja gib TRUE zurück. Sonst FALSE.
+     * 
+     * @param int $protokollInputID
+     * @return boolean
+     */    
+    protected function pruefeNoteGesetzt(int $protokollInputID)
     {
         foreach($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID] as $woelbklappenStellung => $werteRichtungMulitpelNr)
         {
@@ -123,38 +183,55 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {
                     if($wert != 0)
                     {
-                        return true;
+                        return TRUE;
                     } 
                 }
             }         
         }
-        return false;
+        return FALSE;
     }
     
-    
-    protected function pruefeBeladungsZustand()
+    /**
+     * Prüft, ob der Beladungszustand vorhanden ist und bestimmte Angaben gemacht wurden.
+     * 
+     * 
+     * 
+     * @return boolean
+     */
+    protected function pruefeBeladungVorhanden()
     {
-        $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
-        $hebelarmeKorrekt       = false;
+        $flugzeugHebelarmeModel                         = new flugzeugHebelarmeModel();
+        $hebelarmPilotKorrekt = $hebelarmCopilotKorrekt = TRUE;
         
-        if(!isset($_SESSION['protokoll']['beladungszustand']))
+        if(empty($_SESSION['protokoll']['beladungszustand']))
         {
-            return false;
+            return FALSE;
         }
         
         foreach($_SESSION['protokoll']['beladungszustand'] as $hebelarmID => $hebelarm)
         {           
-            if(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Pilot")
+            if( ! is_numeric($hebelarmID))
             {
-                ($hebelarm[0] >= 0 AND $hebelarm['Fallschirm'] >= 0) ? $hebelarmeKorrekt = true : null;
+                continue;
             }
-            elseif(is_numeric($hebelarmID) AND $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'] == "Copilot")
+            
+            $hebelarmBeschreibung = $flugzeugHebelarmeModel->getHebelarmNachID($hebelarmID)['beschreibung'];
+            
+            if($hebelarmBeschreibung == "Pilot")
             {
-                ($hebelarm[0] >= 0 AND $hebelarm['Fallschirm'] >= 0) ? $hebelarmeKorrekt = true : (($hebelarm[0] == "" AND $hebelarm['Fallschirm'] == "") ? true : null);
+                ($hebelarm[0] < 0 OR ($hebelarm['Fallschirm'] < 0 AND (string)$hebelarm['Fallschirm'] != "0")) ? $hebelarmPilotKorrekt = FALSE : NULL;
+            }
+            elseif($hebelarmBeschreibung == "Copilot")
+            {
+                if(isset($_SESSION['protokoll']['copilotID']) AND (empty($hebelarm[0]) OR $hebelarm[0] <= 0))
+                {
+                    $this->setzeFehlerCode(BELADUNG_EINGABE, "Es wurde ein Begleiter ausgewählt aber kein Gewicht angegeben");
+                    $hebelarmCopilotKorrekt = FALSE;
+                }
             }
         }
         
-        return $hebelarmeKorrekt;
+        return ($hebelarmPilotKorrekt AND $hebelarmCopilotKorrekt);
     }
     
     protected function setzeProtokollDetails()
@@ -164,13 +241,13 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             'protokollIDs'  => json_encode($_SESSION['protokoll']['protokollIDs']),
         ];
 
-        empty($_SESSION['protokoll']['flugzeugID']) ? null :                            $protokollDetails['flugzeugID'] = $_SESSION['protokoll']['flugzeugID'];
-        empty($_SESSION['protokoll']['pilotID']) ? null :                               $protokollDetails['pilotID']    = $_SESSION['protokoll']['pilotID'];
-        empty($_SESSION['protokoll']['copilotID']) ? null :                             $protokollDetails['copilotID']  = $_SESSION['protokoll']['copilotID'];
-        isset($_SESSION['protokoll']['fertig']) ?                                       $protokollDetails['fertig']     = "1" : null;
-        (empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) OR $_SESSION['protokoll']['protokollInformationen']['flugzeit'] == '00:00') ? null : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
-        empty($_SESSION['protokoll']['protokollInformationen']['bemerkung']) ? null :   $protokollDetails['bemerkung']  = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
-        empty($_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']) ? null :   $protokollDetails['stundenAufDemMuster']  = $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'];
+        empty($_SESSION['protokoll']['flugzeugID'])                                     ? NULL                                  : $protokollDetails['flugzeugID']           = $_SESSION['protokoll']['flugzeugID'];
+        empty($_SESSION['protokoll']['pilotID'])                                        ? NULL                                  : $protokollDetails['pilotID']              = $_SESSION['protokoll']['pilotID'];
+        empty($_SESSION['protokoll']['copilotID'])                                      ? NULL                                  : $protokollDetails['copilotID']            = $_SESSION['protokoll']['copilotID'];
+        isset($_SESSION['protokoll']['fertig'])                                         ? $protokollDetails['fertig']           = "1"                                       : NULL;
+        empty($_SESSION['protokoll']['protokollInformationen']['bemerkung'])            ? NULL                                  : $protokollDetails['bemerkung']            = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
+        empty($_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'])  ? NULL                                  : $protokollDetails['stundenAufDemMuster']  = $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'];
+        (empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) OR $_SESSION['protokoll']['protokollInformationen']['flugzeit'] == '00:00') ? NULL : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
         
         return $protokollDetails;
     }
@@ -190,13 +267,13 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {                                      
                     foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        if($wert != "" AND !($inputTyp['inputTyp'] == "Note" AND empty($wert)))
+                        if($wert != "" AND ! ($inputTyp['inputTyp'] == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID'] = $protokollInputID;
                             $temporaeresWertArray['wert'] = $wert == "on" ? 1 : $wert;
-                            $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? null : $woelbklappenStellung;
-                            $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? null : $richtung;
-                            $temporaeresWertArray['multipelNr'] = empty($multipelNr) ? null : $multipelNr;
+                            $temporaeresWertArray['woelbklappenstellung'] = $woelbklappenStellung == 0 ? NULL : $woelbklappenStellung;
+                            $temporaeresWertArray['linksUndRechts'] = $richtung == 0 ? NULL : $richtung;
+                            $temporaeresWertArray['multipelNr'] = empty($multipelNr) ? NULL : $multipelNr;
                             array_push($zuSpeicherndeWerte, $temporaeresWertArray);
                         } 
                     }
@@ -208,7 +285,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     
     protected function setzeKommentare()
     {
-        if(isset($_SESSION['protokoll']['kommentare']) AND !empty($_SESSION['protokoll']['kommentare']))
+        if(isset($_SESSION['protokoll']['kommentare']) AND ! empty($_SESSION['protokoll']['kommentare']))
         {
             $zuSpeicherndeKommentare = [];
             
@@ -222,14 +299,14 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             return $zuSpeicherndeKommentare;
         }
         
-        return null;
+        return NULL;
     }
     
     protected function setzeHStWege()
     {
         $hStWegErforderlich = $this->pruefeHStWegeErforderlich();
         
-        if($hStWegErforderlich !== false)
+        if($hStWegErforderlich !== FALSE)
         {
             $zuSpeicherndeHStWege = [];
 
@@ -252,16 +329,16 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             return $zuSpeicherndeHStWege;
         }
 
-        return null;
+        return NULL;
     }
     
     protected function setzeBeladung()
     {        
-        if(isset($_SESSION['protokoll']['beladungszustand']) && !empty($_SESSION['protokoll']['beladungszustand']))  
+        if(isset($_SESSION['protokoll']['beladungszustand']) && ! empty($_SESSION['protokoll']['beladungszustand']))  
         {
             if($this->pruefeBenoetigteHebelarmeVorhanden())
             {
-                $zuSpeichenderBeladungszustand = [];
+                $zuSpeichenderBeladungszustand = array();
 
                 foreach($_SESSION['protokoll']['beladungszustand'] as $flugzeugHebelarmID => $hebelarm)
                 {
@@ -272,8 +349,8 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                             if($gewicht != "")
                             {
                                 $temporaeresBeladungsArray['flugzeugHebelarmID']    = $flugzeugHebelarmID;
-                                $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? null : $bezeichnung;
-                                $temporaeresBeladungsArray['hebelarm']              = null;                           
+                                $temporaeresBeladungsArray['bezeichnung']           = empty($bezeichnung) ? NULL : $bezeichnung;
+                                $temporaeresBeladungsArray['hebelarm']              = NULL;                           
                                 $temporaeresBeladungsArray['gewicht']               = $gewicht;
 
                                 array_push($zuSpeichenderBeladungszustand, $temporaeresBeladungsArray);  
@@ -282,9 +359,9 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                     }
                     elseif($flugzeugHebelarmID == "weiterer")
                     {
-                        if($hebelarm['laenge'] != "" AND !empty($hebelarm['gewicht']))
+                        if($hebelarm['laenge'] != "" AND ! empty($hebelarm['gewicht']))
                         {
-                            $temporaeresBeladungsArray['flugzeugHebelarmID']    = null;
+                            $temporaeresBeladungsArray['flugzeugHebelarmID']    = NULL;
                             $temporaeresBeladungsArray['bezeichnung']           = $hebelarm['bezeichnung'];
                             $temporaeresBeladungsArray['hebelarm']              = $hebelarm['laenge'];
                             $temporaeresBeladungsArray['gewicht']               = $hebelarm['gewicht'];
@@ -302,7 +379,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
             $this->setzeFehlerCode(BELADUNG_EINGABE, "Es wurden keine Angaben zum Beladungszustand gemacht");
         }
         
-        return null;
+        return NULL;
     }
     
         // Wenn ein Wert eingegeben wurde, für den der HStWeg erforderlich ist, muss der HStWeg für das Kapitel gegeben sein.
@@ -312,7 +389,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         $protokollInputsModel               = new protokollInputsModel();
         $protokollLayoutsModel              = new protokollLayoutsModel();
         $kapitelIDsMitInputIDsMitHStWegen   = [];
-        $hStWegErforderlich                 = false;
+        $hStWegErforderlich                 = FALSE;
         
        foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
        {
@@ -322,7 +399,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
 
                 if(isset($hStWegBenoetigt) && $hStWegBenoetigt['hStWeg'] == 1)
                 {
-                    isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? null : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = [];
+                    isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? NULL : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = [];
                     array_push($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']], $protokollLayoutZeile['protokollInputID']);
                 }
             }
@@ -332,32 +409,32 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         {
             foreach($protokollInputIDsMitHStWegen as $protokollInputIDMitHStWeg)    
             {
-                if(isset($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]) && !empty($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]))
+                if(isset($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]) && ! empty($_SESSION['protokoll']['eingegebeneWerte'][$protokollInputIDMitHStWeg]))
                 {
-                    $hStWegErforderlich === false ? $hStWegErforderlich = [] : null;
+                    $hStWegErforderlich === FALSE ? $hStWegErforderlich = [] : NULL;
                     array_push($hStWegErforderlich, $protokollKapitelID);
                 }       
             }
         }
         
-        return $hStWegErforderlich === false ? false : array_unique($hStWegErforderlich);
+        return $hStWegErforderlich === FALSE ? FALSE : array_unique($hStWegErforderlich);
     }   
     
     protected function pruefeBenoetigteHebelarmeVorhanden()
     {
         // prüfen, ob Pilotgewicht und Pilotfallschirm != "", falls Copilotgewicht >0, prüfen Copilotfallschirm != ""
         $flugzeugHebelarmeModel = new flugzeugHebelarmeModel();
-        $erforderlicheHebelarmeVorhanden = true;
+        $erforderlicheHebelarmeVorhanden = TRUE;
         
         if(isset($_SESSION['protokoll']['doppelsitzer']))
         {
-            $copilotHebelarmID = $flugzeugHebelarmeModel->getCopilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID'])['id'];
-            if(isset($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND !empty($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND $_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0] > 0)
+            $copilotHebelarmID = $flugzeugHebelarmeModel->getCopilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID']);
+            if(isset($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND ! empty($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0]) AND $_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID][0] > 0)
             {
                 if($_SESSION['protokoll']['beladungszustand'][$copilotHebelarmID]['Fallschirm'] == "")
                 {
                     $this->setzeFehlerCode(BELADUNG_EINGABE, "Da ein Begleitergewicht angegeben wurde, muss auch das Gewicht für den Fallschirm des Begleiters angegeben werden (0kg ist auch valide)");
-                    $erforderlicheHebelarmeVorhanden = false;
+                    $erforderlicheHebelarmeVorhanden = FALSE;
                 }
             }              
         }
@@ -365,36 +442,26 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         $pilotHebelarmID = $flugzeugHebelarmeModel->getPilotHebelarmIDNachFlugzeugID($_SESSION['protokoll']['flugzeugID'])['id'];
         if(empty($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID][0]) OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID][0] <= 0)
         {
-            $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Piloten muss angegeben und größer als 0 sein");
-            $erforderlicheHebelarmeVorhanden = false;
+            $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Piloten muss angegeben werden und größer als 0 sein");
+            $erforderlicheHebelarmeVorhanden = FALSE;
         }
 
-        if(! isset($_SESSION['protokoll']['beladungszustand']) && ($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] == "" OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] < 0))
+        if(empty($_SESSION['protokoll']['beladungszustand']) AND ($_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] == "" OR $_SESSION['protokoll']['beladungszustand'][$pilotHebelarmID]['Fallschirm'] < 0))
         {
             $this->setzeFehlerCode(BELADUNG_EINGABE, "Das Gewicht des Pilotenfallschirms muss angegeben sein (0kg ist auch valide)");
-            $erforderlicheHebelarmeVorhanden = false;
+            $erforderlicheHebelarmeVorhanden = FALSE;
         }
 
         return $erforderlicheHebelarmeVorhanden;
     }
     
-    protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)
+    protected function setzeFehlerCode(int $protokollKapitelID, string $fehlerBeschreibung)
     {
-        if(! isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
+        if( ! isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
         {
-            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = [];
+            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = array();
         }
         
         array_push($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID], $fehlerBeschreibung);
-    }
-    
-    protected function meldeKeineWerteEingegeben()
-    {
-        $session = session();
-        $session->setFlashdata('nachricht', "Protokoll konnte nicht gespeichert werden, weil noch kein Protokolldaten eingegeben wurden");
-        $session->setFlashdata('link', base_url());
-        header('Location: '. base_url() .'/nachricht');
-        unset($_SESSION['protokoll']);
-        exit;
-    }  
+    } 
 }

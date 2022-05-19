@@ -10,3 +10,4 @@
 - = auf gleicher Höhe
 - TRUE / FALSE / NULL
 - && -> AND, || -> OR
+- Datenbankzugriff-Funktionen etwaige Indices immer in den Models

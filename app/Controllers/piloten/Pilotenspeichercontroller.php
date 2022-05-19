@@ -36,7 +36,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
         {     
             if($this->pruefePilotSchonVorhanden($postDaten['pilot']))
             {             
-                nachrichtAnzeigen("Pilot bereits vorhanden", base_url());
+                nachrichtAnzeigen("Pilot bereits vorhanden.<br> Bitte wende dich an einen Administrator, falls dein Name nicht angezeigt wird", base_url());
             }
             
             $zuSpeicherndeDaten = $this->formatierePilotDatenUndPilotDetails($postDaten);

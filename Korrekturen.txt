@@ -9,3 +9,4 @@
 - auskommentierte Code-Zeilen löschen
 - = auf gleicher Höhe
 - TRUE / FALSE / NULL
+- && -> AND, || -> OR

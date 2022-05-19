@@ -1128,7 +1128,7 @@ class Validation
             ]
         ],
         'neutralHSt' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
                 'required'      => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
                 'is_natural'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'
@@ -1166,7 +1166,7 @@ class Validation
             ]
         ],
         'neutralHSt' => [
-            'rules'  => 'required|is_natural',
+            'rules'  => 'permit_empty|is_natural',
             'errors' => [
                 'required'      => 'Es wurde kein Wert für das HSt im neutralen Zustand angegeben.',
                 'is_natural'    => 'Der HSt Weg für den neutralen Zustand muss eine ganze Zahl sein.'

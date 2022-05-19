@@ -74,7 +74,6 @@ class Protokollcontroller extends Controller
         {
             return redirect()->to(base_url('/protokolle/kapitel/2'));
         }
-
         else
         {
             $this->ersteSeiteAnzeigen();            

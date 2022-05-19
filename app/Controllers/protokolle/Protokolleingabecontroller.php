@@ -370,7 +370,7 @@ class Protokolleingabecontroller extends Protokollcontroller
     {
         foreach($hStWege[key($hStWege)] as $hStStellung => $wert)
         {
-            if(!empty($wert))
+            if(isset($wert) AND $wert != "")
             {
                  $_SESSION['protokoll']['hStWege'][key($hStWege)][$hStStellung] = $wert;
             }

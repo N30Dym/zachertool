@@ -30,7 +30,7 @@ class flugzeugHebelarmeModel extends Model
     
     public function getPilotHebelarmIDNachFlugzeugID($flugzeugID)
     {
-        return $this->select('id')->where('beschreibung', 'Pilot')->where('flugzeugID', $flugzeugID)->first();
+        return $this->select('id')->where('beschreibung', 'Pilot')->where('flugzeugID', $flugzeugID)->first()['id'];
     }
     
     public function getCopilotHebelarmIDNachFlugzeugID($flugzeugID)
@@ -38,7 +38,7 @@ class flugzeugHebelarmeModel extends Model
         return $this->select('id')->where('beschreibung', 'Copilot')->where('flugzeugID', $flugzeugID)->first()['id'];
     }
     
-    public function getHebelarmHebelarmNachID($id)
+    public function getHebelarmLaengeNachID($id)
     {
         return $this->select('hebelarm')->where('id', $id)->first()['hebelarm'];
     }

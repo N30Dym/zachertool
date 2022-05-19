@@ -453,7 +453,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             if(is_numeric($flugzeugHebelarmID))
             {            
                 $hebelarmBezeichnung    = $flugzeugHebelarmeModel->getHebelarmeBezeichnungNachID($flugzeugHebelarmID);
-                $hebelarmHebelarm       = $flugzeugHebelarmeModel->getHebelarmHebelarmNachID($flugzeugHebelarmID);
+                $hebelarmHebelarm       = $flugzeugHebelarmeModel->getHebelarmLaengeNachID($flugzeugHebelarmID);
                 
                 foreach($beladungsArray as $zusatzBezeichnung => $beladungGewicht)
                 {                    

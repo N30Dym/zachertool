@@ -637,7 +637,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
                 }
                 else
                 {
-                    $protokollInputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'];
+                    $protokollInputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID);
                     
                     foreach($woelbklappenUndRichtung as $woelbklappenStellung => $richtungen)
                     {

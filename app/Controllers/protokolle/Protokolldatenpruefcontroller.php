@@ -76,7 +76,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         {
             if( ! empty($wert) AND is_numeric($protokollInputID))
             {
-                if($protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID)['inputTyp'] == "Note")
+                if($protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID) == "Note")
                 {
                     if($this->pruefeNoteGesetzt($protokollInputID))
                     {
@@ -259,7 +259,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
                 {                                      
                     foreach($werteMultipelNr as $multipelNr => $wert)
                     {
-                        if($wert != "" AND ! ($inputTyp['inputTyp'] == "Note" AND empty($wert)))
+                        if($wert != "" AND ! ($inputTyp == "Note" AND empty($wert)))
                         {
                             $temporaeresWertArray['protokollInputID']       = $protokollInputID;
                             $temporaeresWertArray['wert']                   = $wert == "on"                 ? 1     : $wert;

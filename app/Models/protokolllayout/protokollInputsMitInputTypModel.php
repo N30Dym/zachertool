@@ -29,7 +29,7 @@ class protokollInputsMitInputTypModel extends Model
     
     public function getProtokollInputTypNachProtokollInputID($id)
     {
-        return $this->select('inputTyp')->where('id', $id)->first();
+        return $this->select('inputTyp')->where('id', $id)->first()['inputTyp'];
     }
 
 }

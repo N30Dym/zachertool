@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\protokolle;
+namespace App\Controllers\protokolle\anzeige;
 
 use CodeIgniter\Controller;
 use Config\Services;

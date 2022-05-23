@@ -277,7 +277,7 @@ class Protokollcontroller extends Controller
     protected function neueEingabenVerarbeiten(array $postDaten)
     {
         $protokollEingabeController = new Protokolleingabecontroller;
-        $protokollEingabeController->verarbeitenUebergebeneWerte($postDaten);
+        $protokollEingabeController->verarbeiteUebergebeneDaten($postDaten);
     }
     
     /**

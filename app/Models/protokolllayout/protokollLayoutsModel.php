@@ -45,7 +45,7 @@ class protokollLayoutsModel extends Model
         $query = mb_substr($query, 0, -3);
         $query = $query . ");"; 
         
-        return $this->query($query)->getResultArray();
+        return $this->query($query)->getResultArray()[0]['protokollKapitelID'];
     }
     
     public function getInputIDsNachProtokollEingabeID($protokollEingabeID)

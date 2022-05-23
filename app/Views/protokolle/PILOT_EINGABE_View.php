@@ -37,7 +37,6 @@
                 <br>
             </div>
             <div class="col-12">
-                <?php //var_dump($pilotenDatenArray) ?>
                 <select id="pilotAuswahl" name="pilotID" class="form-select form-select-lg" size="10" required>
                     <?php if(isset($_SESSION['protokoll']['fertig']) && isset($_SESSION['protokoll']['pilotID'])) : ?>
                         <option value="<?= esc($_SESSION['protokoll']['pilotID']) ?>" selected>
@@ -47,7 +46,7 @@
                         </option>
                     <?php else: ?>    
                         <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['protokoll']['pilotID']) && $_SESSION['protokoll']['pilotID'] === $pilot['id']) ? "selected" : "" ?>>
+                            <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['protokoll']['pilotID']) && $_SESSION['protokoll']['pilotID'] == $pilot['id']) ? "selected" : "" ?>>
                                 <?= esc($pilot["vorname"]) ?>
                                 <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
                                 <?= esc($pilot["nachname"]) ?>
@@ -76,11 +75,11 @@
             <div class="col-12">
                 <select id="copilotAuswahl" name="copilotID" class="form-select form-select-lg" size="10">
                     <option></option>
-                    <?php foreach($pilotenDatenArray as $pilot) :  ?>
-                        <option value="<?= esc($pilot['id']) ?>" <?= (isset($_SESSION['protokoll']['copilotID']) && $_SESSION['protokoll']['copilotID'] === $pilot['id']) ? "selected" : "" ?>>
-                            <?= esc($pilot["vorname"]) ?>
-                            <?= $pilot["spitzname"] != "" ? " \"" . $pilot["spitzname"] . "\" " : "" ?>
-                            <?= esc($pilot["nachname"]) ?>
+                    <?php foreach($pilotenDatenArray as $copilot) :  ?>
+                        <option value="<?= esc($copilot['id']) ?>" <?= (isset($_SESSION['protokoll']['copilotID']) && $_SESSION['protokoll']['copilotID'] == $copilot['id']) ? "selected" : "" ?>>
+                            <?= esc($copilot["vorname"]) ?>
+                            <?= $copilot["spitzname"] != "" ? " \"" . $copilot["spitzname"] . "\" " : "" ?>
+                            <?= esc($copilot["nachname"]) ?>
                         </option>                      
                     <?php endforeach ?>
                 </select>

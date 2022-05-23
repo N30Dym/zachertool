@@ -232,7 +232,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
      * 
      * Lade eine Instanz des protokollInputsMitInputTypModels.
      * Initialisiere das Array $zuSpeicherndeWerte.
-     * Für jeden Index im Array eingegebeneWerte im Zwischenspeicher, ermittle zunächst den InputTyp.
+     * Für jeden numerischen Index im Array eingegebeneWerte im Zwischenspeicher (protokollInputID), ermittle zunächst den InputTyp.
      * Für jede WölbklappenStellung, jede Kurvenrichtung und jede MultipelNr speichere den Wert im $zuSpeicherndeWerte-Array,
      * vorausgesetzt der Wert ist nicht leer und falls der inputTyp "Note" ist, ist der Wert nicht 0 oder leer.
      * 
@@ -251,7 +251,14 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
         
         foreach($_SESSION['protokoll']['eingegebeneWerte'] as $protokollInputID => $werteWoelbklappenRichtungMultipelNr)
         {
-            $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID);
+            if(is_numeric($protokollInputID))
+            {
+                $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($protokollInputID);
+            }
+            else
+            {
+                continue;
+            }
 
             foreach($werteWoelbklappenRichtungMultipelNr as $woelbklappenStellung => $werteRichtungMulitpelNr)
             {

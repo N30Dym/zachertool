@@ -24,16 +24,16 @@ class protokolleLayoutProtokolleModel extends Model
         return $this->select('protokollTypID')->where("id", $id)->first();
     }
 
-    public function getProtokollAktuelleProtokollIDNachProtokollTypID($protokollTypID)
+    public function getAktuelleProtokollIDNachProtokollTypID($protokollTypID)
     {
-        $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < CURRENT_DATE AND datumBis > CURRENT_DATE) OR (datumVon < CURRENT_DATE AND datumBis IS NULL))";        
+        $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < CURRENT_DATE AND datumBis >= CURRENT_DATE) OR (datumVon < CURRENT_DATE AND datumBis IS NULL))";        
         return $this->query($query)->getResultArray()[0]["id"];
     }
 
     public function getProtokollIDNachProtokollDatumUndProtokollTypID($protokollDatum, $protokollTypID)
     {
-        $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < '" . $protokollDatum . "' AND datumBis > '" . $protokollDatum . "') OR (datumVon < '" . $protokollDatum . "' AND datumBis IS NULL))";     
-        return $this->query($query)->getResultArray();
+        $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < '" . $protokollDatum . "' AND datumBis >= '" . $protokollDatum . "') OR (datumVon < '" . $protokollDatum . "' AND datumBis IS NULL))";     
+        return $this->query($query)->getResultArray()[0]["id"];
     }
     
     public function getAlleProtokolleSoriertNachProtokollTypID()

@@ -27,7 +27,7 @@ class protokolleLayoutProtokolleModel extends Model
     public function getProtokollAktuelleProtokollIDNachProtokollTypID($protokollTypID)
     {
         $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < CURRENT_DATE AND datumBis > CURRENT_DATE) OR (datumVon < CURRENT_DATE AND datumBis IS NULL))";        
-        return $this->query($query)->getResultArray();
+        return $this->query($query)->getResultArray()[0]["id"];
     }
 
     public function getProtokollIDNachProtokollDatumUndProtokollTypID($protokollDatum, $protokollTypID)

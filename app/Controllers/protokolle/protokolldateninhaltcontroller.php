@@ -338,7 +338,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
                     $anzahlMultipelFelder > $multipelFelderArray[$protokollEingabeID] ? $multipelFelderArray[$protokollEingabeID] = $anzahlMultipelFelder : NULL;
                 }
 
-                empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = STANDARDANZAHL_MULTIPELFELDER : NULL;     
+                empty($multipelFelderArray[$protokollEingabeID]) ? $multipelFelderArray[$protokollEingabeID] = self::STANDARDANZAHL_MULTIPELFELDER : NULL;     
             }
         }
 

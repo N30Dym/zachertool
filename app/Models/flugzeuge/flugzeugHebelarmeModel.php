@@ -43,7 +43,7 @@ class flugzeugHebelarmeModel extends Model
         return $this->select('hebelarm')->where('id', $id)->first()['hebelarm'];
     }
     
-    public function getHebelarmeBezeichnungNachID($id)
+    public function getHebelarmBeschreibungNachID($id)
     {
         return $this->select('beschreibung')->where('id', $id)->first()['beschreibung'];
     }

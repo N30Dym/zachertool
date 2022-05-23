@@ -2,15 +2,30 @@
 
 namespace App\Controllers\protokolle;
 
-
-use App\Models\protokolle\{ protokolleModel, beladungModel, datenModel, kommentareModel, hStWegeModel };
 use App\Models\protokolllayout\{ protokollInputsMitInputTypModel, protokollLayoutsModel };
 
+/**
+ * Child-Klasse vom ProtokollController. Validert die zu Speichernden Daten.
+ *
+ * @author Lars Kastner
+ */
 class Protokolldatenvalidiercontroller extends Protokollcontroller
 {
     
-    
-    protected function validiereDatenZumSpeichern($zuValidierendeDaten)
+    /**
+     * Ruft die Funktionen zum Validieren der einzelnen zu speichernden Daten auf.
+     * 
+     * Initialisiere den Validation-Service und speichere ihn in der Variable $validation.
+     * Validiere die ProtokollDetails, die in der Datenbanktabelle 'protokolle' gespeichert werden und die 
+     * eingegebenenWerte, die in 'daten' gespeichert werden.
+     * Optional, falls vorhanden, validiere außerdem den Beladungszustand, der in Datenbanktabelle 'beladung' gespeichert wird,
+     * die Kommentare für 'kommentare' und die HSt-Wege für 'hst-wege'.
+     * Wenn das fehlerArray am Ende leer ist, gib TRUE zurück, sonst FALSE.
+     * 
+     * @param type $zuValidierendeDaten
+     * @return boolean
+     */
+    protected function validiereDatenZumSpeichern(array $zuValidierendeDaten)
     {
         $validation = \Config\Services::validation();
         
@@ -18,29 +33,40 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         
         $this->validereWerte($zuValidierendeDaten['eingegebeneWerte'], $validation);
         
-        if(isset($zuValidierendeDaten['beladung']) && !empty($zuValidierendeDaten['beladung']))
+        if( ! empty($zuValidierendeDaten['beladung']))
         {
             $this->validereBeladung($zuValidierendeDaten['beladung'], $validation);
         }
         
-        if(!empty($zuValidierendeDaten['kommentare']))
+        if( ! empty($zuValidierendeDaten['kommentare']))
         {
             $this->validereKommentare($zuValidierendeDaten['kommentare'], $validation);
         }
 
-        if(!empty($zuValidierendeDaten['hStWege']))
+        if( ! empty($zuValidierendeDaten['hStWege']))
         {
             $this->validereHStWege($zuValidierendeDaten['hStWege'], $validation);
         }
         
-        return empty($_SESSION['protokoll']['fehlerArray']) ? true : false;
+        return empty($_SESSION['protokoll']['fehlerArray']) ? TRUE : FALSE;
     }
     
-    protected function validereProtokollDetails($zuValidierendeProtokollDetails, $validation)
+    /**
+     * Validiert die zu validierenden ProtokollDetails und setzt ggf. Fehler-Codes im fehlerArray.
+     * 
+     * Validiere die zu valdierenden ProtokollDetails. (siehe app/Config/Validation.php -> $protokolle)
+     * Wenn Fehler auftreten, gehe durch die Fehlerliste. Für jeden Fehler setze, für die entsprechenden KapitelID,
+     * einen Fehler-Code im fehlerArray.
+     * Setze die Validierung zurück, damit keine Fehler mehr vorhanden sind.
+     * 
+     * @param array $zuValidierendeProtokollDetails
+     * @param object $validation
+     */
+    protected function validereProtokollDetails(array $zuValidierendeProtokollDetails, object $validation)
     {
         $validation->run($zuValidierendeProtokollDetails, 'protokolle');
 
-        if(!empty($validation->getErrors()))
+        if( ! empty($validation->getErrors()))
         {
             foreach($validation->getErrors() as $feldName => $fehlerBeschreibung)
             {
@@ -62,7 +88,19 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         $validation->reset();
     }
     
-    protected function validereWerte($zuValidierendeWerte, $validation)
+    /**
+     * Validiert die eingegebenen Werte je nach inputTyp und setzt ggf. Fehler-Codes im fehlerArray.
+     * 
+     * Lade je eine Instanz des protokollInputsMitInputTypModels und des protokollLayoutsModels.
+     * Validiere jeden zu validierenden Datensatz, abgesehen von der protokollSpeicherID. (siehe app/Config/Validation.php -> $datenOhneProtokollSpeicherID).
+     * Ermittle den inputTyp des jeweiligen Datensatzes und validiere den eingebenenWert je nach inputTyp.
+     * Wenn es zu Fehlern kommt, ermittle die protokollKapitelID des fehlerhaften Werts und setze einen Fehler-Code im fehlerArray.
+     * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind.
+     * 
+     * @param array $zuValidierendeWerte
+     * @param object $validation
+     */
+    protected function validereWerte(array $zuValidierendeWerte, object $validation)
     {
         $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
         $protokollLayoutsModel              = new protokollLayoutsModel();
@@ -71,13 +109,13 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         {            
             $validation->run($wert, 'datenOhneProtokollSpeicherID');
             
-            $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($wert['protokollInputID'])['inputTyp'];
+            $inputTyp = $protokollInputsMitInputTypModel->getProtokollInputTypNachProtokollInputID($wert['protokollInputID']);
             
             $this->validiereWertNachInputTyp($inputTyp, $wert['wert'], $validation);
             
-            if(!empty($validation->getErrors()))
+            if( ! empty($validation->getErrors()))
             {
-                $protokollKapitelID = $protokollLayoutsModel->getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs($wert['protokollInputID'], $_SESSION['protokoll']['protokollIDs'])[0]['protokollKapitelID'];
+                $protokollKapitelID = $protokollLayoutsModel->getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs($wert['protokollInputID'], $_SESSION['protokoll']['protokollIDs']);
 
                 foreach($validation->getErrors() as $fehlerBeschreibung)
                 {
@@ -89,13 +127,23 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         }
     }
     
-    protected function validereKommentare($zuValidierendeKommentare, $validation)
+    /**
+     * Validiert die zu validierenden Kommentare und setzt ggf. Fehler-Codes im fehlerArray.
+     * 
+     * Validiere jeden Datensatz im zuValidierendeKommentare-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
+     * $kommentareOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
+     * 
+     * @param array $zuValidierendeKommentare
+     * @param object $validation
+     */
+    protected function validereKommentare(array $zuValidierendeKommentare, object $validation)
     {
         foreach($zuValidierendeKommentare as $kommentar)
         {
             $validation->run($kommentar, 'kommentareOhneProtokollSpeicherID');
             
-            if(!empty($validation->getErrors()))
+            if( ! empty($validation->getErrors()))
             {
                 foreach($validation->getErrors() as $fehlerBeschreibung)
                 {
@@ -107,13 +155,23 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         }
     }
     
-    protected function validereHStWege($zuValidierendeHStWege, $validation)
+    /**
+     * Validiert die zu validierenden Kommentare und setzt ggf. Fehler-Codes im fehlerArray.
+     * 
+     * Validiere jeden Datensatz im zuValidierendeHStWege-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
+     * $hStWegeOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
+     * 
+     * @param array $zuValidierendeHStWege
+     * @param object $validation
+     */
+    protected function validereHStWege(array $zuValidierendeHStWege, object $validation)
     {
         foreach($zuValidierendeHStWege as $hStWeg)
         {
             $validation->run($hStWeg, 'hStWegeOhneProtokollSpeicherID');
             
-            if(!empty($validation->getErrors()))
+            if( ! empty($validation->getErrors()))
             {
                 foreach($validation->getErrors() as $fehlerBeschreibung)
                 {
@@ -125,7 +183,17 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         }
     }
     
-    protected function validereBeladung($zuValidierendeBeladung, $validation)
+    /**
+     * Validiert die zu validierenden Beladungszustände und setzt ggf. Fehler-Codes im fehlerArray.
+     * 
+     * Validiere jeden Datensatz im zuValidierendeBeladung-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
+     * $beladungOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
+     * 
+     * @param array $zuValidierendeBeladung
+     * @param object $validation
+     */
+    protected function validereBeladung(array $zuValidierendeBeladung, object $validation)
     {
         foreach($zuValidierendeBeladung as $beladung)
         {
@@ -143,37 +211,57 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
         }
     }
     
-    protected function validiereWertNachInputTyp($inputTyp, $wert, $validation)
+    /**
+     * Validiert den übergebenen Wert, je nach übergebenen inputTyp
+     * 
+     * Speichere den übergebenen Wert im $zuValidierenderWert-Array.
+     * Je nach übergebenen inputTyp valdiere den Wert mit den entsprechenden Regeln.
+     * (siehe app/Config/Validation.php -> $eingabeGanzzahl, $eingabeDezimalzahl, $eingabeCheckbox, $eingabeNote oder $eingabeText).
+     * 
+     * @param string $inputTyp
+     * @param string $wert
+     * @param object $validation
+     */
+    protected function validiereWertNachInputTyp(string $inputTyp, string $wert, object $validation)
     {
-        $wertValidierArray['wert'] = $wert;
+        $zuValidierenderWert['wert'] = $wert;
         
         switch($inputTyp)
         {            
             case 'Auswahloptionen':
             case 'Ganzzahl':
-                $validation->run($wertValidierArray, 'eingabeGanzzahl');
+                $validation->run($zuValidierenderWert, 'eingabeGanzzahl');
                 break;
             case 'Dezimalzahl':
-                $validation->run($wertValidierArray, 'eingabeDezimalzahl');
+                $validation->run($zuValidierenderWert, 'eingabeDezimalzahl');
                 break;
             case 'Checkbox':
-                $validation->run($wertValidierArray, 'eingabeCheckbox');
+                $validation->run($zuValidierenderWert, 'eingabeCheckbox');
                 break;
             case 'Note':
-                $validation->run($wertValidierArray, 'eingabeNote');
+                $validation->run($zuValidierenderWert, 'eingabeNote');
                 break;
             case 'Textfeld':
             case 'Textzeile':
             default:
-                $validation->run($wertValidierArray, 'eingabeText');
+                $validation->run($zuValidierenderWert, 'eingabeText');
         }
     }
     
-    protected function setzeFehlerCode($protokollKapitelID, $fehlerBeschreibung)
+    /**
+     * Setzt einen Fehler-Code in den Zwischenspeicher.
+     * 
+     * Falls das 'fehlerArray' im Zwischenspeicher noch keinen Index mit der übergebenen protokollKapitelID besitz, erzeuge diesen.
+     * Füge dem Index <protokollKapitelID> des 'fehlerArray's die übergebene Fehlerbeschriebung hinzu.
+     * 
+     * @param int $protokollKapitelID
+     * @param string $fehlerBeschreibung
+     */
+    protected function setzeFehlerCode(int $protokollKapitelID, string $fehlerBeschreibung)
     {
-        if(!isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
+        if( ! isset($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID]))
         {
-            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = [];
+            $_SESSION['protokoll']['fehlerArray'][$protokollKapitelID] = array();
         }
         
         array_push($_SESSION['protokoll']['fehlerArray'][$protokollKapitelID], $fehlerBeschreibung);

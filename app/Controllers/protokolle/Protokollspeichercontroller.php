@@ -15,47 +15,42 @@ helper('nachrichtAnzeigen');
  */
 class Protokollspeichercontroller extends Protokollcontroller
 {	
+    
+    /**
+     * Drei lokale Konstanten, die die drei Protokollbearbeitungszustände "angefangen", "fertig" und "bestätigt" widergeben.
+     */
     const ANGEFANGEN    = 'angefangen';
     const FERTIG        = 'fertig';
     const BESTAETIGT    = 'bestaetigt';
     
     /**
-     * Diese Funktion übernimmt die Koordination der zuSpeicherndenDaten und wird vom Protokollcontroller aufgerufen.
+     * Speichert neue und bereits bestehende Protokolle. Bestätigte Protokolle dürfen nur von adminOderEinweiser bearbeitet werden.
      * 
-     * Zunächst wird geprüft, ob eine protokollSpeicherID in der $_SESSION-Variable gespeichert ist. Diese dient gleichzeitig als Flag
-     * dafür, ob das Protokoll schon gespeichert ist oder nicht. Wenn also die $_SESSION-Variable noch nicht existiert bedeutet das, dass 
-     * diese Daten neu sind und noch nicht gespeichert wurden.
-     * In diesem Fall ist der erste Schritt das Anlegen des Protokolls in der Datenbank `protokolle` und das setzen der $_SESSION-Variable mit
-     * der nun erzeugten protokollSpeicherID (s. speicherNeuesProtokoll). Je nachdem, ob die Flag "fertig" im zuSpeichernden Protokoll
-     * gesetzt ist wird der $protokollStatus zu FERTIG oder ANGEFANGEN gesetzt.
-     * Wenn bereits eine protokollSpeicherID in der $_SESSION-Variable vorhanden ist, wird in der Datenbank `protokolle` der entsprechende Datensatz 
-     * geladen und geprüft und ggf. aktualisiert (s. aktualisiereProtokollDaten). 
-     * Wenn der $protokollStatus gleich BESTAETIGT ist, also im gespeicherten Protokoll die Flag 'bestaetigt' gesetzt ist, darf das Protokoll 
-     * nicht mehr geändert werden und es erfolgt eine Weiterleitung zum einem Nachrichtenfenster (s. meldeProtokollKannNichtUeberschriebenWerden).
-     * Andernfalls werden die zuSpeicherndenDaten an die entsprechende Funktion weitergegeben (s. speicherZuSpeicherndeDaten), um dort verarbeitet 
-     * zu werden.
+     * Initialisiere den $protokollStatus mit ANGEFANGEN.
+     * Falls noch keine protokollSpeicherID im Zwischenspeicher vorhanden ist (-> neues Protokoll), speichere das neue Protokoll und setze den 
+     * $protokollStatus je nachdem, ob die 'fertig'-Flag gesetzt ist oder nicht.
+     * Wenn schon eine protokollSpeicherID vorhanden ist und ein Häkchen bei 'bestätigt' gesetzt wurde, setze die 'bestätigt'-Flag und
+     * aktualisiere die ProtokollDetails.
+     * Je nach $protokollStatus werden nun die zu speichernden Daten gespeichert und das Feld 'geändertAm' des aktuellen Protokolls aktualisert
+     * oder nicht.
      * 
-     * Das übergebene Array  $zuSpeicherndeDaten enthält weitere Arrays mit den Daten die gespeichert werden sollen. Diese Daten sind so
-     * auf- und vorbereitet worden (s. Protokolldatenpruef- und Protokolldatenvalidiercontroller), dass das Speichern ohne weitere Fehler
-     * erfolgen sollte. 
-     * $zuSpeicherndeDaten enthält in der ersten Ebene folgende weitere Arrays: protokoll, eingegebeneDaten, kommentare, hStWege, beladung.
+     * @param array $zuSpeicherndeDaten[[eingegebeneWerte],[kommentare],[hStWege],[beladung],[protokoll]]
+     * @param bool $bestaetigt
+     * @return boolean
      * 
-     * @param array_mit_arrays $zuSpeicherndeDaten
-     * 
-     * @var string $protokollStatus 'bestaetigt'|'fertig'|'angefangen'
      */
-    protected function speicherProtokollDaten(array $zuSpeicherndeDaten, bool $bestaetigt = NULL)
+    protected function speicherProtokollDaten(array $zuSpeicherndeDaten, bool $bestaetigt)
     {       
         $protokollStatus = self::ANGEFANGEN;
         
         if( ! isset($_SESSION['protokoll']['protokollSpeicherID']))
         {
-            $this->speicherNeuesProtokoll($zuSpeicherndeDaten['protokoll']);
+            $this->neuesProtokollSpeichern($zuSpeicherndeDaten['protokoll']);
             $protokollStatus = (isset($zuSpeicherndeDaten['protokoll']['fertig']) AND $zuSpeicherndeDaten['protokoll']['fertig'] == 1) ? self::FERTIG : self::ANGEFANGEN;
         }
         else
         {
-            if(!empty($bestaetigt))
+            if($bestaetigt)
             {
                 $zuSpeicherndeDaten['protokoll']['bestaetigt'] = 1;
             }
@@ -65,33 +60,38 @@ class Protokollspeichercontroller extends Protokollcontroller
         
         switch($protokollStatus) 
         {
-            case self::BESTAETIGT AND $this->adminOderZachereinweiser == FALSE:
+            case self::BESTAETIGT AND $this->adminOderZachereinweiser != TRUE:
                 nachrichtAnzeigen("Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde", base_url());
                 break;
+            case self::BESTAETIGT AND $this->adminOderZachereinweiser == TRUE:
             case self::FERTIG:
             case self::ANGEFANGEN:
                 $this->speicherZuSpeicherndeDaten($zuSpeicherndeDaten);
-                break;
+                $this->updateProtokollGeaendertAm();
+                return TRUE;
         }
 
-        $this->updateProtokollGeaendertAm();
-        return TRUE;
+        return FALSE;
     }  
     
     /**
-     * Diese Funktion speichert die Protokolldaten, die ihr übertragen werden in die Datenbank `protokolle`.
-     * Es wird automatisch die ID des neu angelegten Datensatzes zurückgegeben. Diese ist im weiteren Verlauf
-     * als protokollSpeicherID zu betrachten und wird auch so in die $_SESSION-Variable übertragen.
+     * Speichert die protokollDetails in einem neuen Datensatz in 'protokolle' und setzt die protokollSpeicherID im Zwischenspeicher.
+     * 
+     * Lade eine Instanz des protokolleModels.
+     * Speichere die zu speichernden ProtokollDetails in der Datenbank 'protokolle'. Der zurückgegebene Wert entspricht der protokollSpeicherID.
+     * Speichere diese im $_SESSION-Zwischenspeicher.
      * 
      * @param array $zuSpeicherndeProtokollDetails
-     * 
-     * @return int protokollSpeicherID
      */
-    protected function speicherNeuesProtokoll($zuSpeicherndeProtokollDetails)
+    protected function neuesProtokollSpeichern(array $zuSpeicherndeProtokollDetails)
     {        
-        $protokolleModel = new protokolleModel();
-        $_SESSION['protokoll']['protokollSpeicherID'] = $protokolleModel->speicherNeuesProtokoll($zuSpeicherndeProtokollDetails);
-        echo "Das neue Protokoll wurde gespeichert<br>";
+        $protokolleModel                                = new protokolleModel();
+        $_SESSION['protokoll']['protokollSpeicherID']   = $protokolleModel->setNeuesProtokoll($zuSpeicherndeProtokollDetails);
+        
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "Das neue Protokoll wurde gespeichert<br>";
+        }
     }
     
     /**
@@ -113,32 +113,59 @@ class Protokollspeichercontroller extends Protokollcontroller
      * @param array $zuSpeicherndeProtokollDetails
      * @return string 'angefangen'|'fertig'|'bestaetigt'
      */
-    protected function aktualisiereProtokollDetails($zuSpeicherndeProtokollDetails)
+    /**
+     * Aktualisiert die bereits in der Datenbank vorhandenen ProtokollDetails mit den übergebenen zu speichernden ProtkollDetails.
+     * 
+     * Lade eine Instanz des protokolleModels.
+     * Speichere die vorhandenen ProtokollDetails mit der protokollSpeicherID aus dem Zwischenspeicher in der Variable $gespeicherteProtokollDetails.
+     * Wenn im gespeicherten Datensatz 'bestaetigt' == 1 ist, darf entweder nichts verändert werden, wenn kein adminOderEinweiser eingeloggt ist, 
+     * oder die stundenNachSchein und die copilotID können von einem adminOderEinweiser aktualisiert werden.
+     * Wenn im gespeicherten Datensatz 'fertig' == 1 und in den zu speichernden ProtokollDetails bestätigt == 1 ist, dann setze bestätigt in
+     *  
+     * @param array $zuSpeicherndeProtokollDetails
+     * @return string
+     */
+    protected function aktualisiereProtokollDetails(array $zuSpeicherndeProtokollDetails)
     {
-        $protokolleModel = new protokolleModel();
-        $gespeicherteProtokollDetails = $protokolleModel->getProtokollNachID($_SESSION['protokoll']['protokollSpeicherID']);
+        $protokolleModel                = new protokolleModel();
+        $gespeicherteProtokollDetails   = $protokolleModel->getProtokollNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        if(isset($gespeicherteProtokollDetails['bestaetigt']) AND $gespeicherteProtokollDetails['bestaetigt'] == 1)
+        if(isset($gespeicherteProtokollDetails['bestaetigt']) AND $gespeicherteProtokollDetails['bestaetigt'] == 1 AND $this->adminOderZachereinweiser != TRUE)
         {
+            return self::BESTAETIGT;
+        }
+        elseif(isset($gespeicherteProtokollDetails['bestaetigt']) AND $gespeicherteProtokollDetails['bestaetigt'] == 1 AND $this->adminOderZachereinweiser == TRUE)
+        {
+            $protokolleModel->resetProtokollDetails(['copilotID'           => $_SESSION['protokoll']['copilotID']                      ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->resetProtokollDetails(['stundenAufDemMuster' => $zuSpeicherndeProtokollDetails['stundenAufDemMuster']    ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
+            
             return self::BESTAETIGT;
         }
         elseif(isset($gespeicherteProtokollDetails['fertig']) AND $gespeicherteProtokollDetails['fertig'] == 1) 
         {           
             if(isset($zuSpeicherndeProtokollDetails['bestaetigt']) AND $zuSpeicherndeProtokollDetails['bestaetigt'] == 1)
             {
-                $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set('bestaetigt', 1)->update();
+                $protokolleModel->setBestaetigtNachID($_SESSION['protokoll']['protokollSpeicherID']);
+                
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Protokoll wurde als bestätigt markiert<br>";
+                }
             }
-            
-            $copilotID = $_SESSION['protokoll']['copilotID'] ?? NULL;
 
-            $protokolleModel->ueberschreibeProtokoll(['copilotID' => $copilotID], $_SESSION['protokoll']['protokollSpeicherID']);
-            echo "CopilotID wurde aktualisiert";
+            $protokolleModel->resetProtokollDetails(['copilotID'           => $_SESSION['protokoll']['copilotID']                      ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->resetProtokollDetails(['stundenAufDemMuster' => $zuSpeicherndeProtokollDetails['stundenAufDemMuster']    ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
+            
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "CopilotID wurde aktualisiert<br>stundenAufDemMuster wurde aktualisiert<br>";
+            }
             
             return self::FERTIG;
         }
         else
         {           
-            $loescheEintraege = [
+            $geloeschteEintraege = [
                 'flugzeugID'            => NULL,
                 'pilotID'               => NULL,
                 'copilotID'             => NULL,
@@ -147,10 +174,13 @@ class Protokollspeichercontroller extends Protokollcontroller
                 'stundenAufDemMuster'   => NULL
             ];
             
-            $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
-            $protokolleModel->ueberschreibeProtokoll($zuSpeicherndeProtokollDetails, $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->resetProtokollDetails($geloeschteEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
+            $protokolleModel->resetProtokollDetails($zuSpeicherndeProtokollDetails, $_SESSION['protokoll']['protokollSpeicherID']);
             
-            echo "Jetzt wäre das Protokoll geupdatet worden<br>";
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "Das Protokoll wurde geupdatet<br>";
+            }
             return self::ANGEFANGEN;
         }
     }
@@ -162,7 +192,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @param array_mit_arrays $zuSpeicherndeDaten
      */
-    protected function speicherZuSpeicherndeDaten($zuSpeicherndeDaten)
+    protected function speicherZuSpeicherndeDaten(array $zuSpeicherndeDaten)
     {
         empty($zuSpeicherndeDaten['eingegebeneWerte'])  ? NULL : $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
         
@@ -184,7 +214,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @param array_mit_arrays $zuSpeicherndeWerte
      */
-    protected function speicherEingegebeneWerte($zuSpeicherndeWerte)
+    protected function speicherEingegebeneWerte(array $zuSpeicherndeWerte)
     {
         $datenModel         = new datenModel();
         $gespeicherteWerte  = $datenModel->getDatenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
@@ -195,7 +225,11 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $datenModel->speicherNeuenWert($wert);
-                echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
+                
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
+                }
             }
         }
         else 
@@ -208,12 +242,20 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $datenModel->speicherNeuenWert($wert);
-                    echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
+                    }
                 }
                 else
                 {
                     unset($gespeicherteWerte[$wertVorhanden]);
-                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>";
+                    }
                 }
             }
         }
@@ -221,7 +263,11 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteWerte as $gespeicherterWert)
         {
             $datenModel->delete(['id' => $gespeicherterWert['id']]);
-            echo "Datensatz wurde jetzt aus DB `daten` gelöscht<br>";
+            
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "Datensatz wurde jetzt aus DB `daten` gelöscht<br>";
+            }
         }
     }
     
@@ -242,7 +288,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @return int|FALSE
      */
-    protected function zuSpeichernderWertVorhanden($wert, $zuVergleichendeWerte)
+    protected function zuSpeichernderWertVorhanden(array $wert, array $zuVergleichendeWerte)
     {
         $datenModel = new datenModel();
         
@@ -251,19 +297,31 @@ class Protokollspeichercontroller extends Protokollcontroller
             
             if($wert['protokollInputID'] == $zuVergleichenderWert['protokollInputID'] AND $wert['woelbklappenstellung'] == $zuVergleichenderWert['woelbklappenstellung'] AND $wert['linksUndRechts'] == $zuVergleichenderWert['linksUndRechts'] AND $wert['multipelNr'] == $zuVergleichenderWert['multipelNr'])
             {                
-                echo "Wert wurde gefunden<br>";
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Wert wurde gefunden<br>";
+                }
                 
                 if($wert['wert'] != $zuVergleichenderWert['wert'])
                 {
                     $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $datenModel->where('id', $zuVergleichenderWert['id'])->set('wert', $wert['wert'])->update();
-                    echo "Wert wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Wert wurde angepasst<br>";
+                    }
                 }
                 
                 return $index;
             }
         }
-        echo "Wert nicht vorhanden<br>";
+        
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "Wert nicht vorhanden<br>";
+        }
+        
         return FALSE;
     }
     
@@ -278,7 +336,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @param array_mit_arrays $zuSpeicherndeKommentare
      */
-    protected function speicherKommentare($zuSpeicherndeKommentare)
+    protected function speicherKommentare(array $zuSpeicherndeKommentare)
     {
         $kommentareModel        = new kommentareModel();
         $gespeicherteKommentare = $kommentareModel->getKommentareNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
@@ -289,7 +347,11 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $kommentareModel->speicherNeuenKommentar($kommentar);
-                echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+                
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+                }
             }
         }
         else 
@@ -302,12 +364,20 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $kommentareModel->speicherNeuenKommentar($kommentar);
-                    echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
+                    }
                 }
                 else
                 {
                     unset($gespeicherteKommentare[$kommentarVorhanden]);
-                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteKommentare entfernt<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteKommentare entfernt<br>";
+                    }
                 }
             }
         }
@@ -315,7 +385,11 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteKommentare as $gespeicherterKommentar)
         {
             $kommentareModel->delete(['id' => $gespeicherterKommentar['id']]);
-            echo "Datensatz wurde jetzt aus DB `kommentar` gelöscht<br>";
+            
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "Datensatz wurde jetzt aus DB `kommentar` gelöscht<br>";
+            }
         }
     }
     
@@ -335,7 +409,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @return int|FALSE
      */
-    protected function zuSpeichernderKommentarVorhanden($kommentar, $zuVergleichendeKommentare)
+    protected function zuSpeichernderKommentarVorhanden(array $kommentar, array  $zuVergleichendeKommentare)
     {
         $kommentareModel = new kommentareModel();
         
@@ -343,18 +417,30 @@ class Protokollspeichercontroller extends Protokollcontroller
         {                
             if($kommentar['protokollKapitelID'] == $zuVergleichenderKommentar['protokollKapitelID'])
             {                
-                echo "Kommentar wurde gefunden<br>";
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Kommentar wurde gefunden<br>";
+                }
 
                 if($kommentar['kommentar'] != $zuVergleichenderKommentar['kommentar'])
                 {
                     $kommentareModel->where('id', $zuVergleichenderKommentar['id'])->set('kommentar', $kommentar['kommentar'])->update();
-                    echo "Kommentar wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Kommentar wurde angepasst<br>";
+                    }
                 }
                 
                 return $index;
             }
         }
-        echo "Kommentar nicht vorhanden<br>";
+        
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "Kommentar nicht vorhanden<br>";
+        }
+        
         return FALSE;
     }
     
@@ -369,7 +455,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @param array_mit_arrays $zuSpeicherndeHStWege
      */
-    protected function speicherHStWege($zuSpeicherndeHStWege)
+    protected function speicherHStWege(array $zuSpeicherndeHStWege)
     {
         $hStWegeModel        = new hStWegeModel();
         $gespeicherteHStWege = $hStWegeModel->getHStWegeNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
@@ -380,7 +466,11 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $hStWegeModel->speicherNeuenHStWeg($hStWeg);
-                echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+                
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+                }
             }
         }
         else 
@@ -393,12 +483,20 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $hStWegeModel->speicherNeuenHStWeg($hStWeg);
-                    echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
+                    }
                 }
                 else
                 {
                     unset($gespeicherteHStWege[$hStWegVorhanden]);
-                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteHStWege entfernt<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteHStWege entfernt<br>";
+                    }
                 }
             }
         }
@@ -406,7 +504,11 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteHStWege as $gespeicherterHStWeg)
         {
             $hStWegeModel->delete(['id' => $gespeicherterHStWeg['id']]);
-            echo "Datensatz wurde jetzt aus DB `hst-wege` gelöscht<br>";
+            
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "Datensatz wurde jetzt aus DB `hst-wege` gelöscht<br>";
+            }
         }
     }
     
@@ -427,7 +529,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @return int|FALSE
      */
-    protected function zuSpeichernderHStWegVorhanden($hStWeg, $zuVergleichendeHStWege)
+    protected function zuSpeichernderHStWegVorhanden(array $hStWeg, array $zuVergleichendeHStWege)
     {
         $hStWegeModel        = new hStWegeModel();
         
@@ -435,28 +537,48 @@ class Protokollspeichercontroller extends Protokollcontroller
         {                
             if($hStWeg['protokollKapitelID'] == $zuVergleichenderHStWeg['protokollKapitelID'])
             {                
-                echo "hStWeg wurde gefunden<br>";
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "hStWeg wurde gefunden<br>";
+                }
                 
                 if($hStWeg['gedruecktHSt'] != $zuVergleichenderHStWeg['gedruecktHSt'])
                 {
                     $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('gedruecktHSt', $hStWeg['gedruecktHSt'])->update();
-                    echo "gedruecktHSt wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                     echo "gedruecktHSt wurde angepasst<br>";
+                    }
                 }
                 if($hStWeg['neutralHSt'] != $zuVergleichenderHStWeg['neutralHSt'])
                 {
                     $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('neutralHSt', $hStWeg['neutralHSt'])->update();
-                    echo "neutralHSt wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "neutralHSt wurde angepasst<br>";
+                    }
                 }
                 if($hStWeg['gezogenHSt'] != $zuVergleichenderHStWeg['gezogenHSt'])
                 {
                     $hStWegeModel->where('id', $zuVergleichenderHStWeg['id'])->set('gezogenHSt', $hStWeg['gezogenHSt'])->update();
-                    echo "gezogenHSt wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "gezogenHSt wurde angepasst<br>";
+                    }
                 }
                 
                 return $index;
             }
         }
-        echo "hStWeg nicht vorhanden<br>";
+        
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "hStWeg nicht vorhanden<br>";
+        }
+        
         return FALSE;
     }
     
@@ -471,7 +593,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @param array_mit_arrays $zuSpeicherndeBeladung
      */
-    protected function speicherBeladung($zuSpeicherndeBeladung)
+    protected function speicherBeladung(array $zuSpeicherndeBeladung)
     {
         $beladungModel          = new beladungModel();
         $gespeicherteBeladungen = $beladungModel->getBeladungenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
@@ -482,7 +604,11 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $beladungModel->speicherNeueBeladung($beladung);
-                echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
+                
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
+                }
             }
         }
         else
@@ -495,12 +621,20 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $beladungModel->speicherNeueBeladung($beladung);
-                    echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
+                    }
                 }
                 else
                 {
                     unset($gespeicherteBeladungen[$beladungVorhanden]);
-                    echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>";
+                    }
                 }
             }
         }
@@ -508,7 +642,11 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteBeladungen as $gespeicherteBeladung)
         {
             $beladungModel->delete(['id' => $gespeicherteBeladung['id']]);
-            echo "Datensatz wurde jetzt aus DB `beladung` gelöscht<br>";
+            
+            if(getenv('CI_ENVIRONMENT') == 'development')
+            {
+                echo "Datensatz wurde jetzt aus DB `beladung` gelöscht<br>";
+            }
         }
         
     }
@@ -530,45 +668,67 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @return int|FALSE
      */
-    protected function zuSpeicherndeBeladungVorhanden($beladung, $zuVergleichendeBeladungen)
+    protected function zuSpeicherndeBeladungVorhanden(array $beladung, array $zuVergleichendeBeladungen)
     {
         $beladungModel = new beladungModel();
         
-        echo "<br>";
-        var_dump($beladung);
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "<br>";
+            var_dump($beladung);
+        }
         
         foreach($zuVergleichendeBeladungen as $index => $zuVergleichendeBeladung)
         {       
             
             if($beladung['flugzeugHebelarmID'] == $zuVergleichendeBeladung['flugzeugHebelarmID'] AND $beladung['bezeichnung'] == $zuVergleichendeBeladung['bezeichnung'] AND $beladung['hebelarm'] == $zuVergleichendeBeladung['hebelarm'])
             {                
-                echo "Beladung wurde gefunden<br>";
+                if(getenv('CI_ENVIRONMENT') == 'development')
+                {
+                    echo "Beladung wurde gefunden<br>";
+                }
                 
                 if($beladung['gewicht'] != $zuVergleichendeBeladung['gewicht'])
                 {
-                    print_r($zuVergleichendeBeladung);
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        print_r($zuVergleichendeBeladung);
+                        echo "<br>";
+                    }
+                    
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $beladungModel->where('id', $zuVergleichendeBeladung['id'])->set('gewicht', $beladung['gewicht'])->update();
-                    echo "Gewicht wurde angepasst<br>";
+                    
+                    if(getenv('CI_ENVIRONMENT') == 'development')
+                    {
+                        echo "Gewicht wurde angepasst<br>";
+                    }
                 }
                 
                 return $index;
             }
         }
-        echo "Gewicht nicht vorhanden<br>";
+        
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "Gewicht nicht vorhanden<br>";
+        }
+        
         return FALSE;
     }
     
     /**
      * Updatet den Wert für 'geaendertAm' für die ID, die in der $_SESSION['protokoll']['protokollSpeicherID'] gespeichert ist.
      * 
-     * @return void
      */
     protected function updateProtokollGeaendertAm()
     {
         $protokolleModel = new protokolleModel();        
         $protokolleModel->updateGeaendertAmNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        echo "geändertAm aktualisiert<br>";
+        if(getenv('CI_ENVIRONMENT') == 'development')
+        {
+            echo "geändertAm aktualisiert<br>";
+        }
     }
 }

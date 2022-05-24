@@ -98,17 +98,6 @@ class Protokollcontroller extends Controller
     } 
     
     /**
-     * Diese Funktion wird ausgeführt wenn in der URL folgender Pfad aufgerufen wird (siehe Config/Routes.php):
-     * -> /protokolle/kapitel/...*
-     *
-     * Wenn eine Kapitelnummer gegeben ist, wird das jeweilige Protokollkapitel aufgerufen
-     * 
-     * @param int
-     * 
-     * @return void
-     */
-    
-    /**
      * Wird ausgeführt, wenn die URL <base_url>/protokolle/kapitel/<kapitelNummer> aufgerufen wird.
      * 
      * Wenn noch keine protokollTypen im Zwischenspeicher sind und auch keine per $_POST übergeben wurden oder wenn die übermittelte kapitelNummer

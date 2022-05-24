@@ -342,8 +342,8 @@ class Protokollcontroller extends Controller
         
         $datenInhalt = [
             'titel'                         => $_SESSION['protokoll']['protokollInformationen']['titel'],
-            'kapitelDatenArray'             => $protokollLayoutController->ladeKapitelNachKapitelID($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]),
-            'unterkapitelDatenArray'        => $protokollLayoutController->ladeProtokollUnterkapitelLayoutDaten($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']]),
+            'kapitelDatenArray'             => $protokollLayoutController->ladeKapitelDatenNachKapitelID($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]),
+            'unterkapitelDatenArray'        => $protokollLayoutController->ladeProtokollUnterkapitelDatenDesAktuellenKapitels($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']]),
             'adminOderEinweiser'            => $this->adminOderZachereinweiser,
         ];
 

@@ -149,7 +149,7 @@ class Protokollcontroller extends Controller
         }
 
         $datenHeader['titel']   = $_SESSION['protokoll']['protokollInformationen']['titel'];
-        $datenInhalt            = $this->ladeDatenInhalt();        
+        $datenInhalt            = $this->datenInhaltLaden();        
         
         $this->protokollEingabeViewLaden($datenHeader, $datenInhalt);
     }
@@ -169,11 +169,11 @@ class Protokollcontroller extends Controller
             $this->neueEingabenVerarbeiten($this->request->getPost());
         }
             
-        $zuSpeicherndeDaten = $this->pruefeZuSpeicherndeDaten();
+        $zuSpeicherndeDaten = $this->zuSpeicherndeDatenPruefen();
         
-        if($zuSpeicherndeDaten !== FALSE && $this->validiereZuSpeicherndeDaten($zuSpeicherndeDaten))
+        if($zuSpeicherndeDaten !== FALSE && $this->zuSpeicherndeDatenValidieren($zuSpeicherndeDaten))
         {
-            if($this->speicherProtokollDaten($zuSpeicherndeDaten, empty($this->request->getPost('bestaetigt')) ? FALSE : TRUE))
+            if($this->protokollDatenSpeichern($zuSpeicherndeDaten, empty($this->request->getPost('bestaetigt')) ? FALSE : TRUE))
             {
                 nachrichtAnzeigen("Protokolldaten erfolgreich gespeichert", base_url());
             }
@@ -288,7 +288,7 @@ class Protokollcontroller extends Controller
      * 
      * @return boolean
      */
-    protected function pruefeZuSpeicherndeDaten()
+    protected function zuSpeicherndeDatenPruefen()
     {
         $protokollDatenPruefController = new Protokolldatenpruefcontroller();
         return $protokollDatenPruefController->pruefeDatenZumSpeichern();
@@ -303,7 +303,7 @@ class Protokollcontroller extends Controller
      * @param array $zuValidierendeDaten
      * @return boolean
      */
-    protected function validiereZuSpeicherndeDaten(array $zuValidierendeDaten)
+    protected function zuSpeicherndeDatenValidieren(array $zuValidierendeDaten)
     {
         $protokollDatenValidierController = new Protokolldatenvalidiercontroller();
         return $protokollDatenValidierController->validiereDatenZumSpeichern($zuValidierendeDaten);
@@ -319,7 +319,7 @@ class Protokollcontroller extends Controller
      * @param boolean $bestaetigt
      * @return boolean
      */
-    protected function speicherProtokollDaten(array $zuSpeicherndeDaten, bool $bestaetigt)
+    protected function protokollDatenSpeichern(array $zuSpeicherndeDaten, bool $bestaetigt)
     {
         $protokollSpeicherController = new Protokollspeichercontroller();
         return $protokollSpeicherController->speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt);
@@ -335,7 +335,7 @@ class Protokollcontroller extends Controller
      * 
      * @return array $datenInhalt
      */
-    protected function ladeDatenInhalt()
+    protected function datenInhaltLaden()
     {
         $protokollLayoutController          = new Protokolllayoutcontroller;
         $protokollDatenInhaltLadeController = new Protokolldateninhaltcontroller();

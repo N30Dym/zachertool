@@ -6,11 +6,18 @@ use App\Models\protokolle\{ datenModel, protokolleModel, beladungModel, hStWegeM
 
 helper('nachrichtAnzeigen');
 
+/**
+ * Child-Klasse vom ProtokollController. Übernimmt das Speichern der eingegebenen ProtokollDaten. Sowohl bei neuen Protokollen,
+ * als auch bei angefangenen, fertigen oder bestätigten Protokollen. Bestätigte Protokolle aber nur, wenn ein AdminOderZachereinweiser
+ * eingeloggt ist.
+ * 
+ * @author = Lars Kastner
+ */
 class Protokollspeichercontroller extends Protokollcontroller
 {	
     const ANGEFANGEN    = 'angefangen';
     const FERTIG        = 'fertig';
-    const BESTAETIGT    = 'bestaetigt' ;
+    const BESTAETIGT    = 'bestaetigt';
     
     /**
      * Diese Funktion übernimmt die Koordination der zuSpeicherndenDaten und wird vom Protokollcontroller aufgerufen.
@@ -37,14 +44,14 @@ class Protokollspeichercontroller extends Protokollcontroller
      * 
      * @var string $protokollStatus 'bestaetigt'|'fertig'|'angefangen'
      */
-    protected function speicherProtokollDaten($zuSpeicherndeDaten, $bestaetigt = null)
+    protected function speicherProtokollDaten(array $zuSpeicherndeDaten, bool $bestaetigt = NULL)
     {       
         $protokollStatus = self::ANGEFANGEN;
         
-        if(!isset($_SESSION['protokoll']['protokollSpeicherID']))
+        if( ! isset($_SESSION['protokoll']['protokollSpeicherID']))
         {
             $this->speicherNeuesProtokoll($zuSpeicherndeDaten['protokoll']);
-            $protokollStatus = (isset($zuSpeicherndeDaten['protokoll']['fertig']) && $zuSpeicherndeDaten['protokoll']['fertig'] == 1) ? self::FERTIG : self::ANGEFANGEN;
+            $protokollStatus = (isset($zuSpeicherndeDaten['protokoll']['fertig']) AND $zuSpeicherndeDaten['protokoll']['fertig'] == 1) ? self::FERTIG : self::ANGEFANGEN;
         }
         else
         {
@@ -58,7 +65,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         
         switch($protokollStatus) 
         {
-            case self::BESTAETIGT:
+            case self::BESTAETIGT AND $this->adminOderZachereinweiser == FALSE:
                 nachrichtAnzeigen("Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde", base_url());
                 break;
             case self::FERTIG:
@@ -68,7 +75,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         }
 
         $this->updateProtokollGeaendertAm();
-        return true;
+        return TRUE;
     }  
     
     /**
@@ -111,18 +118,18 @@ class Protokollspeichercontroller extends Protokollcontroller
         $protokolleModel = new protokolleModel();
         $gespeicherteProtokollDetails = $protokolleModel->getProtokollNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        if(isset($gespeicherteProtokollDetails['bestaetigt']) && $gespeicherteProtokollDetails['bestaetigt'] == 1)
+        if(isset($gespeicherteProtokollDetails['bestaetigt']) AND $gespeicherteProtokollDetails['bestaetigt'] == 1)
         {
             return self::BESTAETIGT;
         }
         elseif(isset($gespeicherteProtokollDetails['fertig']) AND $gespeicherteProtokollDetails['fertig'] == 1) 
         {           
-            if(isset($zuSpeicherndeProtokollDetails['bestaetigt']) && $zuSpeicherndeProtokollDetails['bestaetigt'] == 1)
+            if(isset($zuSpeicherndeProtokollDetails['bestaetigt']) AND $zuSpeicherndeProtokollDetails['bestaetigt'] == 1)
             {
                 $protokolleModel->where('id', $_SESSION['protokoll']['protokollSpeicherID'])->set('bestaetigt', 1)->update();
             }
             
-            $copilotID = $_SESSION['protokoll']['copilotID'] ?? null;
+            $copilotID = $_SESSION['protokoll']['copilotID'] ?? NULL;
 
             $protokolleModel->ueberschreibeProtokoll(['copilotID' => $copilotID], $_SESSION['protokoll']['protokollSpeicherID']);
             echo "CopilotID wurde aktualisiert";
@@ -132,12 +139,12 @@ class Protokollspeichercontroller extends Protokollcontroller
         else
         {           
             $loescheEintraege = [
-                'flugzeugID'            => null,
-                'pilotID'               => null,
-                'copilotID'             => null,
-                'flugzeit'              => null,
-                'bemerkung'             => null,
-                'stundenAufDemMuster'   => null
+                'flugzeugID'            => NULL,
+                'pilotID'               => NULL,
+                'copilotID'             => NULL,
+                'flugzeit'              => NULL,
+                'bemerkung'             => NULL,
+                'stundenAufDemMuster'   => NULL
             ];
             
             $protokolleModel->ueberschreibeProtokoll($loescheEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
@@ -157,13 +164,13 @@ class Protokollspeichercontroller extends Protokollcontroller
      */
     protected function speicherZuSpeicherndeDaten($zuSpeicherndeDaten)
     {
-        empty($zuSpeicherndeDaten['eingegebeneWerte'])  ? null : $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
+        empty($zuSpeicherndeDaten['eingegebeneWerte'])  ? NULL : $this->speicherEingegebeneWerte($zuSpeicherndeDaten['eingegebeneWerte']);
         
-        empty($zuSpeicherndeDaten['kommentare'])        ? null : $this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
+        empty($zuSpeicherndeDaten['kommentare'])        ? NULL : $this->speicherKommentare($zuSpeicherndeDaten['kommentare']);
         
-        empty($zuSpeicherndeDaten['hStWege'])           ? null : $this->speicherHStWege($zuSpeicherndeDaten['hStWege']);
+        empty($zuSpeicherndeDaten['hStWege'])           ? NULL : $this->speicherHStWege($zuSpeicherndeDaten['hStWege']);
         
-        empty($zuSpeicherndeDaten['beladung'])          ? null : $this->speicherBeladung($zuSpeicherndeDaten['beladung']);
+        empty($zuSpeicherndeDaten['beladung'])          ? NULL : $this->speicherBeladung($zuSpeicherndeDaten['beladung']);
     }
     
     /**
@@ -182,7 +189,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         $datenModel         = new datenModel();
         $gespeicherteWerte  = $datenModel->getDatenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
         
-        if($gespeicherteWerte == null)
+        if($gespeicherteWerte == NULL)
         {
             foreach($zuSpeicherndeWerte as $wert)
             {
@@ -197,7 +204,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             {                
                 $wertVorhanden = $this->zuSpeichernderWertVorhanden($wert, $gespeicherteWerte);
                 
-                if($wertVorhanden === false)
+                if($wertVorhanden == FALSE)
                 {
                     $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $datenModel->speicherNeuenWert($wert);
@@ -227,13 +234,13 @@ class Protokollspeichercontroller extends Protokollcontroller
      * Wenn die Werte der Spalten 'protokollInputID', 'woelbklappenstellung', 'linksUndRechts' und 'multipelNr' bei beiden Arrays
      * übereinstimmen, wird geprüft, ob auch der Wert identisch ist.
      * Wenn nicht wird dieser aktualisiert. 
-     * Ist der Wert noch nicht vorhanden wird false zurückgegeben, ansonsten der Index des gespeicherten Wertes im $zuVergleichenderWert-Array
+     * Ist der Wert noch nicht vorhanden wird FALSE zurückgegeben, ansonsten der Index des gespeicherten Wertes im $zuVergleichenderWert-Array
      * um ihn im nächsten Schritt aus dem Array zu löschen.
      * 
      * @param array $wert
      * @param array_mit_arrays $zuVergleichendeWerte
      * 
-     * @return int|false
+     * @return int|FALSE
      */
     protected function zuSpeichernderWertVorhanden($wert, $zuVergleichendeWerte)
     {
@@ -257,7 +264,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             }
         }
         echo "Wert nicht vorhanden<br>";
-        return false;
+        return FALSE;
     }
     
     /**
@@ -276,7 +283,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         $kommentareModel        = new kommentareModel();
         $gespeicherteKommentare = $kommentareModel->getKommentareNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
 
-        if($gespeicherteKommentare == null)
+        if($gespeicherteKommentare == NULL)
         {
             foreach($zuSpeicherndeKommentare as $kommentar)
             {
@@ -291,7 +298,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             {                
                 $kommentarVorhanden = $this->zuSpeichernderKommentarVorhanden($kommentar, $gespeicherteKommentare);
                 
-                if($kommentarVorhanden === false)
+                if($kommentarVorhanden == FALSE)
                 {
                     $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $kommentareModel->speicherNeuenKommentar($kommentar);
@@ -326,7 +333,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * @param array $kommentar
      * @param array_mit_arrays $zuVergleichendeKommentare
      * 
-     * @return int|false
+     * @return int|FALSE
      */
     protected function zuSpeichernderKommentarVorhanden($kommentar, $zuVergleichendeKommentare)
     {
@@ -348,7 +355,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             }
         }
         echo "Kommentar nicht vorhanden<br>";
-        return false;
+        return FALSE;
     }
     
     /**
@@ -367,7 +374,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         $hStWegeModel        = new hStWegeModel();
         $gespeicherteHStWege = $hStWegeModel->getHStWegeNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
 
-        if($gespeicherteHStWege == null)
+        if($gespeicherteHStWege == NULL)
         {
             foreach($zuSpeicherndeHStWege as $hStWeg)
             {
@@ -382,7 +389,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             {                
                 $hStWegVorhanden = $this->zuSpeichernderHStWegVorhanden($hStWeg, $gespeicherteHStWege);
                 
-                if($hStWegVorhanden === false)
+                if($hStWegVorhanden == FALSE)
                 {
                     $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $hStWegeModel->speicherNeuenHStWeg($hStWeg);
@@ -418,7 +425,7 @@ class Protokollspeichercontroller extends Protokollcontroller
      * @param array $hStWeg
      * @param array_mit_arrays $zuVergleichendeHStWege
      * 
-     * @return int|false
+     * @return int|FALSE
      */
     protected function zuSpeichernderHStWegVorhanden($hStWeg, $zuVergleichendeHStWege)
     {
@@ -450,7 +457,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             }
         }
         echo "hStWeg nicht vorhanden<br>";
-        return false;
+        return FALSE;
     }
     
      /**
@@ -469,7 +476,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         $beladungModel          = new beladungModel();
         $gespeicherteBeladungen = $beladungModel->getBeladungenNachProtokollSpeicherID($_SESSION['protokoll']['protokollSpeicherID']);
 
-        if($gespeicherteBeladungen == null)
+        if($gespeicherteBeladungen == NULL)
         {
             foreach($zuSpeicherndeBeladung as $beladung)
             {
@@ -484,7 +491,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $beladungVorhanden = $this->zuSpeicherndeBeladungVorhanden($beladung, $gespeicherteBeladungen);
                 
-                if($beladungVorhanden === false)
+                if($beladungVorhanden == FALSE)
                 {
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $beladungModel->speicherNeueBeladung($beladung);
@@ -515,13 +522,13 @@ class Protokollspeichercontroller extends Protokollcontroller
      * Wenn die Werte der Spalten 'flugzeugHebelarmID', 'bezeichnung' und 'hebelarm' bei beiden Arrays
      * übereinstimmen, wird geprüft, ob auch das Gewicht identisch ist.
      * Wenn nicht wird dieses aktualisiert. 
-     * Ist die Beladung noch nicht vorhanden wird false zurückgegeben, andernfalls der Index des gespeicherten Wertes im 
+     * Ist die Beladung noch nicht vorhanden wird FALSE zurückgegeben, andernfalls der Index des gespeicherten Wertes im 
      * $zuVergleichendeBeladungen-Array, um ihn im nächsten Schritt aus dem Array zu löschen.
      * 
      * @param array $beladung
      * @param array_mit_arrays $zuVergleichendeBeladungen
      * 
-     * @return int|false
+     * @return int|FALSE
      */
     protected function zuSpeicherndeBeladungVorhanden($beladung, $zuVergleichendeBeladungen)
     {
@@ -549,7 +556,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             }
         }
         echo "Gewicht nicht vorhanden<br>";
-        return false;
+        return FALSE;
     }
     
     /**

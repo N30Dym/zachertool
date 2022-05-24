@@ -149,7 +149,7 @@ class Adminflugzeugcontroller extends Controller
         
         foreach($flugzeugDaten as $flugzeug)
         {
-            if($protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID'])['id'] == 0)
+            if($protokolleModel->getAnzahlProtokolleNachFlugzeugID($flugzeug['flugzeugID']) == 0)
             {
                 array_push($flugzeugeDieGeloeschtWerdenKoennen, $flugzeug);
             }

@@ -83,14 +83,14 @@ class Startseitecontroller extends Controller
         for($jahr = date("Y"); $jahr > date("Y") - $anzahlJahre; $jahr--)    
         {  
             $temporaeresProtokollArray[$jahr] = [];
-            $protokolleProJahr  = $protokolleModel->getDistinctFlugzeugIDNachJahr($jahr);
+            $protokolleProJahr  = $protokolleModel->getDistinctFlugzeugIDsNachJahr($jahr);
 
             foreach($protokolleProJahr as $protokoll)
             {
                 $protokollFlugzeug = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
 
                 $temporaeresProtokollArray[$jahr][$protokoll['flugzeugID']]                     = $protokollFlugzeug;
-                $temporaeresProtokollArray[$jahr][$protokoll['flugzeugID']]['anzahlProtokolle'] = $protokolleModel->getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $protokoll["flugzeugID"])['id'];
+                $temporaeresProtokollArray[$jahr][$protokoll['flugzeugID']]['anzahlProtokolle'] = $protokolleModel->getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $protokoll['flugzeugID']);
             }
             array_sort_by_multiple_keys($temporaeresProtokollArray[$jahr], ['anzahlProtokolle' => SORT_DESC]);
         }
@@ -130,7 +130,7 @@ class Startseitecontroller extends Controller
         for($jahr = date("Y"); $jahr > date("Y") - $anzahlJahre; $jahr--)    
         {
             $temporaeresProtokollArray[$jahr]   = [];        
-            $protokolleProJahr                  = $protokolleModel->getDistinctPilotIDNachJahr($jahr);
+            $protokolleProJahr                  = $protokolleModel->getDistinctPilotIDsNachJahr($jahr);
 
             foreach($protokolleProJahr as $protokoll)
             {
@@ -138,7 +138,7 @@ class Startseitecontroller extends Controller
                 
                 $datenArray += $this->ladePilotName($protokoll["pilotID"]);
 
-                $datenArray['anzahlProtokolle'] = $protokolleModel->getAnzahlProtokolleNachJahrUndPilotID($jahr, $protokoll['pilotID'])['id'];
+                $datenArray['anzahlProtokolle'] = $protokolleModel->getAnzahlProtokolleNachJahrUndPilotID($jahr, $protokoll['pilotID']);
 
                 array_push($temporaeresProtokollArray[$jahr], $datenArray);
             }

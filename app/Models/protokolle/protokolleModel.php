@@ -98,8 +98,8 @@ class protokolleModel extends Model
      */
     public function getBestaetigteProtokolleNachJahrenSoriert()
     {			
-        $protokolleNachJahrenSortiert = [];
-        $protokolle = $this->where("bestaetigt", 1)->orderBy('datum')->findAll();
+        $protokolleNachJahrenSortiert = array();
+        $protokolle = $this->where('bestaetigt', 1)->orderBy('datum')->findAll();
         
         foreach($protokolle as $protokoll)
         {
@@ -112,7 +112,7 @@ class protokolleModel extends Model
     public function getBestaetigteProtokolle()
     {			
         $protokolleNachJahrenSortiert = [];
-        return $this->where("bestaetigt", 1)->orderBy('datum', 'ASC')->findAll();
+        return $this->where('bestaetigt', 1)->orderBy('datum', 'ASC')->findAll();
     }
 
 
@@ -125,7 +125,7 @@ class protokolleModel extends Model
      */
     public function getFertigeProtokolle()
     {			
-        return $this->where("bestaetigt", null)->where("fertig", 1)->orderBy('datum')->findAll();
+        return $this->where('bestaetigt', null)->where('fertig', 1)->orderBy('datum')->findAll();
     }
 
 
@@ -137,7 +137,7 @@ class protokolleModel extends Model
      */
     public function getAngefangeneProtokolle()
     {			
-        return $this->where("bestaetigt", null)->where("fertig", null)->orderBy('datum')->findAll();
+        return $this->where('bestaetigt', null)->where('fertig', null)->orderBy('datum')->findAll();
     }
 
 
@@ -149,7 +149,7 @@ class protokolleModel extends Model
      * @param  int $jahr
      * @return array
      */
-    public function getDistinctFlugzeugIDNachJahr($jahr)
+    public function getDistinctFlugzeugIDsNachJahr($jahr)
     {		
         $query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
@@ -163,7 +163,7 @@ class protokolleModel extends Model
      * @param  int $jahr
      * @return array
      */
-    public function getDistinctPilotIDNachJahr($jahr)
+    public function getDistinctPilotIDsNachJahr($jahr)
     {		
         $query = "SELECT DISTINCT pilotID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
@@ -177,12 +177,12 @@ class protokolleModel extends Model
 
     public function getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $flugzeugID)
     {
-        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        return $this->selectCount('id')->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
     }
     
     public function getAnzahlProtokolleNachJahrUndPilotID($jahr, $pilotID)
     {
-        return $this->selectCount("id")->where("bestaetigt", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first();
+        return $this->selectCount('id')->where("bestaetigt", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
     }
     
     public function getZehnMeisteZacherer()
@@ -193,12 +193,12 @@ class protokolleModel extends Model
     
     public function getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)
     {
-        return $this->selectCount("id")->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where("flugzeugID", $flugzeugID)->first()['id'];
     }
     
     public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
     {
-        return $this->selectCount("id")->where("flugzeugID", $flugzeugID)->first();
+        return $this->selectCount('id')->where('flugzeugID', $flugzeugID)->first()['id'];
     }
     
     public function geBestaetigteProtokolleNachPilotID($pilotID)
@@ -214,36 +214,33 @@ class protokolleModel extends Model
     public function updateGeaendertAmNachID($id)
     {
         $query = "UPDATE `protokolle` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `protokolle`.`id` = " . $id; 
-        //$this->query($query);
         
         if ( ! $this->simpleQuery($query))
         {
-            $error = $this->error(); // Has keys 'code' and 'message'
+            return $this->error(); // Has keys 'code' and 'message'
         }
-    }
-    
-    public function speicherNeuesProtokoll($protokollDaten)
-    {
-        $query = $this->builder()->set($protokollDaten)->getCompiledInsert();
-        $this->query($query);
         
-        return $this->selectMax('id')->where($protokollDaten)->first()['id'];
+        return TRUE;
     }
     
-    public function ueberschreibeProtokoll($protokollDaten, $id)
+    public function setNeuesProtokoll($protokollDaten)
     {
-        $query = $this->builder()->set($protokollDaten)->where('id', $id)->getCompiledUpdate();
-        $this->query($query);
+        return (int)$this->insert($protokollDaten);
+    }
+    
+    public function resetProtokollDetails($protokollDaten, $id)
+    {
+        $this->where('id', $id)->set($protokollDaten)->update();
     }
     
     public function getAnzahlProtokolleNachPilotID($pilotID) 
     {
-        return $this->selectCount("id")->where('pilotID', $pilotID)->first();
+        return $this->selectCount('id')->where('pilotID', $pilotID)->first();
     }
     
     public function getAnzahlProtokolleAlsCopilotNachPilotID($copilotID) 
     {
-        return $this->selectCount("id")->where('copilotID', $copilotID)->first();
+        return $this->selectCount('id')->where('copilotID', $copilotID)->first();
     }
     
     public function getProtokolleNachProtokollID($protokollID)
@@ -256,5 +253,10 @@ class protokolleModel extends Model
         }
         
         return $this->query($query)->getResultArray();             
+    }
+    
+    public function setBestaetigtNachID($id)
+    {
+        $this->where('id', $id)->set('bestaetigt', 1)->update();
     }
 }	

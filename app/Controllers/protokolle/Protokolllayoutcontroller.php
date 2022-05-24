@@ -69,8 +69,11 @@ class Protokolllayoutcontroller extends Protokollcontroller
                     $kapitelBezeichnung = $protokollKapitelModel->getProtokollKapitelBezeichnungNachID($layoutDatensatz["protokollKapitelID"]);
                     $_SESSION['protokoll']['kapitelBezeichnungen'][$layoutDatensatz['kapitelNummer']] = $kapitelBezeichnung['bezeichnung'];
                 }
-
-                empty($temporaeresWerteArray) ? NULL : $this->behalteEingebebeneWerteBei($temporaeresWerteArray, $layoutDatensatz['protokollInputID']);
+                
+                if( ! empty($temporaeresWerteArray) AND is_numeric($layoutDatensatz['protokollInputID'])) 
+                {
+                    $this->behalteEingebebeneWerteBei($temporaeresWerteArray, $layoutDatensatz['protokollInputID']);
+                }
             
                 if(array_key_exists($_SESSION['protokoll']['kapitelIDs'][$layoutDatensatz['kapitelNummer']], $temporaeresKommentarArray) AND ! array_key_exists($_SESSION['protokoll']['kapitelIDs'][$layoutDatensatz['kapitelNummer']], $_SESSION['protokoll']['kommentare']))
                 {
@@ -148,6 +151,11 @@ class Protokolllayoutcontroller extends Protokollcontroller
      */
     protected function behalteEingebebeneWerteBei(array $werteArray, int $protokollInputID)
     {
+        if ( ! is_numeric($protokollInputID))
+        {
+            return NULL;
+        }
+        
         if( ! empty($werteArray[$protokollInputID]))
         {
             $_SESSION['protokoll']['eingegebeneWerte'][$protokollInputID] = $werteArray[$protokollInputID];

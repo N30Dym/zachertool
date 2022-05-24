@@ -18,6 +18,8 @@ class Protokollanzeigecontroller extends Protokollcontroller
      */
     protected function ladeErsteSeiteView(array $datenHeader, array $datenInhalt)
     {
+        $datenHeader['adminOderEinweiser'] = $this->adminOderZachereinweiser;
+        
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollErsteSeiteScript');
         echo view('templates/navbarView');
@@ -34,6 +36,8 @@ class Protokollanzeigecontroller extends Protokollcontroller
      */
     protected function ladeProtokollEingabeView(array $datenHeader, array $datenInhalt)
     {             
+        $datenHeader['adminOderEinweiser'] = $this->adminOderZachereinweiser;
+        
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollEingabeScript');
         echo view('templates/navbarView');

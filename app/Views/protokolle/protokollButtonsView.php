@@ -8,6 +8,12 @@
 
     <?= csrf_field() ?>
     
+    <?php if(isset($_SESSION['protokoll']['bestaetigt'])): ?>
+        <div class="alert alert-danger text-center fs-4 text">
+            ACHTUNG! Du bearbeitest gerade ein bereits abgegebenes Protokoll!
+        </div>
+    <?php endif ?>
+    
     <div class="row g-2">
 <!---------------------------------------->   
 <!--    Zurück und Speichern Buttons    --> 
@@ -21,10 +27,8 @@
             </a>
 
             <?php if(isset($_SESSION['protokoll']['kapitelNummern'])) : ?>
-                <input type="submit" class="btn btn-success" formaction="<?= base_url() ?>/protokolle/speichern" value="Speichern und Zurück">
+                <input type="submit" class="btn btn-success <?= (isset($_SESSION['protokoll']['bestaetigt']) AND $adminOderEinweiser) ? "speicherWarnung" : "" ?>" formaction="<?= base_url() ?>/protokolle/speichern" value="Speichern und Zurück">
             <?php endif ?>
         </div>
-
-	
 
 <!-- Hier folgt protokollTitelUndInhaltView -->

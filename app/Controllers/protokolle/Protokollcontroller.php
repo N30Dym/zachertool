@@ -32,7 +32,6 @@ class Protokollcontroller extends Controller
      */
     public function __construct()
     {
-        // start session
         $session = Services::session();
                
         if($session->isLoggedIn AND ($session->mitgliedsStatus == ADMINISTRATOR OR $session->mitgliedsStatus == ZACHEREINWEISER))
@@ -171,7 +170,7 @@ class Protokollcontroller extends Controller
             
         $zuSpeicherndeDaten = $this->zuSpeicherndeDatenPruefen();
         
-        if($zuSpeicherndeDaten !== FALSE && $this->zuSpeicherndeDatenValidieren($zuSpeicherndeDaten))
+        if($zuSpeicherndeDaten != FALSE && $this->zuSpeicherndeDatenValidieren($zuSpeicherndeDaten))
         {
             if($this->protokollDatenSpeichern($zuSpeicherndeDaten, empty($this->request->getPost('bestaetigt')) ? FALSE : TRUE))
             {

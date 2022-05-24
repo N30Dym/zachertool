@@ -237,6 +237,18 @@ $( document ).ready( function() {
             $( this ).children( 'td:last' ).find( 'input' ).val( '' );    
         });
     });
+    
+    $( document ).on( 'click', '.speicherWarnung', function(e)
+    {
+        if (confirm('Bist du sicher, dass du das bereits bestätigte Protokoll überschreiben willst?')) 
+        {
+            // Do nothing!
+        } 
+        else 
+        {
+            e.preventDefault();
+        }
+    });
 
 });
 </script>

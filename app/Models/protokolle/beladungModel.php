@@ -16,11 +16,11 @@ class beladungModel extends Model
     protected $primaryKey       = 'id';
     protected $validationRules 	= 'beladung';
 
-    protected $allowedFields	= ['flugzeugHebelarmID ', 'bezeichnung', 'hebelarm', 'gewicht', 'protokollSpeicherID'];
+    protected $allowedFields	= ['flugzeugHebelarmID', 'bezeichnung', 'hebelarm', 'gewicht', 'protokollSpeicherID'];
 
     public function getBeladungenNachProtokollSpeicherID($protokollSpeicherID)
     {
-        return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
+        return $this->where('protokollSpeicherID', $protokollSpeicherID)->findAll();
     }
     
     public function insertNeuenBeladungDatensatz($beladung)

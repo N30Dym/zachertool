@@ -49,14 +49,14 @@ class Protokollcontroller extends Controller
      * Wenn eine protokollSpeicherID in der URL übermittelt wurde, aber die Protokolldaten noch nicht geladen wurden, setze
      * die protokollSpeicherID im Zwischenspeicher zu <protokollSpeicherID> und lade die Protokolldaten.
      * Falls die Flag "fertig" aus der Datenbank geladen wurde, springe zu Kapitel 2, wenn nicht, zeige die ersteSeite an und lösche
-     * das Protokolllayout und die ProtokollInformationen der erstenSeite (damit sie bei Änderungen neu geladen/gespeichert werden können).
+     * das Protokolllayout und die protokollDetails der erstenSeite (damit sie bei Änderungen neu geladen/gespeichert werden können).
      * 
      * @param int $protokollSpeicherID
      */
     public function index(int $protokollSpeicherID = NULL)
     {
         $_SESSION['protokoll']['aktuellesKapitel']                   = 1;
-        $_SESSION['protokoll']['protokollInformationen']['titel']    = empty($protokollSpeicherID) ? "Neues Protokoll eingeben" : "Vorhandenes Protokoll bearbeiten";
+        $_SESSION['protokoll']['protokollDetails']['titel']    = empty($protokollSpeicherID) ? "Neues Protokoll eingeben" : "Vorhandenes Protokoll bearbeiten";
         
         if( ! empty($this->request->getPost()))
         {					
@@ -76,7 +76,7 @@ class Protokollcontroller extends Controller
         else
         {
             $this->ersteSeiteAnzeigen();            
-            $this->loescheLayoutDatenUndProtokollInformationen();          
+            $this->loescheLayoutDatenUndprotokollDetails();          
         }
     }
     
@@ -114,7 +114,7 @@ class Protokollcontroller extends Controller
      */
     public function kapitel(int $kapitelNummer = 0)
     {       
-        if((empty($_SESSION['protokoll']['gewaehlteProtokollTypen']) && empty($this->request->getPost("protokollInformation")['protokollTypen'])) OR $kapitelNummer < 2)
+        if((empty($_SESSION['protokoll']['gewaehlteProtokollTypen']) && empty($this->request->getPost("protokollDetail")['protokollTypen'])) OR $kapitelNummer < 2)
         {
             $this->index();
             exit;
@@ -136,7 +136,7 @@ class Protokollcontroller extends Controller
             $_SESSION['protokoll']['aktuellesKapitel'] = $kapitelNummer;
         }
 
-        $datenHeader['titel']   = $_SESSION['protokoll']['protokollInformationen']['titel'];
+        $datenHeader['titel']   = $_SESSION['protokoll']['protokollDetails']['titel'];
         $datenInhalt            = $this->datenInhaltLaden();        
         
         $this->protokollEingabeViewLaden($datenHeader, $datenInhalt);
@@ -206,10 +206,10 @@ class Protokollcontroller extends Controller
         $protokollAnzeigeController = new Protokollanzeigecontroller();
         $protokollKategorienModel   = new protokollKategorienModel();
 
-        $datenHeader['titel']       = $_SESSION['protokoll']['protokollInformationen']['titel'];
+        $datenHeader['titel']       = $_SESSION['protokoll']['protokollDetails']['titel'];
 
         $datenInhalt = [
-            'titel'                 => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'titel'                 => $_SESSION['protokoll']['protokollDetails']['titel'],
             'protokollTypen'        => $protokollTypenModel->getSichtbareProtokollTypen(),
             'protokollKategorien'   => $protokollKategorienModel->getSichtbareKategorien()
         ];
@@ -234,7 +234,7 @@ class Protokollcontroller extends Controller
     /**
      * Löscht verschiedene Daten aus dem Zwischenspeicher.
      */
-    protected function loescheLayoutDatenUndProtokollInformationen()
+    protected function loescheLayoutDatenUndprotokollDetails()
     {
         unset(
             $_SESSION['protokoll']['gewaehlteProtokollTypen'],
@@ -247,10 +247,10 @@ class Protokollcontroller extends Controller
         
         unset
         (
-            $_SESSION['protokoll']['protokollInformationen']['datum'],
-            $_SESSION['protokoll']['protokollInformationen']['flugzeit'], 
-            $_SESSION['protokoll']['protokollInformationen']['bemerkung'], 
-            $_SESSION['protokoll']['protokollInformationen']['titel'], 
+            $_SESSION['protokoll']['protokollDetails']['datum'],
+            $_SESSION['protokoll']['protokollDetails']['flugzeit'], 
+            $_SESSION['protokoll']['protokollDetails']['bemerkung'], 
+            $_SESSION['protokoll']['protokollDetails']['titel'], 
         );
     }
     
@@ -329,7 +329,7 @@ class Protokollcontroller extends Controller
         $protokollDatenInhaltLadeController = new Protokolldateninhaltcontroller();
         
         $datenInhalt = [
-            'titel'                         => $_SESSION['protokoll']['protokollInformationen']['titel'],
+            'titel'                         => $_SESSION['protokoll']['protokollDetails']['titel'],
             'kapitelDatenArray'             => $protokollLayoutController->ladeKapitelDatenNachKapitelID($_SESSION['protokoll']['kapitelIDs'][$_SESSION['protokoll']['aktuellesKapitel']]),
             'unterkapitelDatenArray'        => $protokollLayoutController->ladeProtokollUnterkapitelDatenDesAktuellenKapitels($_SESSION['protokoll']['protokollLayout'][$_SESSION['protokoll']['aktuellesKapitel']]),
             'adminOderEinweiser'            => $this->adminOderZachereinweiser,

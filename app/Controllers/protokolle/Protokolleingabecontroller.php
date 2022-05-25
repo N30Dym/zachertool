@@ -25,9 +25,9 @@ class Protokolleingabecontroller extends Protokollcontroller
      */
     protected function verarbeiteUebergebeneDaten(array $zuVerarbeitendeDaten)
     {
-        if(isset($zuVerarbeitendeDaten['protokollInformation']))
+        if(isset($zuVerarbeitendeDaten['protokollDetail']))
         {
-            $this->setzeProtokollInformationen($zuVerarbeitendeDaten['protokollInformation']);
+            $this->setzeprotokollDetails($zuVerarbeitendeDaten['protokollDetail']);
         }
         
         if(isset($zuVerarbeitendeDaten['flugzeugID']))
@@ -67,26 +67,26 @@ class Protokolleingabecontroller extends Protokollcontroller
     }
 
     /**
-     * Verarbeitet die ProtokollInformationen der erstenSeite der Protokolleingabe.
+     * Verarbeitet die protokollDetails der erstenSeite der Protokolleingabe.
      * 
      * Je nachdem welche Daten übergeben werden, werden diese im korrekten Format auch im $_SESSION-Zwischenspeicher gesetzt.
      * Wenn die 'fertig'-Flag nicht gesetzt ist und diese noch nicht vorhanden sind, speichere die gewähltenProtokollTypen im Zwischenspeicher. 
      * Setze anschließend die ProtokollIDs.
      * 
-     * @param array $protokollInformationen
+     * @param array $protokollDetails
      */
-    protected function setzeProtokollInformationen(array $protokollInformationen)
+    protected function setzeprotokollDetails(array $protokollDetails)
     {                        
-        $_SESSION['protokoll']['protokollInformationen']['titel'] = isset($_SESSION['protokoll']['protokollSpeicherID']) ?  "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
+        $_SESSION['protokoll']['protokollDetails']['titel'] = isset($_SESSION['protokoll']['protokollSpeicherID']) ?  "Vorhandenes Protokoll bearbeiten" : "Neues Protokoll eingeben";
         
-        isset($protokollInformationen['datum'])                 ? $_SESSION['protokoll']['protokollInformationen']['datum']                 = date('Y-m-d', strtotime($protokollInformationen["datum"]))    : NULL;
-        isset($protokollInformationen['flugzeit'])              ? $_SESSION['protokoll']['protokollInformationen']['flugzeit']              = $protokollInformationen["flugzeit"]                           : NULL;
-        isset($protokollInformationen['bemerkung'])             ? $_SESSION['protokoll']['protokollInformationen']['bemerkung']             = $protokollInformationen["bemerkung"]                          : NULL;       
-        isset($protokollInformationen['stundenAufDemMuster'])   ? $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']   = $protokollInformationen['stundenAufDemMuster']                : NULL;
+        isset($protokollDetails['datum'])                 ? $_SESSION['protokoll']['protokollDetails']['datum']                 = date('Y-m-d', strtotime($protokollDetails["datum"]))    : NULL;
+        isset($protokollDetails['flugzeit'])              ? $_SESSION['protokoll']['protokollDetails']['flugzeit']              = $protokollDetails["flugzeit"]                           : NULL;
+        isset($protokollDetails['bemerkung'])             ? $_SESSION['protokoll']['protokollDetails']['bemerkung']             = $protokollDetails["bemerkung"]                          : NULL;       
+        isset($protokollDetails['stundenAufDemMuster'])   ? $_SESSION['protokoll']['protokollDetails']['stundenAufDemMuster']   = $protokollDetails['stundenAufDemMuster']                : NULL;
 
         if( ! isset($_SESSION['protokoll']['fertig']))
         {
-            isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) ? NULL : $_SESSION['protokoll']['gewaehlteProtokollTypen'] = $protokollInformationen["protokollTypen"];       
+            isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) ? NULL : $_SESSION['protokoll']['gewaehlteProtokollTypen'] = $protokollDetails["protokollTypen"];       
             $this->setzeProtokollIDs();
         }
     }
@@ -107,7 +107,7 @@ class Protokolleingabecontroller extends Protokollcontroller
         
         foreach($_SESSION['protokoll']['gewaehlteProtokollTypen'] as $gewaehlterProtokollTyp)
         { 
-            $protokollID = $protokolleLayoutProtokolleModel->getProtokollIDNachProtokollDatumUndProtokollTypID($_SESSION['protokoll']['protokollInformationen']['datum'], $gewaehlterProtokollTyp);
+            $protokollID = $protokolleLayoutProtokolleModel->getProtokollIDNachProtokollDatumUndProtokollTypID($_SESSION['protokoll']['protokollDetails']['datum'], $gewaehlterProtokollTyp);
             array_push($_SESSION['protokoll']['protokollIDs'], $protokollID);
         }
     }

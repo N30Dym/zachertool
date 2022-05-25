@@ -13,7 +13,7 @@ helper('nachrichtAnzeigen');
  * Wenn in der Umgebungsvariable $_ENV die Umgebung 'CI_ENVIRONMENT' == development ist (anstatt production), werden beim Speichern
  * einige Debugging-Text direkt auf den Bildschirm ausgegeben.
  * 
- * @author = Lars Kastner
+ * @author Lars Kastner
  */
 class Protokollspeichercontroller extends Protokollcontroller
 {	

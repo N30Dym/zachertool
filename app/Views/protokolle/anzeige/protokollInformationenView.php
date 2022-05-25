@@ -9,14 +9,14 @@
             <table class="table">
                 <tr>
                     <td>Datum des ersten Fluges:</td>
-                    <td><b><?= isset($protokollDaten['ProtokollInformationen']['datum']) ? date('d.m.Y', strtotime($protokollDaten['ProtokollInformationen']['datum'])) : "" ?></b></td>
+                    <td><b><?= isset($protokollDaten['protokollDetails']['datum']) ? date('d.m.Y', strtotime($protokollDaten['protokollDetails']['datum'])) : "" ?></b></td>
                     <td>Gesamtflugzeit für das Protokoll:</td>
-                    <td><b><?= isset($protokollDaten['ProtokollInformationen']['flugzeit']) ? date('H:i', strtotime($protokollDaten['ProtokollInformationen']['flugzeit'])) : "" ?></b></td>          
+                    <td><b><?= isset($protokollDaten['protokollDetails']['flugzeit']) ? date('H:i', strtotime($protokollDaten['protokollDetails']['flugzeit'])) : "" ?></b></td>          
                 </tr>
-                <?php if(isset($protokollDaten['ProtokollInformationen']['bemerkung']) && ! empty($protokollDaten['ProtokollInformationen']['bemerkung'])) : ?>
+                <?php if(isset($protokollDaten['protokollDetails']['bemerkung']) && ! empty($protokollDaten['protokollDetails']['bemerkung'])) : ?>
                     <tr>
                         <td>Bemerkungen:</td>
-                        <td colspan="3"><b><?= $protokollDaten['ProtokollInformationen']['bemerkung'] ?></b></td>
+                        <td colspan="3"><b><?= $protokollDaten['protokollDetails']['bemerkung'] ?></b></td>
                     </tr>
                 <?php endif ?>
 

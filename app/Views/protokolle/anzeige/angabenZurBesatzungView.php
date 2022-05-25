@@ -31,7 +31,7 @@
                 </tr>
                 <tr>
                     <td>Stunden auf dem Muster:</td>
-                    <td><?= empty($protokollDaten['ProtokollInformationen']['stundenAufDemMuster']) ? "" : "<b>" . dezimalZahlenKorrigieren($protokollDaten['ProtokollInformationen']['stundenAufDemMuster']) . "</b>&nbsp;h" ?></td> 
+                    <td><?= empty($protokollDaten['protokollDetails']['stundenAufDemMuster']) ? "" : "<b>" . dezimalZahlenKorrigieren($protokollDaten['protokollDetails']['stundenAufDemMuster']) . "</b>&nbsp;h" ?></td> 
                     <td>Anzahl der Muster:</td>
                     <td><b><?= $protokollDaten['pilotDaten']['pilotDetails']['typenAnzahl'] ?? "" ?></b></td>   
                 </tr>

@@ -24,7 +24,7 @@
         <div class="row g-3">
             <div class="col-sm-7 ">
                 <label for="datum" class="form-label">Datum des ersten Fluges</label>
-                <input type="date" class="form-control datepicker" name="protokollInformation[datum]" max="<?= date('Y-m-d') ?>" placeholder="TT.MM.JJJJ" value="<?= $_SESSION['protokoll']["protokollInformationen"]["datum"] ?? "" ?>" required>
+                <input type="date" class="form-control datepicker" name="protokollDetail[datum]" max="<?= date('Y-m-d') ?>" placeholder="TT.MM.JJJJ" value="<?= $_SESSION['protokoll']["protokollDetails"]["datum"] ?? "" ?>" required>
             </div>
 
             <div class="col-2">
@@ -32,7 +32,7 @@
 
             <div class="col-sm-3">
                 <label for="flugzeit" class="form-label">Gesamtflugzeit</label>
-                <input type="time" class="form-control" name="protokollInformation[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']['protokollInformationen']['flugzeit']) && !empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) ? $_SESSION['protokoll']['protokollInformationen']['flugzeit'] : "" ?>"> 
+                <input type="time" class="form-control" name="protokollDetail[flugzeit]" id="flugzeit" placeholder="--:--" value="<?= isset($_SESSION['protokoll']['protokollDetails']['flugzeit']) && !empty($_SESSION['protokoll']['protokollDetails']['flugzeit']) ? $_SESSION['protokoll']['protokollDetails']['flugzeit'] : "" ?>"> 
             </div>
 
             <div class="col-12 alert alert-secondary">
@@ -45,7 +45,7 @@
 
             <div class="col-12">
                 <label for="bemerkung" class="form-label">Anmerkungen zum Protokoll (optional)</label>
-                <textarea name="protokollInformation[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll"><?= $_SESSION['protokoll']['protokollInformationen']['bemerkung'] ?? "" ?></textarea>
+                <textarea name="protokollDetail[bemerkung]" type="text" class="form-control" id="bemerkung" placeholder="Allgemeines zu deinem Protokoll"><?= $_SESSION['protokoll']['protokollDetails']['bemerkung'] ?? "" ?></textarea>
             </div>
             
             
@@ -58,7 +58,7 @@
                                 <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
                                 <?php foreach($protokollTypen as $protokollTyp): ?>
                                     <?php if($protokollTyp['kategorieID'] == $kategorie['id']) : ?>
-                                        <p><input type="checkbox" class="form-check-input" name="protokollInformation[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
+                                        <p><input type="checkbox" class="form-check-input" name="protokollDetail[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
                                             <label class="form-check-label" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label></p>
                                     <?php endif ?>
                                 <?php endforeach ?>
@@ -73,7 +73,7 @@
                                 <h5 class="mb-3"><?= $kategorie['bezeichnung'] ?></h5>
                                 <?php foreach($protokollTypen as $protokollTyp): ?>
                                     <?php if($protokollTyp['kategorieID'] == $kategorie['id']) : ?>
-                                        <p><input type="checkbox" class="form-check-input" name="protokollInformation[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
+                                        <p><input type="checkbox" class="form-check-input" name="protokollDetail[protokollTypen][]" id="protokollTypen" value="<?= esc($protokollTyp["id"]) ?>" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["id"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : "" ?> >
                                             <label class="form-check-label" <?= (isset($_SESSION['protokoll']['gewaehlteProtokollTypen']) && in_array($protokollTyp["bezeichnung"], $_SESSION['protokoll']['gewaehlteProtokollTypen'])) ? "checked" : null ?> ><?= esc($protokollTyp["bezeichnung"]) ?></label></p>
                                     <?php endif ?>
                                 <?php endforeach ?>

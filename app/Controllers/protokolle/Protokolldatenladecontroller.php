@@ -167,12 +167,12 @@ class Protokolldatenladecontroller extends Protokollcontroller
      * 
      * Lade eine Instanz des protokolleModels.
      * Speichere den Datensatz aus der Datenbanktabelle 'protokolle', der die ID <protokollSpeicherID> hat, in der
-     * Variable $protokollInformationen.
+     * Variable $protokollDetails.
      * Falls das Attribut 'bestaetigt' == 1 ist und der Benutzer nicht als Admin oder Zachereinweiser eingeloggt ist, leite zur 
      * nachrichtAnzeigen-Seite um.
      * Speichere die notwendigen Daten 'datum' und die dekodierten 'protokollIDs' im Zwischenspeicher und lade zusätzlich die zu den
      * ProtokollIDs gehörigen ProtokollTypen.
-     * Speichere weitere protokollInformationen je nachdem, welche Attribute im Datensatz leer sind und welche nicht.
+     * Speichere weitere protokollDetails je nachdem, welche Attribute im Datensatz leer sind und welche nicht.
      * Falls das Attribut 'fertig', bzw. 'bestaetigt' == 1 ist, setze die entsprechende Flag im Zwischenspeicher.
      * 
      * @param int $protokollSpeicherID
@@ -180,29 +180,29 @@ class Protokolldatenladecontroller extends Protokollcontroller
     protected function ladeProtokollDetails(int $protokollSpeicherID)
     {
         $protokolleModel        = new protokolleModel();       
-        $protokollInformationen = $protokolleModel->getProtokollNachID($protokollSpeicherID);       
+        $protokollDetails = $protokolleModel->getProtokollNachID($protokollSpeicherID);       
         
-        if($protokollInformationen['bestaetigt'] == 1 && $this->adminOderZachereinweiser == FALSE)
+        if($protokollDetails['bestaetigt'] == 1 && $this->adminOderZachereinweiser == FALSE)
         {
             nachrichtAnzeigen("Dieses Protokoll ist bereits abgegeben und darf nicht mehr bearbeitet werden", base_url());
         }
 
-        $_SESSION['protokoll']['protokollInformationen']['datum']   = $protokollInformationen['datum'];          
-        $_SESSION['protokoll']['protokollInformationen']['titel']   = "Vorhandenes Protokoll bearbeiten";
+        $_SESSION['protokoll']['protokollDetails']['datum']   = $protokollDetails['datum'];          
+        $_SESSION['protokoll']['protokollDetails']['titel']   = "Vorhandenes Protokoll bearbeiten";
 
-        $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollInformationen['protokollIDs']);
+        $_SESSION['protokoll']['protokollIDs']                      = json_decode($protokollDetails['protokollIDs']);
         
         $this->setzeGewaehlteProtokollTypen($_SESSION['protokoll']['protokollIDs']);
 
-        empty($protokollInformationen['flugzeugID'])            ? NULL : $this->ladeFlugzeugDaten($protokollInformationen['flugzeugID']);
-        empty($protokollInformationen['flugzeit'])              ? NULL : $_SESSION['protokoll']['protokollInformationen']['flugzeit']               = date('H:i', strtotime($protokollInformationen['flugzeit']));           
-        empty($protokollInformationen['pilotID'])               ? NULL : $_SESSION['protokoll']['pilotID']                                          = $protokollInformationen['pilotID'];
-        empty($protokollInformationen['copilotID'])             ? NULL : $_SESSION['protokoll']['copilotID']                                        = $protokollInformationen['copilotID']; 
-        empty($protokollInformationen['bemerkung'])             ? NULL : $_SESSION['protokoll']['protokollInformationen']['bemerkung']              = $protokollInformationen['bemerkung'];
-        empty($protokollInformationen['stundenAufDemMuster'])   ? NULL : $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']    = $protokollInformationen['stundenAufDemMuster'];
+        empty($protokollDetails['flugzeugID'])            ? NULL : $this->ladeFlugzeugDaten($protokollDetails['flugzeugID']);
+        empty($protokollDetails['flugzeit'])              ? NULL : $_SESSION['protokoll']['protokollDetails']['flugzeit']               = date('H:i', strtotime($protokollDetails['flugzeit']));           
+        empty($protokollDetails['pilotID'])               ? NULL : $_SESSION['protokoll']['pilotID']                                          = $protokollDetails['pilotID'];
+        empty($protokollDetails['copilotID'])             ? NULL : $_SESSION['protokoll']['copilotID']                                        = $protokollDetails['copilotID']; 
+        empty($protokollDetails['bemerkung'])             ? NULL : $_SESSION['protokoll']['protokollDetails']['bemerkung']              = $protokollDetails['bemerkung'];
+        empty($protokollDetails['stundenAufDemMuster'])   ? NULL : $_SESSION['protokoll']['protokollDetails']['stundenAufDemMuster']    = $protokollDetails['stundenAufDemMuster'];
 
-        $protokollInformationen['fertig']       == 1 ? $_SESSION['protokoll']['fertig']     = array() : NULL;
-        $protokollInformationen['bestaetigt']   == 1 ? $_SESSION['protokoll']['bestaetigt'] = array() : NULL;           
+        $protokollDetails['fertig']       == 1 ? $_SESSION['protokoll']['fertig']     = array() : NULL;
+        $protokollDetails['bestaetigt']   == 1 ? $_SESSION['protokoll']['bestaetigt'] = array() : NULL;           
     }
     
     /**

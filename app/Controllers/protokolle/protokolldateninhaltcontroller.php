@@ -47,11 +47,11 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
                     $inhaltZusatz['flugzeugDetailsDatenArray']  = $this->ladeFlugzeugDetails($_SESSION['protokoll']['flugzeugID']);
                     if(isset($_SESSION['protokoll']['pilotID']))
                     {
-                        $inhaltZusatz['pilotGewicht']           = $this->ladePilotGewichtNachPilotIDUndDatum($_SESSION['protokoll']['pilotID'], $_SESSION['protokoll']['protokollInformationen']['datum']);      
+                        $inhaltZusatz['pilotGewicht']           = $this->ladePilotGewichtNachPilotIDUndDatum($_SESSION['protokoll']['pilotID'], $_SESSION['protokoll']['protokollDetails']['datum']);      
                     }
                     if(isset($_SESSION['protokoll']['copilotID']))
                     {
-                        $inhaltZusatz['copilotGewicht']         = $this->ladePilotGewichtNachPilotIDUndDatum($_SESSION['protokoll']['copilotID'], $_SESSION['protokoll']['protokollInformationen']['datum']);
+                        $inhaltZusatz['copilotGewicht']         = $this->ladePilotGewichtNachPilotIDUndDatum($_SESSION['protokoll']['copilotID'], $_SESSION['protokoll']['protokollDetails']['datum']);
                     }
                 }                
                 break;
@@ -388,7 +388,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
     protected function ladeLetzteFlugzeugWaegung(int $flugzeugID)
     {
         $flugzeugWaegungModel = new flugzeugWaegungModel();
-        return $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($_SESSION['protokoll']['protokollInformationen']['datum'])));
+        return $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($_SESSION['protokoll']['protokollDetails']['datum'])));
     }
     
     /**

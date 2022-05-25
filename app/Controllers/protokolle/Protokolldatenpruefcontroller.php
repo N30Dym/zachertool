@@ -114,11 +114,11 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     }
     
     /**
-     * Prüft, ob alle ProtokollInformationen, die benötigt werden, vorhanden sind.
+     * Prüft, ob alle protokollDetails, die benötigt werden, vorhanden sind.
      * 
      * Initialisiere die Variable $protokollDetailsVorhanden und setze sie zu TRUE.
      * Was geprüft wird, steht jeweils kommentiert bei den if-Bedingungen. 
-     * Wenn eine protokollInformation fehlt, setze $protokollDetailsVorhanden zu FALSE und setze den FehlerCode entsprechend.
+     * Wenn eine protokollDetail fehlt, setze $protokollDetailsVorhanden zu FALSE und setze den FehlerCode entsprechend.
      * Gib am Ende $protokollDetailsVorhanden zurück.
      * 
      * @return boolean
@@ -127,8 +127,8 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     {
         $protokollDetailsVorhanden      = TRUE;
         
-        // Array 'protokollInformationen' ist nicht im Zwischenspeicher vorhanden oder das Datum fehlt
-        if(empty($_SESSION['protokoll']['protokollInformationen']) OR empty($_SESSION['protokoll']['protokollInformationen']['datum']))
+        // Array 'protokollDetails' ist nicht im Zwischenspeicher vorhanden oder das Datum fehlt
+        if(empty($_SESSION['protokoll']['protokollDetails']) OR empty($_SESSION['protokoll']['protokollDetails']['datum']))
         {
             $protokollDetailsVorhanden  = FALSE;
             $this->setzeFehlerCode(PROTOKOLL_AUSWAHL, "Du musst das Datum angeben");
@@ -207,21 +207,21 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     protected function setzeProtokollDetailsZumSpeichern()
     {
         $protokollDetails = [
-            'datum'         => $_SESSION['protokoll']['protokollInformationen']['datum'],
+            'datum'         => $_SESSION['protokoll']['protokollDetails']['datum'],
             'protokollIDs'  => json_encode($_SESSION['protokoll']['protokollIDs']),
         ];
 
         empty($_SESSION['protokoll']['flugzeugID'])                                     ? NULL                                  : $protokollDetails['flugzeugID']           = $_SESSION['protokoll']['flugzeugID'];
         empty($_SESSION['protokoll']['pilotID'])                                        ? NULL                                  : $protokollDetails['pilotID']              = $_SESSION['protokoll']['pilotID'];
         empty($_SESSION['protokoll']['copilotID'])                                      ? NULL                                  : $protokollDetails['copilotID']            = $_SESSION['protokoll']['copilotID'];
-        empty($_SESSION['protokoll']['protokollInformationen']['bemerkung'])            ? NULL                                  : $protokollDetails['bemerkung']            = $_SESSION['protokoll']['protokollInformationen']['bemerkung'];
+        empty($_SESSION['protokoll']['protokollDetails']['bemerkung'])            ? NULL                                  : $protokollDetails['bemerkung']            = $_SESSION['protokoll']['protokollDetails']['bemerkung'];
         isset($_SESSION['protokoll']['fertig'])                                         ? $protokollDetails['fertig']           = "1"                                       : NULL;
         
-        (empty($_SESSION['protokoll']['protokollInformationen']['flugzeit']) OR $_SESSION['protokoll']['protokollInformationen']['flugzeit'] == '00:00') ? NULL : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollInformationen']['flugzeit'];
+        (empty($_SESSION['protokoll']['protokollDetails']['flugzeit']) OR $_SESSION['protokoll']['protokollDetails']['flugzeit'] == '00:00') ? NULL : $protokollDetails['flugzeit'] = $_SESSION['protokoll']['protokollDetails']['flugzeit'];
         
-        if(isset($_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster']) AND $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'] != "")
+        if(isset($_SESSION['protokoll']['protokollDetails']['stundenAufDemMuster']) AND $_SESSION['protokoll']['protokollDetails']['stundenAufDemMuster'] != "")
         {
-            $protokollDetails['stundenAufDemMuster'] = $_SESSION['protokoll']['protokollInformationen']['stundenAufDemMuster'];
+            $protokollDetails['stundenAufDemMuster'] = $_SESSION['protokoll']['protokollDetails']['stundenAufDemMuster'];
         }
         
         return $protokollDetails;

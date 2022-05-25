@@ -58,7 +58,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         foreach($protokollDetailsArray as $protokollDetails)
         {
-            $protokollDaten     = $protokollDarstellungsController->ladeDatenAusDemProtokoll($protokollDetails);
+            $protokollDaten     = $protokollDarstellungsController->protokollDatenLaden($protokollDetails);
             $csvReturnString    = $csvReturnString . $this->erstelleCSVDatenZeile($protokollDaten, $ueberschriften['ueberschriftenArray'], $protokolleLayoutsProtokollDaten['id'], $seperator);           
         }       
         
@@ -84,7 +84,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
             switch($protokollLayoutName) 
             {
                 case "protokollDetailsUeberschriftenArray":
-                    $csvReturnArray = $csvReturnArray . $this->erstelleProtokollDetailsZeile($protokollDatenVorbereitet["ProtokollInformationen"], $protokollLayoutArray, $seperator);
+                    $csvReturnArray = $csvReturnArray . $this->erstelleProtokollDetailsZeile($protokollDatenVorbereitet["protokollDetails"], $protokollLayoutArray, $seperator);
                     break;
                 case "flugzeugUeberschriftenArray":
                     $csvReturnArray = $csvReturnArray . $this->erstelleCSVZeile($protokollDatenVorbereitet["flugzeugDaten"], $protokollLayoutArray, $seperator);
@@ -417,8 +417,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         $protokollTypID = $protokolleLayoutProtokolleModel->getProtokollTypIDNachID($protokollID);
         
-        $protokollDaten['ProtokollInformationen']['protokollID']    = $protokollID;        
-        $protokollDaten['ProtokollInformationen']['protokollTyp']   = $protokollTypenModel->getProtokollTypBezeichnungNachID($protokollTypID)['bezeichnung'];
+        $protokollDaten['protokollDetails']['protokollID']    = $protokollID;        
+        $protokollDaten['protokollDetails']['protokollTyp']   = $protokollTypenModel->getProtokollTypBezeichnungNachID($protokollTypID)['bezeichnung'];
 
         foreach($protokollDaten['flugzeugDaten']['flugzeugHebelarme'] as $hebelarmArray)
         {

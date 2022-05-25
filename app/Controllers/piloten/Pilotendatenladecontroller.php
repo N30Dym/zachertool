@@ -9,7 +9,7 @@ use \App\Models\flugzeuge\flugzeugeMitMusterModel;
 /**
  * Child-Klasse vom PilotenController. Übernimmt das Laden der Pilotendaten und -details aus der Datenbank.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Pilotendatenladecontroller extends Pilotencontroller 
 {

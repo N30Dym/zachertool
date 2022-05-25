@@ -10,7 +10,7 @@ helper(['array','form','text','url','nachrichtAnzeigen','dezimalZahlenKorrigiere
 /**
  * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, die sich mit den Flugzeugen befassen.
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Flugzeugcontroller extends Controller
 {   

@@ -10,7 +10,7 @@ helper(['url', 'nachrichtAnzeigen']);
 /**
  * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, die sich mit den Piloten befassen.
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Pilotencontroller extends Controller 
 {

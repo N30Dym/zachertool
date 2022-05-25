@@ -9,7 +9,7 @@ use App\Models\flugzeuge\{ flugzeugeModel, flugzeugeMitMusterModel, flugzeugDeta
  * Child-Klasse vom FlugzeugController. Übernimmt das Speichern der eingegebenen Flugzeugdaten. Sowohl bei neuen Flugzeugen und Mustern,
  * als auch bei neu eingegebenen Wägungen.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Flugzeugspeichercontroller extends Flugzeugcontroller 
 {

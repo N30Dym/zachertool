@@ -11,7 +11,7 @@ helper('nachrichtAnzeigen');
  * Child-Klasse vom PilotenController. Übernimmt das Speichern der eingegebenen Pilotendaten. Sowohl bei neuen Piloten,
  * als auch bei neu eingegebenen Pilotendetails.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Pilotenspeichercontroller extends Pilotencontroller 
 {

@@ -8,7 +8,7 @@ use App\Models\protokolllayout\{ protokollKapitelModel, protokollLayoutsModel, p
  * Child-Klasse vom ProtokollController. Lädt das Protokolllayout mit den protokollIDs der ausgewähltenProtokollTypen in den $_SESSION-
  * Zwischenspeicher.
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolllayoutcontroller extends Protokollcontroller
 {

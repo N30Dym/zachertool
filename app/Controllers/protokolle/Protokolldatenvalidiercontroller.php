@@ -7,7 +7,7 @@ use App\Models\protokolllayout\{ protokollInputsMitInputTypModel, protokollLayou
 /**
  * Child-Klasse vom ProtokollController. Validert die zu Speichernden Daten.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolldatenvalidiercontroller extends Protokollcontroller
 {

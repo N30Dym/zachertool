@@ -9,7 +9,7 @@ use App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugHebelarmeModel };
  * Child-Klasse vom ProtokollController. Dieser Controller verarbeitet die Daten die im $_POST-Zwischenspeicher übergeben wurden.
  * Je nach Art der Daten werden diese unterschiedlich verarbeitet, aber sie werden alle im $_SESSION-Zwischenspeicher zwischengespeichert. 
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolleingabecontroller extends Protokollcontroller
 {	   

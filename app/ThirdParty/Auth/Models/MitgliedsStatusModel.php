@@ -5,7 +5,7 @@ namespace Auth\Models;
 use CodeIgniter\Model;
 
 /**
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class MitgliedsStatusModel extends Model
 {

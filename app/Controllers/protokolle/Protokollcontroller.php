@@ -12,7 +12,7 @@ helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren']
 /**
  * Klasse für alle öffentlich zugänglichen Funktionen und Seiten, der Protokolleingabe und -anzeige befassen.
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokollcontroller extends Controller
 {    

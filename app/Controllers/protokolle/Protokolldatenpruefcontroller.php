@@ -11,7 +11,7 @@ helper('nachrichtAnzeigen');
  * Child-Klasse vom ProtokollController. Prüft, ob im Zwischenspeicher alle Daten vorhanden sind, die zum Speichern in der Datenbank benötigt werden.
  * Außerdem werden die Daten in das Format gebracht, das zum Speichern in der Datenbank benötigt wird.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolldatenpruefcontroller extends Protokollcontroller
 {	

@@ -7,7 +7,7 @@ use App\Controllers\piloten\Pilotencontroller;
 /**
  * Child-Klasse vom PilotenController. Übernimmt das Laden des Front-Ends für alle pilotenbezogenen Seiten.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Pilotenanzeigecontroller extends Pilotencontroller 
 {

@@ -5,7 +5,7 @@ namespace App\Controllers\flugzeuge;
 /**
  * Child-Klasse vom FlugzeugController. Übernimmt das Laden des Front-Ends für alle flugzeugbezogenen Seiten.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Flugzeuganzeigecontroller extends Flugzeugcontroller 
 {

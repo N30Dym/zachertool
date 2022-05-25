@@ -13,7 +13,7 @@ helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren',
 /**
  * Controller zum Anzeigen eines bereits gespeicherten Protokolls.
  * 
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolldarstellungscontroller extends Controller 
 {

@@ -5,7 +5,7 @@ namespace App\Controllers\protokolle;
 /**
  * Child-Klasse vom ProtokollController. Übernimmt das Laden des Front-Ends für alle protokollbezogenen Seiten.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokollanzeigecontroller extends Protokollcontroller
 {

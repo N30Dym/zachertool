@@ -12,7 +12,7 @@ helper('nachrichtAnzeigen');
  * Child-Klasse vom ProtokollController. Übernimmt das Laden der Protokolldaten aus der Datenbank in den Zwischenspeicher ($_SESSION['protokoll']),
  * um die Daten danach zu bearbeiten.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolldatenladecontroller extends Protokollcontroller
 {	

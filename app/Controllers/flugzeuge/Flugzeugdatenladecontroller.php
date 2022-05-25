@@ -11,7 +11,7 @@ use \App\Models\piloten\pilotenMitAkafliegsModel;
 /**
  * Child-Klasse vom FlugzeugController. Übernimmt das Laden der Flugzeug- und Musterdaten aus der Datenbank.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     

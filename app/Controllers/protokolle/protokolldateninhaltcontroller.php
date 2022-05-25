@@ -8,7 +8,7 @@ use App\Models\piloten\{ pilotenModel, pilotenDetailsModel };
 /**
  * Diese Klasse lädt die Daten, die der Variable $datenInhalt zur Verfügung gestellt werden, um dynamisch das Kapitel richtig anzuzeigen.
  *
- * @author Lars Kastner
+ * @author Lars "Eisbär" Kastner
  */
 class Protokolldateninhaltcontroller extends Protokollcontroller 
 {

@@ -26,7 +26,7 @@
                             <?php foreach($protokolleArray as $protokoll) : ?>
 
                                 <tr class="text-center" valign="middle">
-                                    <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
+                                    <td class="<?= date('Y-m-d', strtotime($protokoll['datum'])) ?>"><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
                                     <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
                                     <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
                                     <td>
@@ -72,7 +72,7 @@
                             <?php foreach($protokolleArray[$jahr] as $protokoll) : ?>
 
                                 <tr class="text-center" valign="middle">
-                                    <td><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
+                                    <td class="<?= date('Y-m-d', strtotime($protokoll['datum'])) ?>"><?= date('d.m.Y', strtotime($protokoll['datum'])) ?></td>
                                     <td><?= $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] . $flugzeugeArray[$protokoll['id']]['musterZusatz'] ?></td>
                                     <td><?= $pilotenArray[$protokoll['pilotID']]['vorname'] . " " ?><?= $pilotenArray[$protokoll['pilotID']]['spitzname'] != "" ? '"' . $pilotenArray[$protokoll['pilotID']]['spitzname'] .'" ' : "" ?><?= $pilotenArray[$protokoll['pilotID']]['nachname'] ?></td>
                                     <td>

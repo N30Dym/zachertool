@@ -23,12 +23,21 @@ class beladungModel extends Model
         return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
     }
     
-    public function speicherNeueBeladung($beladung)
+    public function insertNeuenBeladungDatensatz($beladung)
     {
-        $query = $this->builder()->set($beladung)->getCompiledInsert();
-        $this->query($query);
+        return $this->insert($beladung);
     }
     
+    public function deleteDatensatzNachID($id) 
+    {
+        $this->delete($id);
+    }
+    
+    public function setGewichtNachID(int $id, string $gewicht)
+    {
+        $this->where('id', $id)->set('gewicht', $gewicht)->update();
+    }
+
     public function getSpaltenInformationen()
     {    
         $query = "SHOW COLUMNS FROM " . $this->table;

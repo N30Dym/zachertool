@@ -18,14 +18,23 @@ class kommentareModel extends Model
 	
     protected $allowedFields	= ['protokollSpeicherID', 'protokollKapitelID', 'kommentar'];
 
-    public function getKommentareNachProtokollSpeicherID($protokollSpeicherID)
+    public function getKommentareNachProtokollSpeicherID(int $protokollSpeicherID)
     {
         return $this->where("protokollSpeicherID", $protokollSpeicherID)->findAll();
     }
   
-    public function speicherNeuenKommentar($kommentar)
+    public function insertNeuenKommentarDatensatz(array $kommentar)
     {
-        $query = $this->builder()->set($kommentar)->getCompiledInsert();
-        $this->query($query);
+        return $this->insert($kommentar);
+    }
+    
+    public function setKommentarNachID(int $id, string $kommentar) 
+    {
+        $this->where('id', $id)->set('kommentar', $kommentar)->update();
+    }
+    
+    public function deleteDatensatzNachID(int $id) 
+    {
+        $this->delete($id);
     }
 }

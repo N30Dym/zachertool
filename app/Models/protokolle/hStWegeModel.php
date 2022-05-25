@@ -47,14 +47,23 @@ class hStWegeModel extends Model
         * @params int|string $id
         * @return array
         */
-    public function getHStWegeNachID($id)
+    public function getHStWegeNachID(int $id)
     {	
         return $this->where("id", $id)->first();           
     }
     
-    public function  speicherNeuenHStWeg($hStWeg)
+    public function insertNeuenHStWegDatensatz(array $hStWeg)
     {
-        $query = $this->builder()->set($hStWeg)->getCompiledInsert();
-        $this->query($query);
+        return $this->insert($hStWeg);
+    }
+    
+    public function deleteDatensatzNachID($id) 
+    {
+        $this->delete($id);
+    }
+    
+    public function setHStStellungNachID(string $hStStellung, string $HStWert, int $id) 
+    {
+        $this->where('id', $id)->set($hStStellung, $HStWert)->update();
     }
 }

@@ -35,9 +35,9 @@ class datenModel extends Model
         return $this->where("id", $id)->first();	
     }
     
-    public function speicherNeuenWert($wert)
+    public function insertNeuenDatenDatensatz($daten)
     {
-        return $this->insert($wert);
+        return $this->insert($daten);
     }
     
     public function getAnzahlDatenNachProtokollSpeicherIDUndProtokollInputID($protokollSpeicherID, $protokollInputID)
@@ -50,12 +50,12 @@ class datenModel extends Model
         return $this->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first();
     }
 	
-    public function deleteNachID($id) 
+    public function deleteDatensatzNachID($id) 
     {
         $this->delete($id);
     }
     
-    public function updateWertNachID(int $id, string $wert) 
+    public function setWertNachID(int $id, string $wert) 
     {
         $this->where('id', $id)->set('wert', $wert)->update();
     }

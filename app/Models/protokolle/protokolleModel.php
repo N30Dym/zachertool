@@ -223,12 +223,12 @@ class protokolleModel extends Model
         return TRUE;
     }
     
-    public function setNeuesProtokoll($protokollDaten)
+    public function insertNeuenProtokollDatensatz($protokollDaten)
     {
         return (int)$this->insert($protokollDaten);
     }
     
-    public function resetProtokollDetails($protokollDaten, $id)
+    public function updateProtokollDetails($protokollDaten, $id)
     {
         $this->where('id', $id)->set($protokollDaten)->update();
     }
@@ -255,7 +255,7 @@ class protokolleModel extends Model
         return $this->query($query)->getResultArray();             
     }
     
-    public function setBestaetigtNachID($id)
+    public function setProtokollBestaetigtNachID($id)
     {
         $this->where('id', $id)->set('bestaetigt', 1)->update();
     }

@@ -40,7 +40,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="<?= base_url('/protokolle/neu') ?>"><b>Neues Protokoll eingeben</b></a>
-                        <a class="dropdown-item" href="<?= base_url('/protokolle/protokollListe/offen') ?>">Gespeicherte Protokolle anzeigen</a>
+                        <a class="dropdown-item" href="<?= base_url('/protokolle/protokollListe/offen') ?>">Begonnene Protokolle anzeigen</a>
                         <a class="dropdown-item" href="<?= base_url('/protokolle/protokollListe/fertig') ?>">Fertige Protokolle anzeigen</a>
                         <a class="dropdown-item" href="<?= base_url('/protokolle/protokollListe/abgegeben') ?>">Abgegebene Protokolle anzeigen</a>
                     </div>

@@ -78,16 +78,16 @@ class Protokolldarstellungscontroller extends Controller
     {        
         $returnArray = array();
         
-        empty($protokollDaten['flugzeugID'])                ? null : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDaten['flugzeugID'], $protokollDaten['datum']);
-        empty($protokollDaten['pilotID'])                   ? null : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDaten['pilotID'], $protokollDaten['datum']);
-        empty($protokollDaten['copilotID'])                 ? null : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDaten['copilotID'], $protokollDaten['datum']);
-        $this->ladeBeladungszustand($protokollDaten['id'])  ? $returnArray['beladungszustand']      = $this->ladeBeladungszustand($protokollDaten['id']) : null;
+        empty($protokollDaten['flugzeugID'])                ? NULL : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDaten['flugzeugID'], $protokollDaten['datum']);
+        empty($protokollDaten['pilotID'])                   ? NULL : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDaten['pilotID'], $protokollDaten['datum']);
+        empty($protokollDaten['copilotID'])                 ? NULL : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDaten['copilotID'], $protokollDaten['datum']);
+        $this->ladeBeladungszustand($protokollDaten['id'])  ? $returnArray['beladungszustand']      = $this->ladeBeladungszustand($protokollDaten['id']) : NULL;
         
-        $returnArray['protokollDetails']  = $protokollDaten;
-        $returnArray['eingegebeneWerte']        = $this->ladeEingegebeneWerte($protokollDaten['id']);   
-        $returnArray['kommentare']              = $this->ladeKommentare($protokollDaten['id']);
-        $returnArray['hStWege']                 = $this->ladeHStWege($protokollDaten['id']);
-        $returnArray['auswahloptionen']         = $this->ladeAuswahloptionen();
+        $returnArray['protokollDetails']    = $protokollDaten;
+        $returnArray['eingegebeneWerte']    = $this->ladeEingegebeneWerte($protokollDaten['id']);   
+        $returnArray['kommentare']          = $this->ladeKommentare($protokollDaten['id']);
+        $returnArray['hStWege']             = $this->ladeHStWege($protokollDaten['id']);
+        $returnArray['auswahloptionen']     = $this->ladeAuswahloptionen();
         
         return $returnArray;
     }
@@ -99,13 +99,12 @@ class Protokolldarstellungscontroller extends Controller
         $protokollInputsMitInputTypModel    = new protokollInputsMitInputTypModel();
         $protokollKapitelModel              = new protokollKapitelModel(); 
         $protokollUnterkapitelModel         = new protokollUnterkapitelModel();
-        $auswahllistenModel                 = new auswahllistenModel();
         
         $layoutReturnArray = array();
         
         foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $layout)
         {
-            empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : null;
+            empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : NULL;
             
             if( ! isset($layoutReturnArray[$layout['kapitelNummer']]))
             {
@@ -145,7 +144,7 @@ class Protokolldarstellungscontroller extends Controller
             'flugzeugMitMuster' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
             'flugzeugHebelarme' => $flugzeugHebelarmeModel->getHebelarmeNachFlugzeugID($flugzeugID),
             'flugzeugKlappen'   => $flugzeugKlappenModel->getKlappenNachFlugzeugID($flugzeugID),
-            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum)))[0] ?? null
+            'flugzeugWaegung'   => $flugzeugWaegungModel->getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, date('Y-m-d', strtotime($datum))) ?? NULL,
         ];
     }
     
@@ -156,7 +155,7 @@ class Protokolldarstellungscontroller extends Controller
         
         return [
             'pilotMitAkaflieg'  => $pilotenMitAkafliegsModel->getPilotMitAkafliegNachID($pilotID),
-            'pilotDetails'      => $pilotenDetailsModel->getPilotenDetailsNachPilotIDUndDatum($pilotID, date('Y-m-d', strtotime($datum)))[0] ?? array()
+            'pilotDetails'      => $pilotenDetailsModel->getPilotenDetailsNachPilotIDUndDatum($pilotID, date('Y-m-d', strtotime($datum))) ?? array(),
         ];
     }
     
@@ -166,11 +165,10 @@ class Protokolldarstellungscontroller extends Controller
         $datenReturnArray   = array();
         
         foreach($datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID) as $wert)
-        {
-            //isset($datenReturnArray[$wert['protokollInputID']]) ? $datenReturnArray[$wert['protokollInputID']] += $wert : $datenReturnArray[$wert['protokollInputID']] = $wert;
+        {           
             $woelbklappenStellung   = $wert['woelbklappenstellung'] == "" ? 0 : $wert['woelbklappenstellung'];
-            $linksUndRechts         = $wert['linksUndRechts'] == "" ? 0 : $wert['linksUndRechts'];
-            $multipelNr             = $wert['multipelNr'] == "" ? 0 : $wert['multipelNr'];
+            $linksUndRechts         = $wert['linksUndRechts']       == "" ? 0 : $wert['linksUndRechts'];
+            $multipelNr             = $wert['multipelNr']           == "" ? 0 : $wert['multipelNr'];
                
             $datenReturnArray[$wert['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $wert['wert'];
         }
@@ -182,10 +180,10 @@ class Protokolldarstellungscontroller extends Controller
     {
         $beladungModel          = new beladungModel();       
         $beladungReturnArray    = array();
-        
+
         foreach($beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID) as $beladung)
         {
-            if(!empty($beladung['flugzeugHebelarmID']))
+            if( ! empty($beladung['flugzeugHebelarmID']))
             {
                 $beladungReturnArray[$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == "" ? 0 : $beladung['bezeichnung']] = $beladung['gewicht'];
             }
@@ -245,10 +243,10 @@ class Protokolldarstellungscontroller extends Controller
         echo view('templates/navbarView');
         echo view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt);
         echo view('protokolle/anzeige/protokollDetailsView', $datenInhalt);
-        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt) : null;
-        echo isset($datenInhalt['protokollDaten']['pilotDaten'])        ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : null;
-        echo isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : null;
-        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : null;
+        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt)               : NULL;
+        echo isset($datenInhalt['protokollDaten']['pilotDaten'])        ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt)              : NULL;
+        echo isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt)       : NULL;
+        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt)    : NULL;
         echo view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
         echo view('protokolle/anzeige/seitenEndeMitButtonsView');
         echo view('templates/footerView');

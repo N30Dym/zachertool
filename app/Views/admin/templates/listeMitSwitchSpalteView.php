@@ -39,7 +39,7 @@
                 <?php foreach($datenArray as $daten) : ?>
                     <tr class="inhalt" valign="middle">
                         <?php foreach($daten as $spaltenName => $zellenInhalt) : ?>
-                            <?= ($spaltenName == "id" OR $spaltenName == "checked") ? "" : "<td>" . $zellenInhalt . "</td>" ?>
+                            <?= ($spaltenName == "id" OR $spaltenName == "checked") ? "" : "<td" . ($spaltenName == 'datum' ? " class=\"" . date('Y-m-d', strtotime($zellenInhalt))."\"" : "") . ">" . $zellenInhalt . "</td>" ?>
                         <?php endforeach ?>
                         <td class="justify-content-center"><div class="form-check form-switch justify-content-center"><input class="form-check-input" type="checkbox" name="switch[<?= $daten['id'] ?>]" <?= $daten['checked'] == 1 ? "checked" : "" ?>><input type="hidden" name="id[<?= $daten['id'] ?>]" value="<?= $daten['id'] ?>"></div></td>
                     </tr>

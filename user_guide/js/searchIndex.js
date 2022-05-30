@@ -1808,7 +1808,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\App\\Controllers\\flugzeuge\\Flugzeugcontroller\u003A\u003AflugzeugDatenLaden\u0028\u0029",
             "name": "flugzeugDatenLaden",
-            "summary": "L\u00E4dt\u0020die\u0020Flugzeugdaten",
+            "summary": "L\u00E4dt\u0020die\u0020FlugzeugDaten",
             "url": "classes/App-Controllers-flugzeuge-Flugzeugcontroller.html#method_flugzeugDatenLaden"
         },                {
             "fqsen": "\\App\\Controllers\\flugzeuge\\Flugzeugcontroller\u003A\u003AmusterIDVorhanden\u0028\u0029",

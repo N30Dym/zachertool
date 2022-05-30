@@ -162,6 +162,12 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         return $ueberschriften;
     }
     
+    /**
+     * 
+     * @see app/Config/Constants.php globale Konstanten FLUGZEUG_EINGABE, PILOT_EINGABE, BELADUNG_EINGABE
+     * @param type $protokollID
+     * @return type
+     */
     protected function ladeProtokollLayoutNachProtokollID($protokollID)
     {
         $protokollLayoutsModel                  = new protokollLayoutsModel();

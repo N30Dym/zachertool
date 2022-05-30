@@ -60,6 +60,7 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
      * Setze die Validierung zurück, damit keine Fehler mehr vorhanden sind.
      * 
      * @see /Config/Validation::$protokolle
+     * @see app/Config/Constants.php für globale Konstanten FLUGZEUG_EINGABE, PILOT_EINGABE, PROTOKOLL_AUSWAHL
      * @param array $zuValidierendeProtokollDetails
      * @param object $validation
      */

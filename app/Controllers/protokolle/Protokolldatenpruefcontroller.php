@@ -100,6 +100,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
      * zum Speichern formatiert sind. Lade Beladung nur, wenn die ID des statischen BELADUNG_EINGABE-Kapitels in den kapitelIDs
      * enthalten ist.
      * 
+     * @see app/Config/Constants.php für globale Konstanten BELADUNG_EINGABE
      * @return array['protokoll', 'eingegebeneWerte', 'kommentare', 'hStWege'(, 'beladung')]
      */
     protected function zuSpeicherndeDatenSortieren()
@@ -121,6 +122,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
      * Wenn eine protokollDetail fehlt, setze $protokollDetailsVorhanden zu FALSE und setze den FehlerCode entsprechend.
      * Gib am Ende $protokollDetailsVorhanden zurück.
      * 
+     * @see app/Config/Constants.php für globale Konstanten FLUGZEUG_EINGABE, PILOT_EINGABE, BELADUNG_EINGABE
      * @return boolean
      */
     protected function pruefeAlleProtokollDetailsVorhanden()
@@ -504,6 +506,7 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
      * 
      * Gib $erforderlicheHebelarmeVorhanden zurück.
      * 
+     * @see app/Config/Constants.php für globale Konstanten BELADUNG_EINGABE
      * @return boolean
      */
     protected function pruefeBenoetigteHebelarmeVorhanden()

@@ -25,6 +25,7 @@ class Protokolldateninhaltcontroller extends Protokollcontroller
      * zuätzlichen Inhalte.
      * Wenn es sich um eine dynamische Seite handelt, lade die entsprechenden zuätzlichen Inhalte aus der Sektion 'default'.
      * 
+     * @see app/Config/Constants.php für globale Konstanten FLUGZEUG_EINGABE, PILOT_EINGABE, BELADUNG_EINGABE
      * @return array $inhaltZusatz
      */
     protected function datenZumDatenInhaltHinzufügen() 

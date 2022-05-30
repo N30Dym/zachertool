@@ -53,11 +53,12 @@ class Protokollanzeigecontroller extends Protokollcontroller
     /**
      * Gibt je nach aktueller protokollKapitelID einen entsprechenden View zurück.
      * 
-     * Wenn das aktuelle Kapitel eine protokollKapitelID hat, die mit einer der globalen Variablen FLUGZEUG_EINGABE,
+     * Wenn das aktuelle Kapitel eine protokollKapitelID hat, die mit einer der globalen Konstante FLUGZEUG_EINGABE,
      * PILOT_EINGABE oder BELADUNG_EINGABE übereinstimmt (siehe /Config/Constants.php), wird die entsprechende statische Anzeige geladen.
      * Sonst wird die dynamische Anzeige 'protokollKapitelView' mit Inhalten der Datenbank geladen.
      * Wenn die Seite 'BELADUNG_EINGABE' geladen wird, wird außerdem der Beladungszustand aus dem Zwischenspeicher gelöscht.
      * 
+     * @see app/Config/Constants.php für globale Konstanten FLUGZEUG_EINGABE, PILOT_EINGABE, BELADUNG_EINGABE
      * @param array $datenInhalt
      */
     protected function ladeWeitereViews(array $datenInhalt)

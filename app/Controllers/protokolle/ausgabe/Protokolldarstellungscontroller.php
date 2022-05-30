@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Controllers\protokolle\anzeige;
+namespace App\Controllers\protokolle\ausgabe;
 
 use CodeIgniter\Controller;
 use \App\Models\protokolle\{ protokolleModel, datenModel, beladungModel, kommentareModel, hStWegeModel };
 use \App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, auswahllistenModel };
+use \App\Controllers\flugzeuge\{ Flugzeugdatenladecontroller };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren', 'konvertiereHStWegeInProzent', 'schwerpunktlageBerechnen']);
 
@@ -74,10 +75,11 @@ class Protokolldarstellungscontroller extends Controller
      * Lädt die zur protokollSpeicherID gehörenden Daten aus der Datenbank 'zachern_protokolle' und speichert sie in einem Array, das zurückgegeben wird.
      * 
      * Wenn im übergebenen protokollDetails-Array eine flugzeugID vorhanden, speichere die FlugzeugDaten im return-Array. Gleiches, wenn eine pilotID
-     * oder eine copilotID vorhanden ist und BeladungsDaten existieren.
+     * oder eine copilotID vorhanden ist oder BeladungsDaten existieren.
+     * Speichere die ProtokollDetails, eingegebenenWerte, Kommentare, HStWege und Auswahloptionen im $returnArray und gib dieses zurück.
      * 
      * @param array $protokollDetails
-     * @return array $returnArray
+     * @return array $returnArray[[<protokollDetails>],[<eingegebeneWerte>],[<kommentare>],[<hStWege>],[<auswahloptionen>],( [<flugzeugDaten>],[<pilotDaten>],[<copilotDaten>],[<beladungszustand>] )]
      */
     public function protokollDatenLaden(array $protokollDetails)
     {        
@@ -97,6 +99,21 @@ class Protokolldarstellungscontroller extends Controller
         return $returnArray;
     }
     
+    /**
+     * Lädt das ProtokollLayout zu der übergebenen protokollID und gibt es zurück.
+     * 
+     * Lade je eine Instanz des protokollLayoutsModels, protokollEingabenModels, protokollInputsMitInputTypModels, protokollKapitelModels und des protokollUnterkapitelModels.
+     * Initialisiere das $layoutReturnArray.
+     * Für jeden LayoutDatensatz der übergebenen protokollID prüfe, ob die protokollUnterkapitelID leer ist, wenn ja, setze sie zu 0.
+     * Wenn im $layoutReturnArray die aktuelle kapitelNummer noch nicht vorhanden ist, setze diese dort.
+     * Wenn im $layoutReturnArray die aktuelle protokollUnterkapitelID noch nicht vorhanden ist, setze diese dort.
+     * Wenn im $layoutReturnArray die aktuelle protokollEingabeID noch nicht vorhanden ist, setze diese dort.
+     * Wenn im $layoutReturnArray die aktuelle protokollInputID noch nicht vorhanden ist, setze diese dort und lade die protokollInputDetails.
+     * Gib das $layoutReturnArray zurück.
+     * 
+     * @param int $protokollID
+     * @return array[<kapitelNummer>][<protokollUnterkapitelID>|0][<protokollEingabeID>][<protokollInputID>]['inputDetails'] = <protokollInputDetails>
+     */
     public function protokollLayoutLaden(int $protokollID)
     {
         $protokollLayoutsModel              = new protokollLayoutsModel();
@@ -107,35 +124,41 @@ class Protokolldarstellungscontroller extends Controller
         
         $layoutReturnArray = array();
         
-        foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $layout)
+        foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $layoutDatensatz)
         {
-            empty($layout['protokollUnterkapitelID']) ? $layout['protokollUnterkapitelID'] = 0 : NULL;
+            empty($layoutDatensatz['protokollUnterkapitelID']) ? $layoutDatensatz['protokollUnterkapitelID'] = 0 : NULL;
             
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']]))
+            if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']]['protokollKapitelID']  = $layout['protokollKapitelID'];
-                $layoutReturnArray[$layout['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layout['protokollKapitelID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']]['protokollKapitelID']  = $layoutDatensatz['protokollKapitelID'];
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layoutDatensatz['protokollKapitelID']);
             }
             
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]))
+            if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layout['protokollUnterkapitelID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layoutDatensatz['protokollUnterkapitelID']);
             }
             
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]))
+            if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layout['protokollEingabeID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layoutDatensatz['protokollEingabeID']);
             }
             
-            if( ! isset($layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]))
+            if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']][$layoutDatensatz['protokollInputID']]))
             {
-                $layoutReturnArray[$layout['kapitelNummer']][$layout['protokollUnterkapitelID']][$layout['protokollEingabeID']][$layout['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layout['protokollInputID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']][$layoutDatensatz['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layoutDatensatz['protokollInputID']);
             }
         }
 
         return $layoutReturnArray;
     }
     
+    /**
+     * Lädt alle gespeicherten Daten zum 
+     * @param int $flugzeugID
+     * @param string $datum
+     * @return array[[<flugzeugDetails>], [<flugzeugMitMuster>], [<flugzeugHebelarme>], [<flugzeugKlappen>], [<flugzeugWaegung>]]
+     */
     protected function ladeFlugzeugDaten(int $flugzeugID, string $datum)
     {
         $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
@@ -143,6 +166,10 @@ class Protokolldarstellungscontroller extends Controller
         $flugzeugDetailsModel       = new flugzeugDetailsModel();
         $flugzeugKlappenModel       = new flugzeugKlappenModel();
         $flugzeugWaegungModel       = new flugzeugWaegungModel();
+        $flugzeugDatenLadeController     = new Flugzeugdatenladecontroller();
+        
+        var_dump($flugzeugDatenLadeController->ladeFlugzeugDaten($flugzeugID));
+        exit;
         
         return [
             'flugzeugDetails'   => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),

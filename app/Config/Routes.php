@@ -69,13 +69,13 @@ $routes->match(['get', 'post'], 'protokolle/kapitel/(:num)', 'protokolle\Protoko
 $routes->match(['get', 'post'], 'protokolle/speichern', 'protokolle\Protokollcontroller::speichern/');
 $routes->match(['get', 'post'], 'protokolle/absenden', 'protokolle\Protokollcontroller::absenden/');
 
-$routes->add('protokolle/protokollListe/', 'protokolle\anzeige\Protokolllistencontroller::index');
-$routes->get('protokolle/protokollListe/fertig', 'protokolle\anzeige\Protokolllistencontroller::fertigeProtokolle');
-$routes->get('protokolle/protokollListe/offen', 'protokolle\anzeige\Protokolllistencontroller::angefangeneProtokolle');
-$routes->get('protokolle/protokollListe/abgegeben', 'protokolle\anzeige\Protokolllistencontroller::abgegebeneProtokolle');
+$routes->add('protokolle/protokollListe/', 'protokolle\ausgabe\Protokolllistencontroller::index');
+$routes->get('protokolle/protokollListe/fertig', 'protokolle\ausgabe\Protokolllistencontroller::fertigeProtokolle');
+$routes->get('protokolle/protokollListe/offen', 'protokolle\ausgabe\Protokolllistencontroller::angefangeneProtokolle');
+$routes->get('protokolle/protokollListe/abgegeben', 'protokolle\ausgabe\Protokolllistencontroller::abgegebeneProtokolle');
 
     // Protokolle anzeigen
-$routes->get('protokolle/anzeigen/(:num)', 'protokolle\anzeige\Protokolldarstellungscontroller::anzeigen/$1');
+$routes->get('protokolle/anzeigen/(:num)', 'protokolle\ausgabe\Protokolldarstellungscontroller::anzeigen/$1');
 
 $routes->group('admin', function($routes)
 {

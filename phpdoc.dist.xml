@@ -10,11 +10,15 @@
         <cache>/home/lars/Dokumente/docs/cache</cache>
     </paths>
     <version number="3.0.0">
-        <api>
+        <api format="php">
             <source dsn=".">
                 <path>app</path>
                 <path>user_guide/source</path>
             </source>
+            <ignore hidden="true" symlinks="true">
+                <path>system/**/*</path>
+                <path>app/Database/**/*</path>
+            </ignore>
         </api>
     </version>
 

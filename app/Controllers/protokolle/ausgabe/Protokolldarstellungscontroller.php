@@ -7,7 +7,6 @@ use \App\Models\protokolle\{ protokolleModel, datenModel, beladungModel, komment
 use \App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, auswahllistenModel };
-use \App\Controllers\flugzeuge\{ Flugzeugdatenladecontroller };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren', 'konvertiereHStWegeInProzent', 'schwerpunktlageBerechnen']);
 
@@ -36,36 +35,35 @@ class Protokolldarstellungscontroller extends Controller
      */
     public function anzeigen(int $protokollSpeicherID)
     {
-        $protokollDetails   = $this->protokollDetailsLaden($protokollSpeicherID);
-        
+        $protokollDetails       = $this->ladeProtokollDetails($protokollSpeicherID);
+              
         if(empty($protokollDetails))
         {
             nachrichtAnzeigen('Kein Protokoll mit dieser ID vorhanden.', base_url());
         }
-        
-        $protokollIDs                   = json_decode($protokollDetails['protokollIDs']);        
-        $datenInhalt['protokollDaten']  = $this->protokollDatenLaden($protokollDetails);
+                   
+        $protokollIDs                   = json_decode($protokollDetails['protokollIDs']);    
+        $datenHeader['titel']           = $datenInhalt['titel'] = "Protokoll anzeigen";
+        $datenInhalt['protokollDaten']  = $this->ladeProtokollDaten($protokollDetails);
         $datenInhalt['protokollLayout'] = array();
 
         foreach($protokollIDs as $protokollID)
         {
-            $datenInhalt['protokollLayout'] += $this->protokollLayoutLaden($protokollID);
+            $datenInhalt['protokollLayout'] += $this->ladeProtokollLayout($protokollID);
         }
         
-        ksort($datenInhalt['protokollLayout']);
-        
-        $datenHeader['titel'] = $datenInhalt['titel'] = "Protokoll anzeigen";
-        
-        $this->protokollAnzeigen($datenHeader, $datenInhalt);
+        ksort($datenInhalt['protokollLayout']);        
+            
+        $this->zeigeProtokollAn($datenHeader, $datenInhalt);
     }
     
     /**
-     * Lädt die protokollDetails des Protokolls mit der übermittleten protokollSpeicherID
+     * Lädt die protokollDetails des Protokolls mit der übergebenen protokollSpeicherID.
      * 
      * @param int $protokollSpeicherID
      * @return array
      */
-    public function protokollDetailsLaden(int $protokollSpeicherID)
+    protected function ladeProtokollDetails(int $protokollSpeicherID)
     {
         $protokolleModel = new protokolleModel();       
         return $protokolleModel->getProtokollNachID($protokollSpeicherID);
@@ -81,7 +79,7 @@ class Protokolldarstellungscontroller extends Controller
      * @param array $protokollDetails
      * @return array $returnArray[[<protokollDetails>],[<eingegebeneWerte>],[<kommentare>],[<hStWege>],[<auswahloptionen>],( [<flugzeugDaten>],[<pilotDaten>],[<copilotDaten>],[<beladungszustand>] )]
      */
-    public function protokollDatenLaden(array $protokollDetails)
+    public function ladeProtokollDaten(array $protokollDetails)
     {        
         $returnArray = array();
         
@@ -114,7 +112,7 @@ class Protokolldarstellungscontroller extends Controller
      * @param int $protokollID
      * @return array[<kapitelNummer>][<protokollUnterkapitelID>|0][<protokollEingabeID>][<protokollInputID>]['inputDetails'] = <protokollInputDetails>
      */
-    public function protokollLayoutLaden(int $protokollID)
+    protected function ladeProtokollLayout(int $protokollID)
     {
         $protokollLayoutsModel              = new protokollLayoutsModel();
         $protokollEingabenModel             = new protokollEingabenModel();
@@ -154,9 +152,13 @@ class Protokolldarstellungscontroller extends Controller
     }
     
     /**
-     * Lädt alle gespeicherten Daten zum 
+     * Lädt alle gespeicherten Daten zu dem Flugzeug mit der übergebenen flugzeugID und die entsprechende Wägung zum übergebenen Datum.
+     * 
+     * Lade je eine Instanz des flugzeugeMitMusterModels, flugzeugHebelarmeModels, flugzeugDetailsModels, flugzeugKlappenModels und des flugzeugWaegungModels.
+     * Gib ein Array zurück in dem aus den jeweiligen Datenbanken die Daten zu dem Flugzeug mit der übergebenen flugzeugID gespeichert sind.
+     * 
      * @param int $flugzeugID
-     * @param string $datum
+     * @param string $datum 
      * @return array[[<flugzeugDetails>], [<flugzeugMitMuster>], [<flugzeugHebelarme>], [<flugzeugKlappen>], [<flugzeugWaegung>]]
      */
     protected function ladeFlugzeugDaten(int $flugzeugID, string $datum)
@@ -166,11 +168,7 @@ class Protokolldarstellungscontroller extends Controller
         $flugzeugDetailsModel       = new flugzeugDetailsModel();
         $flugzeugKlappenModel       = new flugzeugKlappenModel();
         $flugzeugWaegungModel       = new flugzeugWaegungModel();
-        $flugzeugDatenLadeController     = new Flugzeugdatenladecontroller();
-        
-        var_dump($flugzeugDatenLadeController->ladeFlugzeugDaten($flugzeugID));
-        exit;
-        
+
         return [
             'flugzeugDetails'   => $flugzeugDetailsModel->getFlugzeugDetailsNachFlugzeugID($flugzeugID),
             'flugzeugMitMuster' => $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID),
@@ -180,6 +178,16 @@ class Protokolldarstellungscontroller extends Controller
         ];
     }
     
+    /**
+     * Lädt die Daten zu dem Pilot mit der übergebenen pilotID und die passenden pilotDetails zum übergebenen Datum.
+     * 
+     * Lade je eine Instanz des pilotenMitAkafliegsModels und des pilotenDetailsModels.
+     * Gib ein Array zurück in dem aus den jeweiligen Datenbanken die Daten zu dem Pilot mit der übergebenen pilotID gespeichert sind.
+     * 
+     * @param int $pilotID
+     * @param string $datum
+     * @return array[[<pilotMitAkaflieg>],[<pilotDetails>]]
+     */
     protected function ladePilotDaten(int $pilotID, string $datum)
     {
         $pilotenMitAkafliegsModel   = new pilotenMitAkafliegsModel();
@@ -191,45 +199,76 @@ class Protokolldarstellungscontroller extends Controller
         ];
     }
     
+    /**
+     * Lade alle gespeicherten Werte zu der übergebenen protokollSpeicherID aus der Datenbanktabelle 'daten'
+     * 
+     * Lade eie Instanz des datenModel und initilaisiere das $werteReturnArray.
+     * Für jeden Datensatz mit Wert zu der übergebenen protokollSpeicherID setze den entsprechenden Wert im $werteReturnArray.
+     * Gib das $werteReturnArray zurück.
+     * 
+     * @param int $protokollSpeicherID
+     * @return array $werteReturnArray[<protokollInputID>][<wölbklappenStellung>][<linksUndRechts>][<multipelNr>] = <wert>
+     */
     protected function ladeEingegebeneWerte(int $protokollSpeicherID)
     {
         $datenModel         = new datenModel();       
-        $datenReturnArray   = array();
+        $werteReturnArray   = array();
         
-        foreach($datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID) as $wert)
+        foreach($datenModel->getDatenNachProtokollSpeicherID($protokollSpeicherID) as $wertDatensatz)
         {           
-            $woelbklappenStellung   = $wert['woelbklappenstellung'] == "" ? 0 : $wert['woelbklappenstellung'];
-            $linksUndRechts         = $wert['linksUndRechts']       == "" ? 0 : $wert['linksUndRechts'];
-            $multipelNr             = $wert['multipelNr']           == "" ? 0 : $wert['multipelNr'];
+            $woelbklappenStellung   = $wertDatensatz['woelbklappenstellung'] ?? 0;
+            $linksUndRechts         = $wertDatensatz['linksUndRechts']       ?? 0;
+            $multipelNr             = $wertDatensatz['multipelNr']           ?? 0;
                
-            $datenReturnArray[$wert['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $wert['wert'];
+            $werteReturnArray[$wertDatensatz['protokollInputID']][$woelbklappenStellung][$linksUndRechts][$multipelNr] = $wertDatensatz['wert'];
         }
         
-        return $datenReturnArray;
+        return $werteReturnArray;
     }
     
+    /**
+     * Lädt alle Beladungszustände zu der übergebenen protokollSpeicherID und gibt diese zurück.
+     * 
+     * Lade eine Instanz des beladungModels und initialisiere das $beladungReturnArray.
+     * Für jeden Beladungsdatensatz prüfe, ob eine flugzeugHebelarmID vorhanden ist. Wenn ja, speichere die Beladung mit der flugzeugHebelarmID im Index.
+     * Wenn nicht speichere den Datensatz unter dem Index 'weiterer'.
+     * Gib das $beladungReturnArray zurück.
+     * 
+     * @param int $protokollSpeicherID
+     * @return array $beladungReturnArray[<flugzeugHebelarmID>|'weiterer'][<bezeichnung>] = <gewicht>
+     */
     protected function ladeBeladungszustand(int $protokollSpeicherID)
     {
         $beladungModel          = new beladungModel();       
         $beladungReturnArray    = array();
 
-        foreach($beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID) as $beladung)
+        foreach($beladungModel->getBeladungenNachProtokollSpeicherID($protokollSpeicherID) as $beladungDatensatz)
         {
-            if( ! empty($beladung['flugzeugHebelarmID']))
+            if( ! empty($beladungDatensatz['flugzeugHebelarmID']))
             {
-                $beladungReturnArray[$beladung['flugzeugHebelarmID']][$beladung['bezeichnung'] == "" ? 0 : $beladung['bezeichnung']] = $beladung['gewicht'];
+                $beladungReturnArray[$beladungDatensatz['flugzeugHebelarmID']][empty($beladungDatensatz['bezeichnung']) ?? 0] = $beladungDatensatz['gewicht'];
             }
             else
             {
-                $beladungReturnArray['weiterer']['bezeichnung']    = $beladung['bezeichnung']; 
-                $beladungReturnArray['weiterer']['laenge']         = $beladung['hebelarm']; 
-                $beladungReturnArray['weiterer']['gewicht']        = $beladung['gewicht']; 
+                $beladungReturnArray['weiterer']['bezeichnung']    = $beladungDatensatz['bezeichnung']; 
+                $beladungReturnArray['weiterer']['laenge']         = $beladungDatensatz['hebelarm']; 
+                $beladungReturnArray['weiterer']['gewicht']        = $beladungDatensatz['gewicht']; 
             }
         }
         
         return $beladungReturnArray;
     }
     
+    /**
+     * Lädt alle Kommentare zu der übergebenen protokollSpeicherID und gibt diese zurück.
+     * 
+     * Lade eine Instanz des kommentareModel und initialisiere das $kommentareReturnArray.
+     * Speichere jeden Kommentar der zur übergebenen protokollSpeicherID gehört mit der entsprechenden protokollKapitelID im Index im $kommentareReturnArray.
+     * Gib das $kommentareReturnArray zurück.
+     * 
+     * @param int $protokollSpeicherID
+     * @return array $kommentareReturnArray[<protokollKapitelID>] = <kommentar>
+     */
     protected function ladeKommentare(int $protokollSpeicherID)
     {
         $kommentareModel        = new kommentareModel();
@@ -243,33 +282,61 @@ class Protokolldarstellungscontroller extends Controller
         return $kommentareReturnArray;
     }
     
+    /**
+     * Lädt alle HStWege zu der übergebenen protokollSpeicherID und gibt diese zurück.
+     * 
+     * Lade eine Instanz des hStWegeModel und initialisiere das $hStWegeReturnArray.
+     * Speichere jeden HSt-Weg der zur übergebenen protokollSpeicherID gehört mit der entsprechenden protokollKapitelID im  $hStWegeReturnArray.
+     * Gib das $hStWegeReturnArray zurück.
+     * 
+     * @param int $protokollSpeicherID
+     * @return array $hStWegeReturnArray[<protokollKapitelID>] = [[<gezogenHSt>], [<neutralHSt>], [<gedruecktHSt>]]
+     */
     protected function ladeHStWege(int $protokollSpeicherID)
     {
         $hStWegeModel       = new hStWegeModel();
         $hStWegeReturnArray = array();
         
-        foreach($hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID) as $hStWeg)
+        foreach($hStWegeModel->getHStWegeNachProtokollSpeicherID($protokollSpeicherID) as $hStWegDatensatz)
         {
-            $hStWegeReturnArray[$hStWeg['protokollKapitelID']] = $hStWeg;
+            $hStWegeReturnArray[$hStWegDatensatz['protokollKapitelID']] = $hStWegDatensatz;
         }
         
         return $hStWegeReturnArray;
     }
     
+    /**
+     * Lädt alle auswahloptionen und gibt sie zurück.
+     * 
+     * Lade eine Instanz des auswahllistenModels und initialisiere das $auswahlOptionenArray.
+     * Speichere jeden AuswahlOption mit ihrer auswahlOptionID im Index im $auswahloptionenArray.
+     * Gib das $auswahloptionenArray zurück.
+     * 
+     * @return array $auswahloptionenArray[<auswahlOptionID>] = <auswahloption>
+     */
     protected function ladeAuswahloptionen()
     {
         $auswahllistenModel     = new auswahllistenModel();
-        $auswahloptionenArray   = array();
+        $auswahlOptionenArray   = array();
         
         foreach($auswahllistenModel->getAlleOptionen() as $option)
         {
-            $auswahloptionenArray[$option['id']] = $option;
+            $auswahlOptionenArray[$option['id']] = $option;
         }
         
-        return $auswahloptionenArray;
+        return $auswahlOptionenArray;
     }
     
-    protected function protokollAnzeigen(array $datenHeader, array $datenInhalt)
+    /**
+     * Ruft die Views zum Anzeigen des Protokolls auf.
+     * 
+     * Rufe die entsprechenden Views auf, um das Front-End anzuzeigen.
+     * Je nachdem ob, Flugzeug-, Piloten- und Beladungsdaten vorhanden sind, zeigen die entsprechenden Views an oder nicht.
+     * 
+     * @param array $datenHeader
+     * @param array $datenInhalt
+     */
+    protected function zeigeProtokollAn(array $datenHeader, array $datenInhalt)
     {
         echo view('templates/headerView', $datenHeader);
         echo view('templates/navbarView');

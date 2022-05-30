@@ -58,7 +58,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         foreach($protokollDetailsArray as $protokollDetails)
         {
-            $protokollDaten     = $protokollDarstellungsController->protokollDatenLaden($protokollDetails);
+            $protokollDaten     = $protokollDarstellungsController->ladeProtokollDaten($protokollDetails);
             $csvReturnString    = $csvReturnString . $this->erstelleCSVDatenZeile($protokollDaten, $ueberschriften['ueberschriftenArray'], $protokolleLayoutsProtokollDaten['id'], $seperator);           
         }       
         

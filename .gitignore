@@ -67,7 +67,7 @@ php_errors.log
 #-------------------------
 # User Guide Temp Files
 #-------------------------
-user_guide/*
+user_guide/
 
 
 #-------------------------

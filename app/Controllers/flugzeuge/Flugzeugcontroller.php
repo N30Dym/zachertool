@@ -20,6 +20,8 @@ class Flugzeugcontroller extends Controller
      * Wenn ein neues Flugzeug angelegt wird, kann ein vorhandenes Muster gewählt werden. 
      * Setze zunächst die Überschrift für diese Seite, lade dann die Funktion "ladeSichtbareMuster" aus dem "FlugzeugdatenLadeController".
      * Zeige die geladenen Muster dann in einer MusterListe an.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      */
     public function musterListe()
     {
@@ -38,7 +40,8 @@ class Flugzeugcontroller extends Controller
      * Falls alte Daten (old()) vorhanden sind, lade diese in $datenInhalt, sonst wenn eine MusterID in der URL gegeben ist, lade 
      * die Musterdaten in $datenInhalt.
      * 
-     * @param int $musterID wird automatisch aus der URL entnommen
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int|null $musterID <musterID>
      */	
     public function flugzeugNeu(int $musterID = NULL)
     {
@@ -76,6 +79,7 @@ class Flugzeugcontroller extends Controller
      * Eingabeseite zurück (flugzeugNeu()) und übergib die eingegebenen Daten.
      * Ohne übermittelte Daten leite zur Startseite um.
      * 
+     * @see \Config\App::$baseURL für <base_url>
      */
     public function flugzeugSpeichern()
     {
@@ -103,7 +107,8 @@ class Flugzeugcontroller extends Controller
      * Prüfe, ob die FlugzeugID vorhanden ist, sonst leite zur Startseite um.
      * Lade die Flugzeugdaten in $datenInhalt und zeige die Flugzeugeingabeseite an.
      * 
-     * @param int $flugzeugID wird automatisch aus der URL entnommen
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $flugzeugID <flugzeugID>
      */
     public function flugzeugBearbeiten(int $flugzeugID)
     {
@@ -125,7 +130,8 @@ class Flugzeugcontroller extends Controller
      * Prüfe, ob die FlugzeugID existiert, sonst leite zur Startseite um.
      * Lade die Flugzeugdaten in $datenInhalt und zeige die Flugzeuganzeigeseite an.
      * 
-     * @param int $flugzeugID wird automatisch aus der URL entnommen
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $flugzeugID <flugzeugID>
      */
     public function flugzeugAnzeigen(int $flugzeugID)
     {
@@ -145,6 +151,8 @@ class Flugzeugcontroller extends Controller
      * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/liste aufgerufen wird.
      * 
      * Lade alle sichtbaren Flugzeuge in $datenInhalt['flugzeugArray'] und zeige die Flugzeugliste an.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      */
     public function flugzeugListe()
     {      
@@ -290,7 +298,7 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
-     * Lädt die Flugzeugdaten
+     * Lädt die FlugzeugDaten
      * 
      * Rufe die Funktion ladeFlugzeugDaten der Child-Klasse FlugzeugDatenLadeController auf und gib die Daten zurück.
      * 

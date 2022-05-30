@@ -19,7 +19,7 @@ class Protokolldarstellungscontroller extends Controller
 {
     
     /**
-     * Wird aufgerufen wenn die URL <base_url>/protokolle/anzeigen/<protkollSpeicherID> eingegeben wird. Lädt alle Daten, die zu dem 
+     * Wird aufgerufen wenn die URL <base_url>/protokolle/anzeigen/<protokollSpeicherID> eingegeben wird. Lädt alle Daten, die zu dem 
      * Protokoll mit der eingegebenen protokollSpeicherID gehören und zeigt diese an.
      * 
      * Lade die ProtokollDetails des Protokolls mit der übergebenen protokollSpeicherID und speichere sie in der Variable $protokollDetails.
@@ -30,7 +30,8 @@ class Protokolldarstellungscontroller extends Controller
      * Sortiere das protokollLayout nach kapitelNummer.
      * Speichere den Titel im $datenHeader- und $datenInhalt-Array und zeige das gespeicherte Protokoll an.
      * 
-     * @param int $protokollSpeicherID
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $protokollSpeicherID <protokollSpeicherID>
      */
     public function anzeigen(int $protokollSpeicherID)
     {
@@ -70,23 +71,27 @@ class Protokolldarstellungscontroller extends Controller
     }
     
     /**
+     * Lädt die zur protokollSpeicherID gehörenden Daten aus der Datenbank 'zachern_protokolle' und speichert sie in einem Array, das zurückgegeben wird.
      * 
-     * @param array $protokollDaten
-     * @return array
+     * Wenn im übergebenen protokollDetails-Array eine flugzeugID vorhanden, speichere die FlugzeugDaten im return-Array. Gleiches, wenn eine pilotID
+     * oder eine copilotID vorhanden ist und BeladungsDaten existieren.
+     * 
+     * @param array $protokollDetails
+     * @return array $returnArray
      */
-    public function protokollDatenLaden(array $protokollDaten)
+    public function protokollDatenLaden(array $protokollDetails)
     {        
         $returnArray = array();
         
-        empty($protokollDaten['flugzeugID'])                ? NULL : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDaten['flugzeugID'], $protokollDaten['datum']);
-        empty($protokollDaten['pilotID'])                   ? NULL : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDaten['pilotID'], $protokollDaten['datum']);
-        empty($protokollDaten['copilotID'])                 ? NULL : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDaten['copilotID'], $protokollDaten['datum']);
-        $this->ladeBeladungszustand($protokollDaten['id'])  ? $returnArray['beladungszustand']      = $this->ladeBeladungszustand($protokollDaten['id']) : NULL;
+        empty($protokollDetails['flugzeugID'])                ? NULL : $returnArray['flugzeugDaten']  = $this->ladeFlugzeugDaten($protokollDetails['flugzeugID'], $protokollDetails['datum']);
+        empty($protokollDetails['pilotID'])                   ? NULL : $returnArray['pilotDaten']     = $this->ladePilotDaten($protokollDetails['pilotID'], $protokollDetails['datum']);
+        empty($protokollDetails['copilotID'])                 ? NULL : $returnArray['copilotDaten']   = $this->ladePilotDaten($protokollDetails['copilotID'], $protokollDetails['datum']);
+        $this->ladeBeladungszustand($protokollDetails['id'])  ? $returnArray['beladungszustand']      = $this->ladeBeladungszustand($protokollDetails['id']) : NULL;
         
-        $returnArray['protokollDetails']    = $protokollDaten;
-        $returnArray['eingegebeneWerte']    = $this->ladeEingegebeneWerte($protokollDaten['id']);   
-        $returnArray['kommentare']          = $this->ladeKommentare($protokollDaten['id']);
-        $returnArray['hStWege']             = $this->ladeHStWege($protokollDaten['id']);
+        $returnArray['protokollDetails']    = $protokollDetails;
+        $returnArray['eingegebeneWerte']    = $this->ladeEingegebeneWerte($protokollDetails['id']);   
+        $returnArray['kommentare']          = $this->ladeKommentare($protokollDetails['id']);
+        $returnArray['hStWege']             = $this->ladeHStWege($protokollDetails['id']);
         $returnArray['auswahloptionen']     = $this->ladeAuswahloptionen();
         
         return $returnArray;

@@ -51,12 +51,13 @@ class Protokollcontroller extends Controller
      * Falls die Flag "fertig" aus der Datenbank geladen wurde, springe zu Kapitel 2, wenn nicht, zeige die ersteSeite an und lösche
      * das Protokolllayout und die protokollDetails der erstenSeite (damit sie bei Änderungen neu geladen/gespeichert werden können).
      * 
-     * @param int $protokollSpeicherID
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $protokollSpeicherID <protokollSpeicherID>
      */
     public function index(int $protokollSpeicherID = NULL)
     {
-        $_SESSION['protokoll']['aktuellesKapitel']                   = 1;
-        $_SESSION['protokoll']['protokollDetails']['titel']    = empty($protokollSpeicherID) ? "Neues Protokoll eingeben" : "Vorhandenes Protokoll bearbeiten";
+        $_SESSION['protokoll']['aktuellesKapitel']          = 1;
+        $_SESSION['protokoll']['protokollDetails']['titel'] = empty($protokollSpeicherID) ? "Neues Protokoll eingeben" : "Vorhandenes Protokoll bearbeiten";
         
         if( ! empty($this->request->getPost()))
         {					
@@ -85,6 +86,7 @@ class Protokollcontroller extends Controller
      * 
      * Lösche den Protokoll-Zwischenspeicher und führe die Funktion index() aus.
      * 
+     * @see \Config\App::$baseURL für <base_url>
      * @return function
      */
     public function neu()
@@ -110,7 +112,8 @@ class Protokollcontroller extends Controller
      * Lade die dynamischen Inhalte des aktuellen Kapitels und speichere sie in $datenInhalt.
      * Zeige den protokollEingabe-View an.
      * 
-     * @param int $kapitelNummer
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $kapitelNummer <kapitelNummer>
      */
     public function kapitel(int $kapitelNummer = 0)
     {       
@@ -149,6 +152,8 @@ class Protokollcontroller extends Controller
      * Prüfe die zu speichernden Daten.
      * Wenn die Prüfung und Validierung der zu speichernden Daten erfolgreich war, dann speichere die ProtokollDaten und melde Erfolg.
      * Falls Fehler aufgetreten sind, leite zu dem ersten Kapitel mit fehlerhaften Eingaben um.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      */
     public function speichern()
     {        
@@ -182,6 +187,8 @@ class Protokollcontroller extends Controller
      * Wird ausgeführt, wenn die URL <base_url>/protokolle/absenden aufgerufen wird.
      * 
      * Setze die 'fertig'-Flag und führe die Funktion speichern() aus.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      * @return function
      */
     public function absenden()

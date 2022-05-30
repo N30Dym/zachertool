@@ -20,6 +20,8 @@ class Pilotencontroller extends Controller
      * Lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade alle Akafliegs in das $datenInhalt['akafliegDatenArray'].
      * Wenn im old()-Zwischenspeicher PilotenDaten oder -Details sind, dann füge sie dem $datenInhalt hinzu.
      * Zeige den PilotenEingabeView an und fülle ggf. die alten Daten wieder ein.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      */	
     public function pilotAnlegen()
     {
@@ -45,6 +47,8 @@ class Pilotencontroller extends Controller
      * 
      * Lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade alle sichtbaren Piloten in $datenInhalt['pilotenArray'].
      * Zeige eine Liste mit allen sichtbaren Piloten an 
+     * 
+     * @see \Config\App::$baseURL für <base_url>
      */
     public function pilotenListe()
     {
@@ -59,12 +63,13 @@ class Pilotencontroller extends Controller
     /**
      * Wird ausgeführt, wenn die URL <base_url>/piloten/bearbeiten/<pilotID> aufgerufen wird.
      * 
-     * Wenn die übergebene <pilotID> nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
+     * Wenn die übergebene pilotID nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
      * Andernfalls lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade die Pilotendaten 
-     * mit der <pilotID> in $datenInhalt.
+     * mit der pilotID in $datenInhalt.
      * Zeige die Piloteneingabe an mit der Möglichkeit neue Pilotendetails einzugeben.
      * 
-     * @param int $pilotID
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $pilotID <pilotID>
      */
     public function pilotBearbeiten(int $pilotID)
     {
@@ -84,12 +89,13 @@ class Pilotencontroller extends Controller
     /**
      * Wird ausgeführt, wenn die URL <base_url>/piloten/anzeigen/<pilotID> aufgerufen wird.
      * 
-     * Wenn die übergebene <pilotID> nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
+     * Wenn die übergebene pilotID nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
      * Andernfalls lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade die Pilotendaten 
-     * mit der <pilotID> in $datenInhalt.
+     * mit der pilotID in $datenInhalt.
      * Zeige die Pilotendaten an.
      * 
-     * @param int $pilotID
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $pilotID <pilotID>
      */
     public function pilotAnzeigen(int $pilotID)
     {
@@ -113,6 +119,7 @@ class Pilotencontroller extends Controller
      * Andernfalls versuche die übermittelten Daten zu speichern. Bei Erfolg rufe die nachrichtAnzeigen-Seite auf und melde Erfolg.
      * Bei Misserfolg leite auf die Piloteneingabeseite zurück und gib die übermittelten Daten zurück.
      * 
+     * @see \Config\App::$baseURL für <base_url>
      * @return redirect
      */
     public function pilotSpeichern()
@@ -138,7 +145,7 @@ class Pilotencontroller extends Controller
      * Prüft, ob die übergebene pilotID in der Datenbank existiert.
      * 
      * Lade eine Instanz des PilotenDatenLadeControllers.
-     * Lade damit die Pilotendaten der übergebenen <pilotID>. Wenn Daten vorhanden sind, gib TRUE zurück. Wenn nicht dann FALSE. 
+     * Lade damit die Pilotendaten der übergebenen pilotID. Wenn Daten vorhanden sind, gib TRUE zurück. Wenn nicht dann FALSE. 
      * 
      * @param int $pilotID
      * @return boolean

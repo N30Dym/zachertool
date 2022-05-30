@@ -18,7 +18,7 @@ class Pilotenspeichercontroller extends Pilotencontroller
     /**
      * Prüft und speichert die Pilotendaten.
      * 
-     * Initialisiere das Array $zuSpeicherndeDaten. Wenn eine <pilotID> in den übermittelten $postDaten vorhanden ist, speicher diese in $pilotID.
+     * Initialisiere das Array $zuSpeicherndeDaten. Wenn eine pilotID in den übermittelten $postDaten vorhanden ist, speicher diese in $pilotID.
      * Wenn es sich um einen neuen Pilot handelt ($pilotID == ''), prüfe zunächst, ob der Pilot bereits vorhanden ist. Wenn ja, leite auf die NachrichtAnzeigen-Seite 
      * weiter, wenn nein bestücke $zuSpeicherndeDaten mit den zu speichernden Pilotendaten und Pilotendetails.
      * Wenn $pilotID bereits vorhanden, dann bestücke $zuSpeicherndeDaten nur mit den zu speichernden Pilotendetails und der $pilotID.

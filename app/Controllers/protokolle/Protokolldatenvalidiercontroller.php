@@ -54,11 +54,12 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     /**
      * Validiert die zu validierenden ProtokollDetails und setzt ggf. Fehler-Codes im fehlerArray.
      * 
-     * Validiere die zu valdierenden ProtokollDetails. (siehe app/Config/Validation.php -> $protokolle)
+     * Validiere die zu valdierenden ProtokollDetails.
      * Wenn Fehler auftreten, gehe durch die Fehlerliste. Für jeden Fehler setze, für die entsprechenden KapitelID,
      * einen Fehler-Code im fehlerArray.
      * Setze die Validierung zurück, damit keine Fehler mehr vorhanden sind.
      * 
+     * @see /Config/Validation::$protokolle
      * @param array $zuValidierendeProtokollDetails
      * @param object $validation
      */
@@ -92,11 +93,12 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
      * Validiert die eingegebenen Werte je nach inputTyp und setzt ggf. Fehler-Codes im fehlerArray.
      * 
      * Lade je eine Instanz des protokollInputsMitInputTypModels und des protokollLayoutsModels.
-     * Validiere jeden zu validierenden Datensatz, abgesehen von der protokollSpeicherID. (siehe app/Config/Validation.php -> $datenOhneProtokollSpeicherID).
+     * Validiere jeden zu validierenden Datensatz, abgesehen von der protokollSpeicherID..
      * Ermittle den inputTyp des jeweiligen Datensatzes und validiere den eingebenenWert je nach inputTyp.
      * Wenn es zu Fehlern kommt, ermittle die protokollKapitelID des fehlerhaften Werts und setze einen Fehler-Code im fehlerArray.
      * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind.
      * 
+     * @see /Config/Validation::$datenOhneProtokollSpeicherID
      * @param array $zuValidierendeWerte
      * @param object $validation
      */
@@ -130,10 +132,11 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     /**
      * Validiert die zu validierenden Kommentare und setzt ggf. Fehler-Codes im fehlerArray.
      * 
-     * Validiere jeden Datensatz im zuValidierendeKommentare-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
-     * $kommentareOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Validiere jeden Datensatz im zuValidierendeKommentare-Array, ohne die protokollSpeicherID. Wenn beim Validieren Fehler 
+     * auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
      * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
      * 
+     * @see /Config/Validation::$kommentareOhneProtokollSpeicherID
      * @param array $zuValidierendeKommentare
      * @param object $validation
      */
@@ -158,10 +161,11 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     /**
      * Validiert die zu validierenden Kommentare und setzt ggf. Fehler-Codes im fehlerArray.
      * 
-     * Validiere jeden Datensatz im zuValidierendeHStWege-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
-     * $hStWegeOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Validiere jeden Datensatz im zuValidierendeHStWege-Array, ohne die protokollSpeicherID. Wenn beim Validieren Fehler auftreten, 
+     * setze einen entsprechenden Fehler-Code im fehlerArray.
      * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
      * 
+     * @see /Config/Validation::$hStWegeOhneProtokollSpeicherID
      * @param array $zuValidierendeHStWege
      * @param object $validation
      */
@@ -186,10 +190,11 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
     /**
      * Validiert die zu validierenden Beladungszustände und setzt ggf. Fehler-Codes im fehlerArray.
      * 
-     * Validiere jeden Datensatz im zuValidierendeBeladung-Array, ohne die protokollSpeicherID. (siehe app/Config/Validation.php -> 
-     * $beladungOhneProtokollSpeicherID). Wenn beim Validieren Fehler auftreten, setze einen entsprechenden Fehler-Code im fehlerArray.
+     * Validiere jeden Datensatz im zuValidierendeBeladung-Array, ohne die protokollSpeicherID. Wenn beim Validieren Fehler auftreten, 
+     * setze einen entsprechenden Fehler-Code im fehlerArray.
      * Setze die Validierung nach jedem zu valdierenden Datensatz zurück, damit keine Fehler mehr vorhanden sind. 
      * 
+     * @see /Config/Validation::$beladungOhneProtokollSpeicherID
      * @param array $zuValidierendeBeladung
      * @param object $validation
      */
@@ -216,8 +221,8 @@ class Protokolldatenvalidiercontroller extends Protokollcontroller
      * 
      * Speichere den übergebenen Wert im $zuValidierenderWert-Array.
      * Je nach übergebenen inputTyp valdiere den Wert mit den entsprechenden Regeln.
-     * (siehe app/Config/Validation.php -> $eingabeGanzzahl, $eingabeDezimalzahl, $eingabeCheckbox, $eingabeNote oder $eingabeText).
      * 
+     * @see /Config/Validation::$eingabeGanzzahl|$eingabeDezimalzahl|$eingabeCheckbox|$eingabeNote|$eingabeText
      * @param string $inputTyp
      * @param string $wert
      * @param object $validation

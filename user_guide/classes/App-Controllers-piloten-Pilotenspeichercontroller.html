@@ -1048,9 +1048,9 @@ Zeige den PilotenEingabeView an und fülle ggf. die alten Daten wieder ein.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">pilotAnzeigen</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pilotID</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"><p>Wenn die übergebene &lt;pilotID&gt; nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
+        <section class="phpdocumentor-description"><p>Wenn die übergebene pilotID nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
 Andernfalls lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade die Pilotendaten
-mit der &lt;pilotID&gt; in $datenInhalt.
+mit der pilotID in $datenInhalt.
 Zeige die Pilotendaten an.</p>
 </section>
 
@@ -1061,7 +1061,9 @@ Zeige die Pilotendaten an.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><pilotID>
+</section>
+
             </dd>
             </dl>
 
@@ -1112,9 +1114,9 @@ Zeige die Pilotendaten an.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">pilotBearbeiten</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pilotID</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"><p>Wenn die übergebene &lt;pilotID&gt; nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
+        <section class="phpdocumentor-description"><p>Wenn die übergebene pilotID nicht vorhanden ist, leite auf die nachrichtAnzeigen-Seite um.
 Andernfalls lade eine Instanz des PilotenAnzeigeControllers. Setze den Titel in den $datenHeader und lade die Pilotendaten
-mit der &lt;pilotID&gt; in $datenInhalt.
+mit der pilotID in $datenInhalt.
 Zeige die Piloteneingabe an mit der Möglichkeit neue Pilotendetails einzugeben.</p>
 </section>
 
@@ -1125,7 +1127,9 @@ Zeige die Piloteneingabe an mit der Möglichkeit neue Pilotendetails einzugeben.
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><pilotID>
+</section>
+
             </dd>
             </dl>
 
@@ -1282,7 +1286,7 @@ Bei Misserfolg leite auf die Piloteneingabeseite zurück und gib die übermittel
                     <span class="phpdocumentor-signature__name">pruefeObPilotIDVergeben</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pilotID</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"><p>Lade eine Instanz des PilotenDatenLadeControllers.
-Lade damit die Pilotendaten der übergebenen &lt;pilotID&gt;. Wenn Daten vorhanden sind, gib TRUE zurück. Wenn nicht dann FALSE.</p>
+Lade damit die Pilotendaten der übergebenen pilotID. Wenn Daten vorhanden sind, gib TRUE zurück. Wenn nicht dann FALSE.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1937,7 +1941,7 @@ Speichere den Pilotendetails-Datensatz und gib das Ergebnis zurück.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">speicherPilotenDaten</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$postDaten</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"><p>Initialisiere das Array $zuSpeicherndeDaten. Wenn eine &lt;pilotID&gt; in den übermittelten $postDaten vorhanden ist, speicher diese in $pilotID.
+        <section class="phpdocumentor-description"><p>Initialisiere das Array $zuSpeicherndeDaten. Wenn eine pilotID in den übermittelten $postDaten vorhanden ist, speicher diese in $pilotID.
 Wenn es sich um einen neuen Pilot handelt ($pilotID == ''), prüfe zunächst, ob der Pilot bereits vorhanden ist. Wenn ja, leite auf die NachrichtAnzeigen-Seite
 weiter, wenn nein bestücke $zuSpeicherndeDaten mit den zu speichernden Pilotendaten und Pilotendetails.
 Wenn $pilotID bereits vorhanden, dann bestücke $zuSpeicherndeDaten nur mit den zu speichernden Pilotendetails und der $pilotID.

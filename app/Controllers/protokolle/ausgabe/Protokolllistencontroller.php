@@ -8,6 +8,12 @@ use App\Models\protokolle\{ protokolleModel };
 use App\Models\piloten\{ pilotenModel };
 use App\Models\flugzeuge\{ flugzeugeMitMusterModel };
 
+/**
+ * Dieser Controller lädt die Daten, die zum Anzeigen der Listen für angefangene, fertige und bestätigte Protokolle benötigt werden und 
+ * zeigt diese auch an.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class Protokolllistencontroller extends Controller
 {    
     /**
@@ -35,15 +41,18 @@ class Protokolllistencontroller extends Controller
         }
     }
     
+    /**
+     * Lädt eine Liste mit allen Protokollen die nicht als 'fertig' und 'bestätigt' markiert sind.
+     * 
+     * 
+     */
     public function angefangeneProtokolle()
     {
         $protokolleModel        = new protokolleModel();     
         $angefangeneProtokolle  = $protokolleModel->getAngefangeneProtokolle();     
         $titel                  = "Angefangenes Protokoll zur Anzeige oder Bearbeitung wählen";
         
-        $this->protokollSessionDatenLoeschen();
-
-        $this->ladeZuUebermittelndeDatenUndAnzeigen($angefangeneProtokolle, $titel); 
+        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($angefangeneProtokolle, $titel); 
     } 
     
     public function fertigeProtokolle()
@@ -52,9 +61,7 @@ class Protokolllistencontroller extends Controller
         $fertigeProtokolle  = $protokolleModel->getFertigeProtokolle();
         $titel              = 'Fertiges Protokoll zur Anzeige oder Bearbeitung wählen';
         
-        $this->protokollSessionDatenLoeschen();
-
-        $this->ladeZuUebermittelndeDatenUndAnzeigen($fertigeProtokolle, $titel); 
+        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($fertigeProtokolle, $titel); 
     }
     
     public function abgegebeneProtokolle()
@@ -62,20 +69,17 @@ class Protokolllistencontroller extends Controller
         $protokolleModel        = new protokolleModel();     
         $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolleNachJahrenSoriert();      
         $titel                  = 'Abgegebenes Protokoll zur Anzeige wählen';
-        
-        $this->protokollSessionDatenLoeschen();
-        
-        $this->ladeZuUebermittelndeDatenUndAnzeigen($bestaetigteProtokolle, $titel); 
+              
+        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($bestaetigteProtokolle, $titel); 
     }
     
-    protected function ladeFlugzeugeUndMuster($protokolle) 
+    protected function ladeFlugzeugeUndMuster(array $protokolle) 
     {
-        if($protokolle !== null)
+        if( ! empty($protokolle))
         {
             $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
-            $flugzeugeArray             = [];
+            $flugzeugeArray             = array();
             
-                // Wenn die Protokolle nich nach Jahr sortiert sind, fängt der Index bei 0 an
             if(isset($protokolle[0]))
             {
                 foreach($protokolle as $protokoll)
@@ -86,7 +90,6 @@ class Protokolllistencontroller extends Controller
                     $flugzeugeArray[$protokoll['id']]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
                 }
             }
-                // Hier nur Protokolle, die nach Jahr sortiert sind
             else 
             {
                 foreach($protokolle as $protokolleProJahr)
@@ -108,7 +111,7 @@ class Protokolllistencontroller extends Controller
     protected function ladeAllePiloten() 
     {
         $pilotenModel = new pilotenModel();       
-        $pilotenArray = [];
+        $pilotenArray = array();
         
         foreach($pilotenModel->getAllePiloten() as $pilot)
         {
@@ -120,11 +123,9 @@ class Protokolllistencontroller extends Controller
         return $pilotenArray;
     }
     
-    protected function ladeZuUebermittelndeDatenUndAnzeigen($protokolleArray, $titel)
+    protected function ladeZuUebermittelndeDatenUndZeigeSieAn(array $protokolleArray, string $titel)
     {
-        $datenHeader = [
-            'title'         => $titel,
-        ];
+        $datenHeader['title'] = $titel;
 
         $datenInhalt = [
             'title'                     => $titel,
@@ -137,25 +138,12 @@ class Protokolllistencontroller extends Controller
         $this->ladeListenView($datenInhalt, $datenHeader);
     }
 
-    protected function ladeListenView($datenInhalt, $datenHeader)
+    protected function ladeListenView(array $datenInhalt, array $datenHeader)
     {
         echo view('templates/headerView', $datenHeader);
         echo view('protokolle/scripts/protokollListenScript');
         echo view('templates/navbarView');
         echo view('protokolle/protokollListenView', $datenInhalt);
         echo view('templates/footerView'); 
-    }
-    
-    protected function protokollSessionDatenLoeschen()
-    {
-        if(session_status() !== PHP_SESSION_ACTIVE)
-        {
-            $session = session();    
-        }
-
-        if(isset($_SESSION['protokoll']))
-        {
-            unset($_SESSION['protokoll']);
-        }
     }
 }

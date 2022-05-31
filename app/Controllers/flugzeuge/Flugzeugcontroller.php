@@ -164,8 +164,18 @@ class Flugzeugcontroller extends Controller
     }
     
     /**
+     * Wird ausgeführt, wenn die URL <base_url>/flugzeuge/datenblatt/<flugzeugID> aufgerufen wird. 
      * 
-     * @param int $flugzeugID
+     * Lade die Flugzeugdaten des Flugzeugs mit der durch die URL übergebene flugzeugID und speichere sie im Array $flugzeugDaten.
+     * Der String $muster beinhaltet die musterSchreibweise und falls vorhanden den MusterZusatz mit _ davor.
+     * Der String $kennzeichen beinhaltet das Kennzeichen des Flugzeugs.
+     * Lade ein Option-Object der Dompdf-Klasse und setze die Option zum laden externer Inhalte zu true.
+     * Lade eine Instanz von dompdf mit der Option von oben. Lade den flugzeugPDFVorlageView als HTML mit den $flugzeugDaten
+     * Setze die Größe für das PDF auf A4 und erzeuge es.
+     * Gib das PDF zum Download mit dem angegebenen Dateinamen frei.
+     * 
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $flugzeugID <flugzeugID>
      */
     public function flugzeugDatenblattPDFErzeugen(int $flugzeugID)
     {
@@ -174,7 +184,7 @@ class Flugzeugcontroller extends Controller
         $kennzeichen    = $flugzeugDaten['flugzeug']['kennung'];
         
         $options = new Options();
-        $options->set('isRemoteEnabled', true);
+        $options->set('isRemoteEnabled', TRUE);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml(view('flugzeuge/flugzeugPDFVorlageView', $flugzeugDaten));
         $dompdf->setPaper('A4');

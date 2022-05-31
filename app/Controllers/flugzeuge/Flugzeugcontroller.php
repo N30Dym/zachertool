@@ -169,7 +169,7 @@ class Flugzeugcontroller extends Controller
      * Lade die Flugzeugdaten des Flugzeugs mit der durch die URL übergebene flugzeugID und speichere sie im Array $flugzeugDaten.
      * Der String $muster beinhaltet die musterSchreibweise und falls vorhanden den MusterZusatz mit _ davor.
      * Der String $kennzeichen beinhaltet das Kennzeichen des Flugzeugs.
-     * Lade ein Option-Object der Dompdf-Klasse und setze die Option zum laden externer Inhalte zu true.
+     * Lade ein Option-Object der Dompdf-Klasse und setze die Option zum Laden externer Bilder zu TRUE.
      * Lade eine Instanz von dompdf mit der Option von oben. Lade den flugzeugPDFVorlageView als HTML mit den $flugzeugDaten
      * Setze die Größe für das PDF auf A4 und erzeuge es.
      * Gib das PDF zum Download mit dem angegebenen Dateinamen frei.

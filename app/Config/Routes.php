@@ -54,6 +54,7 @@ $routes->get('muster/liste', 'flugzeuge\Flugzeugcontroller::musterListe');
 $routes->get('flugzeuge/liste', 'flugzeuge\Flugzeugcontroller::flugzeugListe');
 $routes->match(['get', 'post'], 'flugzeuge/speichern', 'flugzeuge\Flugzeugcontroller::flugzeugSpeichern');
 $routes->get('flugzeuge/anzeigen/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugAnzeigen/$1');
+$routes->get('flugzeuge/datenblatt/(:num)', 'flugzeuge\Flugzeugcontroller::flugzeugDatenblattPDFErzeugen/$1');
 
     // Nachrichten
 //$routes->get('nachricht', 'Nachrichtencontroller::nachricht');

@@ -21,7 +21,10 @@
             <a href="<?= base_url('/flugzeuge/bearbeiten/' . $flugzeugID) ?>">
                 <button type="button" class="btn btn-success col-12">Waegung hinzufügen</button>
             </a>
-            <!--<button type="submit" class="btn btn-secondary" formaction="<?= base_url('/flugzeuge/druckansicht/' . $flugzeugID) ?>">Drucken</button>-->
+            <a href="<?= base_url('/flugzeuge/datenblatt/' . $flugzeugID) ?>" target="_blank">
+                <button type="button" class="btn btn-secondary col-12" formaction="">Datenblatt herunterladen</button>
+            </a>
+            
         </div>
     </div>
 

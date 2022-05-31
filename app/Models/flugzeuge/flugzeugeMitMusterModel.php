@@ -13,13 +13,26 @@ use CodeIgniter\Model;
  */
 class flugzeugeMitMusterModel extends Model {
         
-        /*
-         * Verbindungsvariablen für den Zugriff zur
-         * Datenbank zachern_protokolle auf die 
-         * Tabelle protokolle
-         */
+    /**
+     * Name der Datenbank auf die die Klasse zugreift.
+     * 
+     * @see \Config\Database::$flugzeugeDB
+     * @var string $DBGroup
+     */
     protected $DBGroup      = 'flugzeugeDB';
+    
+    /**
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
+     * 
+     * @var string $table
+     */
     protected $table        = 'flugzeuge_mit_muster';
+    
+    /**
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
+     * 
+     * @var string $primaryKey
+     */
     protected $primaryKey   = 'flugzeugID';
     
     public function getFlugzeugMitMusterNachFlugzeugID($flugzeugID) 

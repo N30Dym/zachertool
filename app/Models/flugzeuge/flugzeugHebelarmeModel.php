@@ -4,18 +4,49 @@ namespace App\Models\flugzeuge;
 
 use CodeIgniter\Model;
 
+/**
+ * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_flugzeuge' und der dortigen Tabelle 'flugzeug_hebelarme'.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class flugzeugHebelarmeModel extends Model
 {
-	/**
-	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_flugzeuge auf die 
-	 * Tabelle flugzeug_hebelarme
-	 */
+    
+    /**
+     * Name der Datenbank auf die die Klasse zugreift.
+     * 
+     * @see \Config\Database::$flugzeugeDB
+     * @var string $DBGroup
+     */
     protected $DBGroup          = 'flugzeugeDB';
+    
+    /**
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
+     * 
+     * @var string $table
+     */
     protected $table            = 'flugzeug_hebelarme';
+    
+    /**
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
+     * 
+     * @var string $primaryKey
+     */
     protected $primaryKey       = 'id';
+    
+    /**
+     * Name der Regeln die zum Validieren beim Speichern benutzt werden.
+     * 
+     * @see \Config\Validation::$flugzeugHebelarm
+     * @var string $validationRules
+     */
     protected $validationRules 	= 'flugzeugHebelarm';
 
+    /**
+     * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
+     * 
+     * @var array $allowedFields
+     */
     protected $allowedFields 	= ['flugzeugID', 'beschreibung', 'hebelarm'];
 
     public function getHebelarmeNachFlugzeugID($flugzeugID)

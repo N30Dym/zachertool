@@ -4,31 +4,60 @@ namespace App\Models\flugzeuge;
 
 use CodeIgniter\Model;
 
+/**
+ * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_flugzeuge' und der dortigen Tabelle 'flugzeug_details'.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class flugzeugDetailsModel extends Model
 {
 
-        /**
-         * Verbindungsvariablen für den Zugriff zur
-         * Datenbank zachern_flugzeuge auf die 
-         * Tabelle flugzeug_details
-         */
+    /**
+     * Name der Datenbank auf die die Klasse zugreift.
+     * 
+     * @see \Config\Database::$flugzeugeDB
+     * @var string $DBGroup
+     */
     protected $DBGroup          = 'flugzeugeDB';
+    
+    /**
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
+     * 
+     * @var string $table
+     */
     protected $table            = 'flugzeug_details';
+    
+    /**
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
+     * 
+     * @var string $primaryKey
+     */
     protected $primaryKey       = 'id';
+    
+    /**
+     * Name der Regeln die zum Validieren beim Speichern benutzt werden.
+     * 
+     * @see \Config\Validation::$flugzeugDetails
+     * @var string $validationRules
+     */
     protected $validationRules 	= 'flugzeugDetails';
 	
+    /**
+     * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
+     * 
+     * @var array $allowedFields
+     */
     protected $allowedFields 	= ['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tekArt', 'tekPosition', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel', 'kommentar'];
 
-        /**
-        * Diese Funktion ruft nur die Flugzeugdetails mit
-        * der jeweiligen flugzeugID auf
-        *
-        * @param  mix $id int oder string
-        * @return array
-        */
-    public function getFlugzeugDetailsNachFlugzeugID($flugzeugID)
+    /**
+     * Lädt die FlugzeugDetails des Flugzeuges mit der übergebenen flugzeugID aus der Datenbank.
+     * 
+     * @param int $flugzeugID
+     * @return array['flugzeugID', 'baujahr', 'seriennummer', 'kupplung', 'diffQR', 'radgroesse', 'radbremse', 'radfederung', 'fluegelflaeche', 'spannweite', 'variometer', 'tekArt', 'tekPosition', 'pitotPosition', 'bremsklappen', 'iasVG', 'mtow', 'leermasseSPMin', 'leermasseSPMax', 'flugSPMin', 'flugSPMax', 'bezugspunkt', 'anstellwinkel', 'kommentar'];
+     */
+    public function getFlugzeugDetailsNachFlugzeugID(int $flugzeugID)
     {			
-        return($this->where("flugzeugID", $flugzeugID)->first());
+        return $this->where("flugzeugID", $flugzeugID)->first();
     }
 
         /**

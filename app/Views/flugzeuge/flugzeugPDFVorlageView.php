@@ -7,7 +7,7 @@
     <style>
         table, th, tr, td {border: 1px solid black; border-collapse: collapse;}
         table, textarea {width: 100%;}
-        td, th {padding: 3px;}
+        td, th {padding: 5px;}
         body {font-size: 85%;}
         h3 {margin-bottom: 3px; margin-left: 10px;}
     </style>

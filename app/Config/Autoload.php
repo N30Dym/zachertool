@@ -44,6 +44,7 @@ class Autoload extends AutoloadConfig
 		'Config'      	=> APPPATH . 'Config',
 		'App'       	=> APPPATH,
 		'Auth'          => APPPATH . 'ThirdParty/Auth',
+                'Dompdf'        => APPPATH . 'ThirdParty/dompdf/src',
 	];
 
 	/**

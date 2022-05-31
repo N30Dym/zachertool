@@ -4,6 +4,7 @@ namespace App\Controllers\flugzeuge;
 
 use CodeIgniter\Controller;
 use App\Controllers\flugzeuge\{ Flugzeuganzeigecontroller, Flugzeugdatenladecontroller, Flugzeugspeichercontroller };
+use Dompdf\{ Dompdf, Options };
 
 helper(['array','form','text','url','nachrichtAnzeigen','dezimalZahlenKorrigieren']);
 
@@ -160,6 +161,28 @@ class Flugzeugcontroller extends Controller
         $datenInhalt['flugzeugeArray']  = $this->sichtbareFlugzeugeUndProtokollAnzahlLaden();
         
         $this->flugzeugListeAnzeigen($datenHeader, $datenInhalt);
+    }
+    
+    /**
+     * 
+     * @param int $flugzeugID
+     */
+    public function flugzeugDatenblattPDFErzeugen(int $flugzeugID)
+    {
+        $datenInhalt    = $this->flugzeugDatenLaden($flugzeugID); 
+        $muster         = str_replace(" ", "", $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz']);
+        $kennzeichen    = $datenInhalt['flugzeug']['kennung'];
+        
+        //echo view('flugzeuge/flugzeugPDFVorlageView', $datenInhalt);
+        
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml(view('flugzeuge/flugzeugPDFVorlageView', $datenInhalt));
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+        $dompdf->stream("Flugzeugdatenblatt_" . $muster . "_" . $kennzeichen);
+        
     }
 
     /**

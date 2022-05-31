@@ -32,7 +32,6 @@ class Protokolllistencontroller extends Controller
      */
     public function __construct()
     {
-        // start session
         $session = Services::session();
                
         if($session->isLoggedIn AND ($session->mitgliedsStatus == ADMINISTRATOR OR $session->mitgliedsStatus == ZACHEREINWEISER))
@@ -42,9 +41,10 @@ class Protokolllistencontroller extends Controller
     }
     
     /**
-     * Lädt eine Liste mit allen Protokollen die nicht als 'fertig' und 'bestätigt' markiert sind.
+     * Lädt eine Liste mit allen Protokollen die nicht als 'fertig' und 'bestätigt' markiert sind und zeigt sie an.
      * 
-     * 
+     * Lade eine Instanz des protokolleModels und speichere alle Protokolle, die nicht als 'fertig' und 'bestätigt' markiert sind im 
+     * $angefangeneProtokolle-Array. Setze den Titel übergib beide Variablen an die Funktion zum Laden und Anzeigen der Daten.
      */
     public function angefangeneProtokolle()
     {
@@ -52,29 +52,54 @@ class Protokolllistencontroller extends Controller
         $angefangeneProtokolle  = $protokolleModel->getAngefangeneProtokolle();     
         $titel                  = "Angefangenes Protokoll zur Anzeige oder Bearbeitung wählen";
         
-        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($angefangeneProtokolle, $titel); 
+        $this->ladeAnzuzeigendeDatenUndZeigeSieAn($angefangeneProtokolle, $titel); 
     } 
     
+    /**
+     * Lädt eine Liste mit allen Protokollen die als 'fertig' aber nicht als 'bestätigt' markiert sind und zeigt sie an.
+     * 
+     * Lade eine Instanz des protokolleModels und speichere alle Protokolle, die als 'fertig' aber nicht als 'bestätigt' markiert sind im 
+     * $angefangeneProtokolle-Array. Setze den Titel übergib beide Variablen an die Funktion zum Laden und Anzeigen der Daten.
+     */
     public function fertigeProtokolle()
     {
         $protokolleModel    = new protokolleModel();       
         $fertigeProtokolle  = $protokolleModel->getFertigeProtokolle();
         $titel              = 'Fertiges Protokoll zur Anzeige oder Bearbeitung wählen';
         
-        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($fertigeProtokolle, $titel); 
+        $this->ladeAnzuzeigendeDatenUndZeigeSieAn($fertigeProtokolle, $titel); 
     }
     
+    /**
+     * Lädt eine Liste mit allen Protokollen die 'fertig' und 'bestätigt' markiert sind und zeigt sie an.
+     * 
+     * Lade eine Instanz des protokolleModels und speichere alle Protokolle, die nicht als 'bestätigt' markiert sind im 
+     * $angefangeneProtokolle-Array. Setze den Titel übergib beide Variablen an die Funktion zum Laden und Anzeigen der Daten.
+     */
     public function abgegebeneProtokolle()
     {
         $protokolleModel        = new protokolleModel();     
         $bestaetigteProtokolle  = $protokolleModel->getBestaetigteProtokolleNachJahrenSoriert();      
         $titel                  = 'Abgegebenes Protokoll zur Anzeige wählen';
               
-        $this->ladeZuUebermittelndeDatenUndZeigeSieAn($bestaetigteProtokolle, $titel); 
+        $this->ladeAnzuzeigendeDatenUndZeigeSieAn($bestaetigteProtokolle, $titel); 
     }
     
+    /**
+     * 
+     * @param array $protokolle
+     * @return array 
+     */
     protected function ladeFlugzeugeUndMuster(array $protokolle) 
     {
+        function flugzeugDatenLaden(int $flugzeugID, int $protokollID, objecct &$flugzeugeMitMusterModel)
+        {
+            $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($flugzeugID);
+
+            $flugzeugeArray[$protokollID]['musterSchreibweise'] = $flugzeugMitMuster['musterSchreibweise'];
+            $flugzeugeArray[$protokollID]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
+        }
+        
         if( ! empty($protokolle))
         {
             $flugzeugeMitMusterModel    = new flugzeugeMitMusterModel();
@@ -84,10 +109,7 @@ class Protokolllistencontroller extends Controller
             {
                 foreach($protokolle as $protokoll)
                 {
-                    $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
-
-                    $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] = $flugzeugMitMuster['musterSchreibweise'];
-                    $flugzeugeArray[$protokoll['id']]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
+                    flugzeugDatenLaden($protokoll['flugzeugID'], $protokoll['id'], $flugzeugeMitMusterModel);
                 }
             }
             else 
@@ -96,16 +118,17 @@ class Protokolllistencontroller extends Controller
                 {
                     foreach($protokolleProJahr as $protokoll)
                     {
-                        $flugzeugMitMuster = $flugzeugeMitMusterModel->getFlugzeugMitMusterNachFlugzeugID($protokoll['flugzeugID']);
-
-                        $flugzeugeArray[$protokoll['id']]['musterSchreibweise'] = $flugzeugMitMuster['musterSchreibweise'];
-                        $flugzeugeArray[$protokoll['id']]['musterZusatz']       = $flugzeugMitMuster['musterZusatz']; 
+                        flugzeugDatenLaden($protokoll['flugzeugID'], $protokoll['id'], $flugzeugeMitMusterModel);
                     }
                 }
             }
-
+            
+            
+            
             return $flugzeugeArray;
         }
+        
+        
     }
     
     protected function ladeAllePiloten() 
@@ -123,7 +146,7 @@ class Protokolllistencontroller extends Controller
         return $pilotenArray;
     }
     
-    protected function ladeZuUebermittelndeDatenUndZeigeSieAn(array $protokolleArray, string $titel)
+    protected function ladeAnzuzeigendeDatenUndZeigeSieAn(array $protokolleArray, string $titel)
     {
         $datenHeader['title'] = $titel;
 

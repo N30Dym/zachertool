@@ -169,20 +169,17 @@ class Flugzeugcontroller extends Controller
      */
     public function flugzeugDatenblattPDFErzeugen(int $flugzeugID)
     {
-        $datenInhalt    = $this->flugzeugDatenLaden($flugzeugID); 
-        $muster         = str_replace(" ", "", $datenInhalt['muster']['musterSchreibweise'] . $datenInhalt['muster']['musterZusatz']);
-        $kennzeichen    = $datenInhalt['flugzeug']['kennung'];
-        
-        //echo view('flugzeuge/flugzeugPDFVorlageView', $datenInhalt);
+        $flugzeugDaten  = $this->flugzeugDatenLaden($flugzeugID); 
+        $muster         = str_replace(" ", "", $flugzeugDaten['muster']['musterSchreibweise'] . (isset($flugzeugDaten['muster']['musterZusatz']) ? ("_" . $flugzeugDaten['muster']['musterZusatz']) : ""));
+        $kennzeichen    = $flugzeugDaten['flugzeug']['kennung'];
         
         $options = new Options();
         $options->set('isRemoteEnabled', true);
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('flugzeuge/flugzeugPDFVorlageView', $datenInhalt));
+        $dompdf->loadHtml(view('flugzeuge/flugzeugPDFVorlageView', $flugzeugDaten));
         $dompdf->setPaper('A4');
         $dompdf->render();
-        $dompdf->stream("Flugzeugdatenblatt_" . $muster . "_" . $kennzeichen);
-        
+        $dompdf->stream(date('Y-m-d') . "_Datenblatt_" . $muster . "_" . $kennzeichen);       
     }
 
     /**

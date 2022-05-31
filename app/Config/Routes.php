@@ -72,8 +72,8 @@ $routes->match(['get', 'post'], 'protokolle/absenden', 'protokolle\Protokollcont
 
 $routes->add('protokolle/protokollListe/', 'protokolle\ausgabe\Protokolllistencontroller::index');
 $routes->get('protokolle/protokollListe/fertig', 'protokolle\ausgabe\Protokolllistencontroller::fertigeProtokolle');
-$routes->get('protokolle/protokollListe/offen', 'protokolle\ausgabe\Protokolllistencontroller::angefangeneProtokolle');
-$routes->get('protokolle/protokollListe/abgegeben', 'protokolle\ausgabe\Protokolllistencontroller::abgegebeneProtokolle');
+$routes->get('protokolle/protokollListe/angefangen', 'protokolle\ausgabe\Protokolllistencontroller::angefangeneProtokolle');
+$routes->get('protokolle/protokollListe/bestaetigt', 'protokolle\ausgabe\Protokolllistencontroller::abgegebeneProtokolle');
 
     // Protokolle anzeigen
 $routes->get('protokolle/anzeigen/(:num)', 'protokolle\ausgabe\Protokolldarstellungscontroller::anzeigen/$1');

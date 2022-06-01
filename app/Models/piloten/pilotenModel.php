@@ -4,68 +4,144 @@ namespace App\Models\piloten;
 
 use CodeIgniter\Model;
 
+/**
+ * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_piloten' und der dortigen Tabelle 'piloten'.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class pilotenModel extends Model
 {
-	/*
-	 * Verbindungsvariablen für den Zugriff zur
-	 * Datenbank zachern_piloten auf die 
-	 * Tabelle piloten
-	 */
-    protected $DBGroup 			= 'pilotenDB';
-    protected $table     		= 'piloten';
-    protected $primaryKey 		= 'id';
     
-    protected $useAutoIncrement         = true;
+    /**
+     * Name der Datenbank auf die die Klasse zugreift.
+     * 
+     * @see \Config\Database::$pilotenDB
+     * @var string $DBGroup
+     */
+    protected $DBGroup          = 'pilotenDB';
     
-    protected $useTimestamps            = true;
-    protected $createdField             = 'erstelltAm';
-    protected $updatedField             = 'geaendertAm';
+    /**
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
+     * 
+     * @var string $table
+     */
+    protected $table            = 'piloten';
     
-    protected $validationRules          = 'pilot';
+    /**
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
+     * 
+     * @var string $primaryKey
+     */
+    protected $primaryKey       = 'id';
     
-    protected $allowedFields            = ['vorname', 'spitzname', 'nachname', 'akafliegID', 'groesse', 'sichtbar', 'zachereinweiser', 'geaendertAm'];
+    /**
+     * Name der Spalte die den Zeitstempel des Erstellzeitpunkts des Datensatzes speichert.
+     * 
+     * @var string $createdField
+     */
+    protected $createdField     = 'erstelltAm';
+    
+    /**
+     * Name der Spalte die den Zeitstempel des Zeitpunkts der letzten Änderung des Datensatzes speichert.
+     * 
+     * @var string $updatedField
+     */
+    protected $updatedField     = 'geaendertAm';
+    
+    /**
+     * Name der Regeln die zum Validieren beim Speichern benutzt werden.
+     * 
+     * @see \Config\Validation::$pilot
+     * @var string $validationRules
+     */
+    protected $validationRules  = 'pilot';
+    
+    /**
+     * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
+     * 
+     * @var array $allowedFields
+     */
+    protected $allowedFields    = ['vorname', 'spitzname', 'nachname', 'akafliegID', 'groesse', 'sichtbar', 'zachereinweiser'];
 
+    /**
+     * Lädt alle Piloten die als sichtbar markiert sind aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array[<aufsteigendeNummer>] = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
     public function getSichtbarePiloten()
     {
-        return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
+        return $this->where('sichtbar', 1)->orderBy('geaendertAm', "DESC")->findAll();
     }
     
+    /**
+     * Lädt alle Piloten die nicht als sichtbar markiert sind aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array[<aufsteigendeNummer>] = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
     public function getUnsichtbarePiloten()
     {
-        return $this->where('sichtbar', null)->orWhere('sichtbar', 0)->orderBy('geaendertAm', 'DESC')->findAll();
+        return $this->where('sichtbar', NULL)->orWhere('sichtbar', 0)->orderBy('geaendertAm', "DESC")->findAll();
     }
 	
-    public function getPilotNachID($id)
+    /**
+     * Lädt die PilotenDaten des Pilot mit der übergebenen pilotID aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <pilotID>
+     * @return null|array = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
+    public function getPilotNachID(int $id)
     {
         return $this->where('id', $id)->first();
     }
     
+    /**
+     * Lädt alle PilotenDaten aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array[<aufsteigendeNummer>] = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
     public function getAllePiloten()
     {
         return $this->findAll();
     }
     
-    public function getPilotNachVornameUndSpitzname($vorname, $spitzname) 
+    /**
+     * Lädt die PilotenDaten des Pilot mit dem übergebenen $vorname und dem übergebenen $spitzname aus der Datenbank und gibt sie zurück.
+     * @param string $vorname
+     * @param string $spitzname
+     * @return null|array = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
+    public function getPilotNachVornameUndSpitzname(string $vorname, string $spitzname) 
     {
         return $this->where(['vorname' => $vorname, 'spitzname' => $spitzname])->first();
     }
     
-    public function updateGeaendertAmNachID($id)
+    /**
+     * Speichert den aktuellen Zeitpunkt als den Zeitpunkt der letzten Bearbeitung beim Datensatz mit der übergebenen ID.
+     * 
+     * @param int $id <pilotID>
+     * @return boolean
+     */
+    public function updateGeaendertAmNachID(int $id)
     {
-        $query = "UPDATE `piloten` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `piloten`.`id` = " . $id; 
-        //$this->query($query);
-        
-        if ( ! $this->simpleQuery($query))
-        {
-            $error = $this->error(); // Has keys 'code' and 'message'
-        }
+        $query = "UPDATE `piloten` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `piloten`.`id` = " . $id;        
+        return $this->simpleQuery($query) ? TRUE : FALSE;
     }
     
+    /**
+     * Lädt die PilotenDaten aller Piloten die als Zachereinweiser markiert sind aus der Datenbank und gibt sie zurück. 
+     * 
+     * @return null|array = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
     public function getAlleZachereinweiser()
     {
         return $this->where('sichtbar', 1)->where('zachereinweiser', 1)->findAll();
     }
     
+    /**
+     * Lädt die PilotenDaten aller Piloten die als sichtbar markiert sind, aber nicht als Zachereinweiser aus der Datenbank und gibt sie zurück. 
+     * 
+     * @return null|array = [id, vorname, spitzname, nachname, akafliegID, groesse, sichtbar, zachereinweiser]
+     */
     public function getSichtbarePilotenOhneZachereinweiser()
     {
         return $this->where('sichtbar', 1)->where("(`zachereinweiser` = 0 OR `zachereinweiser` IS NULL)")->findAll();

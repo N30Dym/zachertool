@@ -66,7 +66,8 @@ class pilotenDetailsModel extends Model
     public function getPilotenDetailsNachPilotIDUndDatum(int $pilotID, string $datum)
     {
         $query = "SELECT * FROM piloten_details WHERE pilotID = ". $pilotID ." ORDER BY ABS( DATEDIFF('". date("Y-m-d", strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";   
-        return $this->query($query)->getResultArray()[0];
+        echo $pilotID . " " . $datum . "<br>";
+        return $this->query($query)->getResultArray()[0] ?? NULL;
     }
     
     /**
@@ -79,7 +80,7 @@ class pilotenDetailsModel extends Model
     public function getPilotenGewichtNachPilotIDUndDatum(int $pilotID, string $datum)
     {
         $query = "SELECT gewicht FROM piloten_details WHERE pilotID = ". $pilotID ." ORDER BY ABS( DATEDIFF('". date('Y-m-d', strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";
-        return $this->query($query)->getResultArray()[0]['gewicht'];
+        return $this->query($query)->getResultArray()[0]['gewicht'] ?? NULL;
     }
     
     /**

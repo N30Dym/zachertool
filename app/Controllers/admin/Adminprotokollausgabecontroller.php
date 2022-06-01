@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\admin;
 
-use \App\Controllers\protokolle\anzeige\Protokolldarstellungscontroller;
+use \App\Controllers\protokolle\ausgabe\Protokolldarstellungscontroller;
 use \App\Models\flugzeuge\{ flugzeugeMitMusterModel, flugzeugDetailsModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
 use \App\Models\protokolle\{ protokolleModel, beladungModel };

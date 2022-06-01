@@ -4,50 +4,53 @@ namespace App\Models\protokolle;
 
 use CodeIgniter\Model;
 
+/**
+ * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_protokolle' und der dortigen Tabelle 'protokolle'.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class protokolleModel extends Model
 {
     /**
-     * Verbindung zur Datenbank `zachern_protokolle`.
-     * (siehe app/Config/Database.php -> $protokolleDB).
+     * Name der Datenbank auf die die Klasse zugreift.
      * 
+     * @see \Config\Database::$protokolleDB
      * @var string $DBGroup
      */
     protected $DBGroup          = 'protokolleDB';
     
     /**
-     * Definiert die zu benutzende Tabelle der Datenabank `zachern_protokolle`.
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
      * 
-     * @var string $table 
+     * @var string $table
      */
     protected $table            = 'protokolle';
     
     /**
-     * Definiert den PrimaryKey der Datenbanktabelle `protokolle`.
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
      * 
      * @var string $primaryKey
      */
     protected $primaryKey       = 'id';
     
     /**
-     * Definiert das Feld der Datenbanktabelle `zachern_protokolle`.`protokolle`, welches automatisch den aktuellen Zeitstempel
-     * beim Erstellen des Datensatzes speichert.
+     * Name der Spalte die den Zeitstempel des Erstellzeitpunkts des Datensatzes speichert.
      * 
      * @var string $createdField
      */
     protected $createdField  	= 'erstelltAm';
     
     /**
-     * Definiert das Feld der Datenbanktabelle `zachern_protokolle`.`protokolle`, welches automatisch den aktuellen Zeitstempel
-     * beim Updaten des Datensatzes speichert.
+     * Name der Spalte die den Zeitstempel des Zeitpunkts der letzten Änderung des Datensatzes speichert.
      * 
      * @var string $updatedField
      */
     protected $updatedField     = 'geaendertAm';
     
     /**
-     * Definiert den Regelsatz, der für das Speichern eines Datensatzes für die einzelnen Spalten gilt.
-     * (siehe app/Config/Validation.php -> $protokolle)
+     * Name der Regeln die zum Validieren beim Speichern benutzt werden.
      * 
+     * @see \Config\Validation::$protokolle
      * @var string $validationRules
      */
     protected $validationRules 	= 'protokolle';
@@ -60,68 +63,70 @@ class protokolleModel extends Model
     protected $returnType     = 'array';
 
     /**
-     * Definiert die Spalten der Tabelle `zachern_protokolle`.`protokolle`, die bearbeitet werden dürfen.
+     * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
      * 
-     * @var string[] $allowedFields 
+     * @var array $allowedFields
      */
     protected $allowedFields	= ['flugzeugID', 'pilotID', 'copilotID', 'protokollIDs', 'flugzeit', 'stundenAufDemMuster', 'bemerkung', 'bestaetigt', 'fertig', 'datum'];
 
 
-        /**
-        * Diese Funktion ruft alle Protokolle auf
-        *
-        * @return array
-        */
+    /**
+     * Lädt alle ProtokollDaten aus der Datenbank und gibt sie zurück.
+     *  
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
+     */
     public function getAlleProtokolle()
     {			
         return $this->findAll();	
     }
 
     /**
-     * Diese Funktion ruft nur das Protokoll mit
-     * der jeweiligen ID auf
-     *
-     * @param  mix $id int oder string
-     * @return array
+     * Lädt die ProtokollDaten des Protokolls mit der übergebenen protokollSpeicherID aus der Datenbank und gibt sie zurück.
+     *  
+     * @param $id <protokollSpeicherID>
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum]
      */
-    public function getProtokollNachID($id)
+    public function getProtokollNachID(int $id)
     {			
         return $this->where("id", $id)->first();	
     }
 
 
     /**
-     * Diese Funktion ruft nur Protokolle auf die
-     * bestätigt wurden (Nach Abgabegespräch)
-     *
-     * @return array
+     * Lädt die ProtokollDaten der Protokolls aus der Datenbank die als bestätigt markiert sind, speichert sie im $protokolleNachJahrenSortiert-Array nach
+     * Jahren sortiert und mit der protokollSpeicherID im Index und gibt das $protokolleNachJahrenSortiert-Array zurück.
+     * 
+     * @return null|array[<jahr>][<protokollSpeicherID>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum]
      */
     public function getBestaetigteProtokolleNachJahrenSoriert()
     {			
-        $protokolleNachJahrenSortiert = array();
-        $protokolle = $this->where('bestaetigt', 1)->orderBy('datum')->findAll();
+        $protokolleNachJahrenSortiert   = array();
+        $protokolle                     = $this->where('bestaetigt', 1)->orderBy('datum')->findAll();
         
-        foreach($protokolle as $protokoll)
+        foreach($protokolle as $protokollDaten)
         {
-            $protokolleNachJahrenSortiert[date('Y', strtotime($protokoll['datum']))][$protokoll['id']] = $protokoll;
+            $protokolleNachJahrenSortiert[date('Y', strtotime($protokollDaten['datum']))][$protokollDaten['id']] = $protokollDaten;
         }
         
         return $protokolleNachJahrenSortiert;
     }
     
+    /**
+     * Lädt alle ProtokollDaten die als bestätigt markiert sind aus der Datenbank und gibt sie zurück.
+     *  
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
+     */
     public function getBestaetigteProtokolle()
     {			
         $protokolleNachJahrenSortiert = [];
-        return $this->where('bestaetigt', 1)->orderBy('datum', 'ASC')->findAll();
+        return $this->where('bestaetigt', 1)->orderBy('datum', "ASC")->findAll();
     }
 
 
     /**
-     * Diese Funktion ruft nur Protokolle auf die
-     * fertig sind, aber noch nicht abgegeben wurden 
-     * (vor Abgabegespräch, aber abgesendet)
-     *
-     * @return array
+     * Lädt alle ProtokollDaten aus der Datenbank die als fertig, aber nicht als bestätigt markiert sind und gibt sie zurück.
+     *  
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
      */
     public function getFertigeProtokolle()
     {			
@@ -130,10 +135,9 @@ class protokolleModel extends Model
 
 
     /**
-     * Diese Funktion ruft nur Protokolle auf die
-     * NICHT fertig sind (Zwischenspeicher ggf. abgebrochen)
-     *
-     * @return array
+     * Lädt alle ProtokollDaten aus der Datenbank die nicht als fertig markiert sind und gibt sie zurück.
+     *  
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
      */
     public function getAngefangeneProtokolle()
     {			
@@ -142,120 +146,179 @@ class protokolleModel extends Model
 
 
     /**
-     * Diese Funktion ruft nur alle Protokolle auf
-     * der im jeweiligen Jahr geflogen wurden. Das
-     * Erstelldatum wird NICHT berücksichtigt
-     *
-     * @param  int $jahr
-     * @return array
+     * Lädt alle flugzeugIDs von Flugzeugen zu denen in dem übergebenen Jahr ein Protokoll erstellt wurde aus der Datenbank und gibt sie zurück. Dopplungen werden ignoriert.
+     *  
+     * @return null|array[<aufsteigendeNummer>][flugzeugID] = <flugzeugID>
      */
-    public function getDistinctFlugzeugIDsNachJahr($jahr)
+    public function getDistinctFlugzeugIDsNachJahr(int $jahr)
     {		
         $query = "SELECT DISTINCT flugzeugID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
     }
 
     /**
-     * Diese Funktion ruft nur alle Protokolle auf
-     * der im jeweiligen Jahr geflogen wurden. Das
-     * Erstelldatum wird NICHT berücksichtigt
-     *
-     * @param  int $jahr
-     * @return array
+     * Lädt alle pilotIDs von Piloten zu denen in dem übergebenen Jahr ein Protokoll erstellt wurde aus der Datenbank und gibt sie zurück. Dopplungen werden ignoriert.
+     *  
+     * @return null|array[<aufsteigendeNummer>][pilotID] = <pilotID>
      */
-    public function getDistinctPilotIDsNachJahr($jahr)
+    public function getDistinctPilotIDsNachJahr(int $jahr)
     {		
         $query = "SELECT DISTINCT pilotID FROM protokolle WHERE bestaetigt = 1 AND YEAR(protokolle.datum) = " . trim($jahr);
         return $this->query($query)->getResultArray();
     }
 
-    public function getProtokollIDsNachProtokollSpeicherID($protokollSpeicherID)
+    /**
+     * Zählt die Protokolle denen die übergebene flugzeugID zugeordent ist und die in dem übergebenen Jahr geflogen wurden in der Datenbank und gibt die Anzahl zurück.
+     * 
+     * @param int $jahr
+     * @param int $flugzeugID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlProtokolleNachJahrUndFlugzeugID(int $jahr, int $flugzeugID)
     {
-        $query = "SELECT DISTINCT protokollID FROM testzachern_protokolllayout.protokoll_layouts JOIN testzachern_protokolle.daten ON protokoll_layouts.protokollInputID = daten.protokollInputID WHERE daten.protokollSpeicherID = ". $protokollSpeicherID; 
-        return $this->query($query)->getResultArray();
-    }
-
-    public function getAnzahlProtokolleNachJahrUndFlugzeugID($jahr, $flugzeugID)
-    {
-        return $this->selectCount('id')->where("bestaetigt", 1)->where("flugzeugID", $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
-    }
-    
-    public function getAnzahlProtokolleNachJahrUndPilotID($jahr, $pilotID)
-    {
-        return $this->selectCount('id')->where("bestaetigt", 1)->where("pilotID", $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
     }
     
+    /**
+     * Zählt die Protokolle denen die übergebene pilotID zugeordent ist und die in dem übergebenen Jahr geflogen wurden in der Datenbank und gibt die Anzahl zurück.
+     * 
+     * @param int $jahr
+     * @param int $pilotID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlProtokolleNachJahrUndPilotID(int $jahr, int $pilotID)
+    {
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('pilotID', $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
+    }
+    
+    /**
+     * Lädt die pilotID und die Anzahl der bestätigten Protokolle pro pilotID, sortiert sie absteigend nach der Anzahl und gibt die obersten 10 Einträge zurück.
+     * 
+     * @return null|array[0 ... 9] = [pilotID, anzahlProtokolle]
+     */
     public function getZehnMeisteZacherer()
     {
         $query = "SELECT pilotID, COUNT(pilotID) as anzahlProtokolle FROM `protokolle` WHERE bestaetigt = 1 GROUP BY 1 ORDER BY 2 DESC LIMIT 10";
         return $this->query($query)->getResultArray();
     }
     
-    public function getAnzahlBestaetigteProtokolleNachFlugzeugID($flugzeugID)
+    /**
+     * Lädt die Anzahl der Protokolle die als bestätigt markiert sind und denen die übergebene flugzeugID zugeordnet ist aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $flugzeugID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlBestaetigteProtokolleNachFlugzeugID(int $flugzeugID)
     {
-        return $this->selectCount('id')->where('bestaetigt', 1)->where("flugzeugID", $flugzeugID)->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->first()['id'];
     }
     
-    public function getAnzahlProtokolleNachFlugzeugID($flugzeugID)
+    /**
+     * Lädt die Anzahl der Protokolle denen die übergebene flugzeugID zugeordnet ist aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $flugzeugID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlProtokolleNachFlugzeugID(int $flugzeugID)
     {
         return $this->selectCount('id')->where('flugzeugID', $flugzeugID)->first()['id'];
     }
     
-    public function geBestaetigteProtokolleNachPilotID($pilotID)
+    /**
+     * Lädt alle Protokolle die als bestätigt markiert sind und denen die übergebene pilotID zugeordnet ist aus der Datenbank, sortiert sie aufsteigend nach Datum und gibt sie zurück.
+     * 
+     * @param int $pilotID
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
+     */
+    public function geBestaetigteProtokolleNachPilotID(int $pilotID)
     {
-        return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', 'ASC')->findAll();
+        return $this->where('bestaetigt', 1)->where('pilotID', $pilotID)->orderBy('datum', "ASC")->findAll();
     }
     
-    public function getBestaetigteProtokolleNachFlugzeugID($flugzeugID)
+    /**
+     * Lädt alle Protokolle die als bestätigt markiert sind und denen die übergebene flugzeugID zugeordnet ist aus der Datenbank, sortiert sie aufsteigend nach Datum und gibt sie zurück.
+     * 
+     * @param int $flugzeugID
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
+     */
+    public function getBestaetigteProtokolleNachFlugzeugID(int $flugzeugID)
     {
-        return $this->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll();
+        return $this->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->orderBy('datum', "ASC")->findAll();
     }
     
-    public function updateGeaendertAmNachID($id)
+    /**
+     * Speichert den aktuellen Zeitpunkt als den Zeitpunkt der letzten Bearbeitung beim Datensatz mit der übergebenen ID.
+     * 
+     * @param int $id <protokollSpeicherID>
+     * @return boolean
+     */
+    public function updateGeaendertAmNachID(int $id)
     {
         $query = "UPDATE `protokolle` SET `geaendertAm` = CURRENT_TIMESTAMP WHERE `protokolle`.`id` = " . $id; 
-        
-        if ( ! $this->simpleQuery($query))
-        {
-            return $this->error(); // Has keys 'code' and 'message'
-        }
-        
-        return TRUE;
+        return $this->simpleQuery($query) ? TRUE : FALSE;
     }
     
-    public function insertNeuenProtokollDatensatz($protokollDaten)
+    /**
+     * Erstellt einen neuen Datensatz mit den übergebenen $protokollDaten in der Datenbank und gibt bei Erfolg die ID zurück.
+     * 
+     * @param array $protokollDaten
+     * @return false|int <protokollSpeicherID>
+     */
+    public function insertNeuenProtokollDatensatz(array $protokollDaten)
     {
         return (int)$this->insert($protokollDaten);
     }
     
-    public function updateProtokollDetails($protokollDaten, $id)
+    /**
+     * Aktualisiert die ProtokollDaten mit den übergebenen protokollDaten in der Datenbank.
+     * 
+     * @param array $protokollDaten
+     * @param int $id <protokollSpeicherID>
+     */
+    public function updateProtokollDetails(array $protokollDaten, int $id)
     {
         $this->where('id', $id)->set($protokollDaten)->update();
     }
     
-    public function getAnzahlProtokolleNachPilotID($pilotID) 
+    /**
+     * Lädt die Anzahl der Protokolle denen die übergebene pilotID zugeordnet ist aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $pilotID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlProtokolleNachPilotID(int $pilotID) 
     {
-        return $this->selectCount('id')->where('pilotID', $pilotID)->first();
+        return $this->selectCount('id')->where('pilotID', $pilotID)->first()['id'];
     }
     
-    public function getAnzahlProtokolleAlsCopilotNachPilotID($copilotID) 
+    /**
+     * Lädt die Anzahl der Protokolle denen die übergebene copilotID zugeordnet ist aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $copilotID
+     * @return null|string <anzahlProtokolle>
+     */
+    public function getAnzahlProtokolleAlsCopilotNachPilotID(int $copilotID) 
     {
-        return $this->selectCount('id')->where('copilotID', $copilotID)->first();
+        return $this->selectCount('id')->where('copilotID', $copilotID)->first()['id'];
     }
     
-    public function getProtokolleNachProtokollID($protokollID)
+    /**
+     * Lädt alle Protokolle denen die übergebene protokollID zugeordnet ist aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $protokollID
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum];
+     */
+    public function getProtokolleNachProtokollID(int $protokollID)
     {
-        $query = "SELECT * FROM `protokolle` WHERE JSON_EXTRACT(`protokollIDs`, '$[0]') = " . $protokollID;
-        
-        for($i = 1; $i <= $protokollID; $i++)
-        {
-            $query = $query . " OR JSON_EXTRACT(`protokollIDs`, '$[" . $i . "]') = " . $protokollID;
-        }
-        
-        return $this->query($query)->getResultArray();             
+        return $this->where("JSON_CONTAINS(`protokollIDs`,'\"" . $protokollID . "\"','$') = 1")->findAll();
     }
     
-    public function setProtokollBestaetigtNachID($id)
+    /**
+     * Setzt den Wert von 'bestaetigt' in der Datenbank bei der übergebenen protokollSpeicherID zu 1.
+     * 
+     * @param int $id <protokollSpeicherID>
+     */
+    public function setProtokollBestaetigtNachID(int $id)
     {
         $this->where('id', $id)->set('bestaetigt', 1)->update();
     }

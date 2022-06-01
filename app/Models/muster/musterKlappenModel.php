@@ -63,6 +63,6 @@ class musterKlappenModel extends Model
      */
     public function getMusterKlappenNachMusterID(int$musterID)
     {
-        return($this->where('musterID', $musterID)->findAll());
+        return $this->where('musterID', $musterID)->findAll();
     }
 }

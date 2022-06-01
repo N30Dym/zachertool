@@ -63,6 +63,6 @@ class musterHebelarmeModel extends Model
      */
     public function getMusterHebelarmeNachMusterID(int $musterID)
     {
-        return($this->where('musterID', $musterID)->findAll());
+        return $this->where('musterID', $musterID)->findAll();
     }
 }

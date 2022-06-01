@@ -281,7 +281,7 @@ class Adminflugzeugcontroller extends Controller
         $flugzeugDaten  = $this->ladeFlugzeugDaten($flugzeugID);
         
         $datenInhalt = [
-            'flugzeugBasisDaten'    => $flugzeugeModel->getFlugzeugNachID($flugzeugID),
+            'flugzeugBasisDaten'    => $flugzeugeModel->getFlugzeugDatenNachID($flugzeugID),
             'musterDaten'           => $musterModel->getAlleMuster(),
         ];
         

@@ -48,88 +48,30 @@ class flugzeugWaegungModel extends Model
      * @var array $allowedFields
      */
     protected $allowedFields 	= ['flugzeugID', 'leermasse', 'schwerpunkt', 'zuladungMin', 'zuladungMax', 'datum'];
-
+    
     /**
-    * Diese Funktion ruft nur die Flugzeugdetails mit
-    * der jeweiligen flugzeugID auf
-    *
-    * @param  mix $id int oder string
-    * @return array
-    */
-    public function getFlugzeugWaegungenNachFlugzeugID($flugzeugID)
+     * Lädt alle Wägungen zum Flugzeug mit der übergebenen flugzeugID aus der Datenbank, sortiert sie nach Datum und gibt sie zurück.
+     * 
+     * @param int $flugzeugID
+     * @return null|array[<aufsteigendeNummer>] = <flugzeugWägungDatensatzArray>
+     */
+    public function getAlleWaegungenNachFlugzeugID(int $flugzeugID)
     {			
-        return($this->where('flugzeugID', $flugzeugID)->first());
+        return $this->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll();
     }
     
     /**
-    * Diese Funktion ruft nur die Flugzeugdetails mit
-    * der jeweiligen flugzeugID auf
-    *
-    * @param  mix $id int oder string
-    * @return array
-    */
-    public function getAlleWaegungenNachFlugzeugID($flugzeugID)
-    {			
-        return($this->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll());
-    }
-
-    /**
-    * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "variometer"
-    * gespeichert wurden. Dabei werden Dopplungen ignoriert
-    *
-    * @return array
-    */
-    public function getFlugzeugDetailsDistinctVariometerEingaben()
-    {
-        return $this->distinct()->findColumn('variometer');
-    }
-
-
-    /**
-    * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "tek"
-    * gespeichert wurden. Dabei werden Dopplungen ignoriert
-    *
-    * @return array
-    */
-    public function getFlugzeugDetailsDistinctTekEingaben()
-    {
-        return $this->distinct()->findColumn('tek');
-    }
-
-    /**
-    * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "pitotPosition"
-    * gespeichert wurden. Dabei werden Dopplungen ignoriert
-    *
-    * @return array
-    */
-    public function getFlugzeugDetailsDistinctPitotPositionEingaben()
-    {
-        return $this->distinct()->findColumn('pitotPosition');
-    }
-
-    /**
-    * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "bremsklappen"
-    * gespeichert wurden. Dabei werden Dopplungen ignoriert
-    *
-    * @return array
-    */
-    public function getFlugzeugDetailsDistinctBremsklappenEingaben()
-    {
-        return $this->distinct()->findColumn('bremsklappen');
-    }
-
-    /**
-    * Diese Funktion ruft alle Eingaben auf, die jemals in der Spalte "bezugspunkt"
-    * gespeichert wurden. Dabei werden Dopplungen ignoriert
-    *
-    * @return array
-    */
-    public function getFlugzeugDetailsDistinctBezugspunktEingaben()
-    {
-        return $this->distinct()->findColumn('bezugspunkt');
-    }
-    
-    public function getFlugzeugWaegungNachFlugzeugIDUndDatum($flugzeugID, $datum)
+     * Lädt die zum Zeitpubkt des übergebenen Datums passende Wägung für das Flugzeug mit der übergebenen flugzeugID und gibt diese zurück.
+     * 
+     * Lade die nächste Wägung vor dem Datum, dass in $datum übergeben wurde.
+     * Wenn keine Wägung vorhanden ist, dann lade die Wägung, die am nächsten an dem Zeitpunkt $datum liegt.
+     * Gib das Ergebnis oder NULL zurück.
+     * 
+     * @param int $flugzeugID
+     * @param string $datum
+     * @return null|array[id, flugzeugID, leermasse, schwerpunkt, zuladungMin, zuladungMax, datum]
+     */
+    public function getFlugzeugWaegungNachFlugzeugIDUndDatum(int $flugzeugID, string $datum)
     {
         $query = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = " . $flugzeugID . " AND datum <= '" . $datum . "' ORDER BY datum DESC LIMIT 1";
         $ergebnis = $this->query($query)->getResultArray();
@@ -143,6 +85,11 @@ class flugzeugWaegungModel extends Model
         return $ergebnis[0] ?? NULL;
     }
     
+    /**
+     * Lädt alle Spaltennamen dieser Datenbanktabelle und gibt sie zurück.
+     * 
+     * @return array[<aufsteigendeNummer>] = <spaltenName>
+     */
     public function getSpaltenInformationen()
     {    
         $query = "SHOW COLUMNS FROM " . $this->table;

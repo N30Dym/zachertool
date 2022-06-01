@@ -33,6 +33,14 @@ class flugzeugKlappenModel extends Model
      * @var string $primaryKey
      */
     protected $primaryKey       = 'id';
+    
+    /**
+     * Name der Spalte die den Zeitstempel des Erstellzeitpunkts des Datensatzes speichert.
+     * 
+     * @var string $createdField
+     */
+    protected $createdField  	= 'erstelltAm';
+    
     /**
      * Name der Regeln die zum Validieren beim Speichern benutzt werden.
      * 
@@ -48,11 +56,21 @@ class flugzeugKlappenModel extends Model
      */
     protected $allowedFields 	= ['flugzeugID', 'stellungBezeichnung', 'stellungWinkel', 'neutral', 'kreisflug', 'iasVG'];
     
-    public function getKlappenNachFlugzeugID($flugzeugID)
+    /**
+     * 
+     * @param int $flugzeugID
+     * @return null|array[<aufsteigendeNummer>] = [id, flugzeugID, stellungBezeichnung, stellungWinkel, neutral, kreisflug, iasVG]
+     */
+    public function getKlappenNachFlugzeugID(int $flugzeugID)
     {
         return $this->where('flugzeugID', $flugzeugID)->findAll();
     }
     
+    /**
+     * Lädt alle Spaltennamen dieser Datenbanktabelle und gibt sie zurück.
+     * 
+     * @return array[<aufsteigendeNummer>] = <spaltenName>
+     */
     public function getSpaltenInformationen()
     {    
         $query = "SHOW COLUMNS FROM " . $this->table;

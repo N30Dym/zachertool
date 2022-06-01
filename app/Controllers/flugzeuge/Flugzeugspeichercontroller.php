@@ -124,7 +124,7 @@ class Flugzeugspeichercontroller extends Flugzeugcontroller
         
         if($flugzeugeMitMusterModel->getMusterIDNachKlarnameUndZusatz($musterKlarname, $postDaten['muster']['musterZusatz']))
         {
-            $musterIDVorhanden = $flugzeugeMitMusterModel->getMusterIDNachKlarnameUndZusatz($musterKlarname, $postDaten['muster']['musterZusatz'])['musterID'];
+            $musterIDVorhanden = $flugzeugeMitMusterModel->getMusterIDNachKlarnameUndZusatz($musterKlarname, $postDaten['muster']['musterZusatz']);
         }
         
         return $musterIDVorhanden;

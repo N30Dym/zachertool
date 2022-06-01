@@ -5,13 +5,6 @@ namespace App\Models\flugzeuge;
 use CodeIgniter\Model;
 
 /**
- * flugzeuge_mit_muster ist keine eigene Datenbanktabelle,
- * sondern ein "View". Es werden also immer die aktuellen Daten aus den Tabellen
- * flugzeuge und muster verwendet. Es kann hier auch nichts gespeichert werden.
- *
- * @author Lars
- */
-/**
  * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_flugzeuge' und dem dortigen View 'flugzeuge_mit_muster'.
  * Das es sich um einen View handelt, der auf mehrere Tabellen zugreift, können mit dieser Klasse keine Daten gespeichert werden.
  * 

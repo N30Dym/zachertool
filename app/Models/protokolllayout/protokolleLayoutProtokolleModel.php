@@ -38,6 +38,6 @@ class protokolleLayoutProtokolleModel extends Model
     
     public function getAlleProtokolleSoriertNachProtokollTypID()
     {
-        return $this->orderBy('protokollTypID', 'ASC')->findAll();
+        return $this->orderBy('protokollTypID', "ASC")->findAll();
     }
 }

@@ -57,7 +57,7 @@ class flugzeugWaegungModel extends Model
      */
     public function getAlleWaegungenNachFlugzeugID(int $flugzeugID)
     {			
-        return $this->where('flugzeugID', $flugzeugID)->orderBy('datum', 'ASC')->findAll();
+        return $this->where('flugzeugID', $flugzeugID)->orderBy('datum', "ASC")->findAll();
     }
     
     /**
@@ -78,7 +78,7 @@ class flugzeugWaegungModel extends Model
         
         if(empty($ergebnis))
         {
-            $queryNeu = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = ". $flugzeugID ." ORDER BY ABS( DATEDIFF('". date('Y-m-d', strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";   
+            $queryNeu = "SELECT * FROM flugzeug_waegung WHERE flugzeugID = ". $flugzeugID ." ORDER BY ABS( DATEDIFF('". date("Y-m-d", strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";   
             $ergebnis =  $this->query($queryNeu)->getResultArray();
         }
         

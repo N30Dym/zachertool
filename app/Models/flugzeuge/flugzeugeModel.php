@@ -70,7 +70,7 @@ class flugzeugeModel extends Model
      */
     public function getFlugzeugDatenNachID(int $id)
     {			
-        return $this->where("id", $id)->first();	
+        return $this->where('id', $id)->first();	
     }
 
     /**
@@ -80,7 +80,7 @@ class flugzeugeModel extends Model
      */
     public function getSichtbareFlugzeuge()
     {			
-        return $this->where("sichtbar", 1)->orderBy('geaendertAm', 'DESC')->findAll(); 
+        return $this->where('sichtbar', 1)->orderBy('geaendertAm', "DESC")->findAll(); 
     }
 
     /**
@@ -90,7 +90,7 @@ class flugzeugeModel extends Model
      */
     public function getMusterIDNachID(int $id)
     {
-        return $this->select('musterID')->where("id", $id)->first()['musterID'];
+        return $this->select('musterID')->where('id', $id)->first()['musterID'];
     }
     
     /**

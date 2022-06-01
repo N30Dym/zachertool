@@ -1,4 +1,4 @@
-<?php
+'<?php
 
 namespace App\Models\flugzeuge;
 
@@ -64,7 +64,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getFlugzeugDetailsNachFlugzeugID(int $flugzeugID)
     {			
-        return $this->where("flugzeugID", $flugzeugID)->first();
+        return $this->where('flugzeugID', $flugzeugID)->first();
     }
 
     /**
@@ -74,7 +74,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctVariometerEingaben()
     {
-        return $this->distinct()->findColumn("variometer");
+        return $this->distinct()->findColumn('variometer');
     }
 
 
@@ -85,7 +85,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctTekArtEingaben()
     {
-        return $this->distinct()->findColumn("tekArt");
+        return $this->distinct()->findColumn('tekArt');
     }
     
     /**
@@ -95,7 +95,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctTekPositionEingaben()
     {
-        return $this->distinct()->findColumn("tekPosition");
+        return $this->distinct()->findColumn('tekPosition');
     }
 
     /**
@@ -105,7 +105,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctPitotPositionEingaben()
     {
-        return $this->distinct()->findColumn("pitotPosition");
+        return $this->distinct()->findColumn('pitotPosition');
     }
 
     /**
@@ -115,7 +115,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctBremsklappenEingaben()
     {
-        return $this->distinct()->findColumn("bremsklappen");
+        return $this->distinct()->findColumn('bremsklappen');
     }
 
     /**
@@ -125,7 +125,7 @@ class flugzeugDetailsModel extends Model
      */
     public function getDistinctBezugspunktEingaben()
     {
-        return $this->distinct()->findColumn("bezugspunkt");
+        return $this->distinct()->findColumn('bezugspunkt');
     }
     
     /**

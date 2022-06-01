@@ -74,7 +74,7 @@ class flugzeugeMitMusterModel extends Model {
      */
     public function getAlleFlugzeugeMitMuster()
     {
-        return $this->orderBy('musterKlarname', 'ASC')->findAll();
+        return $this->orderBy('musterKlarname', "ASC")->findAll();
     }
     
     /**
@@ -84,7 +84,7 @@ class flugzeugeMitMusterModel extends Model {
      */
     public function getSichtbareFlugzeugeMitMuster() 
     {
-        return $this->where('sichtbar', 1)->orderBy('geaendertAm', 'DESC')->findAll();
+        return $this->where('sichtbar', 1)->orderBy('geaendertAm', "DESC")->findAll();
     }
     
     /**
@@ -94,7 +94,7 @@ class flugzeugeMitMusterModel extends Model {
      */
     public function getWoelbklappenFlugzeugeMitMuster() 
     {
-        return $this->where('istWoelbklappenFlugzeug', 1)->orderBy('geaendertAm', 'DESC')->findAll();
+        return $this->where('istWoelbklappenFlugzeug', 1)->orderBy('geaendertAm', "DESC")->findAll();
     }
     
     /**
@@ -104,7 +104,7 @@ class flugzeugeMitMusterModel extends Model {
      */
     public function getUnsichtbareFlugzeugeMitMuster() 
     {
-        return $this->where('sichtbar', null)->orderBy('geaendertAm', 'DESC')->findAll();
+        return $this->where('sichtbar', null)->orderBy('geaendertAm', "DESC")->findAll();
     }
     
     /**
@@ -121,7 +121,7 @@ class flugzeugeMitMusterModel extends Model {
     {
         if(empty($musterZusatz))
         {
-            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname])->where('musterZusatz IS NULL')->first()['flugzeugID'];
+            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname])->where("musterZusatz IS NULL")->first()['flugzeugID'];
         }
         else
         {

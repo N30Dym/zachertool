@@ -142,7 +142,7 @@ class Adminprotokollcontroller extends Controller
         
         foreach($bestaetigteProtokolle as $protokoll)
         {          
-            if($datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90))
+            if($datenModel->getWertNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90))
             {
                 foreach($alleFlugzeuge as $flugzeug)
                 {
@@ -150,14 +150,14 @@ class Adminprotokollcontroller extends Controller
                     {
                         if(isset($outputDatenArray[$flugzeug['musterKlarname']]))
                         {
-                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65)['wert'];
-                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90)['wert'];
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getWertNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65);
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getWertNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90);
                         }
                         else
                         {
                             $outputDatenArray[$flugzeug['musterKlarname']]['flugzeug'] = $flugzeug;
-                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65)['wert'];
-                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getDatenNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90)['wert'];
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][65] = $datenModel->getWertNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 65);
+                            $outputDatenArray[$flugzeug['musterKlarname']][$protokoll['id']][90] = $datenModel->getWertNachProtokollSpeicherIDUndProtokollInputID($protokoll['id'], 90);
                         }
                     }
                 }

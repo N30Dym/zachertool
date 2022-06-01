@@ -48,7 +48,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
         
         $musterDatenArray = [
             'musterID'          => $musterID,
-            'muster'            => $musterModel->getMusterNachID($musterID),
+            'muster'            => $musterModel->getMusterDatenNachID($musterID),
             'flugzeugDetails'   => $musterDetailsModel->getMusterDetailsNachMusterID($musterID),
             'hebelarm'          => $musterHebelarmeModel->getMusterHebelarmeNachMusterID($musterID)
         ];
@@ -243,7 +243,7 @@ class Flugzeugdatenladecontroller extends Flugzeugcontroller {
     protected function pruefeMusterIDVorhanden(int $musterID)
     {
         $musterModel = new musterModel();
-        return $musterModel->getMusterNachID($musterID) ? TRUE : FALSE;
+        return $musterModel->getMusterDatenNachID($musterID) ? TRUE : FALSE;
     }
     
     /**

@@ -389,7 +389,7 @@ class Adminflugzeugcontroller extends Controller
     protected function musterBasisdatenBearbeiten($musterID)
     {
         $musterModel = new musterModel();
-        $musterDaten = $musterModel->getMusterNachID($musterID);
+        $musterDaten = $musterModel->getMusterDatenNachID($musterID);
         
         $datenInhalt = [
             'musterBasisDaten'  => $musterDaten,

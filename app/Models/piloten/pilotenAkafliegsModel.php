@@ -2,17 +2,12 @@
 
 namespace App\Models\piloten;
 
+use CodeIgniter\Model;
+
 /**
  * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_piloten' und der dortigen Tabelle 'piloten_akafliegs'.
  * 
  * @author Lars "Eisbär" Kastner
- */
-use CodeIgniter\Model;
-
-/**
- * Description of pilotenAkafliegsModel
- *
- * @author Lars
  */
 class pilotenAkafliegsModel extends Model {
     

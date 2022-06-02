@@ -11,6 +11,7 @@ use CodeIgniter\Model;
  */
 class beladungModel extends Model
 {
+    
     /**
      * Name der Datenbank auf die die Klasse zugreift.
      * 

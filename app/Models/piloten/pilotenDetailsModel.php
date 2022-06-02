@@ -66,7 +66,6 @@ class pilotenDetailsModel extends Model
     public function getPilotenDetailsNachPilotIDUndDatum(int $pilotID, string $datum)
     {
         $query = "SELECT * FROM piloten_details WHERE pilotID = ". $pilotID ." ORDER BY ABS( DATEDIFF('". date("Y-m-d", strtotime($datum)) ."', NOW() ) ), id DESC LIMIT 1";   
-        echo $pilotID . " " . $datum . "<br>";
         return $this->query($query)->getResultArray()[0] ?? NULL;
     }
     

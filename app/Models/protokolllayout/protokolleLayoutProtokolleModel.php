@@ -3,20 +3,65 @@
 namespace App\Models\protokolllayout;
 
 use CodeIgniter\Model;
+use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
+/**
+ * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_protokolllayout' und der dortigen Tabelle 'protokolle'.
+ * 
+ * @author Lars "Eisbär" Kastner
+ */
 class protokolleLayoutProtokolleModel extends Model
 {
-    /*
-     * Verbindungsvariablen für den Zugriff zur
-     * Datenbank zachern_protokolllayout auf die 
-     * Tabelle protokolle
+
+    /**
+     * Name der Datenbank auf die die Klasse zugreift.
+     * 
+     * @see \Config\Database::$protokolllayoutDB
+     * @var string $DBGroup
      */
     protected $DBGroup          = 'protokolllayoutDB';
+    
+    /**
+     * Name der Datenbanktabelle auf die die Klasse zugreift.
+     * 
+     * @var string $table
+     */
     protected $table            = 'protokolle';
+    
+    /**
+     * Name des Primärschlüssels der aktuellen Datenbanktabelle.
+     * 
+     * @var string $primaryKey
+     */
     protected $primaryKey       = 'id';
+    
+    /**
+     * Name der Spalte die den Zeitstempel des Erstellzeitpunkts des Datensatzes speichert.
+     * 
+     * @var string $createdField
+     */
     protected $createdField  	= 'erstelltAm';
+    
+    /**
+     * Name der Spalte die den Zeitstempel des Zeitpunkts der letzten Änderung des Datensatzes speichert.
+     * 
+     * @var string $updatedField
+     */
+    protected $updatedField     = 'geaendertAm';
+    
+    /**
+     * Name der Regeln die zum Validieren beim Speichern benutzt werden.
+     * 
+     * @see \Config\Validation
+     * @var string $validationRules
+     */
     //protected $validationRules 	= '';
 
+    /**
+     * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
+     * 
+     * @var array $allowedFields
+     */
     //protected $allowedFields 	  = ['protokollTypID ', 'datumVon', 'datumBis'];
 
     public function getProtokollTypIDNachID($id)
@@ -39,5 +84,10 @@ class protokolleLayoutProtokolleModel extends Model
     public function getAlleProtokolleSoriertNachProtokollTypID()
     {
         return $this->orderBy('protokollTypID', "ASC")->findAll();
+    }
+      
+    public function getProtokollKategorieBezeichnungNachID(int $id)
+    {
+        
     }
 }

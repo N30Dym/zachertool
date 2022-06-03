@@ -56,21 +56,19 @@ class protokollInputsModel extends Model
      */
     //protected $validationRules 	= '';
 
-<<<<<<< HEAD
+
     /**
      * Gibt die Felder an, in die Daten in der Datenbank gespeichert werden dürfen.
      * 
      * @var array $allowedFields
      */
-    //protected $allowedFields    = ['inputID ', 'bezeichnung', 'aktiv', 'einheit', 'bereichVon', 'bereichBis', 'schrittweite', 'benötigt'];
-=======
     //protected $allowedFields 	= ['inputTypID ', 'bezeichnung', 'aktiv', 'einheit', 'bereichVon', 'bereichBis', 'schrittweite', 'benötigt'];
->>>>>>> zachertoolV0.3.1
+
 
     /**
      * 
      * @param int $id
-     * @return array = [id, inputID , bezeichnung, aktiv, einheit, bereichVon, bereichBis, schrittweite, benötigt]
+     * @return array = [id, inputTypID , bezeichnung, aktiv, einheit, bereichVon, bereichBis, schrittweite, benötigt]
      */
     public function getProtokollInputNachID(int $id)
     {

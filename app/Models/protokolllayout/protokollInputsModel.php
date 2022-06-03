@@ -16,7 +16,7 @@ class protokollInputsModel extends Model
     protected $primaryKey 		= 'id';
     //protected $validationRules 	= '';
 
-    //protected $allowedFields 	= ['inputID ', 'bezeichnung', 'aktiv', 'einheit', 'bereichVon', 'bereichBis', 'schrittweite', 'benötigt'];
+    //protected $allowedFields 	= ['inputTypID ', 'bezeichnung', 'aktiv', 'einheit', 'bereichVon', 'bereichBis', 'schrittweite', 'benötigt'];
 
     public function getProtokollInputNachID($id)
     {

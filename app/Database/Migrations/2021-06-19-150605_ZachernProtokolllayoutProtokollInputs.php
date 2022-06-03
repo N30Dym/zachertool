@@ -16,7 +16,7 @@ class ZachernProtokolllayoutProtokollInputs extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'inputID' => [
+            'inputTypID' => [
                 'type'              => 'INT',
                 'constraint'        => '10',
                 'null'              => false,

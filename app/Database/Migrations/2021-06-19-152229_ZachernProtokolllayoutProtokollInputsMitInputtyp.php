@@ -13,7 +13,7 @@ class ZachernProtokolllayoutProtokollInputsMitInputtyp extends Migration
         $query = "CREATE VIEW `protokoll_inputs_mit_inputtyp` AS
         SELECT 
             `protokoll_inputs`.`id` AS `id`,
-            `protokoll_inputs`.`inputID` AS `inputID`,
+            `protokoll_inputs`.`inputTypID` AS `inputTypID`,
             `protokoll_inputs`.`bezeichnung` AS `bezeichnung`,
             `protokoll_inputs`.`aktiv` AS `aktiv`,
             `protokoll_inputs`.`einheit` AS `einheit`,
@@ -27,7 +27,7 @@ class ZachernProtokolllayoutProtokollInputsMitInputtyp extends Migration
             `input_typen`.`inputTyp` AS `inputTyp`
         FROM 
             (`protokoll_inputs` 
-            LEFT JOIN `input_typen` ON (`protokoll_inputs`.`inputID` = `input_typen`.`id`))";
+            LEFT JOIN `input_typen` ON (`protokoll_inputs`.`inputTypID` = `input_typen`.`id`))";
          
         try 
         {

@@ -10,7 +10,7 @@ class ZachernprotokolllayoutProtokollInputs extends Seeder
     
     public function run()
     {
-        $query = "INSERT IGNORE INTO `protokoll_inputs` (`id`, `inputID`, `bezeichnung`, `aktiv`, `einheit`, `hStWeg`, `bereichVon`, `bereichBis`, `groesse`, `schrittweite`, `multipel`, `benoetigt`) VALUES
+        $query = "INSERT IGNORE INTO `protokoll_inputs` (`id`, `inputTypID`, `bezeichnung`, `aktiv`, `einheit`, `hStWeg`, `bereichVon`, `bereichBis`, `groesse`, `schrittweite`, `multipel`, `benoetigt`) VALUES
             (1, 7, NULL, 1, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
             (2, 3, NULL, 1, 'km/h', NULL, 0.00, NULL, NULL, NULL, NULL, NULL),
             (3, 5, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),

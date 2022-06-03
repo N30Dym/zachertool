@@ -67,7 +67,7 @@ php_errors.log
 #-------------------------
 # User Guide Temp Files
 #-------------------------
-user_guide/build/*
+user_guide/
 
 
 #-------------------------
@@ -82,6 +82,7 @@ phpunit
 # Composer
 #-------------------------
 vendor/
+composer.*
 
 #-------------------------
 # IDE / Development Files

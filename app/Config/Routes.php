@@ -75,8 +75,11 @@ $routes->get('protokolle/protokollListe/fertig', 'protokolle\ausgabe\Protokollli
 $routes->get('protokolle/protokollListe/angefangen', 'protokolle\ausgabe\Protokolllistencontroller::angefangeneProtokolle');
 $routes->get('protokolle/protokollListe/bestaetigt', 'protokolle\ausgabe\Protokolllistencontroller::abgegebeneProtokolle');
 
-    // Protokolle anzeigen
+    // Protokoll anzeigen
 $routes->get('protokolle/anzeigen/(:num)', 'protokolle\ausgabe\Protokolldarstellungscontroller::anzeigen/$1');
+
+    // Protokoll als PDF ausgeben
+$routes->get('protokolle/download/(:num)', 'protokolle\ausgabe\Protokolldarstellungscontroller::alsPDFAusgeben/$1');
 
 $routes->group('admin', function($routes)
 {

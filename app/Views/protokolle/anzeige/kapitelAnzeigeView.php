@@ -4,7 +4,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
 {
     if($kapitel['protokollKapitelID'] == FLUGZEUG_EINGABE || $kapitel['protokollKapitelID'] == PILOT_EINGABE || $kapitel['protokollKapitelID'] == BELADUNG_EINGABE){ continue; }
 
-    echo "<h2 class='mt-5'>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
+    echo "<h3 class='mt-5'>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h3>";
 
     foreach($kapitel as $protokollUnterkapitelID => $unterkapitel)
     {

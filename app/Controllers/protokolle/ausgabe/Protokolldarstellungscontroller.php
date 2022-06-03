@@ -3,10 +3,11 @@
 namespace App\Controllers\protokolle\ausgabe;
 
 use CodeIgniter\Controller;
+use Dompdf\ {Dompdf, Options};
 use \App\Models\protokolle\{ protokolleModel, datenModel, beladungModel, kommentareModel, hStWegeModel };
 use \App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
-use \App\Models\protokolllayout\{ protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, auswahllistenModel };
+use \App\Models\protokolllayout\{ protokolleLayoutProtokolleModel, protokollEingabenModel, protokollInputsMitInputTypModel, protokollKapitelModel, protokollLayoutsModel, protokollUnterkapitelModel, auswahllistenModel };
 
 helper(['form', 'url', 'array', 'nachrichtAnzeigen', 'dezimalZahlenKorrigieren', 'konvertiereHStWegeInProzent', 'schwerpunktlageBerechnen']);
 
@@ -35,26 +36,66 @@ class Protokolldarstellungscontroller extends Controller
      */
     public function anzeigen(int $protokollSpeicherID)
     {
-        $protokollDetails       = $this->ladeProtokollDetails($protokollSpeicherID);
+        $datenInhalt            = $this->ladeDatenZumAnzeigen($protokollSpeicherID);    
+        $datenHeader['titel']   = $datenInhalt['titel'] = "Protokoll anzeigen";
+            
+        $this->zeigeProtokollAn($datenHeader, $datenInhalt);
+    }
+    
+    public function alsPDFAusgeben(int $protokollSpeicherID)
+    {
+        
+        $datenInhalt            = $this->ladeDatenZumAnzeigen($protokollSpeicherID);    
+        $datenInhalt['titel']   = "Protokoll anzeigen";
+        
+        $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
+        $muster                             = $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterSchreibweise'] . (isset($datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz']) ? "_" . $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz'] : "") ;
+        //$kategorie                          = $protokolleLayoutProtokolleModel->getProtokollKategorieBezeichnungNachID(json_decode($datenInhalt['protokollDaten']['protokollDetails']['protokollIDs'])[0]);
+        
+        $htmlCode = view('templates/bootstrapCodeView');
+        //$htmlCode .= view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt);
+        $htmlCode .= view('protokolle/anzeige/protokollDetailsView', $datenInhalt);        
+        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt)             : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['pilotDaten'])    ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : "";
+        $htmlCode .= view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
+        //$htmlCode .= view('protokolle/anzeige/seitenEndeMitButtonsView');
+        //$htmlCode .= "</main></body></html>";
+
+        
+        $dompdf = new Dompdf();
+        /*$dompdf->loadHtml(view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt));
+        $dompdf->loadHtml(view('protokolle/anzeige/protokollDetailsView', $datenInhalt));
+        $dompdf->loadHtml(view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt));
+        $dompdf->loadHtml(view('protokolle/anzeige/seitenEndeMitButtonsView'));*/
+        $dompdf->loadHtml($htmlCode);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+        $dompdf->stream(date('Y-m-d') . "_Protokoll_" . $muster . "_");              
+    }
+    
+    protected function ladeDatenZumAnzeigen(int $protokollSpeicherID)
+    {
+        $protokollDetails                   = $this->ladeProtokollDetails($protokollSpeicherID);
               
         if(empty($protokollDetails))
         {
             nachrichtAnzeigen('Kein Protokoll mit dieser ID vorhanden.', base_url());
         }
                    
-        $protokollIDs                   = json_decode($protokollDetails['protokollIDs']);    
-        $datenHeader['titel']           = $datenInhalt['titel'] = "Protokoll anzeigen";
-        $datenInhalt['protokollDaten']  = $this->ladeProtokollDaten($protokollDetails);
-        $datenInhalt['protokollLayout'] = array();
+        $protokollIDs                       = json_decode($protokollDetails['protokollIDs']);    
+        $rueckgabeArray['protokollDaten']   = $this->ladeProtokollDaten($protokollDetails);
+        $rueckgabeArray['protokollLayout']  = array();
 
         foreach($protokollIDs as $protokollID)
         {
-            $datenInhalt['protokollLayout'] += $this->ladeProtokollLayout($protokollID);
+            $rueckgabeArray['protokollLayout'] += $this->ladeProtokollLayout($protokollID);
         }
         
-        ksort($datenInhalt['protokollLayout']);        
-            
-        $this->zeigeProtokollAn($datenHeader, $datenInhalt);
+        ksort($rueckgabeArray['protokollLayout']);
+        
+        return $rueckgabeArray;
     }
     
     /**
@@ -129,22 +170,22 @@ class Protokolldarstellungscontroller extends Controller
             if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']]))
             {
                 $layoutReturnArray[$layoutDatensatz['kapitelNummer']]['protokollKapitelID']  = $layoutDatensatz['protokollKapitelID'];
-                $layoutReturnArray[$layoutDatensatz['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layoutDatensatz['protokollKapitelID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']]['kapitelDetails']      = $protokollKapitelModel->getProtokollKapitelNachID($layoutDatensatz['protokollKapitelID'] ?? 0);
             }
             
             if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']]))
             {
-                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layoutDatensatz['protokollUnterkapitelID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']]['unterkapitelDetails'] = $protokollUnterkapitelModel->getProtokollUnterkapitelNachID($layoutDatensatz['protokollUnterkapitelID'] ?? 0);
             }
             
             if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']]))
             {
-                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layoutDatensatz['protokollEingabeID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']]['eingabeDetails'] = $protokollEingabenModel->getProtokollEingabeNachID($layoutDatensatz['protokollEingabeID'] ?? 0);
             }
             
             if( ! isset($layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']][$layoutDatensatz['protokollInputID']]))
             {
-                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']][$layoutDatensatz['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layoutDatensatz['protokollInputID']);
+                $layoutReturnArray[$layoutDatensatz['kapitelNummer']][$layoutDatensatz['protokollUnterkapitelID']][$layoutDatensatz['protokollEingabeID']][$layoutDatensatz['protokollInputID']]['inputDetails'] = $protokollInputsMitInputTypModel->getProtokollInputMitInputTypNachProtokollInputID($layoutDatensatz['protokollInputID'] ?? 0);
             }
         }
 

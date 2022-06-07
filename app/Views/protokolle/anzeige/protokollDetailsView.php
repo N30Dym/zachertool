@@ -1,4 +1,4 @@
-<h2>1. Angaben zum Protokoll</h2>
+<h2 class="mt-5">1. Angaben zum Protokoll</h2>
 
 <div class="row">
     <div class="col-lg-1">

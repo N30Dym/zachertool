@@ -1,5 +1,5 @@
 <?php if($protokollDaten['flugzeugDaten']['flugzeugMitMuster']['istWoelbklappenFlugzeug'] == 1) : ?>
-    <h2>Vergleichsfluggeschwindigkeiten</h2>
+    <h3 class="ms-4">Vergleichsfluggeschwindigkeiten</h3>
     
     <div class="row">
         <div class="col-lg-1">
@@ -48,7 +48,7 @@
         </div>
     </div>
 <?php else : ?>
-    <h2>Vergleichsfluggeschwindigkeit</h2>
+    <h3 class="ms-4">Vergleichsfluggeschwindigkeit</h3>
     
     <div class="row">
         <div class="col-lg-1">

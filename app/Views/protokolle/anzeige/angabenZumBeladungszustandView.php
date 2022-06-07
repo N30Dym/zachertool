@@ -1,4 +1,4 @@
-<h2>
+<h2 class="mt-5">
     <?php foreach($protokollLayout as $kapitelNummer => $layout)
         {
             if($layout["protokollKapitelID"] == BELADUNG_EINGABE)

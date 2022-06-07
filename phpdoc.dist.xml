@@ -18,6 +18,12 @@
             <ignore hidden="true" symlinks="true">
                 <path>system/**/*</path>
                 <path>app/Database/**/*</path>
+				<path>vendor/**/*</path>
+				<path>database_backup/**/*</path>
+				<path>nbproject/**/*</path>
+				<path>public/**/*</path>
+				<path>writeable/**/*</path>
+				
             </ignore>
         </api>
     </version>

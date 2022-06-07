@@ -4,21 +4,21 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
 {
     if($kapitel['protokollKapitelID'] == FLUGZEUG_EINGABE || $kapitel['protokollKapitelID'] == PILOT_EINGABE || $kapitel['protokollKapitelID'] == BELADUNG_EINGABE){ continue; }
 
-    echo "<h3 class='mt-5'>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h3>";
+    echo "<h2 class='mt-5'>" . $kapitelNummer . ". " . $kapitel['kapitelDetails']['bezeichnung'] ."</h2>";
 
     foreach($kapitel as $protokollUnterkapitelID => $unterkapitel)
     {
         if(!is_numeric($protokollUnterkapitelID)) { continue; }
         if($protokollUnterkapitelID > 0)
         {
-            echo '<h4 class="ms-4">' . $kapitelNummer . "." . $kapitel[$protokollUnterkapitelID]['unterkapitelDetails']['unterkapitelNummer'] . " " . $kapitel[$protokollUnterkapitelID]['unterkapitelDetails']['bezeichnung'] . "</h4>";
+            echo "<h3 class='ms-4'>" . $kapitelNummer . "." . $kapitel[$protokollUnterkapitelID]['unterkapitelDetails']['unterkapitelNummer'] . " " . $kapitel[$protokollUnterkapitelID]['unterkapitelDetails']['bezeichnung'] . "</h3>";
         }
         
         $woelbklappen = ($protokollDaten['flugzeugDaten']['flugzeugMitMuster']['istWoelbklappenFlugzeug'] == 1 && (($unterkapitel['unterkapitelDetails']['woelbklappen'] ?? "") || ($kapitel['kapitelDetails']['woelbklappen'] ?? ""))) ? ['Neutral', 'Kreisflug'] : [0]; 
         echo "<div class='row'><div class='col-lg-1'></div><div class='col-sm-10'>";
         foreach($woelbklappen as $woelbklappenStellung)
         {
-            echo $woelbklappenStellung == 0 ? "" : '<h5 class="ms-4 mt-4">Wölbklappenstellung: <b>' . $woelbklappenStellung . '</b></h5>';
+            echo $woelbklappenStellung == 0 ? "" : "<h5 class='ms-4 mt-4'>Wölbklappenstellung: <b>" . $woelbklappenStellung . "</b></h5>";
             echo "<div class='table-responsive'><table class='table'>";
             
             foreach($unterkapitel as $protokollEingabeID => $eingabe)
@@ -35,7 +35,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                             echo "<tr>";
                             if($input['inputDetails']['bezeichnung'] != "")
                             {
-                                echo '<td>' . $input['inputDetails']['bezeichnung'] . "</td>";
+                                echo "<td>" . $input['inputDetails']['bezeichnung'] . "</td>";
                             }
 
                             if(isset($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][0]))
@@ -43,7 +43,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                 foreach($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][0] as $wert)
                                 {
 
-                                    echo '<td valign="middle"><b>';
+                                    echo "<td valign='middle'><b>";
                                     switch($input['inputDetails']['inputTyp'])
                                     {
                                         case "Dezimalzahl": 
@@ -58,11 +58,11 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
 
                                     if($input['inputDetails']['einheit'] ?? "" != "")
                                     {
-                                        echo '&nbsp;' . $input['inputDetails']['einheit'];
+                                        echo "&nbsp;" . $input['inputDetails']['einheit'];
                                     }
                                     if($input['inputDetails']['hStWeg'])
                                     {
-                                        echo " (<b>" . konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']], $wert) . "</b>&nbsp;%&nbsp;gezogen)";
+                                        echo " <br>(<b>" . konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']], $wert) . "</b>&nbsp;%&nbsp;gezogen)";
                                     }
                                     echo "</td>";
 
@@ -97,7 +97,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                             }
                                             break;
                                         case "Note":
-                                            echo "<td><b>";
+                                            echo "<td style='padding-right: 5px'>Note:&nbsp;&nbsp;<b>";
                                             switch($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][$richtung][0] ?? null)
                                             {
                                                 case 1:
@@ -171,8 +171,8 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                 </div>
                 <div class="col-lg-8">
                     <h5 class="mt-4">Höhensteuerwege</h5>
-                    <div class='table-responsive'>
-                        <table class='table'>
+                    <div class="table-responsive">
+                        <table class="table">
                             <tr>
                                 <td>voll gedrückt</td>
                                 <td><?= isset($protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt']) ? "<b>" . $protokollDaten['hStWege'][$kapitel['protokollKapitelID']]['gedruecktHSt'] . "</b>&nbsp;mm" : "" ?></td>
@@ -200,7 +200,7 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
 
     if(isset($protokollDaten['kommentare'][$kapitel['protokollKapitelID']]))
     {
-        echo "<div class='col-lg-12'><label class='ms-2 mb-2'><b>Kommentar:</b></label><textarea class='form-control' disabled>" . $protokollDaten['kommentare'][$kapitel['protokollKapitelID']]["kommentar"] . "</textarea></div>";
+        echo "<div class='col-lg-12'><label class='ms-2 mb-2'><b>Kommentar:</b></label><textarea class='form-control' disabled>" . $protokollDaten['kommentare'][$kapitel['protokollKapitelID']]['kommentar'] . "</textarea></div>";
     }
 }
 

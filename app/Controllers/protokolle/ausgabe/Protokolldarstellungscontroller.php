@@ -384,9 +384,9 @@ class Protokolldarstellungscontroller extends Controller
         echo view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt);
         echo view('protokolle/anzeige/protokollDetailsView', $datenInhalt);
         echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt)               : NULL;
+        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt)    : NULL;
         echo isset($datenInhalt['protokollDaten']['pilotDaten'])        ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt)              : NULL;
         echo isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt)       : NULL;
-        echo isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt)    : NULL;
         echo view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
         echo view('protokolle/anzeige/seitenEndeMitButtonsView');
         echo view('templates/footerView');

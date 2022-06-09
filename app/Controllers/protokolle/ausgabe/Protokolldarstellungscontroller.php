@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle\ausgabe;
 
 use CodeIgniter\Controller;
-use Dompdf\ {Dompdf, Options};
+use Dompdf\ {Dompdf};
 use \App\Models\protokolle\{ protokolleModel, datenModel, beladungModel, kommentareModel, hStWegeModel };
 use \App\Models\flugzeuge\{ flugzeugDetailsModel, flugzeugeMitMusterModel, flugzeugHebelarmeModel, flugzeugKlappenModel, flugzeugWaegungModel };
 use \App\Models\piloten\{ pilotenMitAkafliegsModel, pilotenDetailsModel };
@@ -23,74 +23,84 @@ class Protokolldarstellungscontroller extends Controller
      * Wird aufgerufen wenn die URL <base_url>/protokolle/anzeigen/<protokollSpeicherID> eingegeben wird. Lädt alle Daten, die zu dem 
      * Protokoll mit der eingegebenen protokollSpeicherID gehören und zeigt diese an.
      * 
-     * Lade die ProtokollDetails des Protokolls mit der übergebenen protokollSpeicherID und speichere sie in der Variable $protokollDetails.
-     * Falls $protokollDetails leer ist, zeige eine entsprechende Nachricht an.
-     * Speichere die dekodierten protokollIDs aus den ProtokollDetails in der entsprechenden Variable.
-     * Lade die ProtokollDaten und speichere sie im $datenInhalt-Array, initialisiere dort außerdem das 'protokollLayout'.
-     * Für jede $protokollID lade das zugehörige protkoollLayout und speicher es im $datenInhalt-Array.
-     * Sortiere das protokollLayout nach kapitelNummer.
-     * Speichere den Titel im $datenHeader- und $datenInhalt-Array und zeige das gespeicherte Protokoll an.
+     * Speichere die Daten des Protokolls mit der übergebenen protokollSpeicherID im $datenInhalt.
+     * Speichere die ProtokollKategorie in einer eigenen Variable und setze den Titel mit der entsprechenden Kategorie.
+     * Zeige das Protokoll an.
      * 
      * @see \Config\App::$baseURL für <base_url>
      * @param int $protokollSpeicherID <protokollSpeicherID>
      */
     public function anzeigen(int $protokollSpeicherID)
     {
-        $datenInhalt            = $this->ladeDatenZumAnzeigen($protokollSpeicherID);    
-        $datenHeader['titel']   = $datenInhalt['titel'] = "Protokoll anzeigen";
+        $datenInhalt            = $this->ladeDatenDesProtokolls($protokollSpeicherID);    
+        $kategorie              = $datenInhalt['protokollDaten']['protokollKategorie'];
+        $datenHeader['titel']   = $datenInhalt['titel'] = $kategorie . " anzeigen";        
             
         $this->zeigeProtokollAn($datenHeader, $datenInhalt);
     }
     
+    /**
+     * Wird aufgerufen wenn die URL <base_url>/protokolle/download/<protokollSpeicherID> eingegeben wird. Lädt alle Daten, die zu dem 
+     * Protokoll mit der eingegebenen protokollSpeicherID gehören und gibt sie als PDF-Datei aus.
+     * 
+     * Speichere die Daten des Protokolls mit der übergebenen protokollSpeicherID im $datenInhalt.
+     * Speichere die Bezeichnung des Mustersin einer eigenen Variable.
+     * Speichere die ProtokollKategorie in einer eigenen Variable und setze den Titel mit der entsprechenden Kategorie.
+     * Erstelle den HTML-Code, der für das Rendern des PDF benötigt wird. Lade eine Instanz von DOMPDF.
+     * Lade den HTML-Code, stelle die Papiergröße ein und erzeuge das PDF.
+     * Gib das PDF zum downloaden frei. 
+     *  
+     * @see \Config\App::$baseURL für <base_url>
+     * @param int $protokollSpeicherID
+     * @output PDF-file 
+     */
     public function alsPDFAusgeben(int $protokollSpeicherID)
-    {
+    {        
+        $datenInhalt            = $this->ladeDatenDesProtokolls($protokollSpeicherID);    
+        $muster                 = str_replace(" ", "", $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterSchreibweise'] . (isset($datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz']) ? "_" . $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz'] : "") );       
+        $kategorie              = $datenInhalt['protokollDaten']['protokollKategorie'];
+        $datenInhalt['titel']   = $kategorie . " anzeigen";                
+        $htmlCode               = $this->erstelleHTMLCode($datenInhalt);
+        $dompdf                 = new Dompdf();
         
-        $datenInhalt            = $this->ladeDatenZumAnzeigen($protokollSpeicherID);    
-        $datenInhalt['titel']   = "Protokoll anzeigen";
-        
-        $protokolleLayoutProtokolleModel    = new protokolleLayoutProtokolleModel();
-        $muster                             = $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterSchreibweise'] . (isset($datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz']) ? "_" . $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['musterZusatz'] : "") ;
-        //$kategorie                          = $protokolleLayoutProtokolleModel->getProtokollKategorieBezeichnungNachID(json_decode($datenInhalt['protokollDaten']['protokollDetails']['protokollIDs'])[0]);
-        
-        $htmlCode = view('templates/bootstrapCodeView');
-        //$htmlCode .= view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt);
-        $htmlCode .= view('protokolle/anzeige/protokollDetailsView', $datenInhalt);        
-        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt)             : "";
-        $htmlCode .= isset($datenInhalt['protokollDaten']['pilotDaten'])    ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt) : "";
-        $htmlCode .= isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt) : "";
-        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten']) ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt) : "";
-        $htmlCode .= view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
-        //$htmlCode .= view('protokolle/anzeige/seitenEndeMitButtonsView');
-        //$htmlCode .= "</main></body></html>";
-
-        
-        $dompdf = new Dompdf();
-        /*$dompdf->loadHtml(view('protokolle/anzeige/anzeigeTitelUndButtonsView', $datenInhalt));
-        $dompdf->loadHtml(view('protokolle/anzeige/protokollDetailsView', $datenInhalt));
-        $dompdf->loadHtml(view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt));
-        $dompdf->loadHtml(view('protokolle/anzeige/seitenEndeMitButtonsView'));*/
         $dompdf->loadHtml($htmlCode);
         $dompdf->setPaper('A4');
         $dompdf->render();
-        $dompdf->stream(date('Y-m-d') . "_Protokoll_" . $muster . "_");              
+        $dompdf->stream(date('Y-m-d', strtotime($datenInhalt['protokollDaten']['protokollDetails']['datum'])) . "_" . $kategorie . "_" . $muster . "_" . $datenInhalt['protokollDaten']['flugzeugDaten']['flugzeugMitMuster']['kennung']);              
     }
     
-    protected function ladeDatenZumAnzeigen(int $protokollSpeicherID)
+    /**
+     * Lädt die Daten und das Layout des Protokolls mit der übergebenen protokollSpeicherID und gibt sie zurück.
+     * 
+     * Lade die ProtokollDetails des Protokolls mit der übergebenen protokollSpeicherID und speichere sie in der Variable $protokollDetails.
+     * Falls $protokollDetails leer ist, zeige eine entsprechende Nachricht an.
+     * Speichere die dekodierten protokollIDs aus den ProtokollDetails in dem entsprechenden Array.
+     * Lade die ProtokollDaten und speichere sie im $datenInhalt-Array, initialisiere dort außerdem das 'protokollLayout'.
+     * Für jede $protokollID lade das zugehörige protokollLayout und speicher es im $datenInhalt-Array.
+     * Sortiere das protokollLayout nach kapitelNummer.
+     * gib die Daten im $rueckgabeArray zurück.
+     * 
+     * @param int $protokollSpeicherID
+     * @return array $rueckgabeArray[protokollDaten, protokollLayout]
+     */
+    protected function ladeDatenDesProtokolls(int $protokollSpeicherID)
     {
-        $protokollDetails                   = $this->ladeProtokollDetails($protokollSpeicherID);
-              
+        $protokollDetails                       = $this->ladeProtokollDetails($protokollSpeicherID);
+                     
         if(empty($protokollDetails))
         {
             nachrichtAnzeigen('Kein Protokoll mit dieser ID vorhanden.', base_url());
         }
-                   
-        $protokollIDs                       = json_decode($protokollDetails['protokollIDs']);    
-        $rueckgabeArray['protokollDaten']   = $this->ladeProtokollDaten($protokollDetails);
-        $rueckgabeArray['protokollLayout']  = array();
+        
+        $protokolleLayoutProtokolleModel        = new protokolleLayoutProtokolleModel();
+        $protokollIDs                           = json_decode($protokollDetails['protokollIDs']);    
+        $rueckgabeArray['protokollDaten']       = $this->ladeProtokollDaten($protokollDetails);
+        $rueckgabeArray['protokollDaten']       += ['protokollKategorie' => $protokolleLayoutProtokolleModel->getProtokollKategorieBezeichnungNachID($protokollIDs[0])];
+        $rueckgabeArray['protokollLayout']      = array();
 
         foreach($protokollIDs as $protokollID)
         {
-            $rueckgabeArray['protokollLayout'] += $this->ladeProtokollLayout($protokollID);
+            $rueckgabeArray['protokollLayout']  += $this->ladeProtokollLayout($protokollID);
         }
         
         ksort($rueckgabeArray['protokollLayout']);
@@ -372,7 +382,7 @@ class Protokolldarstellungscontroller extends Controller
      * Ruft die Views zum Anzeigen des Protokolls auf.
      * 
      * Rufe die entsprechenden Views auf, um das Front-End anzuzeigen.
-     * Je nachdem ob, Flugzeug-, Piloten- und Beladungsdaten vorhanden sind, zeigen die entsprechenden Views an oder nicht.
+     * Je nachdem ob, Flugzeug-, Piloten- und Beladungsdaten vorhanden sind, zeige die entsprechenden Views an oder nicht.
      * 
      * @param array $datenHeader
      * @param array $datenInhalt
@@ -391,4 +401,28 @@ class Protokolldarstellungscontroller extends Controller
         echo view('protokolle/anzeige/seitenEndeMitButtonsView');
         echo view('templates/footerView');
     }  
+    
+    /**
+     * Erstellt den HTML-Code für die Anzeige des übergebenen ProtokollInhalts und gibt ihn zurück.
+     * 
+     * Rufe die entsprechenden Views auf, um den HTML-Code zu generieren.
+     * Je nachdem ob, Flugzeug-, Piloten- und Beladungsdaten vorhanden sind, generiere den entsprechenden Code oder nicht.
+     * Gib den HTML-Code zurück.
+     * 
+     * @param array $datenInhalt
+     * @return string $htmlCode
+     */
+    protected function erstelleHTMLCode(array $datenInhalt) 
+    {
+
+        $htmlCode = view('protokolle/anzeige/pdfStyleView', $datenInhalt);
+        $htmlCode .= view('protokolle/anzeige/protokollDetailsView', $datenInhalt);        
+        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/angabenZumFlugzeugView', $datenInhalt)               : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['flugzeugDaten'])     ? view('protokolle/anzeige/vergleichsfluggeschwindigkeitView', $datenInhalt)    : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['pilotDaten'])        ? view('protokolle/anzeige/angabenZurBesatzungView', $datenInhalt)              : "";
+        $htmlCode .= isset($datenInhalt['protokollDaten']['beladungszustand'])  ? view('protokolle/anzeige/angabenZumBeladungszustandView', $datenInhalt)       : "";
+        $htmlCode .= view('protokolle/anzeige/kapitelAnzeigeView', $datenInhalt);
+
+        return $htmlCode;
+    }
 }

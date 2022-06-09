@@ -42,7 +42,6 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                             {
                                 foreach($protokollDaten['eingegebeneWerte'][$protokollInputID][$woelbklappenStellung][0] as $wert)
                                 {
-
                                     echo "<td valign='middle'><b>";
                                     switch($input['inputDetails']['inputTyp'])
                                     {
@@ -56,10 +55,11 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                                     }
                                     echo "</b>";
 
-                                    if($input['inputDetails']['einheit'] ?? "" != "")
+                                    if(!empty($input['inputDetails']['einheit']))
                                     {
                                         echo "&nbsp;" . $input['inputDetails']['einheit'];
                                     }
+                                    
                                     if($input['inputDetails']['hStWeg'])
                                     {
                                         echo " <br>(<b>" . konvertiereHStWegeInProzent($protokollDaten['hStWege'][$kapitel['protokollKapitelID']], $wert) . "</b>&nbsp;%&nbsp;gezogen)";
@@ -74,7 +74,6 @@ foreach($protokollLayout as $kapitelNummer => $kapitel)
                     else
                     {
                         echo "<tr><td>" . $eingabe['eingabeDetails']['bezeichnung'] . "</td>"; 
-
 
                         foreach($eingabe as $protokollInputID => $input)
                         {

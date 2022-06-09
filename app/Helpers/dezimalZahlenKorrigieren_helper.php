@@ -13,7 +13,7 @@ if (! function_exists('dezimalZahlenKorrigieren'))
         if(is_numeric($zahl) && gettype($zahl) == "string")
         {
             $zahlOhneNullen = floatval($zahl);
-            return str_replace(".", ",", $zahlOhneNullen);
+            return trim(str_replace(".", ",", $zahlOhneNullen));
         }
         else if(gettype($zahl) == "int")
         {
@@ -23,7 +23,7 @@ if (! function_exists('dezimalZahlenKorrigieren'))
         {
             $zahlAlsString = (string)$zahl;
             $zahlOhneNullen = floatval($zahlAlsString);
-            return str_replace(".", ",", $zahlOhneNullen);
+            return trim(str_replace(".", ",", $zahlOhneNullen));
         }
         else
         {

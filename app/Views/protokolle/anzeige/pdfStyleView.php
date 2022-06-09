@@ -9,9 +9,16 @@
     
     body{
         font-size: 11pt;
+        padding-right: 20px;
     }
-    .table,table{margin-left: 20px}
-    td,tr{border-top:1px solid #dee2e6}
+    .table,table{
+        margin-left: 20px;
+        
+    }
+    td,tr{border-bottom:1px solid #dee2e6}
+    h1{
+        font-size: 20pt;
+    }
     h2{
         font-size: 16pt;
     }
@@ -32,4 +39,7 @@
     }
     
 </style>
+</head>
+<body>
+    <h1 style="text-align: center;"><?= $protokollDaten['protokollKategorie'] ?></h1>
 

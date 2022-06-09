@@ -19,7 +19,10 @@
 <!---------------------------------------->         
 
         <div class="row g-3 mt-3">
-            <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">               
+                <a href="<?= base_url("/protokolle/download/" . $protokollDaten['protokollDetails']['id']) ?>" target="_blank">
+                    <input type="button" class="btn btn-secondary col-12" value="Protokoll herunterladen">
+                </a>
                 <a href="<?= previous_url() == current_url() ? base_url() : previous_url() ?>">
                     <input type="button" class="btn btn-danger col-12" value="Zurück">
                 </a>

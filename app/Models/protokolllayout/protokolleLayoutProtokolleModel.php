@@ -3,7 +3,7 @@
 namespace App\Models\protokolllayout;
 
 use CodeIgniter\Model;
-use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
+//use App\Models\protokolllayout\{ protokollTypenModel, protokollKategorienModel };
 
 /**
  * Klasse zur Datenverarbeitung mit der Datenbank 'zachern_protokolllayout' und der dortigen Tabelle 'protokolle'.
@@ -72,13 +72,13 @@ class protokolleLayoutProtokolleModel extends Model
     public function getAktuelleProtokollIDNachProtokollTypID($protokollTypID)
     {
         $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < CURRENT_DATE AND datumBis >= CURRENT_DATE) OR (datumVon < CURRENT_DATE AND datumBis IS NULL))";        
-        return $this->query($query)->getResultArray()[0]["id"];
+        return $this->query($query)->getResultArray()[0]["id"] ?? NULL;
     }
 
     public function getProtokollIDNachProtokollDatumUndProtokollTypID($protokollDatum, $protokollTypID)
     {
         $query = "SELECT id FROM `protokolle` WHERE protokollTypID = " . $protokollTypID . " AND ((datumVon < '" . $protokollDatum . "' AND datumBis >= '" . $protokollDatum . "') OR (datumVon < '" . $protokollDatum . "' AND datumBis IS NULL))";     
-        return $this->query($query)->getResultArray()[0]["id"];
+        return $this->query($query)->getResultArray()[0]["id"] ?? NULL;
     }
     
     public function getAlleProtokolleSoriertNachProtokollTypID()
@@ -86,8 +86,9 @@ class protokolleLayoutProtokolleModel extends Model
         return $this->orderBy('protokollTypID', "ASC")->findAll();
     }
       
-    public function getProtokollKategorieBezeichnungNachID(int $id)
+    public function getProtokollKategorieBezeichnungNachID($id)
     {
-        
+        $query = "SELECT protokoll_kategorien.bezeichnung FROM protokoll_kategorien JOIN protokoll_typen ON protokoll_typen.kategorieID = protokoll_kategorien.id JOIN protokolle ON protokolle.protokollTypID = protokoll_typen.id WHERE protokolle.id = " . $id;
+        return $this->query($query)->getResultArray()[0]["bezeichnung"] ?? NULL;
     }
 }

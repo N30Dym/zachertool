@@ -115,6 +115,6 @@ class musterModel extends Model
      */
     public function getIDNachKlarnameUndZusatz(string $musterKlarname, string $musterZusatz)
     {
-        return $this->select('id')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['id'];
+        return $this->select('id')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['id'] ?? NULL;
     }
 }

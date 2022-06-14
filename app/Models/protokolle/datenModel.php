@@ -105,7 +105,7 @@ class datenModel extends Model
      */
     public function getWertNachProtokollSpeicherIDUndProtokollInputID(int $protokollSpeicherID, int $protokollInputID)
     {
-        return $this->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first()['wert'];
+        return $this->where('protokollSpeicherID', $protokollSpeicherID)->where('protokollInputID', $protokollInputID)->first()['wert'] ?? NULL;
     }
 	
     /**

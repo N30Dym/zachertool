@@ -82,16 +82,16 @@ class protokollInputsModel extends Model
     
     public function getProtokollInputBezeichnungNachID(int $id)
     {
-        return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'];
+        return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'] ?? NULL;
     }
     
     public function getProtokollInputHStWegNachID(int $id)
     {
-        return $this->select('hStWeg')->where('id', $id)->first()['hStWeg'];
+        return $this->select('hStWeg')->where('id', $id)->first()['hStWeg'] ?? NULL;
     }
     
     public function getProtokollInputEinheitNachID(int $id)
     {
-        return $this->select('einheit')->where('id', $id)->first()['einheit'];
+        return $this->select('einheit')->where('id', $id)->first()['einheit'] ?? NULL;
     }
 }

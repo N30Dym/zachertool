@@ -90,7 +90,7 @@ class flugzeugeModel extends Model
      */
     public function getMusterIDNachID(int $id)
     {
-        return $this->select('musterID')->where('id', $id)->first()['musterID'];
+        return $this->select('musterID')->where('id', $id)->first()['musterID'] ?? NULL;
     }
     
     /**

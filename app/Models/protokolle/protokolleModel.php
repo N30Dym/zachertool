@@ -119,7 +119,6 @@ class protokolleModel extends Model
      */
     public function getBestaetigteProtokolle()
     {			
-        $protokolleNachJahrenSortiert = [];
         return $this->where('bestaetigt', 1)->orderBy('datum', "ASC")->findAll();
     }
 
@@ -177,7 +176,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlProtokolleNachJahrUndFlugzeugID(int $jahr, int $flugzeugID)
     {
-        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'] ?? 0;
     }
     
     /**
@@ -189,7 +188,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlProtokolleNachJahrUndPilotID(int $jahr, int $pilotID)
     {
-        return $this->selectCount('id')->where('bestaetigt', 1)->where('pilotID', $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('pilotID', $pilotID)->where("datum >=", $jahr . "-01-01")->where("datum <=", $jahr . "-12-31")->first()['id'] ?? 0;
     }
     
     /**
@@ -211,7 +210,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlBestaetigteProtokolleNachFlugzeugID(int $flugzeugID)
     {
-        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->first()['id'];
+        return $this->selectCount('id')->where('bestaetigt', 1)->where('flugzeugID', $flugzeugID)->first()['id'] ?? 0;
     }
     
     /**
@@ -222,7 +221,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlProtokolleNachFlugzeugID(int $flugzeugID)
     {
-        return $this->selectCount('id')->where('flugzeugID', $flugzeugID)->first()['id'];
+        return $this->selectCount('id')->where('flugzeugID', $flugzeugID)->first()['id'] ?? 0;
     }
     
     /**
@@ -289,7 +288,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlProtokolleNachPilotID(int $pilotID) 
     {
-        return $this->selectCount('id')->where('pilotID', $pilotID)->first()['id'];
+        return $this->selectCount('id')->where('pilotID', $pilotID)->first()['id'] ?? 0;
     }
     
     /**
@@ -300,7 +299,7 @@ class protokolleModel extends Model
      */
     public function getAnzahlProtokolleAlsCopilotNachPilotID(int $copilotID) 
     {
-        return $this->selectCount('id')->where('copilotID', $copilotID)->first()['id'];
+        return $this->selectCount('id')->where('copilotID', $copilotID)->first()['id'] ?? 0;
     }
     
     /**

@@ -47,7 +47,7 @@ class protokollInputsMitInputTypModel extends Model
      * Lädt den protokollInputDatensatz und den InputTyp mit der übergebenen protokollInputID aus der Datenbank und gibt ihn zurück.
      *   
      * @param int $id <protokollInputID>
-     * @return array = <protokollInputMitInputTypDatensatzArray>
+     * @return null|array = <protokollInputMitInputTypDatensatzArray>
      */
     public function getProtokollInputMitInputTypNachProtokollInputID(int $id)
     {
@@ -58,10 +58,10 @@ class protokollInputsMitInputTypModel extends Model
      * Lädt den InputTyp des protokollInputs mit der übergebenen protokollInputID aus der Datenbank und gibt ihn zurück.
      * 
      * @param int $id <protokollInputID>
-     * @return string <inputTyp>
+     * @return null|string <inputTyp>
      */
     public function getProtokollInputTypNachProtokollInputID(int $id)
     {
-        return $this->select('inputTyp')->where('id', $id)->first()['inputTyp'];
+        return $this->select('inputTyp')->where('id', $id)->first()['inputTyp'] ?? NULL;
     }
 }

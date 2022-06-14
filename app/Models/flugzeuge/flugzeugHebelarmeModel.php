@@ -86,7 +86,7 @@ class flugzeugHebelarmeModel extends Model
      */
     public function getPilotHebelarmIDNachFlugzeugID(int $flugzeugID)
     {
-        return $this->select('id')->where('beschreibung', 'Pilot')->where('flugzeugID', $flugzeugID)->first()['id'];
+        return $this->select('id')->where('beschreibung', 'Pilot')->where('flugzeugID', $flugzeugID)->first()['id'] ?? NULL;
     }
     
     /**
@@ -97,7 +97,7 @@ class flugzeugHebelarmeModel extends Model
      */
     public function getCopilotHebelarmIDNachFlugzeugID(int $flugzeugID)
     {
-        return $this->select('id')->where('beschreibung', 'Copilot')->where('flugzeugID', $flugzeugID)->first()['id'];
+        return $this->select('id')->where('beschreibung', 'Copilot')->where('flugzeugID', $flugzeugID)->first()['id'] ?? NULL;
     }
     
     /**
@@ -108,7 +108,7 @@ class flugzeugHebelarmeModel extends Model
      */
     public function getHebelarmLaengeNachID(int $id)
     {
-        return $this->select('hebelarm')->where('id', $id)->first()['hebelarm'];
+        return $this->select('hebelarm')->where('id', $id)->first()['hebelarm'] ?? NULL;
     }
     
     /**
@@ -119,7 +119,7 @@ class flugzeugHebelarmeModel extends Model
      */
     public function getHebelarmBeschreibungNachID(int $id)
     {
-        return $this->select('beschreibung')->where('id', $id)->first()['beschreibung'];
+        return $this->select('beschreibung')->where('id', $id)->first()['beschreibung'] ?? NULL;
     }
     
     /**

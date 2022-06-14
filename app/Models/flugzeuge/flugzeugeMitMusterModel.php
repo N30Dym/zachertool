@@ -114,11 +114,11 @@ class flugzeugeMitMusterModel extends Model {
     {
         if(empty($musterZusatz))
         {
-            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname])->where("musterZusatz IS NULL")->first()['flugzeugID'];
+            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname])->where("musterZusatz IS NULL")->first()['flugzeugID'] ?? NULL;
         }
         else
         {
-            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['flugzeugID'];
+            return $this->select('flugzeugID')->where(['kennung' => $kennung, 'musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['flugzeugID'] ?? NULL;
         }
     }
     
@@ -131,7 +131,7 @@ class flugzeugeMitMusterModel extends Model {
      */
     public function getMusterIDNachKlarnameUndZusatz(string $musterKlarname, string $musterZusatz)
     {
-        return $this->select('musterID')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['musterID'];
+        return $this->select('musterID')->where(['musterKlarname' => $musterKlarname, 'musterZusatz' => $musterZusatz])->first()['musterID'] ?? NULL;
     }
     
     /**

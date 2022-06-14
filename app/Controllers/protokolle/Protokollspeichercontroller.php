@@ -62,10 +62,13 @@ class Protokollspeichercontroller extends Protokollcontroller
         
         switch($protokollStatus) 
         {
-            case self::BESTAETIGT AND $this->adminOderZachereinweiser != TRUE:
-                nachrichtAnzeigen("Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde", base_url());
-                break;
-            case self::BESTAETIGT AND $this->adminOderZachereinweiser == TRUE:
+            case self::BESTAETIGT:
+                if($this->adminOderZachereinweiser != TRUE)
+                {
+                    nachrichtAnzeigen("Protokoll konnte nicht gespeichert werden, weil das Protokoll bereits als abgegeben markiert wurde", base_url());
+                    break;
+                }
+                else{}
             case self::FERTIG:
             case self::ANGEFANGEN:
                 $this->speicherZuSpeicherndeDaten($zuSpeicherndeDaten);
@@ -93,7 +96,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         
         if(getenv('CI_ENVIRONMENT') == 'development')
         {
-            echo "Das neue Protokoll wurde gespeichert<br>";
+            $this->debugNachricht("Das neue Protokoll wurde gespeichert<br>");
         }
     }
 
@@ -134,19 +137,13 @@ class Protokollspeichercontroller extends Protokollcontroller
             {
                 $protokolleModel->setProtokollBestaetigtNachID($_SESSION['protokoll']['protokollSpeicherID']);
                 
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Protokoll wurde als bestätigt markiert<br>";
-                }
+                $this->debugNachricht("Protokoll wurde als bestätigt markiert<br>");
             }
 
             $protokolleModel->updateProtokollDetails(['copilotID'           => $_SESSION['protokoll']['copilotID']                      ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
             $protokolleModel->updateProtokollDetails(['stundenAufDemMuster' => $zuSpeicherndeProtokollDetails['stundenAufDemMuster']    ?? NULL], $_SESSION['protokoll']['protokollSpeicherID']);
-            
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "CopilotID wurde aktualisiert<br>stundenAufDemMuster wurde aktualisiert<br>";
-            }
+
+            $this->debugNachricht("CopilotID wurde aktualisiert<br>stundenAufDemMuster wurde aktualisiert<br>");
             
             return self::FERTIG;
         }
@@ -164,10 +161,7 @@ class Protokollspeichercontroller extends Protokollcontroller
             $protokolleModel->updateProtokollDetails($geloeschteEintraege, $_SESSION['protokoll']['protokollSpeicherID']);
             $protokolleModel->updateProtokollDetails($zuSpeicherndeProtokollDetails, $_SESSION['protokoll']['protokollSpeicherID']);
             
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "Das Protokoll wurde geupdatet<br>";
-            }
+            $this->debugNachricht("Das Protokoll wurde geupdatet<br>");
             
             return self::ANGEFANGEN;
         }
@@ -214,10 +208,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $datenModel->insertNeuenDatenDatensatz($wert);
                 
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
-                }
+                $this->debugNachricht("Neuer Datensatz in der DB `daten` gespeichert<br>");
             }
         }
         else 
@@ -231,19 +222,13 @@ class Protokollspeichercontroller extends Protokollcontroller
                     $wert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $datenModel->insertNeuenDatenDatensatz($wert);
                     
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Neuer Datensatz in der DB `daten` gespeichert<br>";
-                    }
+                    $this->debugNachricht("Neuer Datensatz in der DB `daten` gespeichert<br>");
                 }
                 else
                 {
                     unset($gespeicherteWerte[$wertVorhanden]);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>";
-                    }
+
+                    $this->debugNachricht("Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteWerte entfernt<br>");
                 }
             }
         }
@@ -251,11 +236,8 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteWerte as $gespeicherterWert)
         {
             $datenModel->deleteDatensatzNachID($gespeicherterWert['id']);
-            
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "Datensatz wurde jetzt aus DB `daten` gelöscht<br>";
-            }
+
+            $this->debugNachricht("Datensatz wurde jetzt aus DB `daten` gelöscht<br>");
         }
     }
     
@@ -278,30 +260,22 @@ class Protokollspeichercontroller extends Protokollcontroller
         {                 
             if($zuSpeichernderWert['protokollInputID'] == $zuVergleichenderWert['protokollInputID'] AND $zuSpeichernderWert['woelbklappenstellung'] == $zuVergleichenderWert['woelbklappenstellung'] AND $zuSpeichernderWert['linksUndRechts'] == $zuVergleichenderWert['linksUndRechts'] AND $zuSpeichernderWert['multipelNr'] == $zuVergleichenderWert['multipelNr'])
             {                
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Wert wurde gefunden<br>";
-                }
+
+                $this->debugNachricht("Wert wurde gefunden<br>");
                 
                 if($zuSpeichernderWert['wert'] != $zuVergleichenderWert['wert'])
                 {
                     $zuSpeichernderWert['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $datenModel->setWertNachID($zuVergleichenderWert['id'], $zuSpeichernderWert['wert']);
                     
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Wert wurde angepasst<br>";
-                    }
+                    $this->debugNachricht("Wert wurde angepasst<br>");
                 }
                 
                 return $index;
             }
         }
-        
-        if(getenv('CI_ENVIRONMENT') == 'development')
-        {
-            echo "Wert nicht vorhanden<br>";
-        }
+
+        $this->debugNachricht("Wert nicht vorhanden<br>");
         
         return FALSE;
     }
@@ -331,10 +305,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $kommentareModel->insertNeuenKommentarDatensatz($kommentar);
                 
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
-                }
+                $this->debugNachricht("Neuer Datensatz in der DB `kommentar` gespeichert<br>");
             }
         }
         else 
@@ -347,20 +318,14 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $kommentar['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $kommentareModel->insertNeuenKommentarDatensatz($kommentar);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Neuer Datensatz in der DB `kommentar` gespeichert<br>";
-                    }
+
+                    $this->debugNachricht("Neuer Datensatz in der DB `kommentar` gespeichert<br>");
                 }
                 else
                 {
                     unset($gespeicherteKommentare[$kommentarVorhanden]);
                     
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteKommentare entfernt<br>";
-                    }
+                    $this->debugNachricht("Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteKommentare entfernt<br>");
                 }
             }
         }
@@ -368,11 +333,8 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteKommentare as $gespeicherterKommentar)
         {
             $kommentareModel->deleteDatensatzNachID($gespeicherterKommentar['id']);
-            
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "Datensatz wurde jetzt aus DB `kommentar` gelöscht<br>";
-            }
+
+            $this->debugNachricht("Datensatz wurde jetzt aus DB `kommentar` gelöscht<br>");
         }
     }
     
@@ -395,29 +357,20 @@ class Protokollspeichercontroller extends Protokollcontroller
         {                
             if($zuSpeichernderKommentar['protokollKapitelID'] == $zuVergleichenderKommentar['protokollKapitelID'])
             {                
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Kommentar wurde gefunden<br>";
-                }
-
+                $this->debugNachricht("Kommentar wurde gefunden<br>");
+          
                 if($zuSpeichernderKommentar['kommentar'] != $zuVergleichenderKommentar['kommentar'])
                 {
                     $kommentareModel->setKommentarNachID($zuVergleichenderKommentar['id'], $zuSpeichernderKommentar['kommentar']);
                     
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Kommentar wurde angepasst<br>";
-                    }
+                    $this->debugNachricht("Kommentar wurde angepasst<br>");
                 }
                 
                 return $index;
             }
         }
         
-        if(getenv('CI_ENVIRONMENT') == 'development')
-        {
-            echo "Kommentar nicht vorhanden<br>";
-        }
+        $this->debugNachricht("Kommentar nicht vorhanden<br>");
         
         return FALSE;
     }
@@ -447,10 +400,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $hStWegeModel->insertNeuenHStWegDatensatz($hStWeg);
                 
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
-                }
+                $this->debugNachricht("Neuer Datensatz in der DB `hst-wege` gespeichert<br>");
             }
         }
         else 
@@ -463,20 +413,14 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $hStWeg['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $hStWegeModel->insertNeuenHStWegDatensatz($hStWeg);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Neuer Datensatz in der DB `hst-wege` gespeichert<br>";
-                    }
+
+                    $this->debugNachricht("Neuer Datensatz in der DB `hst-wege` gespeichert<br>");
                 }
                 else
                 {
                     unset($gespeicherteHStWege[$hStWegVorhanden]);
                     
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteHStWege entfernt<br>";
-                    }
+                    $this->debugNachricht("Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteHStWege entfernt<br>");
                 }
             }
         }
@@ -484,11 +428,8 @@ class Protokollspeichercontroller extends Protokollcontroller
         foreach($gespeicherteHStWege as $gespeicherterHStWeg)
         {
             $hStWegeModel->deleteDatensatzNachID($gespeicherterHStWeg['id']);
-            
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "Datensatz wurde jetzt aus DB `hst-wege` gelöscht<br>";
-            }
+
+            $this->debugNachricht("Datensatz wurde jetzt aus DB `hst-wege` gelöscht<br>");
         }
     }
     
@@ -511,49 +452,34 @@ class Protokollspeichercontroller extends Protokollcontroller
         {                
             if($zuSpeichernderHStWeg['protokollKapitelID'] == $zuVergleichenderHStWeg['protokollKapitelID'])
             {                
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "hStWeg wurde gefunden<br>";
-                }
+                $this->debugNachricht("hStWeg wurde gefunden<br>");
                 
                 if($zuSpeichernderHStWeg['gedruecktHSt'] != $zuVergleichenderHStWeg['gedruecktHSt'])
                 {
                     $hStWegeModel->setHStStellungNachID('gedruecktHSt', $zuSpeichernderHStWeg['gedruecktHSt'], $zuVergleichenderHStWeg['id']);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                     echo "gedruecktHSt wurde angepasst<br>";
-                    }
+
+                    $this->debugNachricht("gedruecktHSt wurde angepasst<br>");
                 }
                 
                 if($zuSpeichernderHStWeg['neutralHSt'] != $zuVergleichenderHStWeg['neutralHSt'])
                 {
                     $hStWegeModel->setHStStellungNachID('neutralHSt', $zuSpeichernderHStWeg['neutralHSt'], $zuVergleichenderHStWeg['id']);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "neutralHSt wurde angepasst<br>";
-                    }
+
+                    $this->debugNachricht("neutralHSt wurde angepasst<br>");
                 }
                 
                 if($zuSpeichernderHStWeg['gezogenHSt'] != $zuVergleichenderHStWeg['gezogenHSt'])
                 {
                     $hStWegeModel->setHStStellungNachID('gezogenHSt', $zuSpeichernderHStWeg['gezogenHSt'], $zuVergleichenderHStWeg['id']);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "gezogenHSt wurde angepasst<br>";
-                    }
+
+                    $this->debugNachricht("gezogenHSt wurde angepasst<br>");
                 }
                 
                 return $index;
             }
         }
-        
-        if(getenv('CI_ENVIRONMENT') == 'development')
-        {
-            echo "hStWeg nicht vorhanden<br>";
-        }
+
+        $this->debugNachricht("hStWeg nicht vorhanden<br>");
         
         return FALSE;
     }
@@ -583,10 +509,7 @@ class Protokollspeichercontroller extends Protokollcontroller
                 $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                 $beladungModel->insertNeuenBeladungDatensatz($beladung);
                 
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
-                }
+                $this->debugNachricht("<br>Neuer Datensatz in der DB `beladung` gespeichert<br>");
             }
         }
         else
@@ -599,20 +522,14 @@ class Protokollspeichercontroller extends Protokollcontroller
                 {
                     $beladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $beladungModel->insertNeuenBeladungDatensatz($beladung);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "<br>Neuer Datensatz in der DB `beladung` gespeichert<br>";
-                    }
+
+                    $this->debugNachricht("<br>Neuer Datensatz in der DB `beladung` gespeichert<br>");
                 }
                 else
                 {
                     unset($gespeicherteBeladungen[$beladungVorhanden]);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteBeladungen entfernt<br>";
-                    }
+
+                    $this->debugNachricht("Der Datensatz ist vorhanden und wurde aus dem Array \$gespeicherteBeladungen entfernt<br>");
                 }
             }
         }
@@ -621,10 +538,7 @@ class Protokollspeichercontroller extends Protokollcontroller
         {
             $beladungModel->deleteDatensatzNachID($gespeicherteBeladung['id']);
             
-            if(getenv('CI_ENVIRONMENT') == 'development')
-            {
-                echo "Datensatz wurde jetzt aus DB `beladung` gelöscht<br>";
-            }
+            $this->debugNachricht("Datensatz wurde jetzt aus DB `beladung` gelöscht<br>");
         }
         
     }
@@ -648,31 +562,22 @@ class Protokollspeichercontroller extends Protokollcontroller
         {           
             if($zuSpeicherndeBeladung['flugzeugHebelarmID'] == $zuVergleichendeBeladung['flugzeugHebelarmID'] AND $zuSpeicherndeBeladung['bezeichnung'] == $zuVergleichendeBeladung['bezeichnung'] AND $zuSpeicherndeBeladung['hebelarm'] == $zuVergleichendeBeladung['hebelarm'])
             {                
-                if(getenv('CI_ENVIRONMENT') == 'development')
-                {
-                    echo "Beladung wurde gefunden<br>";
-                }
+                $this->debugNachricht("Beladung wurde gefunden<br>");
                 
                 if($zuSpeicherndeBeladung['gewicht'] != $zuVergleichendeBeladung['gewicht'])
                 {                   
                     $zuSpeicherndeBeladung['protokollSpeicherID'] = $_SESSION['protokoll']['protokollSpeicherID'];
                     $beladungModel->setGewichtNachID($zuVergleichendeBeladung['id'], $zuSpeicherndeBeladung['gewicht']);
-                    
-                    if(getenv('CI_ENVIRONMENT') == 'development')
-                    {
-                        echo "Gewicht wurde angepasst<br>";
-                    }
+
+                    $this->debugNachricht("Gewicht wurde angepasst<br>");
                 }
                 
                 return $index;
             }
         }
         
-        if(getenv('CI_ENVIRONMENT') == 'development')
-        {
-            echo "Beladung nicht vorhanden<br>";
-        }
-        
+        $this->debugNachricht("Beladung nicht vorhanden<br>");
+
         return FALSE;
     }
 
@@ -688,9 +593,19 @@ class Protokollspeichercontroller extends Protokollcontroller
         $protokolleModel = new protokolleModel();        
         $protokolleModel->updateGeaendertAmNachID($_SESSION['protokoll']['protokollSpeicherID']);
         
+        $this->debugNachricht("Protokoll geändertAm aktualisiert<br>");
+    }
+    
+    /**
+     * Gibt die übergebene Nachricht auf dem Bildschrim aus, wenn das Environment auf development gesetzt ist.
+     * 
+     * @param string $nachricht
+     */
+    protected function debugNachricht(string $nachricht)
+    {
         if(getenv('CI_ENVIRONMENT') == 'development')
         {
-            echo "Protokoll geändertAm aktualisiert<br>";
+            echo $nachricht;
         }
     }
 }

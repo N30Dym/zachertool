@@ -56,11 +56,21 @@ class protokollKategorienModel extends Model
      */
     //protected $allowedFields 	= ['bezeichnung', 'sichtbar'];
 
+    /**
+     * Lädt alle Kategorien aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array = [id, bezeichnung, sichtbar]
+     */
     public function getAlleKategorien()
     {
         return $this->findAll();
     }
     
+    /**
+     * Lädt alle Kategorien, die als sichtbar markiert sind, aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array = [id, bezeichnung, sichtbar]
+     */
     public function getSichtbareKategorien()
     {
         return $this->where('sichtbar', 1)->findAll();

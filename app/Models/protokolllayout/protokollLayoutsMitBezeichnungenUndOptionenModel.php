@@ -47,7 +47,7 @@ class protokollLayoutsMitBezeichnungenUndOptionenModel extends Model
      * Lädt die Datensätze der übergebenen protokollID, die einen hStWeg erfordern, aus der Datenbank und gibt sie zurück.
      * 
      * @param int $protokollID
-     * @return null|array[<protokollLayoutMitBezeichnungenUndOptionen>]
+     * @return null|array[<aufsteigendeNummer>] = <protokollLayoutMitBezeichnungenUndOptionen>
      */
     public function getProtokollInputsMitHStWegNachProtokollID(int $protokollID) 
     {

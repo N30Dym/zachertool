@@ -54,39 +54,64 @@ class protokollLayoutsModel extends Model
      * 
      * @var array $allowedFields
      */
-    //protected $allowedFields 	  = ['protokollID ', 'protokollKapitelID ', 'protokollUnterkapitelID ', 'protokollEingabeID ', 'protokollInputID '];
+    //protected $allowedFields 	  = ['protokollID ', 'protokollKapitelID ', 'protokollUnterkapitelID ', 'protokollEingabeID ', 'protokollInputID'];
 
-    public function getProtokollLayoutNachProtokollID($protokollID)
+    /**
+     * Lädt alle protokollLayout-Datensätz mit der übergebenen protokollID aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $protokollID
+     * @return null|array[<aufsteigendeNummer>] = [id, protokollID , protokollKapitelID , protokollUnterkapitelID , protokollEingabeID , protokollInputID]
+     */
+    public function getProtokollLayoutNachProtokollID(int $protokollID)
     {
-        return $this->where("protokollID", $protokollID)->findAll();
+        return $this->where('protokollID', $protokollID)->findAll();
     }
     
-    public function getProtokollInputIDNachProtokollEingabeID($protokollEingabeID)
+    /**
+     * Lädt alle protokollLayout-Datensätz mit der übergebenen protokollEingabeID aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $protokollEingabeID
+     * @return null|array[<aufsteigendeNummer>] = [id, protokollID , protokollKapitelID , protokollUnterkapitelID , protokollEingabeID , protokollInputID]
+     */
+    public function getProtokollInputIDNachProtokollEingabeID(int $protokollEingabeID)
     {
         return $this->select('protokollInputID')->where('protokollEingabeID', $protokollEingabeID)->findAll();
     }
     
-    public function getProtokollKapitelIDNachProtokollInputID($protokollInputID)
-    {
-        return $this->select('protokollKapitelID')->where('protokollInputID', $protokollInputID)->first();
-    }
-    
-    public function getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs($protokollInputID, $protokollIDs) 
+    /**
+     * Gibt die protokollKapitelID des protokollInputs innerhalb der übergebenen protokollIDs zurück, dessen protokollInputID übergeben wird.
+     * 
+     * Lade den gegebenen String in die Variable $query.
+     * Für jede protokollID aus dem protokollIDs-Array füge dem Query "`protokollID` = <protokollID> OR " hinzu.
+     * Lösche das letzt "OR " und füge stattdessen ");" hinzu. 
+     * Gib die protokollKapitelID zurück.
+     * 
+     * @param int $protokollInputID
+     * @param array $protokollIDs
+     * @return null|string <protokollKapitelID>
+     */
+    public function getProtokollKapitelIDNachProtokollInputIDUndProtokollIDs(int $protokollInputID, array $protokollIDs) 
     {
         $query = "SELECT `protokollKapitelID` FROM `protokoll_layouts` WHERE `protokollInputID` = " . $protokollInputID . " AND ( ";
         
         foreach($protokollIDs as $protokollID)
         {
-            $query = $query . "`protokollID` = " . $protokollID . " OR ";
+            $query .= "`protokollID` = " . $protokollID . " OR ";
         }
         
         $query = mb_substr($query, 0, -3);
-        $query = $query . ");"; 
+        $query .= ");"; 
         
-        return $this->query($query)->getResultArray()[0]['protokollKapitelID'];
+        return $this->query($query)->getResultArray()[0]['protokollKapitelID'] ?? NULL;
     }
     
-    public function getInputIDsNachProtokollEingabeID($protokollEingabeID)
+    /**
+     * Lädt alle protokollInputIDs mit der übergebenen protokollEingabeID aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $protokollEingabeID
+     * @return null|array[<aufsteigendeNummer>] = <protokollInputID>
+     */
+    public function getInputIDsNachProtokollEingabeID(int $protokollEingabeID)
     {
         return $this->select('protokollInputID')->where('protokollEingabeID', $protokollEingabeID)->findAll();
     }

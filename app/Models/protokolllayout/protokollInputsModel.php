@@ -66,30 +66,44 @@ class protokollInputsModel extends Model
 
 
     /**
+     * Lädt den protokollInput mit der übergebenen id aus der Datenbank und gibt ihn zurück.
      * 
      * @param int $id
-     * @return array = [id, inputTypID , bezeichnung, aktiv, einheit, bereichVon, bereichBis, schrittweite, benötigt]
+     * @return null|array = [id, inputTypID , bezeichnung, aktiv, einheit, bereichVon, bereichBis, schrittweite, benötigt]
      */
     public function getProtokollInputNachID(int $id)
     {
         return $this->where('id', $id)->first();
     }
     
-    public function getHStWegNachProtokollInputID(int $id)
-    {
-        return $this->select('hStWeg')->where('id', $id)->first();
-    }
-    
+    /**
+     * Lädt die Bezeichnung des protokollInputs mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollInputID>
+     * @return null|string
+     */
     public function getProtokollInputBezeichnungNachID(int $id)
     {
         return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'] ?? NULL;
     }
     
+    /**
+     * Lädt den Wert des Feldes hStWeg des protokollInputs mit der übergebenen id aus der Datenbank und gibt ihn zurück.
+     * 
+     * @param int $id <protokollInputID>
+     * @return null|string "1"
+     */
     public function getProtokollInputHStWegNachID(int $id)
     {
         return $this->select('hStWeg')->where('id', $id)->first()['hStWeg'] ?? NULL;
     }
     
+    /**
+     * Lädt den Wert die Einheit des protokollInputs mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollInputID>
+     * @return null|string
+     */
     public function getProtokollInputEinheitNachID(int $id)
     {
         return $this->select('einheit')->where('id', $id)->first()['einheit'] ?? NULL;

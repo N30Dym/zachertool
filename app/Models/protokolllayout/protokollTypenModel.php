@@ -63,18 +63,34 @@ class protokollTypenModel extends Model
      */
     //protected $allowedFields 	= ['bezeichnung', 'sichtbar', 'erstelltAm'];
 
+    /**
+     * Lädt alle protokollTypen aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array[<aufsteigendeNummer>] = [id, bezeichnung, sichtbar, erstelltAm]
+     */
     public function getAlleProtokollTypen()
     {		
         return $this->findAll();
     }
 
+    /**
+     * Lädt alle als sichtbar markierten protokollTypen aus der Datenbank und gibt sie zurück.
+     * 
+     * @return null|array[<aufsteigendeNummer>] = [id, bezeichnung, sichtbar, erstelltAm]
+     */
     public function getSichtbareProtokollTypen()
     {		
         return $this->where("sichtbar",1)->findAll();
     }
     
-    public function getProtokollTypBezeichnungNachID($id) 
+    /**
+     * Lädt die Bezeichnung des protokollTyps mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollTypID>
+     * @return null|string
+     */
+    public function getProtokollTypBezeichnungNachID(int $id) 
     {
-        return $this->select('bezeichnung')->where('id', $id)->first();
+        return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'] ?? NULL;
     }
 }

@@ -63,33 +63,47 @@ class protokollKapitelModel extends Model
      */
     //protected $allowedFields    = ['protokollTypID', 'kapitelNummer', 'bezeichnung', 'zusatztext', 'woelbklappen', 'kommentar'];
 
-    public function getProtokollKapitelNachProtokollID($protokollID)
-    {
-        return $this->where("protokollID", $protokollID)->findAll();
-    }
-
-    public function getProtokollKapitelNachID($id)
+    /**
+     * Lädt das protokollKapitel mit der übergebenen id aus der Datenbank und gibt es zurück.
+     * 
+     * @param int $id <protokollKapitelID>
+     * @return null|array = [id, protokollTypID, kapitelNummer, bezeichnung, zusatztext, woelbklappen, kommentar]
+     */
+    public function getProtokollKapitelNachID(int $id)
     {	
-        return $this->where("id", $id)->first();
+        return $this->where('id', $id)->first();
     }
 
-    public function getProtokollKapitelNummerNachID($id)
-    {
-        return $this->select("kapitelNummer")->where("id", $id)->first();
-    }
-
-    public function getProtokollKapitelBezeichnungNachID($id)
+    /**
+     * Lädt die Bezeichnung des Kapitels mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollKapitelID>
+     * @return null|string
+     */
+    public function getProtokollKapitelBezeichnungNachID(int $id)
     {	
-        return $this->select("bezeichnung")->where("id", $id)->first();
+        return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'] ?? NULL;
     }
     
-    public function getProtokollKapitelWoelbklappenNachID($id) 
+    /**
+     * Lädt den Wert für die Spalte Wölbklappen des protokollKapitels mit der übergebenen id aus der Datenbank und gibt ihn zurück.
+     * 
+     * @param int $id <protokollKapitelID>
+     * @return null|string "1"
+     */
+    public function getProtokollKapitelWoelbklappenNachID(int $id) 
     {
-        return $this->select('woelbklappen')->where("id", $id)->first()['woelbklappen'];
+        return $this->select('woelbklappen')->where('id', $id)->first()['woelbklappen'] ?? NULL;
     }
     
-    public function getProtokollKapitelKommentarNachID($id) 
+    /**
+     * Lädt den Wert für die Spalte kommentar des protokollKapitels mit der übergebenen id aus der Datenbank und gibt ihn zurück.
+     * 
+     * @param int $id <protokollKapitelID>
+     * @return null|string "1"
+     */
+    public function getProtokollKapitelKommentarNachID(int $id) 
     {
-        return $this->select('kommentar')->where("id", $id)->first()['kommentar'];
+        return $this->select('kommentar')->where('id', $id)->first()['kommentar'] ?? NULL;
     }
 }

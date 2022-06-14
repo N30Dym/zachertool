@@ -63,23 +63,47 @@ class protokollUnterkapitelModel extends Model
      */
     //protected $allowedFields 	= ['protokollTypID ', 'unterkapitelNummer', 'bezeichnung', 'zusatztext', 'woelbklappen'];
 
-    public function getProtokollUnterkapitelNachID($id)
+    /**
+     * Lädt das protokollUnterkapitel mit der übergebenen id aus der Datenbank und gibt es zurück.
+     * 
+     * @param int $id <protokollUnterkapitelID>
+     * @return null|array = [id, protokollTypID , unterkapitelNummer, bezeichnung, zusatztext, woelbklappen]
+     */
+    public function getProtokollUnterkapitelNachID(int $id)
     {
-        return $this->where("id", $id)->first();
+        return $this->where('id', $id)->first();
     }
     
-    public function getProtokollUnterkapitelBezeichnungNachID($id)
+    /**
+     * Lädt die Bezeichnung des protokollUnterkapitel mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollUnterkapitelID>
+     * @return null|string
+     */
+    public function getProtokollUnterkapitelBezeichnungNachID(int $id)
     {
-        return $this->select('bezeichnung')->where("id", $id)->first();
+        return $this->select('bezeichnung')->where('id', $id)->first()['bezeichnung'] ?? NULL;
     }
     
-    public function getProtokollUnterkapitelNummerNachID($id) 
+    /**
+     * Lädt die unterkapitelNummer des protokollUnterkapitel mit der übergebenen id aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $id <protokollUnterkapitelID>
+     * @return null|string 
+     */
+    public function getProtokollUnterkapitelNummerNachID(int $id) 
     {
-        return $this->select('unterkapitelNummer')->where("id", $id)->first();
+        return $this->select('unterkapitelNummer')->where('id', $id)->first()['unterkapitelNummer'] ?? NULL;
     }
     
-    public function getProtokollUnterkapitelWoelbklappenNachID($id) 
+    /**
+     * Lädt den Wert der Spalte woelbklappen des protokollUnterkapitel mit der übergebenen id aus der Datenbank und gibt ihn zurück.
+     * 
+     * @param int $id <protokollUnterkapitelID>
+     * @return null|string 
+     */
+    public function getProtokollUnterkapitelWoelbklappenNachID(int $id) 
     {
-        return $this->select('woelbklappen')->where("id", $id)->first()['woelbklappen'];
+        return $this->select('woelbklappen')->where('id', $id)->first()['woelbklappen'] ?? NULL;
     }
 }

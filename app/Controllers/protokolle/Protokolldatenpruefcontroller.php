@@ -405,12 +405,15 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
        {
             foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $protokollLayoutZeile)
             {
-                $protokollInputDaten = $protokollInputsModel->getHStWegNachProtokollInputID($protokollLayoutZeile['protokollInputID']);
-
-                if(isset($protokollInputDaten) AND $protokollInputDaten['hStWeg'] == 1)
+                if(is_numeric($protokollLayoutZeile['protokollInputID']))
                 {
-                    isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? NULL : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = array();
-                    array_push($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']], $protokollLayoutZeile['protokollInputID']);
+                    $protokollInputDaten = $protokollInputsModel->getHStWegNachProtokollInputID($protokollLayoutZeile['protokollInputID']);
+
+                    if(isset($protokollInputDaten) AND $protokollInputDaten['hStWeg'] == 1)
+                    {
+                        isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? NULL : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = array();
+                        array_push($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']], $protokollLayoutZeile['protokollInputID']);
+                    }
                 }
             }
         }

@@ -3,7 +3,7 @@
 namespace App\Controllers\protokolle;
 
 use App\Models\flugzeuge\{ flugzeugHebelarmeModel };
-use App\Models\protokolllayout\{ protokollInputsModel, protokollLayoutsModel, protokollInputsMitInputTypModel };
+use App\Models\protokolllayout\{ protokollInputsModel, protokollLayoutsModel, protokollInputsMitInputTypModel, protokollLayoutsMitBezeichnungenUndOptionenModel };
 
 helper('nachrichtAnzeigen');
 
@@ -382,39 +382,29 @@ class Protokolldatenpruefcontroller extends Protokollcontroller
     /**
      * Prüft, ob ein protokollInput, das einen HSt-Weg benötigt, ausgefüllt wurde.
      * 
-     * Lade eine Instanz des protokollInputsModels und des protokollLayoutsModels.
+     * Lade eine Instanz des protokollLayoutsMitBezeichnungenUndOptionenModels.
      * Initialisiere das $kapitelIDsMitInputIDsMitHStWegen-Array und die Variable $hStWegErforderlich als FALSE.
-     * Für jede Zeile protokollLayout jeder im Zwischenspeicher vorhandenen protokollID, prüfe, ob der jeweilige protokollInput
-     * einen HStWeg erfordert. Wenn ja füge die protokollKapitelID zum $kapitelIDsMitInputIDsMitHStWegen-Array hinzu (falls noch nicht vorhanden) 
-     * und füge die protokollInputID zum Index <protokollKapitelID> hinzu.
+     * Für jede Zeile protokollLayout jeder im Zwischenspeicher vorhandenen protokollID, die einen HStWeg erfordert, füge die protokollKapitelID 
+     * zum $kapitelIDsMitInputIDsMitHStWegen-Array hinzu (falls noch nicht vorhanden) und füge die protokollInputID zum Index <protokollKapitelID> hinzu.
      * Für jedes Kapitel mit Input der einen HStWeg erfordert, prüfe jede protokollInputID, ob bei dieser im Array 'eingegebeneWerte' im 
      * Zwischenspeicher ein Wert vorliegt (! empty(...)). Wenn ja pushe die protokollInputID des entsprechenden protokollInputs
      * in das $hStWegErforderlich
      * Gib entweder FALSE zurück, wenn kein Input mit HStWeg gefunden wurde, oder ein Array das $hStWegErforderlich-Array.
      * 
-     * @return array
+     * @return false|array $hStWegErforderlich[<protokollKapitelID>][<protokollInputID>] = []
      */
     protected function pruefeHStWegeErforderlich()
     {
-        $protokollInputsModel               = new protokollInputsModel();
-        $protokollLayoutsModel              = new protokollLayoutsModel();
-        $kapitelIDsMitInputIDsMitHStWegen   = array();
-        $hStWegErforderlich                 = FALSE;
+        $protokollLayoutsMitBezeichnungenUndOptionenModel   = new protokollLayoutsMitBezeichnungenUndOptionenModel();
+        $kapitelIDsMitInputIDsMitHStWegen                   = array();
+        $hStWegErforderlich                                 = FALSE;
         
-       foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
-       {
-            foreach($protokollLayoutsModel->getProtokollLayoutNachProtokollID($protokollID) as $protokollLayoutZeile)
+        foreach($_SESSION['protokoll']['protokollIDs'] as $protokollID)
+        {
+            foreach($protokollLayoutsMitBezeichnungenUndOptionenModel->getProtokollInputsMitHStWegNachProtokollID($protokollID) as $inputMitHStWeg)
             {
-                if(is_numeric($protokollLayoutZeile['protokollInputID']))
-                {
-                    $protokollInputDaten = $protokollInputsModel->getHStWegNachProtokollInputID($protokollLayoutZeile['protokollInputID']);
-
-                    if(isset($protokollInputDaten) AND $protokollInputDaten['hStWeg'] == 1)
-                    {
-                        isset($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']]) ? NULL : $kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']] = array();
-                        array_push($kapitelIDsMitInputIDsMitHStWegen[$protokollLayoutZeile['protokollKapitelID']], $protokollLayoutZeile['protokollInputID']);
-                    }
-                }
+                isset($kapitelIDsMitInputIDsMitHStWegen[$inputMitHStWeg['protokollKapitelID']]) ? NULL : $kapitelIDsMitInputIDsMitHStWegen[$inputMitHStWeg['protokollKapitelID']] = array();
+                array_push($kapitelIDsMitInputIDsMitHStWegen[$inputMitHStWeg['protokollKapitelID']], $inputMitHStWeg['protokollInputID']);
             }
         }
 

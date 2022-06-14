@@ -43,6 +43,12 @@ class protokollLayoutsMitBezeichnungenUndOptionenModel extends Model
      */
     protected $allowedFields    = [];
     
+    /**
+     * Lädt die Datensätze der übergebenen protokollID, die einen hStWeg erfordern, aus der Datenbank und gibt sie zurück.
+     * 
+     * @param int $protokollID
+     * @return null|array[<protokollLayoutMitBezeichnungenUndOptionen>]
+     */
     public function getProtokollInputsMitHStWegNachProtokollID(int $protokollID) 
     {
         return $this->where(['hStWeg' => 1, 'protokollID' => $protokollID])->findAll();

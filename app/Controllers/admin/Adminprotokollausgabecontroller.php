@@ -217,8 +217,8 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         
         $returnArray                = array();
         
-        $returnArray[$layoutZeile['protokollKapitelID']]['kapitelBezeichnung']                                                          = $layoutZeile['kapitelNummer'] . ". " . $protokollKapitelModel->getProtokollKapitelBezeichnungNachID($layoutZeile['protokollKapitelID'])['bezeichnung']; 
-        $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['unterkapitelBezeichnung']   = empty($layoutZeile['protokollUnterkapitelID']) ? null : $layoutZeile['kapitelNummer'] . "." . $protokollUnterkapitelModel->getProtokollUnterkapitelNummerNachID($layoutZeile['protokollUnterkapitelID'])['unterkapitelNummer'] . " " . $protokollUnterkapitelModel->getProtokollUnterkapitelBezeichnungNachID($layoutZeile['protokollUnterkapitelID'])['bezeichnung'];
+        $returnArray[$layoutZeile['protokollKapitelID']]['kapitelBezeichnung']                                                          = $layoutZeile['kapitelNummer'] . ". " . $protokollKapitelModel->getProtokollKapitelBezeichnungNachID($layoutZeile['protokollKapitelID']); 
+        $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['unterkapitelBezeichnung']   = empty($layoutZeile['protokollUnterkapitelID']) ? null : $layoutZeile['kapitelNummer'] . "." . $protokollUnterkapitelModel->getProtokollUnterkapitelNummerNachID($layoutZeile['protokollUnterkapitelID']) . " " . $protokollUnterkapitelModel->getProtokollUnterkapitelBezeichnungNachID($layoutZeile['protokollUnterkapitelID']);
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['eingabeBezeichnung']        = $protokollEingabeModel->getProtokollEingabeBezeichnungNachID($layoutZeile['protokollEingabeID']);
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['inputBezeichnung']          = $protokollInputsModel->getProtokollInputBezeichnungNachID($layoutZeile['protokollInputID']);
         $returnArray[$layoutZeile['protokollKapitelID']]['inputDetails'][$layoutZeile['protokollInputID']]['inputEinheit']              = $protokollInputsModel->getProtokollInputEinheitNachID($layoutZeile['protokollInputID']);
@@ -424,7 +424,7 @@ class Adminprotokollausgabecontroller extends Adminprotokollspeichercontroller
         $protokollTypID = $protokolleLayoutProtokolleModel->getProtokollTypIDNachID($protokollID);
         
         $protokollDaten['protokollDetails']['protokollID']    = $protokollID;        
-        $protokollDaten['protokollDetails']['protokollTyp']   = $protokollTypenModel->getProtokollTypBezeichnungNachID($protokollTypID)['bezeichnung'];
+        $protokollDaten['protokollDetails']['protokollTyp']   = $protokollTypenModel->getProtokollTypBezeichnungNachID($protokollTypID);
 
         foreach($protokollDaten['flugzeugDaten']['flugzeugHebelarme'] as $hebelarmArray)
         {

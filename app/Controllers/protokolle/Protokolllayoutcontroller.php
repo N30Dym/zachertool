@@ -67,7 +67,7 @@ class Protokolllayoutcontroller extends Protokollcontroller
                 {                          
                     array_push($_SESSION['protokoll']['kapitelNummern'], $layoutDatensatz['kapitelNummer']);
                     $kapitelBezeichnung = $protokollKapitelModel->getProtokollKapitelBezeichnungNachID($layoutDatensatz["protokollKapitelID"]);
-                    $_SESSION['protokoll']['kapitelBezeichnungen'][$layoutDatensatz['kapitelNummer']] = $kapitelBezeichnung['bezeichnung'];
+                    $_SESSION['protokoll']['kapitelBezeichnungen'][$layoutDatensatz['kapitelNummer']] = $kapitelBezeichnung;
                 }
                 
                 if( ! empty($temporaeresWerteArray) AND is_numeric($layoutDatensatz['protokollInputID'])) 

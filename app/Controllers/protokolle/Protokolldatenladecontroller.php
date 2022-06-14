@@ -221,7 +221,7 @@ class Protokolldatenladecontroller extends Protokollcontroller
         
         foreach($protokollIDs as $protokollID)
         {
-            array_push($_SESSION['protokoll']['gewaehlteProtokollTypen'], $protokollLayoutProtokolleModel->getProtokollTypIDNachID($protokollID)['protokollTypID']);
+            array_push($_SESSION['protokoll']['gewaehlteProtokollTypen'], $protokollLayoutProtokolleModel->getProtokollTypIDNachID($protokollID));
         }
     }
         

@@ -115,7 +115,7 @@ class Adminpilotencontroller extends Controller
         
         foreach($pilotenDaten as $pilot)
         {
-            if($protokolleModel->getAnzahlProtokolleNachPilotID($pilot['id']) == 0 AND ( ! isset($protokolleModel->getAnzahlProtokolleAlsCopilotNachPilotID($pilot['id'])) OR $protokolleModel->getAnzahlProtokolleAlsCopilotNachPilotID($pilot['id']) == 0))
+            if($protokolleModel->getAnzahlProtokolleNachPilotID($pilot['id']) == 0 AND $protokolleModel->getAnzahlProtokolleAlsCopilotNachPilotID($pilot['id']) == 0)
             {
                 array_push($pilotenDieGeloeschtWerdenKoennen, $pilot);
             }

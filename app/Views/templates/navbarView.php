@@ -55,13 +55,12 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="<?= base_url('/admin/piloten/index') ?>">Pilotenverwaltung</a>
-                        <a class="dropdown-item" href="<?= base_url('/admin/flugzeuge/index') ?>">Flugzeugverwaltung</a>
-                        <a class="dropdown-item" href="<?= base_url('/admin/protokolle/index') ?>">Protokollverwaltung</a>
+                        <a class="dropdown-item" href="<?= base_url('/admin/flugzeuge/index') ?>">Flugzeug- und Musterverwaltung</a>
+                        <a class="dropdown-item" href="<?= base_url('/admin/protokolle/index') ?>">Verwaltung der gespeicherten Protokolle</a>
                         
-
                         <?php if(session_status() == PHP_SESSION_ACTIVE && isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 1 && $_SESSION['mitgliedsStatus'] == ADMINISTRATOR) : ?>
-                            <!--<a class="dropdown-item" href="#">Benutzer</a>-->
-                            <!--<a class="dropdown-item" href="#">Protokoll Layout</a>-->
+                            <!--<a class="dropdown-item" href="#">Benutzerverwaltung</a>-->
+                            <a class="dropdown-item" href="<?= base_url('/admin/protokolllayout/index') ?>">Verwaltung der Protokollversionen</a>
                         <?php endif ?>
                     </div>
                 </li>

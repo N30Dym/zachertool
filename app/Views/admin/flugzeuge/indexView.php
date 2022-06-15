@@ -45,7 +45,7 @@
         <div class="p-3 m-3 rounded shadow border">
             <h3 class="m-2">Muster bearbeiten</h3>
             <ul style="list-style-type:none">
-                <li><a href="<?= base_url('/admin/flugzeuge/bearbeitenListe/musterBasisdaten') ?>">Basisdatendaten für ein Flugzeug bearbeiten</a></li>
+                <li><a href="<?= base_url('/admin/flugzeuge/bearbeitenListe/musterBasisdaten') ?>">Basisdatendaten für ein Muster bearbeiten</a></li>
                 <!-- Entferne Duplikate -->
             </ul>
         </div>

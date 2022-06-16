@@ -10,6 +10,7 @@
         td, th {padding: 5px;}
         body {font-size: 85%;}
         h3 {margin-bottom: 3px; margin-left: 10px;}
+        h2, h3, h4, h5 {margin-bottom: 0.5em;}
     </style>
 </head>
 <body>
@@ -27,6 +28,12 @@
     <main>
         <h1 style="text-align: center; margin-bottom: -10px;"><?= $muster['musterSchreibweise'] . $muster['musterZusatz'] ?> -- <?= $flugzeug['kennung'] ?></h1>
         <h3 style="text-align: center">Informationen zum Flugzeug</h3>
+        <div style="width: 70%; ">
+            <div style="float: right">
+                <h2>Betreuer <?= date('Y') ?>:</h2>
+            </div>
+        </div>
+        <br>
         <h3>1. Angaben zum Flugzeug</h3>
         <table>
             <tr>
@@ -191,8 +198,7 @@
                     <?= str_replace("\r\n", "<br>", $flugzeugDetails['kommentar']) ?>
                 </div>
         <?php endif ?>
-    </main>    
-    
+    </main>       
 </body>
 
     

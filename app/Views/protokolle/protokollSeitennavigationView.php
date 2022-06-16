@@ -9,7 +9,7 @@
             <?php if(isset($_SESSION['protokoll']['protokollSpeicherID']) AND end($_SESSION['protokoll']['kapitelNummern']) == $_SESSION['protokoll']['aktuellesKapitel'] AND isset($adminOderEinweiser) AND $adminOderEinweiser == TRUE) : ?>
                 <div class="col-12 mt-3 alert alert-danger">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="bestaetigt" id="bestaetigt" <?= isset($_SESSION['protokoll']['bestaetigt']) ? " checked" : "" ?>>
+                        <input class="form-check-input" type="checkbox" name="bestaetigt" id="bestaetigt" <?= isset($_SESSION['protokoll']['bestaetigt']) ? ' checked onclick="$(this).prop(\'checked\', true);"' : "" ?>>
                         <label class="form-check-label" for="bestaetigt">
                             Diese Protokoll als abgegeben markieren
                         </label>

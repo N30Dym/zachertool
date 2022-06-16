@@ -95,7 +95,7 @@ class protokolleModel extends Model
 
     /**
      * Lädt die ProtokollDaten der Protokolls aus der Datenbank die als bestätigt markiert sind, speichert sie im $protokolleNachJahrenSortiert-Array nach
-     * Jahren sortiert und mit der protokollSpeicherID im Index und gibt das $protokolleNachJahrenSortiert-Array zurück.
+     * Jahren sortiert und mit der protokollSpeicherID im Index und gibt das $protokolleNachJahrenSortiert-Array mit dem aktuellsten Jahr zuerst zurück.
      * 
      * @return null|array[<jahr>][<protokollSpeicherID>] = [id, flugzeugID, pilotID, copilotID, protokollIDs, flugzeit, stundenAufDemMuster, bemerkung, bestaetigt, fertig, datum]
      */
@@ -108,8 +108,8 @@ class protokolleModel extends Model
         {
             $protokolleNachJahrenSortiert[date('Y', strtotime($protokollDaten['datum']))][$protokollDaten['id']] = $protokollDaten;
         }
-        
-        return $protokolleNachJahrenSortiert;
+
+        return array_reverse($protokolleNachJahrenSortiert, TRUE);
     }
     
     /**

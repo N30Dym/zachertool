@@ -134,7 +134,7 @@
                                         <td><input type="number" class="form-control" name="pilotDetail[0][typenAnzahl]" min="0" value="<?= $pilotDetail[0]['typenAnzahl'] ?? "" ?>" required></td>
                                         <td>
                                             <div class="input-group">
-                                                <input type="number" class="form-control" name="pilotDetail[0][gewicht]" min="0" value="<?= $pilotDetail[0]['gewicht'] ?? "" ?>" required>
+                                                <input type="number" class="form-control" name="pilotDetail[0][gewicht]" min="0" step="0.1" value="<?= $pilotDetail[0]['gewicht'] ?? "" ?>" required>
                                                 <span class="input-group-text">kg</span>
                                             </div>
                                         </td>

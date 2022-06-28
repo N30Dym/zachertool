@@ -121,7 +121,10 @@ class Pilotenspeichercontroller extends Pilotencontroller
         
         foreach($uebergebeneDaten['pilot'] as $inputName => $inputInhalt)
         {
-            $rueckgabeArray['pilot'][$inputName] = $inputInhalt;
+            if( ! empty($inputInhalt))
+            {
+                $rueckgabeArray['pilot'][$inputName] = $inputInhalt;
+            }
         }
         
         foreach($uebergebeneDaten['pilotDetail'] as $inputName => $inputInhalt)
